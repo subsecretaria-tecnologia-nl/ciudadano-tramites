@@ -9,11 +9,13 @@ User Story: _JIRA_TASK_CODE_ \ _JIRA_TASK_LINK_
 Type:
 - [ ] Backend
 - [ ] Frontend
+- [ ] N/A
 
 Scope:
 
 - [ ] Partial Implementation
 - [ ] Complete Implementation
+- [ ] N/A
 
 # Description:
 _What this PR does, you could add gifs or screenshoots in order to help reviewers know what is going on._
@@ -23,6 +25,7 @@ Unit Test:
 
 - [ ] Sanity passes
 - [ ] Coverage report shows no missing coverage related to changes
+- [ ] N/A
 
 # Checklist:
 - [ ] Code follows the code guidelines
