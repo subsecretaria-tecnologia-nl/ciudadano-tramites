@@ -1,4 +1,4 @@
-# REMEMBER
+# Pull request Name
 Use the following nomenclature to name your PR:
 **_JIRA_TASK_CODE_ | Issue or Feat Description**
 
@@ -14,7 +14,7 @@ Scope:
 - [ ] Partial Implementation
 - [ ] Complete Implementation
 
-Description:
+# Description:
 _What this PR does, you could add gifs or screenshoots in order to help reviewers know what is going on._
 
 # Testing
