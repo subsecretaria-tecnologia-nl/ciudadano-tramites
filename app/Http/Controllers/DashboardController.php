@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
     public function index () {
-    	// set_global_arg("title", "TE YOYO MI REINA");
+    	set_layout_arg("subtitle", "Dashboard");
     	return layout_view("welcome", [ "hello" => "world" ]);
     }
 }

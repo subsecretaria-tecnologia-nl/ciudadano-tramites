@@ -1,19 +1,15 @@
 <?php
 
-$globalArgs = [];
-
-if(!function_exists("set_global_arg")){
-	function set_global_arg ($name, $value) {
-		global $globalArgs;
-		$globalArgs[$name] = $value;
+if(!function_exists("set_layout_arg")){
+	function set_layout_arg ($name, $value) {
+		Config::set("layout.args.{$name}", $value);
 	}
 }
 
 if(!function_exists("layout_view")){
 	function layout_view ($viewPath, $args) {
-		global $globalArgs;
+		$globalArgs = Config::get("layout.args");
 		$templatePath = env("TEMPLATE_PATH");
-		if(!$globalArgs["title"]) $globalArgs["title"] = env("APP_NAME") ?? "Gobierno del Estado de Nuevo León";
 
 		$uri = Route::getCurrentRoute()->uri;
 		$parameters = Route::getCurrentRoute()->parameters;
