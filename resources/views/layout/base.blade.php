@@ -2,7 +2,8 @@
 
 <html lang="en">
 	<!--begin::Head-->
-	<head><base href="">
+	<head>
+		<base href="{{ env("APP_HOSTNAME") }}">
 		<meta charset="utf-8" />
 		<title>{{ isset($subtitle) ? "{$subtitle} | " : "" }}{{ $title ?? "" }}</title>
 		<meta name="description" content="{{ $description ?? "" }}" />
@@ -120,7 +121,7 @@
 											<!--begin::Menu-->
 											<div id="kt_header_menu" class="header-menu header-menu-mobile header-menu-layout-default align-items-center w-100">
 												<!--begin::Nav-->
-												<a href="index.html" class="mr-2">
+												<a href="/" class="mr-2">
 													<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px" width="100%" />
 												</a>
 												<ul class="menu-nav">
