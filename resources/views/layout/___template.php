@@ -3612,7 +3612,6 @@
 							
 						</div>
 						<div class="d-flex flex-column-fluid">
-							@yield('content_front')
 							
 						</div>
 						<!--end::Entry-->

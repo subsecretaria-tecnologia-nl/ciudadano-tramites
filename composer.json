@@ -37,6 +37,9 @@
         "psr-4": {
             "App\\": "app/"
         },
+        "files" : [
+            "app/Helpers/layout.php"
+        ],
         "classmap": [
             "database/seeds",
             "database/factories"
@@ -51,6 +54,7 @@
     "prefer-stable": true,
     "scripts": {
         "start" : "php -S localhost:8080 -t public",
+        "sass-dev" : "sass --watch resources/sass:public/css --style compressed",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

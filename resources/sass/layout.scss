@@ -1,0 +1,46 @@
+@import "./_variables.scss";
+
+*, body{
+	font-family: 'Montserrat', sans-serif;
+
+	a{
+		color: $font-link !important;
+	}
+}
+
+.btn-icon{
+	// background-color: $soft-gray;
+}
+
+.header-menu .menu-nav>.menu-item.menu-item-active>.menu-link .menu-text, .header-menu .menu-nav>.menu-item:hover:not(.menu-item-here):not(.menu-item-active)>.menu-link .menu-text, .header-menu .menu-nav>.menu-item.menu-item-hover:not(.menu-item-here):not(.menu-item-active)>.menu-link .menu-text{
+	color: $font-link !important;
+}
+
+.header{
+	.header-top {
+		height: auto;
+		background-color: $soft-gray;
+	}
+}
+
+.footer{
+	background-color: $dark-gray !important;
+	color: $white !important;
+
+	.list-group-item{
+		background-color: transparent !important;
+		font-size: 20px;
+		font-weight: bold;
+		border: none !important;
+	}
+
+	img{
+		width: 300px;
+		margin-left: 50px;
+	}
+
+	i{
+		font-size: 30px;
+		margin: 0px 7px;
+	}
+}
