@@ -2,6 +2,9 @@
 return [
 	"args" => [
 		"title" => env("APP_NAME") ?? "Gobierno del Estado de Nuevo León",
-		"empty_layout" => false
+		"empty_layout" => false,
+		"footer" => [
+			"style" => "minify"
+		]
 	]
 ];

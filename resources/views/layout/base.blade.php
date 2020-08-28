@@ -720,7 +720,7 @@
 					<!--begin::Footer-->
 					<div class="footer bg-white py-4 flex-lg-column @if($empty_layout === true) d-none @else d-flex @endif" id="kt_footer">
 						<!--begin::Container-->
-						<div class="container-xl pt-20 pb-10 px-0">
+						<div class="container-xl pt-20 pb-10 px-0 <?= isset($footer["style"]) && $footer["style"] == "minify" ? "d-none" : ""?>">
 							<div class="row">
 								<a href="tel:911" class="col text-center text-white text-hover-primary" target="_blank">
 									<h1><strong>911</strong></h1>
@@ -744,7 +744,7 @@
 								</a>
 							</div>
 						</div>
-						<div class="container-xl pt-10 pb-20 px-0">
+						<div class="container-xl pt-10 pb-20 px-0 <?= isset($footer["style"]) && $footer["style"] == "minify" ? "d-none" : ""?>">
 							<div class="row d-flex align-items-center">
 								<div class="col">
 									<img src="{{ asset("images/escudo.svg") }}" alt="">
