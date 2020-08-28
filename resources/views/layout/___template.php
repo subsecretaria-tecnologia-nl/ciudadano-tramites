@@ -3594,7 +3594,6 @@
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 						<!--begin::Entry-->
 						<div class="d-flex flex-column-fluid">
-							@yield('content_front')
 							
 						</div>
 						<!--end::Entry-->
