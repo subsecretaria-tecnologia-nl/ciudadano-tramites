@@ -1,1 +1,0 @@
-<h1>THIS IS CONTENT VIEW</h1>
