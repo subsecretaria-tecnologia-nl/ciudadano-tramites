@@ -14,8 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-	return redirect("/dashboard");
+	return redirect("/login");
 });
+
 Route::get('/dashboard', "DashboardController@index");
 Route::get('/tramites/{type}', "TramitesController@index");
 Route::get('/avisos', "AvisosController@index");
+
+// LOGIN
+Route::get('/login', "LoginController@index");
+Route::post('/login', "LoginController@validation");
+Route::get('/logout', "LoginController@logout");

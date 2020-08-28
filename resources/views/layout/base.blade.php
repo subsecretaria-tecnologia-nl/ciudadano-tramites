@@ -64,7 +64,7 @@
 				<!--begin::Wrapper-->
 				<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
 					<!--begin::Header-->
-					<div id="kt_header" class="header flex-column header-fixed">
+					<div id="kt_header" class="header flex-column header-fixed @if($empty_layout === true) d-none @endif">
 						<!--begin::Top-->
 						<div class="header-top">
 							<!--begin::Container-->
@@ -709,16 +709,16 @@
 					</div>
 					<!--end::Header-->
 					<!--begin::Content-->
-					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+					<div class="content d-flex flex-column flex-column-fluid" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
 						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid container-xl">
+						<div class="d-flex flex-column-fluid container-xl  @if($empty_layout === true) justify-content-center align-items-center @endif">
 							<?= view($viewPath, $args) ?>
 						</div>
 						<!--end::Entry-->
 					</div>
 					<!--end::Content-->
 					<!--begin::Footer-->
-					<div class="footer bg-white py-4 d-flex flex-lg-column" id="kt_footer">
+					<div class="footer bg-white py-4 flex-lg-column @if($empty_layout === true) d-none @else d-flex @endif" id="kt_footer">
 						<!--begin::Container-->
 						<div class="container-xl pt-20 pb-10 px-0">
 							<div class="row">
@@ -835,7 +835,7 @@
 									<span class="navi-text text-muted text-hover-primary">jm@softplus.com</span>
 								</span>
 							</a>
-							<a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
+							<a href="/logout" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
 						</div>
 					</div>
 				</div>
@@ -1264,15 +1264,27 @@
 		<!--end::Global Config-->
 		<!--begin::Global Theme Bundle(used by all pages)-->
 		<script src="{{ asset("plugins/global/plugins.bundle.js?v=7.0.3") }}"></script>
-		{{-- <script src="plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3"></script> --}}
+		<script src="{{ asset("plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3") }}"></script>
 		<script src="{{ asset("js/scripts.bundle.js?v=7.0.3") }}"></script>
+		<script>
+			$.ajaxSetup({
+			    data: {
+			        '_token': "{{ csrf_token() }}"
+			    }
+			});
+		</script>	
 		<!--end::Global Theme Bundle-->
 		<!--begin::Page Vendors(used by this page)-->
-		<script src="plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.3"></script>
+		{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.3"></script> --}}
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="js/pages/widgets.js?v=7.0.3"></script>
 		<!--end::Page Scripts-->
+		@if(isset($script))
+			@foreach ($script as $js)
+				<script src="{{ $js }}" type="text/javascript"></script>
+			@endforeach
+		@endif
 	</body>
 	<!--end::Body-->
 </html>
