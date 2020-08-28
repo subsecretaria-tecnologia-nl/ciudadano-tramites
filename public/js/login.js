@@ -33,17 +33,17 @@ $('#kt_login_signin_submit').on('click', function (e) {
         		},
         		success: function(res){
         			console.log(res);
-		            swal.fire({
-		                text: "All is cool! Now you submit this form",
-		                icon: "success",
-		                buttonsStyling: false,
-		                confirmButtonText: "Ok, got it!",
-		                customClass: {
-							confirmButton: "btn font-weight-bold btn-light-primary"
-						}
-		            }).then(function() {
-						KTUtil.scrollTop();
-					});
+                    swal.fire({
+                        text: "All is cool! Now you submit this form",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+        					confirmButton: "btn font-weight-bold btn-light-primary"
+        				}
+                    }).then(function() {
+        				window.location="/dashboard"
+        			});
         		}
         	});
 		} else {

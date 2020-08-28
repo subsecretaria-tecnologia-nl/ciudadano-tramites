@@ -835,7 +835,7 @@
 									<span class="navi-text text-muted text-hover-primary">jm@softplus.com</span>
 								</span>
 							</a>
-							<a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
+							<a href="/logout" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
 						</div>
 					</div>
 				</div>
@@ -1266,6 +1266,13 @@
 		<script src="{{ asset("plugins/global/plugins.bundle.js?v=7.0.3") }}"></script>
 		<script src="{{ asset("plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3") }}"></script>
 		<script src="{{ asset("js/scripts.bundle.js?v=7.0.3") }}"></script>
+		<script>
+			$.ajaxSetup({
+			    data: {
+			        '_token': "{{ csrf_token() }}"
+			    }
+			});
+		</script>	
 		<!--end::Global Theme Bundle-->
 		<!--begin::Page Vendors(used by this page)-->
 		{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.3"></script> --}}
