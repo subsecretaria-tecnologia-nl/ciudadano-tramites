@@ -709,7 +709,7 @@
 					</div>
 					<!--end::Header-->
 					<!--begin::Content-->
-					<div class="content d-flex flex-column flex-column-fluid" @if($background_content) style="background-color: {{$background_content}}" @endif id="kt_content">
+					<div class="content d-flex flex-column flex-column-fluid" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
 						<!--begin::Entry-->
 						<div class="d-flex flex-column-fluid container-xl  @if($empty_layout === true) justify-content-center align-items-center @endif">
 							<?= view($viewPath, $args) ?>
