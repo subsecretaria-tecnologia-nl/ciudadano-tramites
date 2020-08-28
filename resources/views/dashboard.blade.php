@@ -456,3 +456,12 @@
     </div>
 </div>
 @endsection
+
+{{-- <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" /> --}}
+<style type="text/css">
+    @font-face {
+    font-family: 'Montserrat-Black';
+    src: url('{{ resource_path('font/Montserrat-Black.ttf') }}');
+    }
+
+</style>

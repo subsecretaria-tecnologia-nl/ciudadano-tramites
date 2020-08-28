@@ -23,6 +23,12 @@
 		<!--end::Layout Themes-->
 		<link rel="shortcut icon" href="metronic/assets/media/logos/favicon.ico" />
 		
+		<style> 
+		@font-face { 
+			font-family: Montserrat-Black; 
+			src: url('{{ URL::asset("font/Montserrat-Bold.ttf") }}'); 
+		}
+		</style>
 		<link rel="stylesheet" href="/css/dashboard.css">
 		{{-- <link rel="stylesheet" href="/css/home.css"> --}}
 	</head>

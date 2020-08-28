@@ -1,7 +1,7 @@
-@font-face {
+/* @font-face {
     font-family: 'Montserrat-Black';
-    src: url('/font/Montserrat-Bold.ttf') format('truetype');
-}
+    src: url('http://127.0.0.1:8000/resources/font/Montserrat-Bold.ttf') format('truetype');
+} */
 
 .dashboard {
     max-height: 210px;
@@ -21,7 +21,7 @@
 }
 
 .busqueda {
-    background-image: url("/img/cerro_monterrey.jpg");
+    background-image: url("http://127.0.0.1:8000/resources/img/cerro_monterrey.jpg");
     background-repeat: no-repeat;
     background-size: 100% !important;
     background-position: 0px 35%;
