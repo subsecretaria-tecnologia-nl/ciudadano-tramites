@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dashboard', "HomeController@index");
+Route::get('/', function () {
+	return redirect("/dashboard");
+});
+Route::get('/dashboard', "DashboardController@index");
 Route::get('/tramites/{type}', "TramitesController@index");
 Route::get('/avisos', "AvisosController@index");
