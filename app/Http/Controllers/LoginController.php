@@ -20,13 +20,26 @@ class LoginController extends Controller
 	}
 
 	public function validation (Request $request) {
-		return response(true)->cookie(
-			'session', true, env("SESSION_LIFETIME")
-		);
+		$session = [
+			"authenticated" => [
+				"created_at" => date("Y-m-d H:i:s"),
+				"until_at" => date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s")." + ".env("SESSION_LIFETIME")." minutes"))
+			],
+			"user" => [
+				"name" => "",
+				"last_name" => "",
+				"email" => "",
+				"username" => "",
+				"job" => ""
+			]
+		];
+
+		if(session($session))
+			response(200);
 	}
 
 	public function logout () {
-		$cookie = Cookie::forget('session');
-		return redirect("/login")->withCookie($cookie);
+		session()->forget(["user", "authenticated"]);
+		return redirect("/login");
 	}
 }

@@ -17,7 +17,7 @@ if(!function_exists("set_layout_arg")){
 
 if(!function_exists("layout_view")){
 	function layout_view ($viewPath, $args = [], $templatePath = null) {
-		$session = Cookie::get("session");
+		// $session = Cookie::get("session");
 
 		$globalArgs = Config::get("layout.args");
 		if(!$templatePath) $templatePath = env("TEMPLATE_PATH");
@@ -25,7 +25,7 @@ if(!function_exists("layout_view")){
 		$uri = Route::getCurrentRoute()->uri;
 		$parameters = Route::getCurrentRoute()->parameters;
 		
-		if(!$session && $uri != "login") return redirect("/login");
+		// if(!$session && $uri != "login") return redirect("/login");
 
 		foreach($parameters as $key => $val){
 			$uri = str_replace("{{$key}}", $val, $uri);
@@ -38,5 +38,11 @@ if(!function_exists("layout_view")){
 		];
 		$layoutArgs = array_merge($layoutArgs, $globalArgs);
 		return view($templatePath, $layoutArgs);
+	}
+}
+
+if(!function_exists("to_object")){
+	function to_object ($arr){
+		return json_decode(json_encode($arr));
 	}
 }
