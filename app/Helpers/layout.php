@@ -25,7 +25,7 @@ if(!function_exists("layout_view")){
 		$uri = Route::getCurrentRoute()->uri;
 		$parameters = Route::getCurrentRoute()->parameters;
 		
-		// if(!$session && $uri != "login") return redirect("/login");
+	    if(!$session && $uri != "login") return redirect("/login");
 
 		foreach($parameters as $key => $val){
 			$uri = str_replace("{{$key}}", $val, $uri);
