@@ -9,7 +9,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" />
 		<!--end::Fonts-->
 		<!--begin::Page Vendors Styles(used by this page)-->
 		<link href="metronic/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css?v=7.0.3" rel="stylesheet" type="text/css" />
@@ -23,14 +22,6 @@
 		<!--end::Layout Themes-->
 		<link rel="shortcut icon" href="metronic/assets/media/logos/favicon.ico" />
 		
-		<style> 
-		@font-face { 
-			font-family: Montserrat-Black; 
-			src: url('{{ URL::asset("font/Montserrat-Bold.ttf") }}'); 
-		}
-		</style>
-		<link rel="stylesheet" href="/css/dashboard.css">
-		{{-- <link rel="stylesheet" href="/css/home.css"> --}}
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
@@ -3601,16 +3592,8 @@
 					</div>
 					<!--end::Header-->
 					<!--begin::Content-->
-					<div class="dashboard">
-						@yield('dashboard')
-					</div>
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 						<!--begin::Entry-->
-
-						<div class="d-flex flex-column-fluid "  >
-							@yield('tramites')
-							
-						</div>
 						<div class="d-flex flex-column-fluid">
 							
 						</div>

@@ -4,14 +4,12 @@
             
     </div>
     <div class="gradient">
-            <br>
             <div class="form-group">
-                <div>
+                <div style="padding-top: 20px"
                     <span class="busqueda-titulo">Busca tus trámites</span>
                 </div>
                 <span  class="busqueda-sub">Puedes buscar por nombre de trámite, número de folio, nombre de solicitante, etc.</span>
-                <div>
-                    <br>
+                <div style="padding-top: 20px">
                     <input class="form-control  form-control-lg" style="height: 50px;" type="text" name="busqueda" id="busqueda"  placeholder="Ejemplo: Certificado de gravamen">
                 </div>
             </div>
