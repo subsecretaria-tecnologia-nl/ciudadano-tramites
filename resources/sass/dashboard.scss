@@ -1,3 +1,126 @@
-.hola{
-	display: none;
+@import "./_variables.scss";
+*,
+body {
+    font-family: 'Montserrat', sans-serif;
+    a {
+        color: $font-link !important;
+    }
+}
+
+.dashboard {
+    max-height: 210px;
+    position: relative;
+}
+
+.gradient {
+    position: absolute;
+    background: linear-gradient(90deg, rgba(57, 77, 163, 1) 0%, rgba(46, 137, 186, 0.8001401244091386) 100%); // background: $gradient;
+    background-size: 100% !important;
+    background-position: cover top;
+    padding-left: 13%;
+    padding-right: 13%;
+    height: 210px;
+    width: 100%;
+}
+
+.busqueda {
+    position: absolute;
+    background-image: url("../images/cerro_monterrey.jpg") !important;
+    background-repeat: no-repeat;
+    background-size: 100% !important;
+    background-position: 0px 30%;
+    padding-left: 13%;
+    padding-right: 13%;
+    height: 210px;
+    width: 100%;
+}
+
+.busqueda-titulo {
+    font-size: 1cm;
+    color: $white;
+}
+
+.busqueda-sub {
+    font-size: .4cm;
+    color: $white;
+}
+
+.tramites {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1300px;
+    height: 600px;
+    margin-bottom: 100px;
+}
+
+.cuadros {
+    padding-top: 500px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1000px;
+    height: 600px;
+    margin-bottom: 100px;
+}
+
+.cuadros-cont {
+    margin-top: 30px;
+    height: 100%
+}
+
+.cuadro {
+    width: calc(50% - 20px);
+    height: 85%;
+    color: #088cbc;
+    margin: 10px;
+    border-radius: 5px;
+    float: left;
+}
+
+.tramite {
+    width: calc(33% - 20px);
+    height: 50%;
+    color: black;
+    margin: 10px;
+    border-radius: 5px;
+    float: left;
+}
+
+.tramite-lista {
+    background-color: $white;
+}
+
+.identificador {
+    background-color: #d5e8f3;
+    border-radius: 5px;
+    padding: 8px 15px 8px 15px;
+    color: $blue;
+}
+
+.nombre-tramite {
+    font-size: 15px;
+    color: $blue;
+    text-decoration: underline;
+}
+
+.nombre {
+    color: $font-light;
+}
+
+.titulo {
+    font-size: .6cm;
+    font-weight: bold;
+}
+
+.btn-vermas {
+    border-color: $blue;
+    color: $blue;
+}
+
+.btn-vermas:hover {
+    background-color: $blue;
+    color: $white;
+}
+
+.contenido {
+    padding-top: 180px;
 }
