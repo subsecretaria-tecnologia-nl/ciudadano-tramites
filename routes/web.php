@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,15 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-	return redirect("/login");
+Route::middleware(["validate_session"])->group(function(){
+	Route::get('/', function () {
+		return redirect("/dashboard");
+	});
+	Route::get('/dashboard', "DashboardController@index");
+	Route::get('/tramites/{type}', "TramitesController@index");
+	Route::get('/nuevo-tramite', "TramitesController@new");
+	
+	// LOGIN
+	Route::get('/login', "LoginController@index");
+	Route::post('/login', "LoginController@validation");
+	Route::get('/logout', "LoginController@logout");
 });
 
-Route::get('/dashboard', "DashboardController@index");
-Route::get('/tramites/{type}', "TramitesController@index");
-Route::get('/avisos', "AvisosController@index");
-
-// LOGIN
-Route::get('/login', "LoginController@index");
-Route::post('/login', "LoginController@validation");
-Route::get('/logout', "LoginController@logout");

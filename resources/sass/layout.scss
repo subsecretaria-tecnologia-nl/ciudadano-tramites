@@ -44,3 +44,12 @@
 		margin: 0px 7px;
 	}
 }
+
+#notifications{
+	.badge{
+		border-radius: 100%;
+		position: absolute;
+		top: -25%;
+		right: -25%;
+	}
+}
