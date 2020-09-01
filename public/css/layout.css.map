@@ -1,1 +1,7 @@
-{"version":3,"sourceRoot":"","sources":["../../resources/sass/layout.scss","../../resources/sass/_variables.scss"],"names":[],"mappings":"AAEA,OACC,oCAEA,WACC,yBAQF,uSACC,yBAIA,oBACC,YACA,iBCpBU,QDwBZ,QACC,oCACA,sBAEA,yBACC,wCACA,eACA,iBACA,uBAGD,YACC,YACA,iBAGD,UACC,eACA","file":"layout.css"}
+{
+"version": 3,
+"mappings": "AAEA,MAAO,CACN,WAAW,CAAE,wBAAwB,CAErC,UAAC,CACA,KAAK,CAAE,kBAAqB,CAQ9B,sSAAwS,CACvS,KAAK,CAAE,kBAAqB,CAI5B,mBAAY,CACX,MAAM,CAAE,IAAI,CACZ,gBAAgB,CCpBN,OAAO,CDwBnB,OAAO,CACN,gBAAgB,CAAE,kBAAqB,CACvC,KAAK,CAAE,eAAiB,CAExB,wBAAgB,CACf,gBAAgB,CAAE,sBAAsB,CACxC,SAAS,CAAE,IAAI,CACf,WAAW,CAAE,IAAI,CACjB,MAAM,CAAE,eAAe,CAGxB,WAAG,CACF,KAAK,CAAE,KAAK,CACZ,WAAW,CAAE,IAAI,CAGlB,SAAC,CACA,SAAS,CAAE,IAAI,CACf,MAAM,CAAE,OAAO,CAKhB,qBAAM,CACL,aAAa,CAAE,IAAI,CACnB,QAAQ,CAAE,QAAQ,CAClB,GAAG,CAAE,IAAI,CACT,KAAK,CAAE,IAAI",
+"sources": ["../../resources/sass/layout.scss","../../resources/sass/_variables.scss"],
+"names": [],
+"file": "layout.css"
+}

@@ -1,1 +1,0 @@
-<h1>LISTADO DE TRÁMITES: <strong class="text-underline text-uppercase">{{ $type }}</strong></h1>
