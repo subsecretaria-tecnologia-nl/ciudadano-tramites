@@ -21,6 +21,7 @@
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
 		<link rel="shortcut icon" href="metronic/assets/media/logos/favicon.ico" />
+		
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->

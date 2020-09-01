@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Facades\Cookie;
 
 if(!function_exists("set_layout_arg")){
 	function set_layout_arg ($name, $value = null) {
@@ -17,15 +16,11 @@ if(!function_exists("set_layout_arg")){
 
 if(!function_exists("layout_view")){
 	function layout_view ($viewPath, $args = [], $templatePath = null) {
-		// $session = Cookie::get("session");
-
 		$globalArgs = Config::get("layout.args");
 		if(!$templatePath) $templatePath = env("TEMPLATE_PATH");
 
 		$uri = Route::getCurrentRoute()->uri;
 		$parameters = Route::getCurrentRoute()->parameters;
-		
-		// if(!$session && $uri != "login") return redirect("/login");
 
 		foreach($parameters as $key => $val){
 			$uri = str_replace("{{$key}}", $val, $uri);

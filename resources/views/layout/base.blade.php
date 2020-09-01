@@ -314,7 +314,7 @@
 					<!--begin::Content-->
 					<div class="content d-flex flex-column flex-column-fluid" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
 						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid container-xl  @if($empty_layout === true) justify-content-center align-items-center @endif">
+						<div class="d-flex flex-column-fluid {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) justify-content-center align-items-center @endif">
 							<?= view($viewPath, $args) ?>
 						</div>
 						<!--end::Entry-->
