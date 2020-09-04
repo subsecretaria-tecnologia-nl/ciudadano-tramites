@@ -19,6 +19,7 @@ Route::middleware(["validate_session"])->group(function(){
 		return redirect("/dashboard");
 	});
 	Route::get('/dashboard', "DashboardController@index");
+	Route::get('/listado', "ListadoController@index");
 	Route::get('/tramites/{type}', "TramitesController@index");
 	Route::get('/nuevo-tramite', "TramitesController@new");
 	
