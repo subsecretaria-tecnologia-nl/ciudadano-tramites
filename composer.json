@@ -53,7 +53,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "start": "php -S localhost:8080 -t public",
+        "start": "php -S localhost:8010 -t public",
         "sass-dev": "sass --watch resources/sass:public/css --style compressed",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
