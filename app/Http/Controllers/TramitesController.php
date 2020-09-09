@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class TramitesController extends Controller
 {
     public function index ($type) {
-    	set_layout_arg("subtitle", "Trámites: {$type}");
+    	set_layout_arg(["subtitle" => "Trámites: {$type}","fluid_container"=> true]);
     	return layout_view("tramites.index", [ "type" => $type ]);
     }
 
