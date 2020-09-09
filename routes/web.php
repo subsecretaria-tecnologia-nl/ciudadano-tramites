@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware(["validate_session"])->group(function(){
+//Route::middleware(["validate_session"])->group(function(){
 	Route::get('/', function () {
 		return redirect("/dashboard");
 	});
@@ -26,4 +26,4 @@ use Illuminate\Support\Facades\Route;
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
 	Route::get('/logout', "LoginController@logout");
-// });
+//});
