@@ -27,8 +27,11 @@ class CheckSession
     }
 
     protected function redirectLogin($request, Closure $next){
-        if($request->getPathInfo() != "/login")
+        if($request->getPathInfo() != "/login" && $request->getPathInfo() != "/recovery-password")
             return redirect("/login");
+        else if( $request->getPathInfo() == "/recovery-password" ){
+            return $next($request);
+        } 
         else
             return $next($request);
     }

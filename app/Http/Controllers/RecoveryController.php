@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ContraController extends Controller
+class RecoveryController extends Controller
 {
     public function index () {
 		set_layout_arg([
@@ -13,6 +13,6 @@ class ContraController extends Controller
 			      "background_content" => "#ffffff",
 		]);
 
-		return layout_view("contra");
+		return layout_view("recovery");
     }
 }
