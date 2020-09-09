@@ -14,17 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(["validate_session"])->group(function(){
+// Route::middleware(["validate_session"])->group(function(){
 	Route::get('/', function () {
 		return redirect("/dashboard");
 	});
 	Route::get('/dashboard', "DashboardController@index");
 	Route::get('/tramites/{type}', "TramitesController@index");
 	Route::get('/nuevo-tramite', "TramitesController@new");
-	
+
 	// LOGIN
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
 	Route::get('/logout', "LoginController@logout");
-});
-
+// });
