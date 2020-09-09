@@ -24,7 +24,6 @@
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
 		<link rel="shortcut icon" href="media/logos/favicon.ico" />
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
@@ -890,6 +889,7 @@
 		@endif
 
 		<!-- dataTable -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://unpkg.com/@popperjs/core@2"></script>
 		<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
