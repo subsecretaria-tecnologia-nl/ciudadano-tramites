@@ -25,13 +25,12 @@ class CheckSession
         }
         return self::redirectLogin($request, $next);
     }
-
+    
     protected function redirectLogin($request, Closure $next){
-        if($request->getPathInfo() != "/login" && $request->getPathInfo() != "/recovery-password")
+        
+        $session_whitelist = config("layout.session_whitelist");
+        if( in_array($request->getPathInfo() , $session_whitelist ) )
             return redirect("/login");
-        else if( $request->getPathInfo() == "/recovery-password" ){
-            return $next($request);
-        } 
         else
             return $next($request);
     }
