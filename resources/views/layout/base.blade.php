@@ -8,7 +8,7 @@
 		<title>{{ isset($subtitle) ? "{$subtitle} | " : "" }}{{ $title ?? "" }}</title>
 		<meta name="description" content="{{ $description ?? "" }}" />
 		<meta name="keywords" content="{{ $keywords ?? "" }}">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no" />
 		<!--begin::Fonts-->
 		{{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,600;0,900;1,700&display=swap" rel="stylesheet">
@@ -60,34 +60,183 @@
 		<!--end::Header Mobile-->
 		<div class="d-flex flex-column flex-root">
 			<!--begin::Page-->
-			<div class="d-flex flex-row flex-column-fluid page">
-				<!--begin::Wrapper-->
-				<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
-					<!--begin::Header-->
-					<div id="kt_header" class="header flex-column header-fixed @if($empty_layout === true) d-none @endif">
-						<!--begin::Top-->
-						<div class="header-top">
-							<!--begin::Container-->
-							<div class="container">
-								<!--begin::Left-->
-								<div class="d-none d-lg-flex align-items-center mx-auto">
-									<!--begin::Logo-->
-									<a href="index.html" class="mx-auto d-flex align-items-center py-2">
-										<img alt="Logo" src="{{ asset('images/icon.svg') }}" width="70" class="mr-4" />
-										Un sitio oficial del Gobierno del Estado de Nuevo León
-									</a>
-									<!--end::Logo-->
-									<!--begin::Tab Navs-->
+			<div class="d-flex flex-column flex-column-fluid page">
+				<!--begin::Top-->
+				<div class="header-top bg-white">
+					<!--begin::Container-->
+					<div class="container-fluid px-0">
+						<!--begin::Left-->
+						<div class="d-none d-md-flex align-items-center align-items-stretch mx-auto">
+							<!--begin::Logo-->
+							{{-- <a href="index.html" class="mx-auto d-flex align-items-center py-2">
+								<img alt="Logo" src="{{ asset('images/icon.svg') }}" width="70" class="mr-4" />
+								Un sitio oficial del Gobierno del Estado de Nuevo León
+							</a> --}}
+							<!--end::Logo-->
+
+							<a href="/" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center bg-dark-o-30 d-flex ">
+								<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px mr-3 w-100" width="200" />
+							</a>
+							<!--begin::Topbar-->
+							<div class="topbar text-secondary ml-auto py-4">
+								<!--begin::Search-->
+								<div class="dropdown d-none">
+									<!--begin::Toggle-->
+									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
+										<div class="btn btn-icon btn-hover-transparent-white btn-lg btn-dropdown mr-1">
+											<span class="svg-icon svg-icon-xl">
+												<!--begin::Svg Icon | path:media/svg/icons/General/Search.svg-->
+												<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+														<rect x="0" y="0" width="24" height="24" />
+														<path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+														<path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+													</g>
+												</svg>
+												<!--end::Svg Icon-->
+											</span>
+										</div>
+									</div>
+									<!--end::Toggle-->
+									<!--begin::Dropdown-->
+									<div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
+										<div class="quick-search quick-search-dropdown" id="kt_quick_search_dropdown">
+											<!--begin:Form-->
+											<form method="get" class="quick-search-form">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:media/svg/icons/General/Search.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																	<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																		<rect x="0" y="0" width="24" height="24" />
+																		<path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+																		<path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+																	</g>
+																</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</span>
+													</div>
+													<input type="text" class="form-control" placeholder="Search..." />
+													<div class="input-group-append">
+														<span class="input-group-text">
+															<i class="quick-search-close ki ki-close icon-sm text-muted"></i>
+														</span>
+													</div>
+												</div>
+											</form>
+											<!--end::Form-->
+											<!--begin::Scroll-->
+											<div class="quick-search-wrapper scroll" data-scroll="true" data-height="325" data-mobile-height="200"></div>
+											<!--end::Scroll-->
+										</div>
+									</div>
+									<!--end::Dropdown-->
 								</div>
-								<!--end::Left-->
+								<!--end::Search-->
+								<!--begin::Notifications-->
+								<div class="dropdown mr-3">
+									<!--begin::Toggle-->
+									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" id="notifications">
+										<div class="btn btn-icon btn-hover-transparent-dark {{ $notifications["total"] > 0 && $notifications["total"] > $notifications["read"] ? "bg-primary" : "" }} btn-dropdown btn-lg mr-1 pulse pulse-white">
+											<span class="svg-icon svg-icon-xl">
+												<!--begin::Svg Icon | path:media/svg/icons/Code/Compiling.svg-->
+												<i class="far fa-bell {{ $notifications["total"] > 0 && $notifications["total"] > $notifications["read"] ? "text-white" : "" }}"></i>
+												<span class="badge badge-danger">{{ $notifications["total"] - $notifications["read"] }}</span>
+											</span>
+											@if($notifications["total"] > 0 && $notifications["total"] > $notifications["read"])
+												<span class="pulse-ring"></span>
+											@endif
+										</div>
+									</div>
+									<!--end::Toggle-->
+									<!--begin::Dropdown-->
+									<div class="dropdown-menu p-0 m-0 mt-3 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
+										<form>
+											<!--begin::Header-->
+											<div class="d-flex flex-column py-12 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url(media/misc/bg-1.jpg)">
+												<!--begin::Title-->
+												<h4 class="d-flex flex-center rounded-top">
+													<span class="text-white">Notificaciones</span>
+													<span class="btn btn-text btn-success btn-sm font-weight-bold btn-font-md ml-2">{{ $notifications["total"] - $notifications["read"] }} nuevas</span>
+												</h4>
+												<!--end::Title-->
+											</div>
+											<!--end::Header-->
+											<!--begin::Content-->
+											<div class="tab-pane active show p-8" id="topbar_notifications_notifications" role="tabpanel">
+												<!--begin::Scroll-->
+												<div class="scroll mr-n7 w-100" data-scroll="true" data-height="300" data-mobile-height="200">
+													@foreach($notifications["items"] as $notification)
+														<div class="d-flex align-items-center mb-6 border-bottom pb-4">
+															@if(!empty($notification["icon"]))
+																<!--begin::Symbol-->
+																<div class="symbol symbol-40 symbol-light-primary mr-5">
+																	<span class="symbol-label">
+																		<span class="svg-icon svg-icon-lg svg-icon-primary">
+																			<!--begin::Svg Icon | path:media/svg/icons/Home/Library.svg-->
+																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																					<rect x="0" y="0" width="24" height="24" />
+																					<path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+																					<rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+																				</g>
+																			</svg>
+																			<!--end::Svg Icon-->
+																		</span>
+																	</span>
+																</div>
+																<!--end::Symbol-->
+															@endif
+															<!--begin::Text-->
+															<div class="d-flex flex-column font-weight-bold">
+																<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
+																<span class="text-muted">{!! $notification["content"] ?? "" !!}</span>
+															</div>
+															<!--end::Text-->
+														</div>
+													@endforeach
+												</div>
+												<!--end::Scroll-->
+											</div>
+											<!--end::Content-->
+										</form>
+									</div>
+									<!--end::Dropdown-->
+								</div>
+								<!--end::Notifications-->
+								<!--begin::User-->
+								<div class="topbar-item">
+									<div class="btn btn-icon btn-hover-transparent-dark w-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
+										<div class="d-flex flex-column text-right pr-3">
+											<span class="opacity-50 font-weight-bold font-size-sm d-none d-md-inline">Raymundo Salazar</span>
+											<span class="font-weight-bolder font-size-sm d-none d-md-inline">Frontend Dev</span>
+										</div>
+										<span class="symbol symbol-35">
+											<span class="symbol-label font-size-h5 font-weight-bold bg-dark-o-20">RS</span>
+										</span>
+									</div>
+								</div>
+								<!--end::User-->
 							</div>
-							<!--end::Container-->
+							<!--end::Topbar-->
+							<!--begin::Tab Navs-->
 						</div>
-						<!--end::Top-->
+						<!--end::Left-->
+					</div>
+					<!--end::Container-->
+				</div>
+				<!--end::Top-->
+				<!--begin::Wrapper-->
+				<div class="d-flex flex-row flex-row-fluid wrapper " id="kt_wrapper">
+					<!--begin::Header-->
+					<div id="kt_header" class="d-none d-lg-flex col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @endif h-100 px-0">
 						<!--begin::Bottom-->
-						<div class="header-bottom">
+						<div class="header-sidebar bg-dark-o-20 h-100">
 							<!--begin::Container-->
-							<div class="container">
+							<div class="container px-0">
 								<!--begin::Header Menu Wrapper-->
 								<div class="header-navs header-navs-left" id="kt_header_navs">
 									<!--begin::Tab Navs(for tablet and mobile modes)-->
@@ -119,184 +268,42 @@
 										<!--begin::Tab Pane-->
 										<div class="tab-pane py-5 p-lg-0 show active" id="kt_header_tab_1">
 											<!--begin::Menu-->
-											<div id="kt_header_menu" class="header-menu header-menu-mobile header-menu-layout-default align-items-center w-100">
+											<div id="kt_header_menu" class="header-menu header-menu-mobile header-menu-layout-default flex-column align-items-center w-100 pt-4">
 												<!--begin::Nav-->
-												<a href="/" class="mr-2">
-													<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px mr-3" width="200" />
-												</a>
-												<ul class="menu-nav">
+												<ul class="menu-nav flex-column w-100 px-4">
+													<li class="menu-item <?= ($currentPath == "/avisos") ? "menu-item-active" : "" ?>" aria-haspopup="true">
+														<a href="/nuevo-tramite" class="menu-link bg-success w-100">
+															<span class="menu-icon"><i class="fas fa-folder-plus text-white"></i></span>
+															<span class="menu-text text-white d-flex d-md-none d-xl-flex">Iniciar Trámite</span>
+														</a>
+													</li>
+													<li><hr></li>
 													<li class="menu-item <?= ($currentPath == "/dashboard") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/dashboard" class="menu-link">
-															<span class="menu-text">Inicio</span>
+														<a href="/dashboard" class="menu-link w-100">
+															<span class="menu-icon"><i class="fas fa-home"></i></span>
+															<span class="menu-text d-flex d-md-none d-xl-flex">Inicio</span>
 														</a>
 													</li>
 													<li class="menu-item <?= ($currentPath == "/tramites/pendientes") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/tramites/pendientes" class="menu-link">
-															<span class="menu-text">Trámites Pendientes</span>
+														<a href="/tramites/pendientes" class="menu-link w-100">
+															<span class="menu-icon"><i class="fas fa-clock"></i></span>
+															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Pendientes</span>
 														</a>
 													</li>
 													<li class="menu-item <?= ($currentPath == "/tramites/curso") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/tramites/curso" class="menu-link">
-															<span class="menu-text">Trámites en Curso</span>
+														<a href="/tramites/curso" class="menu-link w-100">
+															<span class="menu-icon"><i class="fas fa-play-circle"></i></span>
+															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites en Curso</span>
 														</a>
 													</li>
 													<li class="menu-item <?= ($currentPath == "/tramites/finalizados") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/tramites/finalizados" class="menu-link">
-															<span class="menu-text">Trámites Finalizados</span>
-														</a>
-													</li>
-													<li class="menu-item <?= ($currentPath == "/avisos") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/nuevo-tramite" class="menu-link bg-success ">
-															<span class="text-white">Iniciar Trámite</span>
+														<a href="/tramites/finalizados" class="menu-link w-100">
+															<span class="menu-icon"><i class="fas fa-check-circle"></i></span>
+															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Finalizados</span>
 														</a>
 													</li>
 												</ul>
 												<!--end::Nav-->
-												<!--begin::Topbar-->
-												<div class="topbar text-secondary ml-auto">
-													<!--begin::Search-->
-													<div class="dropdown d-none">
-														<!--begin::Toggle-->
-														<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
-															<div class="btn btn-icon btn-hover-transparent-white btn-lg btn-dropdown mr-1">
-																<span class="svg-icon svg-icon-xl">
-																	<!--begin::Svg Icon | path:media/svg/icons/General/Search.svg-->
-																	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																			<rect x="0" y="0" width="24" height="24" />
-																			<path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
-																			<path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
-																		</g>
-																	</svg>
-																	<!--end::Svg Icon-->
-																</span>
-															</div>
-														</div>
-														<!--end::Toggle-->
-														<!--begin::Dropdown-->
-														<div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
-															<div class="quick-search quick-search-dropdown" id="kt_quick_search_dropdown">
-																<!--begin:Form-->
-																<form method="get" class="quick-search-form">
-																	<div class="input-group">
-																		<div class="input-group-prepend">
-																			<span class="input-group-text">
-																				<span class="svg-icon svg-icon-lg">
-																					<!--begin::Svg Icon | path:media/svg/icons/General/Search.svg-->
-																					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																							<rect x="0" y="0" width="24" height="24" />
-																							<path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
-																							<path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
-																						</g>
-																					</svg>
-																					<!--end::Svg Icon-->
-																				</span>
-																			</span>
-																		</div>
-																		<input type="text" class="form-control" placeholder="Search..." />
-																		<div class="input-group-append">
-																			<span class="input-group-text">
-																				<i class="quick-search-close ki ki-close icon-sm text-muted"></i>
-																			</span>
-																		</div>
-																	</div>
-																</form>
-																<!--end::Form-->
-																<!--begin::Scroll-->
-																<div class="quick-search-wrapper scroll" data-scroll="true" data-height="325" data-mobile-height="200"></div>
-																<!--end::Scroll-->
-															</div>
-														</div>
-														<!--end::Dropdown-->
-													</div>
-													<!--end::Search-->
-													<!--begin::Notifications-->
-													<div class="dropdown mr-3">
-														<!--begin::Toggle-->
-														<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" id="notifications">
-															<div class="btn btn-icon btn-hover-transparent-dark {{ $notifications["total"] > 0 && $notifications["total"] > $notifications["read"] ? "bg-primary" : "" }} btn-dropdown btn-lg mr-1 pulse pulse-white">
-																<span class="svg-icon svg-icon-xl">
-																	<!--begin::Svg Icon | path:media/svg/icons/Code/Compiling.svg-->
-																	<i class="far fa-bell {{ $notifications["total"] > 0 && $notifications["total"] > $notifications["read"] ? "text-white" : "" }}"></i>
-																	<span class="badge badge-danger">{{ $notifications["total"] - $notifications["read"] }}</span>
-																</span>
-																@if($notifications["total"] > 0 && $notifications["total"] > $notifications["read"])
-																	<span class="pulse-ring"></span>
-																@endif
-															</div>
-														</div>
-														<!--end::Toggle-->
-														<!--begin::Dropdown-->
-														<div class="dropdown-menu p-0 m-0 mt-3 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
-															<form>
-																<!--begin::Header-->
-																<div class="d-flex flex-column py-12 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url(media/misc/bg-1.jpg)">
-																	<!--begin::Title-->
-																	<h4 class="d-flex flex-center rounded-top">
-																		<span class="text-white">Notificaciones</span>
-																		<span class="btn btn-text btn-success btn-sm font-weight-bold btn-font-md ml-2">{{ $notifications["total"] - $notifications["read"] }} nuevas</span>
-																	</h4>
-																	<!--end::Title-->
-																</div>
-																<!--end::Header-->
-																<!--begin::Content-->
-																<div class="tab-pane active show p-8" id="topbar_notifications_notifications" role="tabpanel">
-																	<!--begin::Scroll-->
-																	<div class="scroll mr-n7 w-100" data-scroll="true" data-height="300" data-mobile-height="200">
-																		@foreach($notifications["items"] as $notification)
-																			<div class="d-flex align-items-center mb-6 border-bottom pb-4">
-																				@if(!empty($notification["icon"]))
-																					<!--begin::Symbol-->
-																					<div class="symbol symbol-40 symbol-light-primary mr-5">
-																						<span class="symbol-label">
-																							<span class="svg-icon svg-icon-lg svg-icon-primary">
-																								<!--begin::Svg Icon | path:media/svg/icons/Home/Library.svg-->
-																								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																									<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																										<rect x="0" y="0" width="24" height="24" />
-																										<path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
-																										<rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-																									</g>
-																								</svg>
-																								<!--end::Svg Icon-->
-																							</span>
-																						</span>
-																					</div>
-																					<!--end::Symbol-->
-																				@endif
-																				<!--begin::Text-->
-																				<div class="d-flex flex-column font-weight-bold">
-																					<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
-																					<span class="text-muted">{!! $notification["content"] ?? "" !!}</span>
-																				</div>
-																				<!--end::Text-->
-																			</div>
-																		@endforeach
-																	</div>
-																	<!--end::Scroll-->
-																</div>
-																<!--end::Content-->
-															</form>
-														</div>
-														<!--end::Dropdown-->
-													</div>
-													<!--end::Notifications-->
-													<!--begin::User-->
-													<div class="topbar-item">
-														<div class="btn btn-icon btn-hover-transparent-dark w-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
-															<div class="d-flex flex-column text-right pr-3">
-																<span class="opacity-50 font-weight-bold font-size-sm d-none d-md-inline">Raymundo Salazar</span>
-																<span class="font-weight-bolder font-size-sm d-none d-md-inline">Frontend Dev</span>
-															</div>
-															<span class="symbol symbol-35">
-																<span class="symbol-label font-size-h5 font-weight-bold bg-dark-o-30">RS</span>
-															</span>
-														</div>
-													</div>
-													<!--end::User-->
-												</div>
-												<!--end::Topbar-->
 											</div>
 											<!--end::Menu-->
 										</div>
@@ -312,7 +319,7 @@
 					</div>
 					<!--end::Header-->
 					<!--begin::Content-->
-					<div class="content d-flex flex-column flex-column-fluid" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
+					<div class="content col-12 col-lg-11 col-xl-10 d-flex flex-column flex-column-fluid pt-0" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
 						<!--begin::Entry-->
 						<div class="d-flex flex-column-fluid {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) justify-content-center align-items-center @endif">
 							<?= view($viewPath, $args) ?>
@@ -320,79 +327,79 @@
 						<!--end::Entry-->
 					</div>
 					<!--end::Content-->
-					<!--begin::Footer-->
-					<div class="footer bg-white py-4 flex-lg-column @if($empty_layout === true) d-none @else d-flex @endif" id="kt_footer">
-						<!--begin::Container-->
-						<div class="container-xl pt-20 pb-10 px-0 <?= isset($footer["style"]) && $footer["style"] == "minify" ? "d-none" : ""?>">
-							<div class="row">
-								<a href="tel:911" class="col text-center text-white text-hover-primary" target="_blank">
-									<h1><strong>911</strong></h1>
-									<h4><strong>Emergencias</strong></h4>
-								</a>
-								<a href="tel:089" class="col text-center text-white text-hover-primary" target="_blank">
-									<h1><strong>089</strong></h1>
-									<h4><strong>Denuncia anónima</strong></h4>
-								</a>
-								<a href="tel:070" class="col text-center text-white text-hover-primary" target="_blank">
-									<h1><strong>070</strong></h1>
-									<h4><strong>Informatel y Locatel</strong></h4>
-								</a>
-								<a href="tel:073" class="col text-center text-white text-hover-primary" target="_blank">
-									<h1><strong>073</strong></h1>
-									<h4><strong>Agua y Drenaje</strong></h4>
-								</a>
-								<a href="http://aire.nl.gob.mx/" class="col text-center text-white text-hover-primary" target="_blank">
-									<h1><strong><span class="fas fa-seedling"></span></strong></h1>
-									<h4><strong>Monitoreo ambiental</strong></h4>
-								</a>
-							</div>
+				</div>
+				<!--end::Wrapper-->
+				<!--begin::Footer-->
+				<div class="footer bg-white py-4 flex-lg-column @if($empty_layout === true) d-none @else d-flex @endif" id="kt_footer">
+					<!--begin::Container-->
+					<div class="container-xl pt-20 pb-10 px-0 <?= isset($footer["style"]) && $footer["style"] == "minify" ? "d-none" : ""?>">
+						<div class="row">
+							<a href="tel:911" class="col text-center text-white text-hover-primary" target="_blank">
+								<h1><strong>911</strong></h1>
+								<h4><strong>Emergencias</strong></h4>
+							</a>
+							<a href="tel:089" class="col text-center text-white text-hover-primary" target="_blank">
+								<h1><strong>089</strong></h1>
+								<h4><strong>Denuncia anónima</strong></h4>
+							</a>
+							<a href="tel:070" class="col text-center text-white text-hover-primary" target="_blank">
+								<h1><strong>070</strong></h1>
+								<h4><strong>Informatel y Locatel</strong></h4>
+							</a>
+							<a href="tel:073" class="col text-center text-white text-hover-primary" target="_blank">
+								<h1><strong>073</strong></h1>
+								<h4><strong>Agua y Drenaje</strong></h4>
+							</a>
+							<a href="http://aire.nl.gob.mx/" class="col text-center text-white text-hover-primary" target="_blank">
+								<h1><strong><span class="fas fa-seedling"></span></strong></h1>
+								<h4><strong>Monitoreo ambiental</strong></h4>
+							</a>
 						</div>
-						<div class="container-xl pt-10 pb-20 px-0 <?= isset($footer["style"]) && $footer["style"] == "minify" ? "d-none" : ""?>">
-							<div class="row d-flex align-items-center">
-								<div class="col">
-									<img src="{{ asset("images/escudo.svg") }}" alt="">
-									<p class="mt-5 ml-15"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/sobre-tratamiento-datos-personales">Sobre el tratamiento de los datos personales</a></p>
-								</div>
-								<div class="col">
-									<div class="row align-items-center">
-										<div class="col text-right border-right">
-											<ul class="list-group list-group-flush">
-												<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/gobierno">GOBIERNO</a></li>
-												<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/tramites-y-servicios">TRÁMITES Y SERVICIOS</a></li>
-												<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/actualidad">ACTUALIDAD</a></li>
-												<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/transparencia">TRANSPARENCIA</a></li>
-											</ul>
-										</div>
-										<div class="col">
-											<ul class="list-group list-group-flush">
-												<li class="list-group-item text-white">
-													<a target="_blank" class="text-white text-hover-primary" href="https://www.facebook.com/gobiernonuevoleon/"><i class="fab fa-facebook-square"></i></a>
-													<a target="_blank" class="text-white text-hover-primary" href="https://twitter.com/nuevoleon"><i class="fab fa-twitter"></i></a>
-													<a target="_blank" class="text-white text-hover-primary" href="https://www.instagram.com/nuevoleonmx/"><i class="fab fa-instagram"></i></a>
-													<a target="_blank" class="text-white text-hover-primary" href="https://www.youtube.com/user/GobiernoNuevoLeon"><i class="fab fa-youtube"></i></a>
-													<a target="_blank" class="text-white text-hover-primary" href="https://t.me/gobnl"><i class="fab fa-telegram-plane"></i></a>
-												</li>
-												<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/campanas/codigo-de-etica-del-gobierno-del-estado-de-nuevo-leon">CÓDIGO DE ÉTICA</a></li>
-											</ul>
-										</div>
+					</div>
+					<div class="container-xl pt-10 pb-20 px-0 <?= isset($footer["style"]) && $footer["style"] == "minify" ? "d-none" : ""?>">
+						<div class="row d-flex align-items-center">
+							<div class="col">
+								<img src="{{ asset("images/escudo.svg") }}" alt="">
+								<p class="mt-5 ml-15"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/sobre-tratamiento-datos-personales">Sobre el tratamiento de los datos personales</a></p>
+							</div>
+							<div class="col">
+								<div class="row align-items-center">
+									<div class="col text-right border-right">
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/gobierno">GOBIERNO</a></li>
+											<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/tramites-y-servicios">TRÁMITES Y SERVICIOS</a></li>
+											<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/actualidad">ACTUALIDAD</a></li>
+											<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/transparencia">TRANSPARENCIA</a></li>
+										</ul>
+									</div>
+									<div class="col">
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item text-white">
+												<a target="_blank" class="text-white text-hover-primary" href="https://www.facebook.com/gobiernonuevoleon/"><i class="fab fa-facebook-square"></i></a>
+												<a target="_blank" class="text-white text-hover-primary" href="https://twitter.com/nuevoleon"><i class="fab fa-twitter"></i></a>
+												<a target="_blank" class="text-white text-hover-primary" href="https://www.instagram.com/nuevoleonmx/"><i class="fab fa-instagram"></i></a>
+												<a target="_blank" class="text-white text-hover-primary" href="https://www.youtube.com/user/GobiernoNuevoLeon"><i class="fab fa-youtube"></i></a>
+												<a target="_blank" class="text-white text-hover-primary" href="https://t.me/gobnl"><i class="fab fa-telegram-plane"></i></a>
+											</li>
+											<li class="list-group-item text-white"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/campanas/codigo-de-etica-del-gobierno-del-estado-de-nuevo-leon">CÓDIGO DE ÉTICA</a></li>
+										</ul>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="container d-flex flex-column flex-md-row align-items-center justify-content-center">
-							<!--begin::Copyright-->
-							<div class="order-2 order-md-1">
-								<span class="font-weight-bold mr-2"><?= date("Y")?> © Todos los Derechos Reservados</span>
-								<span class="ml-2 mr-2">|</span>
-								<a href="http://keenthemes.com/metronic" target="_blank" class="text-white text-hover-secondary">Gobierno del Estado de Nuevo León</a>
-							</div>
-							<!--end::Copyright-->
-						</div>
-						<!--end::Container-->
 					</div>
-					<!--end::Footer-->
+					<div class="container d-flex flex-column flex-md-row align-items-center justify-content-center">
+						<!--begin::Copyright-->
+						<div class="order-2 order-md-1">
+							<span class="font-weight-bold mr-2"><?= date("Y")?> © Todos los Derechos Reservados</span>
+							<span class="ml-2 mr-2">|</span>
+							<a href="http://keenthemes.com/metronic" target="_blank" class="text-white text-hover-secondary">Gobierno del Estado de Nuevo León</a>
+						</div>
+						<!--end::Copyright-->
+					</div>
+					<!--end::Container-->
 				</div>
-				<!--end::Wrapper-->
+				<!--end::Footer-->
 			</div>
 			<!--end::Page-->
 		</div>
