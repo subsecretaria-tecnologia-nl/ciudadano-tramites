@@ -11,21 +11,25 @@ use Carbon\Carbon;
 
 use App\Repositories\TramitedetalleRepositoryEloquent;
 use App\Repositories\PortalsolicitudescatalogoRepositoryEloquent;
+use App\Repositories\PortalcamporelationshipRepositoryEloquent;
 
 
 class TramitesController extends Controller
 {
     protected $tramites;
     protected $solicitudes;
+    protected $relationship;
 
     public function __construct(
       TramitedetalleRepositoryEloquent $tramites,
-      PortalsolicitudescatalogoRepositoryEloquent $solicitudes
+      PortalsolicitudescatalogoRepositoryEloquent $solicitudes,
+      PortalcamporelationshipRepositoryEloquent $relationship
       )
       {
         // $this->middleware('auth');
         $this->tramites = $tramites;
         $this->solicitudes = $solicitudes;
+        $this->relationship= $relationship;
       }
 
     public function index ($type) {
@@ -46,9 +50,9 @@ class TramitesController extends Controller
 
     public function listaTramites(){
 
-      $tramits = $this->solicitudes->get();
+      $tramits = $this->relationship->groupBy('tramite_id')->get();
 
-      return json_encode($tramits);
+      return json_encode($t);
 
     }
 }

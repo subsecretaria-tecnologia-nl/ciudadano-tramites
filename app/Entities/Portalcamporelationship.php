@@ -20,6 +20,9 @@ class Portalcamporelationship extends Model implements Transformable
      *
      * @var array
      */
+
+     protected $connection = "db_portal";
+     
     protected $fillable = ['id','tramite_id','campo_id','tipo_id','caracteristicas'];
 
     protected $table = "campos_relationship";
