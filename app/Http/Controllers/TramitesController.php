@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Repositories\TramitedetalleRepositoryEloquent;
 use App\Repositories\PortalsolicitudescatalogoRepositoryEloquent;
 use App\Repositories\PortalcamporelationshipRepositoryEloquent;
+use App\Repositories\EgobiernotiposerviciosRepositoryEloquent;
 
 
 class TramitesController extends Controller
@@ -19,17 +20,20 @@ class TramitesController extends Controller
     protected $tramites;
     protected $solicitudes;
     protected $relationship;
+    protected $tiposer;
 
     public function __construct(
       TramitedetalleRepositoryEloquent $tramites,
       PortalsolicitudescatalogoRepositoryEloquent $solicitudes,
-      PortalcamporelationshipRepositoryEloquent $relationship
+      PortalcamporelationshipRepositoryEloquent $relationship,
+      EgobiernotiposerviciosRepositoryEloquent $tiposer
       )
       {
         // $this->middleware('auth');
         $this->tramites = $tramites;
         $this->solicitudes = $solicitudes;
         $this->relationship= $relationship;
+        $this->tiposer = $tiposer;
       }
 
     public function index ($type) {
@@ -52,7 +56,30 @@ class TramitesController extends Controller
 
       $tramits = $this->relationship->get();
 
-      return json_encode($tramits);
+      $tmts = array();
+
+      foreach ($tramits as $t) {
+        $id_tramite = $t->tramite_id;
+        $created_at = $t->created_at;
+        $updated_at = $t->updated_at;
+
+        $serv = $this->tiposer->where('Tipo_Code', $id_tramite)->get();
+        foreach ($serv as $s) {
+          $name = $s->Tipo_Descripcion;
+
+          $tmts []=array(
+            'id_tramite' => $id_tramite,
+            'nombre' => $name,
+            'created_at' => $created_at,
+            'updated_at' => $updated_at
+          );
+
+        }
+      }
+
+      //dd($tmts);
+
+      return json_encode($tmts);
     }
     /**
     * Funcion para crear una nueva solicitud
