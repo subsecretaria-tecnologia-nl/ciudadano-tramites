@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 	Route::get('/dashboard', "DashboardController@index");
 	Route::get('/tramites/{type}', "TramitesController@index");
 	Route::get('/nuevo-tramite', "TramitesController@new");
+	Route::get('/getTramites', 'TramitesController@listaTramites');
 
 	// LOGIN
 	Route::get('/login', "LoginController@index");

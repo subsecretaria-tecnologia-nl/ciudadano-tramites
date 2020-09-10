@@ -20,6 +20,9 @@ class Portalsolicitudescatalogo extends Model implements Transformable
      *
      * @var array
      */
+
+     protected $connection = "portal";
+
     protected $fillable = ['tramite_id','padre_id','titulo','atendido_por','status'];
 
     protected $table = "solicitudes_catalogo";
