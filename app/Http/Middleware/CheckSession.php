@@ -25,9 +25,11 @@ class CheckSession
         }
         return self::redirectLogin($request, $next);
     }
-
+    
     protected function redirectLogin($request, Closure $next){
-        if($request->getPathInfo() != "/login")
+        
+        $session_whitelist = config("layout.session_whitelist");
+        if( in_array($request->getPathInfo() , $session_whitelist ) )
             return redirect("/login");
         else
             return $next($request);
