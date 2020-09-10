@@ -50,9 +50,16 @@ class TramitesController extends Controller
 
     public function listaTramites(){
 
-      $tramits = $this->relationship->groupBy('tramite_id')->get();
+      $tramits = $this->relationship->get();
 
-      return json_encode($t);
+      return json_encode($tramits);
+    }
+    /**
+    * Funcion para crear una nueva solicitud
+    *
+    *	@return json lista de tramites con id
+    */
+    public function crearSolicitud(Request $request) {
 
     }
 }
