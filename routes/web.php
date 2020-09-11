@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 	Route::get('/logout', "LoginController@logout");
 
 	//Solicitudes
-	Route::get('/getTramites', 'SolicitudesController@getTramites');
+	Route::get('/allTramites', 'SolicitudesController@getTramites');
 	Route::get('/getCampos', 'SolicitudesController@getCampos');
 
 //});

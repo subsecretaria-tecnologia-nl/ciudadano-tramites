@@ -20,6 +20,9 @@ class Portalcampo extends Model implements Transformable
      *
      * @var array
      */
+
+    protected $connection = "db_portal";
+
     protected $fillable = ['status','descripcion'];
 
     protected $table = "campos_catalogue";
