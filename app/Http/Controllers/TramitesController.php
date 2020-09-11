@@ -55,13 +55,13 @@ class TramitesController extends Controller
     public function listaTramites(){
 
       $tramits = $this->relationship->get();
-
+      //dd($tramits);
       $tmts = array();
 
       foreach ($tramits as $t) {
         $id_tramite = $t->tramite_id;
-        // $created_at = $t->created_at;
-        // $updated_at = $t->updated_at;
+        $created_at = $t->created_at;
+        $updated_at = $t->updated_at;
 
         $serv = $this->tiposer->where('Tipo_Code', $id_tramite)->get();
         foreach ($serv as $s) {
@@ -69,7 +69,9 @@ class TramitesController extends Controller
 
           $tmts []=array(
             'id_tramite' => $id_tramite,
-            'nombre' => $name
+            'nombre' => $name,
+            'created_at' => $created_at,
+            'updated_at' => $updated_at
           );
 
         }
