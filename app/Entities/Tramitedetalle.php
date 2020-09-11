@@ -21,7 +21,7 @@ class Tramitedetalle extends Model implements Transformable
      * @var array
      */
 
-    protected $connection = "operacion";
+    protected $connection = "db_operacion";
 
     protected $fillable = ['id_detalle_tramite','id_tramite_motor','concepto','importe_concepto','partida'];
 

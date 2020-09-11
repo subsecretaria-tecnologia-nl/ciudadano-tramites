@@ -27,4 +27,8 @@ use Illuminate\Support\Facades\Route;
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
 	Route::get('/logout', "LoginController@logout");
+
+	//Solicitudes
+	Route::get('/getTramites', 'SolicitudesController@getTramites');
+
 //});
