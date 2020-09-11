@@ -30,5 +30,6 @@ use Illuminate\Support\Facades\Route;
 
 	//Solicitudes
 	Route::get('/getTramites', 'SolicitudesController@getTramites');
+	Route::get('/getCampos', 'SolicitudesController@getCampos');
 
 //});

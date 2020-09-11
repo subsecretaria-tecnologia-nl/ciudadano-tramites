@@ -54,4 +54,16 @@ class SolicitudesController extends Controller
     return json_encode($tmts);
   }
 
+  public function getCampos(Request $request){
+    $id_tramite = $request->id_tramite;
+
+    try{
+      $campos = $this->relationship->where('tramite_id', $id_tramite)->get();
+
+    }catch(\Exception $e){
+      Log::info('Error Solicitud - getCampos '.$e->getMessage());
+    }
+    return json_encode($campos);
+  }
+
 }
