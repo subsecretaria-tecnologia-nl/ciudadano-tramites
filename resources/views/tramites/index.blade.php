@@ -91,9 +91,7 @@ $(document).ready(() => createTable());
 function createTable( ){
     let url = "{{ url('/getTramites') }}";
     $('#listado').DataTable({
-        initComplete: function() {
-            $("#listado").removeClass('dataTable');
-        },
+        initComplete:initTableComplete,
         "ajax": {
             "url":url,"dataSrc":""
         },
@@ -126,6 +124,11 @@ function createTable( ){
     });
 }
 
+function initTableComplete(){
+    $("#listado").removeClass('dataTable');
+    $(".dataTables_filter").hide();    
+}
+
 function getTemplateAcciones( data, type, row, meta  ){
     let botonEditar = '<a type="button" ><i class="fas fa-edit"></i></a>';
     let botonEliminar = '<a type="button" ><i class="far fa-trash-alt"></i></a>';
@@ -155,4 +158,10 @@ function renderDate( data ){
         return "";
     }
 }
+
+$("#busqueda").on("keyup", (s) => {
+    $('#listado').DataTable().search( $("#busqueda").val() ).draw();
+})
+
+
 </script>
