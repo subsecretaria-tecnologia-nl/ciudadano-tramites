@@ -5,12 +5,12 @@
     </div>
     <div class="gradient">
             <div class="form-group">
-                <div style="padding-top: 20px">
+                <div class="padding-busqueda">
                     <span class="busqueda-titulo">Busca tus trámites</span>
                 </div>
                 <span  class="busqueda-sub">Puedes buscar por nombre de trámite, número de folio, nombre de solicitante, etc.</span>
-                <div style="padding-top: 20px">
-                    <input class="form-control  form-control-lg" style="height: 50px;" type="text" name="busqueda" id="busqueda"  placeholder="Ejemplo: Certificado de gravamen">
+                <div class="padding-busqueda">
+                    <input class="form-control  form-control-lg" type="text" name="busqueda" id="busqueda"  placeholder="Ejemplo: Certificado de gravamen">
                 </div>
             </div>
     </div>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="cuadro-listado tramite-lista" style="padding-top: 10px">
                         <div class="titulo-cuadro">
-                            <div style=" padding-top: 20px;">
+                            <div style="padding-top: 20px;">
                                 <span class="tituloTabla">
                                     Trámites pendientes
                                 </span>
@@ -39,32 +39,32 @@
                                 <thead>
                                     <tr >
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div >
                                                 <span>id tramites</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div >
                                                 <span>Nombre del Tramite</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div>
                                                 <span>Nombre del solicitante</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div>
                                                 <span>Fecha de creacion</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div>
                                                 <span>Fecha de ultima modificacion</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div>
                                                 <span>Acciones</span>
                                             </div>
                                         </th>
@@ -91,9 +91,7 @@ $(document).ready(() => createTable());
 function createTable( ){
     let url = "{{ url('/getTramites') }}";
     $('#listado').DataTable({
-        initComplete: function() {
-            $("#listado").removeClass('dataTable');
-        },
+        initComplete:initTableComplete,
         "ajax": {
             "url":url,"dataSrc":""
         },
@@ -116,7 +114,7 @@ function createTable( ){
             "sProcessing" : "Procesando...",
         },
         "columns": [
-            { "data": "id", class:"alineacionVertical",render: renderTd }, 
+            { "data": "id_tramite", class:"alineacionVertical",render: renderTd }, 
             { "data": "nombre", render: renderTitulo },
             { "data": "user", render: renderNombre },
             { "data": "created_at", render: renderDate },
@@ -124,6 +122,11 @@ function createTable( ){
             { "data": "id", "render": getTemplateAcciones}
         ]
     });
+}
+
+function initTableComplete(){
+    $("#listado").removeClass('dataTable');
+    $(".dataTables_filter").hide();    
 }
 
 function getTemplateAcciones( data, type, row, meta  ){
@@ -155,4 +158,10 @@ function renderDate( data ){
         return "";
     }
 }
+
+$("#busqueda").on("keyup", (s) => {
+    $('#listado').DataTable().search( $("#busqueda").val() ).draw();
+})
+
+
 </script>
