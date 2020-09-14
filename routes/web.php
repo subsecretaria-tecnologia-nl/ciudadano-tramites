@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 	Route::get('/', function () {
 		return redirect("/dashboard");
 	});
-	Route::get('/tramites/nuevo', "TramitesController@new");
+	Route::get('/nuevo-tramite', "TramitesController@new");
 	Route::get('/dashboard', "DashboardController@index");
 	Route::get('/tramites/{type}', "TramitesController@index");
 	
