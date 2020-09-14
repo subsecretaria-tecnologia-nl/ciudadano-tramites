@@ -42,7 +42,7 @@ class TramitesController extends Controller
     }
 
     public function new () {
-    	set_layout_arg("subtitle", "Nuevo Trámite");
+    	set_layout_arg(["subtitle" => "Nuevo Trámite", "fluid_container"=> true]);
     	return layout_view("tramites.new");
     }
 
