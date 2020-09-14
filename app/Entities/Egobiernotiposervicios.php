@@ -20,7 +20,8 @@ class Egobiernotiposervicios extends Model implements Transformable
      *
      * @var array
      */
-     protected $connection = "db_egobierno";
+     //protected $connection = "db_egobierno";
+     protected $connection = "db_operacion";
 
      protected $fillable = ['Tipo_Code','Tipo_Descripcion','Origen_URL','GpoTrans_Num','id_gpm','descripcion_gpm','tiporeferencia_id','limitereferencia_id'];
 

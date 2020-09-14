@@ -42,7 +42,7 @@ class TramitesController extends Controller
     }
 
     public function new () {
-    	set_layout_arg(["subtitle" => "Nuevo Trámite", "fluid_container"=> true]);
+    	set_layout_arg("subtitle", "Nuevo Trámite");
     	return layout_view("tramites.new");
     }
 
@@ -87,6 +87,11 @@ class TramitesController extends Controller
     *	@return json lista de tramites con id
     */
     public function crearSolicitud(Request $request) {
+      $tramite_id = $request->tramite_id;
+      $user = $request->user_id;
+
+      $valor = $request->valor;
+
 
     }
 }
