@@ -79,6 +79,14 @@
 							</a>
 							<!--begin::Topbar-->
 							<div class="topbar text-secondary ml-auto py-4">
+							    <form class="form-inline my-2 my-lg-0">
+									<div class="input-group" id="busquedaInputGroup">
+								        <span class="input-group-prepend">
+								            <div class="input-group-text bg-transparent border-right-0"><i class="fa fa-search"></i></div>
+								        </span>
+								        <input class="form-control  mr-sm-2 " type="text" name="busqueda" id="busqueda"  placeholder="Ejemplo: Certificado de gravamen" style="border-left: none; transition: width 0.8s linear 0.2s; ">
+								    </div>
+							    </form>
 								<!--begin::Search-->
 								<div class="dropdown d-none">
 									<!--begin::Toggle-->
