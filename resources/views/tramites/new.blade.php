@@ -76,7 +76,7 @@
 													    <div id="camposDinamicosDiv" class="row"></div>
 
 													    <div class="text-center  ">
-														    <button class="btn btn-info"  type="button" onclick="next()">
+														    <button class="btn btn-info"  type="button" onclick="next('#nav-detalle-tab')">
 							                        			Siguiente
 							                        		</button>
 													    </div>
@@ -86,45 +86,49 @@
 							                    <div class="tab-pane fade" id="nav-detalle" role="tabpanel" aria-labelledby="nav-detalle-tab">
 
 
-<div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 10px;">
-     <div class="card">
-         <div class="card-body">
-             <div class="table-responsive-sm">
-                 <table class="table table-striped" id="tableDetails">
-                     <thead>
-                         <tr>
-                         	<th></th>
-                            <th class="center">#</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th class="right">Total</th>
+													<div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top: 10px;">
+													     <div class="card">
+													         <div class="card-body">
+													             <div class="table-responsive-sm">
+													                 <table class="table table-striped" id="tableDetails">
+													                     <thead>
+													                         <tr>
+													                         	<th></th>
+													                            <th class="center">#</th>
+													                            <th>Nombre</th>
+													                            <th>Descripción</th>
+													                            <th class="right">Total</th>
 
-                         </tr>
-                     </thead>
-                 </table>
-             </div>
-             <div class="row">
-                 <div class="col-lg-4 col-sm-5">
-                 </div>
-                 <div class="col-lg-4 col-sm-5 ml-auto">
-                     <table class="table table-clear">
-                         <tbody>
-                             <tr>
-                                 <td class="left">
-                                     <strong class="text-dark">Total</strong> </td>
-                                 <td class="right">
-                                     <strong class="text-dark">$20,744,00</strong>
-                                 </td>
-                             </tr>
-                         </tbody>
-                     </table>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
+													                         </tr>
+													                     </thead>
+													                 </table>
+													             </div>
+													             <div class="row">
+													                 <div class="col-lg-4 col-sm-5">
+													                 </div>
+													                 <div class="col-lg-4 col-sm-5 ml-auto">
+													                     <table class="table table-clear">
+													                         <tbody>
+													                             <tr>
+													                                 <td class="left">
+													                                     <strong class="text-dark">Total</strong> </td>
+													                                 <td class="right">
+													                                     <strong class="text-dark">$20,744,00</strong>
+													                                 </td>
+													                             </tr>
+													                         </tbody>
+													                     </table>
+													                 </div>
+													             </div>
+													         </div>
+													     </div>
+													 </div>
 
-
+												    <div class="text-center  ">
+													    <button class="btn btn-info"  type="button" onclick="next('#nav-comprobante-tab')">
+						                        			Siguiente
+						                        		</button>
+												    </div>
 							                    </div>
 							                    <div class="tab-pane fade" id="nav-comprobante" role="tabpanel" aria-labelledby="nav-comprobante-tab">
 							                    		Comprbant
@@ -262,6 +266,7 @@
 			tramitesGuardar.push( nuevoTramite );
 			Command: toastr.success("Se agrego el trámite a su lista", "Notifications") ;
 			$("#camposDinamicosDiv").fadeOut(60).empty();
+			$("#tramitesSelect").val("limpia").trigger('change');
 		}
 	}
 
@@ -314,7 +319,7 @@
 		$("#modalDelete").modal('hide');
 	}
 
-	function next(){
-		$("#nav-detalle-tab").click();
+	function next(idNext){
+		$(idNext).click();
 	}
 </script>

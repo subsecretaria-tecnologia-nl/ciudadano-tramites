@@ -23,7 +23,7 @@ FormularioBuilder = {
 			type:"button"
 		}).append("Guardar");
 
-		//arrToDOm.push(botonCancel);
+
 		botonAdd.on("click", () => {
 			fnValid( arrElementos, id_tramite );
 		});
