@@ -4,18 +4,19 @@
 		<h1 class="mt-20"><strong>RECUPERAR CONTRASEÑA</strong></h1>
 		<p>Ingrese su nueva contraseña :</p>
 		<form class="form fv-plugins-bootstrap fv-plugins-framework pt-5" novalidate="novalidate" id="kt_confirm_password_form">
-			<div class="form-group fv-plugins-icon-container">
+			<div class="form-group fv-plugins-icon-container" id="show_hide_password">
 				<input
 					id="password"
+					name="password"
 					class="form-control form-control-solid bg-light h-auto py-5 px-6"
 					type="password"
 					placeholder="ingrese su nueva contraseña"
-					name="password"
 					autocomplete="off"
+					data-toggle="password"
 				>
 				<div class="fv-plugins-message-container"></div>
             </div>
-            <div class="form-group fv-plugins-icon-container">
+            <div class="form-group fv-plugins-icon-container"  id="show_hide_password2">
 				<input
 					id="confirmPassword"
 					class="form-control form-control-solid bg-light h-auto py-5 px-6"
@@ -25,6 +26,7 @@
 					autocomplete="off"
 					data-fv-not-empty="true" 
 					data-fv-not-empty___message="este campo es obligatorio" 
+					data-toggle="password"
 				>
 				<div class="fv-plugins-message-container"></div>
 			</div>

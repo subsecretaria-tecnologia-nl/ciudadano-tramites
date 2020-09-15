@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
                         },
                         regexp: {
                             regexp: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-                            message: 'La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula'
+                            message: 'La contraseña debe tener al entre 8 y 16 caracteres,al menos un dígito,' +
+                                '<br>' + ' al menos una minúscula y al menos una mayúscula'
                         }
                     }
                 },
@@ -46,7 +47,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
                         },
                         regexp: {
                             regexp: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-                            message: 'La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula'
+                            message: 'La contraseña debe tener al entre 8 y 16 caracteres,al menos un dígito,' +
+                                '<br>' + ' al menos una minúscula y al menos una mayúscula'
                         }
                     }
                 }
