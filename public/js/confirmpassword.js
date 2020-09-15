@@ -93,7 +93,7 @@ $('#kt_recovery_submit').on('click', function(e) {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location = "/login?email=" + res;
+                        window.location = "/login?e=" + btoa(res);
                     });
                 }
             });

@@ -900,7 +900,6 @@
 		<script src="https://unpkg.com/@popperjs/core@2"></script>
 		<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
-		<script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
 	</body>
 	<!--end::Body-->
 </html>
