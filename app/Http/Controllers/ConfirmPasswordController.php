@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class RecoveryController extends Controller
+class ConfirmPasswordController extends Controller
 {
     public function index () {
 		set_layout_arg([
-            "subtitle" => "Olvidaste tu contraseña",
+            "subtitle" => "Confirmar la contraseña nueva",
             "empty_layout" => true,
             "background_content" => "#ffffff",
             "script" => [
-              asset("js/recovery.js")
+              asset("js/confirmpassword.js")
             ]
 		]);
 
-		return layout_view("recovery");
+		return layout_view("confirmpassword");
     }
 }

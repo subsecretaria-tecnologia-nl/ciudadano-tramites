@@ -11,7 +11,6 @@
 					placeholder="Nombre de usuario o Correo electrónico"
 					name="username"
 					autocomplete="off"
-
 					data-fv-not-empty="true"
 					data-fv-not-empty___message="El nombre de usuario o correo electrónico es requerido" 
 				>
