@@ -310,6 +310,12 @@
 															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Finalizados</span>
 														</a>
 													</li>
+													<li class="menu-item <?= ($currentPath == "/tramites/finalizados") ? "menu-item-active" : "" ?>" aria-haspopup="true">
+														<a href="/tramites/por-pagar" class="menu-link w-100">
+															<span class="menu-icon"><i class="fas fa-money-bill"></i></span>
+															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Por Pagar</span>
+														</a>
+													</li>
 												</ul>
 												<!--end::Nav-->
 											</div>
@@ -329,7 +335,7 @@
 					<!--begin::Content-->
 					<div class="content col-12  @if($empty_layout === false) col-lg-11 col-xl-10 @endif d-flex flex-column flex-column-fluid pt-0" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
 						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) justify-content-center align-items-center @endif">
+						<div class="d-flex flex-column-fluid justify-content-center {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) align-items-center @endif">
 							<?= view($viewPath, $args) ?>
 						</div>
 						<!--end::Entry-->
