@@ -78,7 +78,31 @@
 								<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px mr-3 w-100" width="200" />
 							</a>
 							<!--begin::Topbar-->
-							<div class="topbar text-secondary ml-auto py-4">
+							<div class="topbar text-secondary ml-auto py-4 w-100 px-3 align-items-center">
+								<div class="mr-auto header-menu header-menu-mobile header-menu-layout-default">
+									<ul class="menu-nav">
+										<li class="menu-item">
+											<a href="/" class="menu-link">
+												<span class="menu-text m-0">Guía de Usuario</span>
+											</a>
+										</li>
+										<li class="menu-item">
+											<a href="/" class="menu-link">
+												<span class="menu-text m-0">Registro de Usuarios</span>
+											</a>
+										</li>
+										<li class="menu-item">
+											<a href="/" class="menu-link">
+												<span class="menu-text m-0">Noticias</span>
+											</a>
+										</li>
+										<li class="menu-item">
+											<a href="/" class="menu-link">
+												<span class="menu-text m-0">Nuevo Trámite</span>
+											</a>
+										</li>
+									</ul>
+								</div>
 							    <form class="form-inline my-2 my-lg-0">
 									<div class="input-group" id="busquedaInputGroup">
 								        <span class="input-group-prepend">
@@ -144,8 +168,21 @@
 									<!--end::Dropdown-->
 								</div>
 								<!--end::Search-->
+								<!--begin::User-->
+								<div class="topbar-item">
+									<div class="btn btn-icon btn-hover-transparent-dark w-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
+										<div class="d-flex flex-column text-right pr-3">
+											<span class="opacity-50 font-weight-bold font-size-sm d-none d-md-inline">Raymundo Salazar</span>
+											<span class="font-weight-bolder font-size-sm d-none d-md-inline">Frontend Dev</span>
+										</div>
+										<span class="symbol symbol-35">
+											<span class="symbol-label font-size-h5 font-weight-bold bg-dark-o-20">RS</span>
+										</span>
+									</div>
+								</div>
+								<!--end::User-->
 								<!--begin::Notifications-->
-								<div class="dropdown mr-3">
+								<div class="dropdown mr-3 ml-2">
 									<!--begin::Toggle-->
 									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" id="notifications">
 										<div class="btn btn-icon btn-hover-transparent-dark {{ $notifications["total"] > 0 && $notifications["total"] > $notifications["read"] ? "bg-primary" : "" }} btn-dropdown btn-lg mr-1 pulse pulse-white">
@@ -215,19 +252,6 @@
 									<!--end::Dropdown-->
 								</div>
 								<!--end::Notifications-->
-								<!--begin::User-->
-								<div class="topbar-item">
-									<div class="btn btn-icon btn-hover-transparent-dark w-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
-										<div class="d-flex flex-column text-right pr-3">
-											<span class="opacity-50 font-weight-bold font-size-sm d-none d-md-inline">Raymundo Salazar</span>
-											<span class="font-weight-bolder font-size-sm d-none d-md-inline">Frontend Dev</span>
-										</div>
-										<span class="symbol symbol-35">
-											<span class="symbol-label font-size-h5 font-weight-bold bg-dark-o-20">RS</span>
-										</span>
-									</div>
-								</div>
-								<!--end::User-->
 							</div>
 							<!--end::Topbar-->
 							<!--begin::Tab Navs-->
@@ -310,6 +334,12 @@
 															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Finalizados</span>
 														</a>
 													</li>
+													<li class="menu-item <?= ($currentPath == "/tramites/finalizados") ? "menu-item-active" : "" ?>" aria-haspopup="true">
+														<a href="/tramites/por-pagar" class="menu-link w-100">
+															<span class="menu-icon"><i class="fas fa-money-bill"></i></span>
+															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Por Pagar</span>
+														</a>
+													</li>
 												</ul>
 												<!--end::Nav-->
 											</div>
@@ -329,7 +359,7 @@
 					<!--begin::Content-->
 					<div class="content col-12  @if($empty_layout === false) col-lg-11 col-xl-10 @endif d-flex flex-column flex-column-fluid pt-0" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
 						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) justify-content-center align-items-center @endif">
+						<div class="d-flex flex-column-fluid justify-content-center {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) align-items-center @endif">
 							<?= view($viewPath, $args) ?>
 						</div>
 						<!--end::Entry-->
