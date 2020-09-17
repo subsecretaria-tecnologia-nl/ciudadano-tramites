@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ConfirmPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,11 @@ use Illuminate\Support\Facades\Route;
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
 	Route::get('/logout', "LoginController@logout");
+	Route::get('/recovery-password', "RecoveryController@index");
+	Route::get('/recovery-password/{token}', [ConfirmPasswordController::class,'index'], function($token){
+			return $token;
+	});
+});
 
 	//Solicitudes
 	Route::get('/allTramites', 'SolicitudesController@getTramites');

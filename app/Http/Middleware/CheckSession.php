@@ -21,13 +21,17 @@ class CheckSession
             if(!empty($session->authenticated->until) && $session->authenticated->until <= date()){
                 return self::redirectLogin($request, $next);
             }
-            return $next($request);
+            return $request->getPathInfo() == "/login" ? redirect("/dashboard") : $next($request);
         }
         return self::redirectLogin($request, $next);
     }
-
+    
     protected function redirectLogin($request, Closure $next){
-        if($request->getPathInfo() != "/login")
+        
+        $session_whitelist = config("layout.session_whitelist");
+        $path = explode("/", $request->getPathInfo())[1];
+
+        if( !in_array($path , $session_whitelist ) )
             return redirect("/login");
         else
             return $next($request);
