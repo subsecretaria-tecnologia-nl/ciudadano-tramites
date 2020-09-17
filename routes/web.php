@@ -15,14 +15,16 @@ use App\Http\Controllers\ConfirmPasswordController;
 |
 */
 
-Route::middleware(["validate_session"])->group(function(){
+//Route::middleware(["validate_session"])->group(function(){
 	Route::get('/', function () {
 		return redirect("/dashboard");
 	});
+	Route::get('/nuevo-tramite', "TramitesController@new");
 	Route::get('/dashboard', "DashboardController@index");
 	Route::get('/tramites/{type}', "TramitesController@index");
-	Route::get('/nuevo-tramite', "TramitesController@new");
 	
+	Route::get('/getTramites', 'TramitesController@listaTramites');
+
 	// LOGIN
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
@@ -33,3 +35,8 @@ Route::middleware(["validate_session"])->group(function(){
 	});
 });
 
+	//Solicitudes
+	Route::get('/allTramites', 'SolicitudesController@getTramites');
+	Route::get('/getCampos', 'SolicitudesController@getCampos');
+
+//});
