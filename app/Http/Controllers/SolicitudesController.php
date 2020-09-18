@@ -24,6 +24,10 @@ class SolicitudesController extends Controller
   protected $tipocampo;
   protected $campo;
 
+// agregar catalogos
+  protected $catalogo_campos;
+  protected $catalogo_type;
+
   public function __construct(
     PortalsolicitudescatalogoRepositoryEloquent $solicitudes,
     PortalcamporelationshipRepositoryEloquent $relationship,
@@ -34,65 +38,128 @@ class SolicitudesController extends Controller
     {
       // $this->middleware('auth');
       $this->solicitudes = $solicitudes;
+      
       $this->relationship= $relationship;
+      
       $this->tiposer = $tiposer;
+      
       $this->tipocampo = $tipocampo;
+      
       $this->campo = $campo;
+
+      // creamos los catalogos iniciales
+
+      $this->loadInfo();
+
+
     }
 
+  /*
+   * getTramites() ESTE METODO REGRESA LOS TRAMITES CONFIGURADOS 
+   * 
+   * @params null 
+   *
+   *
+   * @returns an json object
+   */
+
+  public function loadInfo()
+  {
+
+    $c_campos = array();
+
+    $campos = $this->campo->all();
+
+    foreach($campos as $c)
+    {
+      $c_campos [$c->id]= $c->descripcion;
+    }
+
+    $this->catalogo_campos = $c_campos;
+
+    $c_type = array();
+
+    $type = $this->tipocampo->all();
+
+    foreach($type as $t)
+    {
+      $c_type [$t->id]= $t->descripcion;
+    }
+    
+    $this->catalogo_type = $c_type;
+
+  }
+
+
+  /*
+   * getTramites() ESTE METODO REGRESA LOS TRAMITES CONFIGURADOS 
+   * 
+   * @params null 
+   *
+   *
+   * @returns an json object
+   */
 
   public function getTramites(){
 
-    $tramits = $this->tiposer->where('id_gpm','>=', 1)->get();
+    $tramites = $this->relationship->all();
 
-    //$tmts->tramites
-    $tmts = array();
-    try{
-
-      foreach ($tramits as $t) {
-        $tmts []=array(
-          'id_tramite'=> $t->Tipo_Code,
-          'tramite' => $t->Tipo_Descripcion,
-        );
+    $t = array();
+    
+    // obtengo los tramites configurados
+    foreach ($tramites as $k) {
+      # checar los que no tenemos
+      if( !in_array((int)$k->tramite_id, $t) )
+      {
+        $t[] = (int)$k->tramite_id;
       }
+    }
 
-    }catch(\Exception $e){
-      Log::info('Error Portal - ver Tramites: '.$e->getMessage());
+    // obtengo la descripcion y id de los tramites
+    $servicios = $this->tiposer->findWhereIn('Tipo_Code',$t);
+    
+    $tmts = array();
+
+    foreach($servicios as $s)
+    {
+      $tmts []=array(
+          'id_tramite'=> $s->Tipo_Code,
+          'tramite' => $s->Tipo_Descripcion,
+        );
     }
 
     return json_encode($tmts);
+    
   }
 
+  /*
+   * getCampos() ESTE METODO REGRESA LOS CAMPOS CONFIGURADOS EN EL TRAMITE
+   * 
+   * @params id_tramite 
+   *
+   *
+   * @returns an json object
+   */
+
   public function getCampos(Request $request){
+    
     $id_tramite = $request->id_tramite;
 
+    //dd($id_tramite,$this->catalogo_campos,$this->catalogo_type);
+    
     $campos_data = array();
+    
     try{
-      $campos = $this->relationship->where('tramite_id', $id_tramite)->get();
+      $campos = $this->relationship->findWhere( ['tramite_id' => $id_tramite] );
       //$campos = $this->relationship->where('tramite_id', 100)->get();
 
       foreach ($campos as $c) {
-        $rel_id = $c->id;
-        $campo_id = $c->campo_id;
-        $tipo_id = $c->tipo_id;
-        $caracteristicas = $c->caracteristicas;
-
-        $type = $this->tipocampo->where('id', $tipo_id)->get();
-
-        foreach ($type as $t) {
-          $tipo = $t->descripcion;
-        }
-
-        $campos_get = $this->campo->where('id',$campo_id)->get();
-        foreach ($campos_get as $cps) {
-          $campo_name = $cps->descripcion;
-        }
 
         $campos_data []=array(
-          'relationship' => $rel_id,
-          'tipo' => $tipo,
-          'nombre' => $campo_name,
-          'caracteristicas' => $caracteristicas
+          'relationship' => $c->id,
+          'tipo' => $this->catalogo_type[$c->tipo_id],
+          'nombre' => $this->catalogo_campos[$c->campo_id],
+          'caracteristicas' => $c->caracteristicas,
         );
       }
 
@@ -101,6 +168,8 @@ class SolicitudesController extends Controller
     }catch(\Exception $e){
       Log::info('Error Solicitud - getCampos '.$e->getMessage());
     }
+
+    
     return json_encode($campos_data);
   }
 
