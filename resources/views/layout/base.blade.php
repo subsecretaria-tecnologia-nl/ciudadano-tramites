@@ -1,3 +1,6 @@
+<?php
+	$user = session()->get("user");
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -172,11 +175,11 @@
 								<div class="topbar-item">
 									<div class="btn btn-icon btn-hover-transparent-dark w-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
 										<div class="d-flex flex-column text-right pr-3">
-											<span class="opacity-50 font-weight-bold font-size-sm d-none d-md-inline">Raymundo Salazar</span>
+											<span class="opacity-50 font-weight-bold font-size-sm d-none d-md-inline">{{ $user->name }} {{ $user->fathers_surname }} </span>
 											<span class="font-weight-bolder font-size-sm d-none d-md-inline">Frontend Dev</span>
 										</div>
 										<span class="symbol symbol-35">
-											<span class="symbol-label font-size-h5 font-weight-bold bg-dark-o-20">RS</span>
+											<span class="symbol-label font-size-h5 font-weight-bold bg-dark-o-20">{{ $user->name[0].$user->fathers_surname[0] }}</span>
 										</span>
 									</div>
 								</div>
@@ -458,14 +461,14 @@
 				<div class="d-flex align-items-center mt-5">
 					<div class="symbol symbol-100 mr-5">
 						{{-- <div class="symbol-label" style="background-image:url('media/users/300_21.jpg')"></div> --}}
-						<span class="symbol-label font-size-h2 font-weight-bold bg-dark-o-30">RS</span>
+						<span class="symbol-label font-size-h2 font-weight-bold bg-dark-o-30">{{ $user->name[0].$user->fathers_surname[0] }}</span>
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">Raymundo Salazar</a>
-						<div class="text-muted mt-1">Frontend Development</div>
+						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $user->name }} {{ $user->fathers_surname }} </a>
+						{{-- <div class="text-muted mt-1">Frontend Development</div> --}}
 						<div class="navi mt-2">
-							<a href="mailto:alberto.salazars@nuevoleon.gob.mx" class="navi-item">
+							<a href="mailto:{{ $user->email }}" class="navi-item">
 								<span class="navi-link p-0 pb-2">
 									<span class="navi-icon mr-1">
 										<span class="svg-icon svg-icon-lg svg-icon-primary">
@@ -480,7 +483,7 @@
 											<!--end::Svg Icon-->
 										</span>
 									</span>
-									<span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">alberto.salazars@nuevoleon.gob.mx</span>
+									<span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">{{ $user->email }}</span>
 								</span>
 							</a>
 							<a href="/logout" class="btn btn-sm btn-light-danger font-weight-bolder text-danger text-hover-white py-2 px-5">Cerrar Sesión</a>
