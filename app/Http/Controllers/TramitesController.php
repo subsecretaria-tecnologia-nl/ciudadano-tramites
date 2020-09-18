@@ -81,16 +81,21 @@ class TramitesController extends Controller
 
       return json_encode($tmts);
     }
+
     /**
     * Funcion para crear una nueva solicitud
     *
     *	@return json lista de tramites con id
     */
     public function crearSolicitud(Request $request) {
-      $tramite_id = $request->tramite_id;
-      $user = $request->user_id;
+      $data = $request->tramite_id;
+      $user_id = 1;
 
-      $valor = $request->valor;
+      try{
+
+      }catch(\Exception $e){
+        Log::info('Error - crear Solicitud: '.$e->getMessage());
+      }
 
 
     }

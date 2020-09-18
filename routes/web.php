@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 	Route::get('/nuevo-tramite', "TramitesController@new");
 	Route::get('/dashboard', "DashboardController@index");
 	Route::get('/tramites/{type}', "TramitesController@index");
-	
+
 	Route::get('/getTramites', 'TramitesController@listaTramites');
 
 	// LOGIN
@@ -32,5 +32,6 @@ use Illuminate\Support\Facades\Route;
 	//Solicitudes
 	Route::get('/allTramites', 'SolicitudesController@getTramites');
 	Route::get('/getCampos', 'SolicitudesController@getCampos');
+	Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
 
 //});
