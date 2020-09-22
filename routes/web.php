@@ -22,6 +22,10 @@ Route::middleware(["validate_session"])->group(function(){
 	Route::get('/dashboard', "DashboardController@index");
 	Route::get('/tramites/{type}', "TramitesController@index");
 	Route::get('/nuevo-tramite', "TramitesController@new");
+	Route::get('/perfil', "ProfileController@index");
+	Route::get('/informacion-cuenta', "AcountInfoController@index");
+	Route::get('/cambiar-contraseña', "changePassword@index");
+	Route::get('/usuarios', "UsersController@index");
 	
 	// LOGIN
 	Route::get('/login', "LoginController@index");

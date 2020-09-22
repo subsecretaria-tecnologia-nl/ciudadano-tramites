@@ -88,3 +88,20 @@ body {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 3px;
 }
+
+.btn-guardar {
+    background-color: #347ab8 !important;
+    width: 150px !important;
+    float: right;
+    margin-right: 15px !important;
+    color: $white !important;
+}
+
+.btn-cancelar {
+    background-color: #f0f0f0 !important;
+    color: #858585 !important;
+    border-color: #f0f0f0 !important;
+    width: 100px !important;
+    float: right;
+    margin-right: 0px !important;
+}
