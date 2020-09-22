@@ -20,22 +20,28 @@ class LoginController extends Controller
 	}
 
 	public function validation (Request $request) {
-		$session = [
-			"authenticated" => [
-				"created_at" => date("Y-m-d H:i:s"),
-				"until_at" => date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s")." + ".env("SESSION_LIFETIME")." minutes"))
-			],
-			"user" => [
-				"name" => "",
-				"last_name" => "",
-				"email" => "",
-				"username" => "",
-				"job" => ""
-			]
-		];
+		$login = curlSendRequest("GET", env("SESSION_HOSTNAME")."/login", [], [ "Authorization: Basic ".base64_encode($request->username.":".$request->password) ]);
+		if($login->data == "response"){
+			$user = curlSendRequest("GET", env("SESSION_HOSTNAME")."/users/me", [], [ "Authorization: Bearer {$login->response->token}" ]);
+
+			if($user->data == "response"){
+				$session = [
+					"authenticated" => [
+						"created_at" => date("Y-m-d H:i:s"),
+						"until_at" => $login->response->expires_in
+					],
+					"session" => $login->response,
+					"user" => $user->response->user
+				];
+			}else{
+				return abort(401);
+			}
+		}else{
+			return abort(401);
+		}
 
 		if(session($session))
-			response(200);
+			return response(200);
 	}
 
 	public function logout () {
