@@ -15,7 +15,7 @@ use App\Http\Controllers\ConfirmPasswordController;
 |
 */
 
-Route::middleware(["validate_session"])->group(function(){
+// Route::middleware(["validate_session"])->group(function(){
 	Route::get('/', function () {
 		return redirect("/dashboard");
 	});
@@ -39,4 +39,4 @@ Route::middleware(["validate_session"])->group(function(){
 	Route::get('/allTramites', 'SolicitudesController@getTramites');
 	Route::get('/getCampos', 'SolicitudesController@getCampos');
 	Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
-});
+// });
