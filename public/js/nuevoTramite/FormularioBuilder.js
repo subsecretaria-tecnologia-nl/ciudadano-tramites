@@ -1,13 +1,15 @@
 FormularioBuilder = {
-    build: function( campos, fnValid, id_tramite ) {
+	arrElementos: [],
+
+    build: function( campos ) {
 		let arrCampos = JSON.parse( campos );
-		let arrElementos = [];
+		this.arrElementos = [];
 		arrCampos.forEach( ( campo, index ) => {
-			arrElementos.push(	ElementFactory.create( campo ) );
+			this.arrElementos.push(	ElementFactory.create( campo ) );
 		});
 
 		let arrToDOm= [];
-		arrElementos.forEach( element => {
+		this.arrElementos.forEach( element => {
 			let divFormGroup = $("<div>").addClass("form-group");
 			let divElem = $("<div>").addClass("").append( element.build() );
 			divFormGroup.append($('<label>').addClass("control-label") ).append(element.descripcion.toUpperCase());
@@ -15,21 +17,25 @@ FormularioBuilder = {
 			let divCol =  $("<div>").addClass("col-lg-4").append(divFormGroup);
 			arrToDOm.push( divCol )
 		});
-
+/*
 		let botonCancel = $("<button>").addClass("btn btn-danger").attr({
 			type:"button"
 		}).append("Cancelar");
 		let botonAdd = $("<button>").addClass("btn btn-success").attr({
-			type:"button"
+			type:"button", id:"buttonSave"
 		}).append("Guardar");
 
 
 		botonAdd.on("click", () => {
 			fnValid( arrElementos, id_tramite );
-		});
-		arrToDOm.push(botonAdd);
+		});*/
+		//arrToDOm.push(botonAdd);
 		return arrToDOm;
 		
+    },
+
+    getElements: function(){
+    	return this.arrElementos;
     },
 
     isValid: function( campos){
