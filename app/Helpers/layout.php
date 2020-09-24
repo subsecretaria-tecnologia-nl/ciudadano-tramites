@@ -41,3 +41,20 @@ if(!function_exists("to_object")){
 		return json_decode(json_encode($arr));
 	}
 }
+
+if(!function_exists("curlSendRequest")){
+	function curlSendRequest ($method, $endpoint, $data, $headers = [], $timeout = null) {
+		if(!$timeout) $timeout = env("WS_TIMEOUT");
+		$req = curl_init();
+		$data = json_encode($data);
+		curl_setopt($req, CURLOPT_URL, $endpoint);
+		curl_setopt($req, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($req, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($req, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($req, CURLOPT_CUSTOMREQUEST, $method);
+		curl_setopt($req, CURLOPT_TIMEOUT, $timeout * 1000);
+		$response = curl_exec($req);
+		curl_close($req);
+		return json_decode($response);
+	}
+}

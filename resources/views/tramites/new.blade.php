@@ -4,7 +4,7 @@
             <div>
                 <span > inicio->Tramites en curso->Selección de Trámite</span>
             </div>
-            <div class="card" style="padding-top: 10px">
+            <div class="card" style="padding-top: 10px; min-height: 600px;">
                 <div class="card-body">
                     <div style="padding-top: 20px;">
                         <span class="card-title">
@@ -17,8 +17,6 @@
                     <div class="dropdown-divider"></div>
                     <section id="tabs" >
 					    <div class="container-fluid">
-
-
 							<div class="row">
 
 							    <!--Grid column-->
@@ -26,10 +24,19 @@
 
 							      	<!-- Card -->
 							      	<div class="mb-3">
-							        	<div class="pt-4 wish-list" id="listTramites">
-							        	</div>
+							        	<div class="pt-4 wish-list" id="listTramites"></div>
 							      	</div>
 							      	<!-- Card -->
+
+
+					      			<div class="mb-3" id="divMetodoPago"  style="display: none;">
+										<div id="containerMetodoPago" > </div>
+										<!--
+										<button type="button" class="btn btn-primary btn-block" onclick="pagar()"> Pagar </button>
+							        	<button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" onclick="cancelarPago()">
+							          		Cancelar
+							          	</button>	    -->    		
+						        	</div>
 							    </div>
 							    <!--Grid column-->
 
@@ -62,21 +69,13 @@
 							          			Elegir método de pago
 							          		</button>
 							          		<button  id="addTramiteBTN" type="button" class="btn btn-default btn-block" onclick="openModalAdd()">Agregar Trámite</button>
-
+							          		<button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" onclick="cancelarPago()" style="display: none;">
+							          			Cancelar
+							          		</button>
 							        	</div>
+
+
 							     	</div>
-							      	<!-- Card -->
-
-
-							      	<!-- Card -->
-							      	<div class="mb-3 shadow-sm p-3 bg-white rounded" id="divMetodoPago"  style="display: none;">
-							        	<div class="pt-4" id="containerMetodoPago">     	</div>
-										<button type="button" class="btn btn-primary btn-block" onclick="pagar()"> Pagar </button>
-							        	<button id="metodoPagoBtn" type="button" class="btn btn-danger btn-block" onclick="cancelarPago()">
-							          		Cancelar
-							          	</button>
-							          	
-							      	</div>
 							      	<!-- Card -->
 							    </div>
 							    <!--Grid column-->
@@ -177,6 +176,7 @@
 
 
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/shoppingCarModule/shoppingCarBuilder.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/templateMetodoPagoBuilder.js') }}"></script>
 <script type="text/javascript">
 	let tramites = [];
 
@@ -305,8 +305,8 @@
 
 	function metodoPago(){
 		$("#metodoPagoBtn").attr("disabled", true);
-		$("#addTramiteBTN").hide();
-
+		//$("#addTramiteBTN").hide();
+		$("#addTramiteBTN").slideUp();
 
 		$("#metodoPagoBtn").append('<div id="spinner-pago" class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 		
@@ -319,22 +319,21 @@
 		        "Authorization":"Bearer B6C8XvbNouJj!ds@.NXjfeswtzehVN",
 		    }
 		}).done((response) => {
+			console.log(response )
 			
 			let cuentas = response.response.cuentas;
 			if(cuentas.length > 0 ){
-				$("#metodoPagoBtn").hide().attr("disabled", false);
-
-
-				$("#divMetodoPago").show();				
-				$("#containerMetodoPago").empty();
-
+								
+				//$("#containerMetodoPago").empty();
+				/*
 				$("#containerMetodoPago").append('<h5 class="mb-4">Método de pago</h5>');
+				let divInicial = $("<div>").addClass("form-check");
 				cuentas.forEach( (cuenta, index )=> {
 					var image = new Image(45);
 					image.className = "mr-2";
 					image.src = 'data:image/png;base64,' + cuenta.imagen;
 					//document.body.appendChild(image);
-					let divInicial = $("<div>").addClass("form-check");
+					
 					let label = $("<label>").addClass("form-check-label");
 
 					let input = $("<input>").attr({
@@ -347,15 +346,28 @@
 					label.append( image );
 					label.append( getMetodoPago( cuenta.metodopago_id ) );
 					divInicial.append(label);
-					$("#containerMetodoPago").append(divInicial);
+					
+					
+				});*/
+				//let div = $("<div>").addClass("form-check");
+
+				//$("#containerMetodoPago").append(divInicial);
+				templateMetodoPagoBulder.build(cuentas);
+
+				$("#metodoPagoBtn").attr("disabled", false).slideUp( "slow", () => {
+					$("#listTramites").slideUp("slow", ()=> {
+						$("#divMetodoPago").slideDown( "slow");
+						$("#metodoPagoCancBtn").slideDown("slow");
+					});
+					
 				});
+				
 			}
 			
 		}).fail((rror)=> {
 			console.log( rror)
 		}).always(() => {
 			$("#spinner-pago").remove();
-			//$("#metodoPagoBtn").attr("disabled", false);
 		});
 	}
 
@@ -373,9 +385,12 @@
 	}
 
 	function cancelarPago(){
-		$("#divMetodoPago").fadeOut(10, () => {
-			$("#metodoPagoBtn").fadeIn();
-			$("#addTramiteBTN").fadeIn();			
+		$("#divMetodoPago").slideUp("slow", () => {
+			$("#metodoPagoBtn").slideDown( "slow");
+			$("#addTramiteBTN").slideDown( "slow");	
+			$("#listTramites").slideDown("slow");	
+
+			$("#metodoPagoCancBtn").hide("slow");	
 		});	
 
 	}
