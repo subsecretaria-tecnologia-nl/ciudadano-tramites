@@ -27,8 +27,8 @@ Route::middleware(["validate_session"])->group(function(){
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
 	Route::get('/logout', "LoginController@logout");
-	Route::get('/recovery-password', "RecoveryController@index");
-	Route::get('/recovery-password/{token}', [ConfirmPasswordController::class,'index'], function($token){
+	Route::get('/password/recovery', "RecoveryController@index");
+	Route::get('/password/recovery/{token}', [ConfirmPasswordController::class,'index'], function($token){
 			return $token;
 	});
 });
