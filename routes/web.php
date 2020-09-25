@@ -26,12 +26,17 @@ use App\Http\Controllers\ConfirmPasswordController;
 
 	Route::get('/nuevo-tramite', "TramitesController@new");
 
+	Route::get('/perfil', "ProfileController@index");
+	Route::get('/informacion-cuenta', "AcountInfoController@index");
+	Route::get('/cambiar-contraseña', "changePassword@index");
+	Route::get('/usuarios', "UsersController@index");
+	
 	// LOGIN
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
 	Route::get('/logout', "LoginController@logout");
-	Route::get('/recovery-password', "RecoveryController@index");
-	Route::get('/recovery-password/{token}', [ConfirmPasswordController::class,'index'], function($token){
+	Route::get('/password/recovery', "RecoveryController@index");
+	Route::get('/password/recovery/{token}', [ConfirmPasswordController::class,'index'], function($token){
 			return $token;
 	});
 
