@@ -31,7 +31,7 @@ $('#kt_recovery_submit').on('click', function(e) {
     validation.validate().then(function(status) {
         if (status == 'Valid') {
             $.ajax({
-                url: env("SESSION_HOSTNAME") + "/password/recovery",
+                url: "https://session-api-stage.herokuapp.com/password/recovery",
                 type: "POST",
                 data: {
                     "email": email,
