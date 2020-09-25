@@ -4,7 +4,7 @@ $(document).ready(function() {
     const sub = url.substr(0, url.indexOf("?")).split("/");
     const token = sub[sub.length - 1];
     $.ajax({
-        url: env("SESSION_HOSTNAME") + "/password/recovery/" + token,
+        url: "https://session-api-stage.herokuapp.com/password/recovery/" + token,
         type: "GET",
         data: {
             "email": email,
@@ -81,7 +81,7 @@ $('#kt_recovery_submit').on('click', function(e) {
     validation.validate().then(function(status) {
         if (status == 'Valid') {
             $.ajax({
-                url: env("SESSION_HOSTNAME") + "/password/recovery",
+                url: "https://session-api-stage.herokuapp.com/password/recovery",
                 type: "POST",
                 data: {
                     "email": email,
