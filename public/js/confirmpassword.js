@@ -1,19 +1,20 @@
 $(document).ready(function() {
-    const urlParams = window.location.pathname;
-    const token = urlParams.substr(19);
-    // const token = new URLSearchParams(param);
+    const url = window.location.href;
+    const email = new URL(url).searchParams.get('e');
+    const sub = url.substr(0, url.indexOf("?")).split("/");
+    const token = sub[sub.length - 1];
     $.ajax({
-        url: "/get_token",
+        url: env("SESSION_HOSTNAME") + "/password/recovery/" + token,
         type: "GET",
         data: {
-            token,
+            "email": email,
         },
         success: function(res) {
             console.log("token correcto");
         },
         error: function(res) {
             console.log(res);
-            // window.location = "/error";
+            window.location = "/404";
         }
     })
 })
@@ -73,14 +74,19 @@ document.addEventListener('DOMContentLoaded', function(e) {
 
 $('#kt_recovery_submit').on('click', function(e) {
     e.preventDefault();
-    var email = $(document).find('input[name="email"]').val();
+    const url = window.location.href;
+    const email = new URL(url).searchParams.get('e');
+    const password = $(document).find('input[name="password"]').val();
+    const password_confirmation = $(document).find('input[name="confirmPassword"]').val();
     validation.validate().then(function(status) {
         if (status == 'Valid') {
             $.ajax({
-                url: "/login",
+                url: env("SESSION_HOSTNAME") + "/password/recovery",
                 type: "POST",
                 data: {
-                    email,
+                    "email": email,
+                    "password": password,
+                    "password_confirmation": password_confirmation
                 },
                 success: function(res) {
                     console.log(res);
