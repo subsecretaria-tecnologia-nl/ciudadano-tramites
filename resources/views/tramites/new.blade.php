@@ -30,13 +30,9 @@
 
 
 					      			<div class="mb-3" id="divMetodoPago"  style="display: none;">
-										<div id="containerMetodoPago" > </div>
-										<!--
-										<button type="button" class="btn btn-primary btn-block" onclick="pagar()"> Pagar </button>
-							        	<button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" onclick="cancelarPago()">
-							          		Cancelar
-							          	</button>	    -->    		
+										<div id="containerMetodoPago" > </div>  		
 						        	</div>
+
 							    </div>
 							    <!--Grid column-->
 
@@ -79,7 +75,6 @@
 							      	<!-- Card -->
 							    </div>
 							    <!--Grid column-->
-
 							</div>
 							<!-- Grid row -->
 					    </div>
@@ -87,7 +82,6 @@
 
                 </div>
             </div>
-                
         </div>
         
     </div>
@@ -123,7 +117,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ></button>
-                <h4 class="modal-title">Agregar tramité</h4>
+                <h4 class="modal-title">Agregar trámite</h4>
             </div>
             <div class="modal-body">
 
@@ -177,6 +171,10 @@
 
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/shoppingCarModule/shoppingCarBuilder.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/templateMetodoPagoBuilder.js') }}"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script><divid="conteudo">
 <script type="text/javascript">
 	let tramites = [];
 
@@ -305,54 +303,33 @@
 
 	function metodoPago(){
 		$("#metodoPagoBtn").attr("disabled", true);
-		//$("#addTramiteBTN").hide();
 		$("#addTramiteBTN").slideUp();
 
-		$("#metodoPagoBtn").append('<div id="spinner-pago" class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+		$("#metodoPagoBtn").append('<div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status"><span class="sr-only">Loading...</span></div>');
 		
+		console.log( JSON.stringify(JSONGeneraReferenciaBuilder.build()) );
 		let url = "https://payments-api-stage.herokuapp.com/v1/pay";
 		$.ajax({
 		  	type: "POST",
 		  	url,
-		  	data: JSONGeneraReferenciaBuilder.build(),
+		  	data: JSON.stringify(JSONGeneraReferenciaBuilder.build()),
+		  	dataType:"json",
 		   	headers: {
 		        "Authorization":"Bearer B6C8XvbNouJj!ds@.NXjfeswtzehVN",
+		        "Content-type":"application/json"
 		    }
 		}).done((response) => {
-			console.log(response )
 			
+			let folio = response.response.folio;
+
 			let cuentas = response.response.cuentas;
 			if(cuentas.length > 0 ){
-								
-				//$("#containerMetodoPago").empty();
-				/*
-				$("#containerMetodoPago").append('<h5 class="mb-4">Método de pago</h5>');
-				let divInicial = $("<div>").addClass("form-check");
-				cuentas.forEach( (cuenta, index )=> {
-					var image = new Image(45);
-					image.className = "mr-2";
-					image.src = 'data:image/png;base64,' + cuenta.imagen;
-					//document.body.appendChild(image);
-					
-					let label = $("<label>").addClass("form-check-label");
+				templateMetodoPagoBulder.build(cuentas, folio);
 
-					let input = $("<input>").attr({
-						name: "optradio",
-						id: index,
-						type:"radio",
-						value: cuenta.cuenta_id,
-					}).addClass("form-check-input");
-					label.append( input );
-					label.append( image );
-					label.append( getMetodoPago( cuenta.metodopago_id ) );
-					divInicial.append(label);
-					
-					
-				});*/
-				//let div = $("<div>").addClass("form-check");
-
-				//$("#containerMetodoPago").append(divInicial);
-				templateMetodoPagoBulder.build(cuentas);
+				$(".btn-metodopago").on("click", (e) => {
+					console.log(e.currentTarget.id)
+					$("#" + e.currentTarget.id)
+				});
 
 				$("#metodoPagoBtn").attr("disabled", false).slideUp( "slow", () => {
 					$("#listTramites").slideUp("slow", ()=> {
@@ -361,7 +338,6 @@
 					});
 					
 				});
-				
 			}
 			
 		}).fail((rror)=> {
@@ -369,19 +345,6 @@
 		}).always(() => {
 			$("#spinner-pago").remove();
 		});
-	}
-
-	function getMetodoPago(metodoId){
-		switch( metodoId ) {
-			case 1:
-				return "Tarjeta de Crédito y Débito";
-			case 2:
-				return "SPEI Interbancario"
-			case 3:
-				return "Ventanilla Bancaria";
-			default:
-				return "";
-		}
 	}
 
 	function cancelarPago(){
