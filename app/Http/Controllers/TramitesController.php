@@ -99,4 +99,22 @@ class TramitesController extends Controller
 
 
     }
+
+    /**
+    * Funcion para traer el costo de un trámite
+    *
+    *	@return json costo e informacion del trámite
+    */
+    public function getcostoTramite(Request $request) {
+      $tramite_id = $request->tramite_id;
+
+      try{
+
+      }catch(\Exception $e){
+        Log::info('Error - costo Trámite: '.$e->getMessage());
+      }
+
+
+    }
+
 }

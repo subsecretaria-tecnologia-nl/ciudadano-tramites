@@ -30,7 +30,7 @@ use App\Http\Controllers\ConfirmPasswordController;
 	Route::get('/informacion-cuenta', "AcountInfoController@index");
 	Route::get('/cambiar-contraseña', "changePassword@index");
 	Route::get('/usuarios', "UsersController@index");
-	
+
 	// LOGIN
 	Route::get('/login', "LoginController@index");
 	Route::post('/login', "LoginController@validation");
@@ -44,4 +44,6 @@ use App\Http\Controllers\ConfirmPasswordController;
 	Route::get('/allTramites', 'SolicitudesController@getTramites');
 	Route::get('/getCampos', 'SolicitudesController@getCampos');
 	Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
+
+	Route::get('/getcostoTramite', 'TramitesController@getcostoTramite');
 // });
