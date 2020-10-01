@@ -59,7 +59,7 @@ $('#kt_recovery_submit').on('click', function(e) {
     const password_confirmation = $(document).find('input[name="confirmPassword"]').val();
     validation.validate().then(function(status) {
         if (status == 'Valid') {
-            $.ajax({
+            $.ajaxSetup({
                 url: "https://session-api-stage.herokuapp.com/password/recovery",
                 type: "POST",
                 data: {
@@ -80,8 +80,15 @@ $('#kt_recovery_submit').on('click', function(e) {
                     }).then(function() {
                         window.location = "/login?e=" + btoa(res);
                     });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status == 401) {
+                        alert(".");
+                        return redirect("/login");
+                    }
                 }
             });
+            $.ajax();
         } else {
             swal.fire({
                 text: "La contraseña no a sido actualizada, intenta nuevamente.",

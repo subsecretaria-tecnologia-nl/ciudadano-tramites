@@ -56,7 +56,8 @@
                                                 </td>
                                                 <td colspan="3">
                                                     <span class="text-muted text-truncate col-8 pl-0">
-                                                        alberto.salazar@nuevoleon.gob.mx
+                                                        {{ $user->email }}
+
                                                     </span>
                                                 </td>
                                             </tr>
@@ -70,7 +71,7 @@
                                                 </td>
                                                 <td colspan="3">
                                                     <span class="text-muted" style="padding-right: 10%">
-                                                       44(76)3425478
+                                                        {{  $user->phone }}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -94,7 +95,7 @@
                                     </table>
                                     <a href="/perfil" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
                                     <a href="/informacion-cuenta" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion de la Cuenta</a>
-                                    <a href="/cambiar-contraseña" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</a>
+                                    <button href="/cambiar-contraseña" aria-pressed="true" selected type="checkbox" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</button>
                                     <a href="/usuarios" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Usuario</a>
                                </div>
                           </div>

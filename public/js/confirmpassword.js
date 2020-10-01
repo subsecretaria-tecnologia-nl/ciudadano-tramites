@@ -3,7 +3,7 @@ $(document).ready(function() {
     const email = new URL(url).searchParams.get('e');
     const sub = url.substr(0, url.indexOf("?")).split("/");
     const token = sub[sub.length - 1];
-    $.ajax({
+    $.ajaxSetup({
         url: "https://session-api-stage.herokuapp.com/password/recovery/" + token,
         type: "GET",
         data: {
@@ -12,11 +12,14 @@ $(document).ready(function() {
         success: function(res) {
             console.log("token correcto");
         },
-        error: function(res) {
-            console.log(res);
-            window.location = "/404";
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status == 401) {
+                alert(".");
+                return redirect("/login");
+            }
         }
-    })
+    });
+    $.ajax();
 })
 
 var validation;
@@ -80,7 +83,7 @@ $('#kt_recovery_submit').on('click', function(e) {
     const password_confirmation = $(document).find('input[name="confirmPassword"]').val();
     validation.validate().then(function(status) {
         if (status == 'Valid') {
-            $.ajax({
+            $.ajaxSetup({
                 url: "https://session-api-stage.herokuapp.com/password/recovery",
                 type: "POST",
                 data: {
@@ -101,8 +104,15 @@ $('#kt_recovery_submit').on('click', function(e) {
                     }).then(function() {
                         window.location = "/login?e=" + btoa(res);
                     });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status == 401) {
+                        alert(".");
+                        return redirect("/login");
+                    }
                 }
             });
+            $.ajax();
         } else {
             swal.fire({
                 text: "La contraseña no a sido actualizada, intenta nuevamente.",

@@ -20,7 +20,7 @@ class LoginController extends Controller
 	}
 
 	public function validation (Request $request) {
-		$login = curlSendRequest("GET", env("SESSION_HOSTNAME") . "/login", [], [ "Authorization: Basic ".base64_encode($request->username.":".$request->password) ]);
+		$login = curlSendRequest("GET", env("SES SION_HOSTNAME") . "/login", [], [ "Authorization: Basic ".base64_encode($request->username.":".$request->password) ]);
 		// $login = curlSendRequest("GET", "https://session-api-stage.herokuapp.com/login", [], [ "Authorization: Basic ".base64_encode($request->username.":".$request->password) ]);
 		if($login->data == "response"){
 			// $user = curlSendRequest("GET",  "https://session-api-stage.herokuapp.com/users/me", [], [ "Authorization: Bearer {$login->response->token}" ]);
