@@ -14,6 +14,9 @@ use App\Repositories\PortalsolicitudescatalogoRepositoryEloquent;
 use App\Repositories\PortalcamporelationshipRepositoryEloquent;
 use App\Repositories\EgobiernotiposerviciosRepositoryEloquent;
 
+use App\Repositories\PortalcostotramitesRepositoryEloquent;
+use App\Repositories\PortalsubsidiotramitesRepositoryEloquent;
+
 
 class TramitesController extends Controller
 {
@@ -21,12 +24,16 @@ class TramitesController extends Controller
     protected $solicitudes;
     protected $relationship;
     protected $tiposer;
+    protected $costotramites;
+    protected $subsidiotramites;
 
     public function __construct(
       TramitedetalleRepositoryEloquent $tramites,
       PortalsolicitudescatalogoRepositoryEloquent $solicitudes,
       PortalcamporelationshipRepositoryEloquent $relationship,
-      EgobiernotiposerviciosRepositoryEloquent $tiposer
+      EgobiernotiposerviciosRepositoryEloquent $tiposer,
+      PortalcostotramitesRepositoryEloquent $costotramites,
+      PortalsubsidiotramitesRepositoryEloquent $subsidiotramites
       )
       {
         // $this->middleware('auth');
@@ -34,6 +41,8 @@ class TramitesController extends Controller
         $this->solicitudes = $solicitudes;
         $this->relationship= $relationship;
         $this->tiposer = $tiposer;
+        $this->costotramites = $costotramites;
+        $this->subsidiotramites = $subsidiotramites;
       }
 
     public function index ($type) {
@@ -113,8 +122,7 @@ class TramitesController extends Controller
       }catch(\Exception $e){
         Log::info('Error - costo Trámite: '.$e->getMessage());
       }
-
-
     }
+
 
 }
