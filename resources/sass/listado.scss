@@ -1,9 +1,36 @@
 @import "./_variables.scss";
+@import "./mixins";
 *,
 body {
     font-family: 'Montserrat', sans-serif;
     a {
         color: $font-link !important;
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .card {
+        border-color: #347ab8;
+        width: 85%;
+        margin-left: 7.5%;
+    }
+    [class*="col-3"] {
+        // width: 100% !important;
+        // max-width: 100%;
+        // -webkit-box-flex: 0;
+        // -ms-flex: 0 0 100%;
+        // // flex: 0 0 0;
+        // max-width: 100%;
+        // @include make-col-ready();
+        // @include make-col(12);
+    }
+    [class*="col-8"] {
+        width: 100% !important;
+        max-width: 100%;
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 100%;
+        // flex: 0 0 0;
+        max-width: 100%;
     }
 }
 
