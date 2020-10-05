@@ -16,6 +16,7 @@ use App\Repositories\EgobiernotiposerviciosRepositoryEloquent;
 
 use App\Repositories\PortalcostotramitesRepositoryEloquent;
 use App\Repositories\PortalsubsidiotramitesRepositoryEloquent;
+use App\Repositories\PortalumaRepositoryEloquent;
 
 
 class TramitesController extends Controller
@@ -26,6 +27,7 @@ class TramitesController extends Controller
     protected $tiposer;
     protected $costotramites;
     protected $subsidiotramites;
+    protected $uma;
 
     public function __construct(
       TramitedetalleRepositoryEloquent $tramites,
@@ -33,7 +35,8 @@ class TramitesController extends Controller
       PortalcamporelationshipRepositoryEloquent $relationship,
       EgobiernotiposerviciosRepositoryEloquent $tiposer,
       PortalcostotramitesRepositoryEloquent $costotramites,
-      PortalsubsidiotramitesRepositoryEloquent $subsidiotramites
+      PortalsubsidiotramitesRepositoryEloquent $subsidiotramites,
+      PortalumaRepositoryEloquent $uma
       )
       {
         // $this->middleware('auth');
@@ -43,6 +46,7 @@ class TramitesController extends Controller
         $this->tiposer = $tiposer;
         $this->costotramites = $costotramites;
         $this->subsidiotramites = $subsidiotramites;
+        $this->uma = $uma;
       }
 
     public function index ($type) {
@@ -115,10 +119,39 @@ class TramitesController extends Controller
     *	@return json costo e informacion del trámite
     */
     public function getcostoTramite(Request $request) {
-      $tramite_id = $request->tramite_id;
+      //$tramite_id = $request->tramite_id;
+
+      $tramite_id = 100;
+      $dt = date("Y");
+
+      $data_uma = $this->uma->where('year', $dt)->get();
+      foreach ($data_uma as $val) {
+        $actual_uma = $val->daily;
+      }
+
+      $data_costo = $this->costotramites->where('tramite_id', $tramite_id)->get();
+
+      foreach($data_costo as $data){
+        $tipo = $data->tipo;
+        $costoX = $data->costo;
+        $min = $data->minimo;
+        $max = $data->maximo;
+        $status = $data->status;
+      }
+
+
 
       try{
+        if ($tipo == "F"){
+          if($costoX == "L"){ //usamos L en lo que se habilita la opcion null
+            $costo_real = $actual_uma * $min;
+            return json_encode($costo_real);
+          }
+          // elseif ($costoX == "M") {
+          //
+          // }
 
+        }
       }catch(\Exception $e){
         Log::info('Error - costo Trámite: '.$e->getMessage());
       }

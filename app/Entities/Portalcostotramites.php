@@ -20,7 +20,7 @@ class Portalcostotramites extends Model implements Transformable
      *
      * @var array
      */
-    protected $connection = "db_portal";
+    protected $connection = "db_operacion";
 
     protected $fillable = ['id','tramite_id','tipo','costo','minimo','maximo','status'];
 
