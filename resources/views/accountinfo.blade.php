@@ -1,4 +1,4 @@
-<div class="content" id="kt_content">
+<div class="content" id="kt_content" style="min-width: -webkit-fill-available">
     <div class="d-flex flex-column-fluid">
         <div class="container">
             <span style="font-size: .8cm" class="6p">
@@ -16,7 +16,7 @@
                                     <i class="symbol-badge bg-success"></i>
                                 </div>
                                 <div class="d-flex flex-column">
-                                    <a href="/perfil" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">Raymundo Salazar</a>
+                                <a href="/perfil" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary"> {{ $user->name }} {{$user->fathers_surname}}</a>
                                     <div class="text-muted mt-1">Frontend Development</div>
                                     <div class="navi mt-2">
                                         <a href="mailto:alberto.salazars@nuevoleon.gob.mx" class="navi-item">
@@ -34,7 +34,7 @@
                                                         <!--end::Svg Icon-->
                                                     </span>
                                                 </span>
-                                                <span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">alberto.salazars@nuevoleon.gob.mx</span>
+                                                <span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">{{ $user->email}}</span>
                                             </span>
                                         </a>
                                         <a href="/logout" class="btn btn-sm  btn-info font-weight-bolder text-white  text-hover-white py-2 px-5">Chat</a>
@@ -56,7 +56,7 @@
                                                 </td>
                                                 <td colspan="3">
                                                     <span class="text-muted text-truncate col-8 pl-0">
-                                                        alberto.salazar@nuevoleon.gob.mx
+                                                        {{ $user->email  }}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -70,7 +70,7 @@
                                                 </td>
                                                 <td colspan="3">
                                                     <span class="text-muted" style="padding-right: 10%">
-                                                       44(76)3425478
+                                                        {{ $user->phone  }}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -92,7 +92,7 @@
                                             
                                         </tbody>
                                     </table>
-                                    <a href="/perfil" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
+                                    <a href="/perfil" selected type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
                                     <a href="/informacion-cuenta" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion de la Cuenta</a>
                                     <a href="/cambiar-contraseña" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</a>
                                     <a href="/usuarios" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Usuario</a>
@@ -148,13 +148,13 @@
                                         <div class="form-group row">
                                             <label for="example-search-input" class="col-3 col-form-label">Nombres(s)</label>
                                             <div class="col-8">
-                                                <input class="form-control" type="text" placeholder="Nombres(s)"/>
+                                                <input class="form-control" type="text" value="{{ $user->name }} {{ $user->mothers_surname}} {{ $user->fathers_surname }}" disabled/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-email-input" class="col-3 col-form-label">Apellido Paterno</label>
                                             <div class="col-8">
-                                                <input class="form-control" type="text" placeholder="Apellido Paterno" />
+                                                <input class="form-control" type="text"  value="{{ $user->fathers_surname }}" disabled />
                                             </div>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                                         <div class="form-group row">
                                             <label  class="col-3 col-form-label">Correo Electronioco</label>
                                             <div class="col-8">
-                                                <input class="form-control" type="text" placeholder="Correo Electronioco" id="example-text-input"/>
+                                                <input class="form-control" type="text"  value="{{ $user->email }}" disabled id="example-text-input"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -184,19 +184,19 @@
                                         <div class="form-group row">
                                             <label for="example-email-input" class="col-3 col-form-label">Curp </label>
                                             <div class="col-8">
-                                                <input class="form-control" type="text" placeholder="Curp" />
+                                                <input class="form-control" type="text"  value="{{ $user->curp }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-email-input" class="col-3 col-form-label">RFC</label>
                                             <div class="col-8">
-                                                <input class="form-control" type="text" placeholder="RFC" />
+                                                <input class="form-control" type="text"  value="{{ $user->rfc }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-email-input" class="col-3 col-form-label">Numero de Contacto </label>
                                             <div class="col-8">
-                                                <input class="form-control" type="text" placeholder="Numero de Contacto" />
+                                                <input class="form-control" type="text" value="{{ $user->phone }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">

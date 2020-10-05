@@ -56,7 +56,8 @@
                                                 </td>
                                                 <td colspan="3">
                                                     <span class="text-muted text-truncate col-8 pl-0">
-                                                        alberto.salazar@nuevoleon.gob.mx
+                                                        {{ $user->email }}
+
                                                     </span>
                                                 </td>
                                             </tr>
@@ -70,7 +71,7 @@
                                                 </td>
                                                 <td colspan="3">
                                                     <span class="text-muted" style="padding-right: 10%">
-                                                       44(76)3425478
+                                                        {{  $user->phone }}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -94,7 +95,7 @@
                                     </table>
                                     <a href="/perfil" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
                                     <a href="/informacion-cuenta" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion de la Cuenta</a>
-                                    <a href="/cambiar-contraseña" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</a>
+                                    <button href="/cambiar-contraseña" aria-pressed="true" selected type="checkbox" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</button>
                                     <a href="/usuarios" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Usuario</a>
                                </div>
                           </div>
@@ -110,7 +111,7 @@
                                 </div>
                                 <div class="col-7">
                                     <a class="btn btn-icon btn-primary btn-cancelar ">Cancelar</a>
-                                    <a class="btn btn-icon btn-primary btn-guardar" > Guardar cambios</a>
+                                    <a class="btn btn-icon btn-primary btn-guardar" id="kt_recovery_submit" > Guardar cambios</a>
                                 </div>
                             </div>
                         </div>
@@ -126,25 +127,27 @@
                                         </div>
                                     </div>
                                         <!--begin::Form-->
-                                        <form>
+                                        <form id="kt_confirm_password_form">
                                             <div class="card-body">
                                                 <div class="form-group row">
                                                     <label  class="col-3 col-form-label">Contraseña actual</label>
                                                     <div class="col-8">
-                                                        <input class="form-control" type="text" placeholder="Contraseña actual" id="example-text-input"/>
+                                                        <input class="form-control" type="text" placeholder="Contraseña actual" id="example-text-input" data-toggle="password" />
                                                         <a href="/recovery-password"><span>¿Se te olvido la Contraseña?</span></a>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
+                                                <div class="form-group row"  id="show_hide_password">
                                                     <label  class="col-3 col-form-label">Nueva Contraseña</label>
                                                     <div class="col-8">
-                                                        <input class="form-control" type="password" placeholder="Nueva Contraseña" id="example-search-input"/>
+                                                        <input class="form-control" type="password" placeholder="Nueva Contraseña" id="password" name="password" data-toggle="password"/>
+                                                				<div class="fv-plugins-message-container"></div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
+                                                <div class="form-group row" id="show_hide_password2">
                                                     <label class="col-3 col-form-label">Verificar Contraseña</label>
                                                     <div class="col-8">
-                                                        <input class="form-control" type="password" placeholder="Verificar Contraseña" id="example-email-input"/>
+                                                        <input class="form-control" type="password" placeholder="Verificar Contraseña" id="confirmPassword" name="confirmPassword" data-toggle="password"/>
+                                                				<div class="fv-plugins-message-container"></div>
                                                     </div>
                                                 </div>
                                             </div>
