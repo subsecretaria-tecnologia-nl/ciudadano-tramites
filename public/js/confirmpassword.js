@@ -1,26 +1,3 @@
-$(document).ready(function() {
-    const url = window.location.href;
-    const email = new URL(url).searchParams.get('e');
-    const sub = url.substr(0, url.indexOf("?")).split("/");
-    const token = sub[sub.length - 1];
-    $.ajaxSetup({
-        url: "https://session-api-stage.herokuapp.com/password/recovery/" + token,
-        type: "GET",
-        data: {
-            "email": email,
-        },
-        success: function(res) {
-            console.log("token correcto");
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status == 401) {
-                alert(".");
-                return redirect("/login");
-            }
-        }
-    });
-    $.ajax();
-})
 
 var validation;
 
