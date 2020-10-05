@@ -21,7 +21,7 @@ class ConfirmPasswordController extends Controller
     $email = $_GET["e"];
     $actual_link = str_replace('?e=', '?email=', $_SERVER['REQUEST_URI'] );
     // $result = curlSendRequest("GET", env("SESSION_HOSTNAME"). "$_SERVER[REQUEST_URI]" , [], [ "Authorization: Basic ".base64_encode("email".":".$email) ]);
-    $result = curlSendRequest("GET", "https://session-api-stage.herokuapp.com". "$actual_link" , [], [ "Authorization: Basic ".base64_encode("email".":".$email) ]);
+    $result = curlSendRequest("GET", env("SESSION_HOSTNAME") . "$actual_link" , [], [ "Authorization: Basic ".base64_encode("email".":".$email) ]);
     $valid_token = ($result->data == 'response' ) ? true : false;
     return layout_view("confirmpassword", ["valid_token"=> $valid_token ]);
     }
