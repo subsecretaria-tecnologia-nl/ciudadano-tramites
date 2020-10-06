@@ -1,4 +1,3 @@
-
 var validation;
 
 document.addEventListener('DOMContentLoaded', function(e) {

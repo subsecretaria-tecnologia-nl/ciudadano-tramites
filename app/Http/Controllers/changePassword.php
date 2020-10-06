@@ -9,9 +9,15 @@ class changePassword extends Controller
     public function index () {
 		set_layout_arg([
 			"subtitle" => "cambiar contraseña",
-			"fluid_container"=> true
+			"fluid_container"=> true,
+			"script" => [
+				asset("js/changepassword.js"),
+				asset("https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js")
+			]
 		]);
+		$user = session()->get("user");
 
-		return layout_view("changepassword");
-    }
+		return layout_view("changePassword", ['user' => $user ]);
+
+	}
 }
