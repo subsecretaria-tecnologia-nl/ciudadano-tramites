@@ -119,10 +119,15 @@ class TramitesController extends Controller
     *	@return json costo e informacion del trámite
     */
     public function getcostoTramite(Request $request) {
-      //$tramite_id = $request->tramite_id;
-
-      $tramite_id = 100;
+      $tramite_id = $request->tramite_id;
+      //$tramite_id = 106;
       $dt = date("Y");
+
+      //datos para el tramite
+      $valor_catastral = $request->valor_catastral;
+      $valor_operacion = $request->valor_operacion;
+
+
 
       $data_uma = $this->uma->where('year', $dt)->get();
       foreach ($data_uma as $val) {
@@ -139,17 +144,33 @@ class TramitesController extends Controller
         $status = $data->status;
       }
 
-
-
       try{
         if ($tipo == "F"){
-          if($costoX == "L"){ //usamos L en lo que se habilita la opcion null
+          if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
             $costo_real = $actual_uma * $min;
+
+            //Redondeo
+            $exacto = floor($costo_real);
+            $dec = $costo_real - $exacto;
+            if($dec <= "0.50"){
+              $costo_real = floor($costo_real);
+            }else{
+              $costo_real = $exacto + 1;
+            }
+
             return json_encode($costo_real);
           }
-          // elseif ($costoX == "M") {
-          //
-          // }
+          elseif ($costoX == "L") { //costo x lote
+            // code...
+          }
+          elseif ($costoX == "M") { //costo x millares
+            if (empty($valor_operacion)){
+              //primero se valida la equivalencia de los millares
+
+
+              $costo_real = $valor_catastral * $min;
+            }
+          }
 
         }
       }catch(\Exception $e){
