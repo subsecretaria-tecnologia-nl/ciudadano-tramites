@@ -41,7 +41,21 @@ $('#kt_login_signin_submit').on('click', function(e) {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location = "/dashboard"
+                        window.location = "/dashboard";
+                    });
+                },
+                error: function(res) {
+                    console.log(res);
+                    swal.fire({
+                        text: "Sorry, looks like there are some errors detected, please try again.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-light-primary"
+                        }
+                    }).then(function() {
+                        window.location = "/login";
                     });
                 }
             });
