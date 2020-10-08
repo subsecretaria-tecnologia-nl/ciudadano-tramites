@@ -16,6 +16,10 @@ use App\Repositories\PortalcampotypeRepositoryEloquent;
 use App\Repositories\PortalcampoRepositoryEloquent;
 
 
+use App\Repositories\EgobiernopartidasRepositoryEloquent;
+
+
+
 class SolicitudesController extends Controller
 {
   protected $solicitudes;
@@ -23,6 +27,7 @@ class SolicitudesController extends Controller
   protected $tiposer;
   protected $tipocampo;
   protected $campo;
+  protected $partidas;
 
 // agregar catalogos
   protected $catalogo_campos;
@@ -33,7 +38,8 @@ class SolicitudesController extends Controller
     PortalcamporelationshipRepositoryEloquent $relationship,
     EgobiernotiposerviciosRepositoryEloquent $tiposer,
     PortalcampotypeRepositoryEloquent $tipocampo,
-    PortalcampoRepositoryEloquent $campo
+    PortalcampoRepositoryEloquent $campo,
+    EgobiernopartidasRepositoryEloquent $partidas
     )
     {
       // $this->middleware('auth');
@@ -46,6 +52,8 @@ class SolicitudesController extends Controller
       $this->tipocampo = $tipocampo;
 
       $this->campo = $campo;
+
+      $this->partidas = $partidas;
 
       // creamos los catalogos iniciales
 
@@ -111,7 +119,7 @@ class SolicitudesController extends Controller
       # checar los que no tenemos
       if( !in_array((int)$k->tramite_id, $t) )
       {
-        $t[] = (int)$k->tramite_id;
+        $t[] = array(int)$k->tramite_id;
       }
     }
 
@@ -125,6 +133,7 @@ class SolicitudesController extends Controller
       $tmts []=array(
           'id_tramite'=> $s->Tipo_Code,
           'tramite' => $s->Tipo_Descripcion,
+          'partidas' => $this->getPartidasTramites($s->Tipo_Code), // aqui mando los datos de la partida
         );
     }
 
@@ -171,6 +180,49 @@ class SolicitudesController extends Controller
 
 
     return json_encode($campos_data);
+  }
+
+  /**
+   *
+   * getPartidasTramites . Busca en la tabla de partidas los valores
+   *
+   * @param $id es el valor del tramite
+   *
+   * @return Array con los valores de la partida
+   *
+   */
+
+  public function getPartidasTramites($id)
+  {
+    $data = array();
+    try{
+
+      $info = $this->partidas->findWhere( ["id_servicio" =>  $id] );
+
+      if($info->count() > 0){
+        foreach($info as $i)
+        {
+          $data []= array(
+            "id_partida"  => $i->id_partida,
+            "descripcion" => $i->descripcion
+          );
+        }
+      }else{
+        $data = 0;
+      }
+
+    }catch(\Exception $e){
+      Log::info('Error Eliminar Solicitud '.$e->getMessage());
+      return response()->json(
+        [
+          "Code" => "400",
+          "Message" => "Error al getPartidasTramites",
+        ]
+      );
+    }
+
+    return $data;
+
   }
 
 }
