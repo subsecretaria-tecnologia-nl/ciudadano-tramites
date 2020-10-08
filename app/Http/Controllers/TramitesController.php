@@ -120,45 +120,47 @@ class TramitesController extends Controller
     */
     public function getcostoTramite(Request $request) {
       $tramite_id = $request->tramite_id;
-      //$tramite_id = 106;
+      //$tramite_id = 102;
       $dt = date("Y");
 
       //datos para el tramite
       $valor_catastral = $request->valor_catastral;
+      //$valor_catastral = 15005;
+      //$valor_operacion = 2500000;
       $valor_operacion = $request->valor_operacion;
-
-
+      $lotes = $request->lotes;
+      $hojas =  $request->hojas;
 
       $data_uma = $this->uma->where('year', $dt)->get();
       foreach ($data_uma as $val) {
         $actual_uma = $val->daily;
       }
 
-      $data_costo = $this->costotramites->where('tramite_id', $tramite_id)->get();
+      $data_costo = $this->costotramites->where('tramite_id', $tramite_id)->where('status', 1)->get();
 
       foreach($data_costo as $data){
         $tipo = $data->tipo;
         $costoX = $data->costo;
         $min = $data->minimo;
         $max = $data->maximo;
+        $valor = $data->valor;
         $status = $data->status;
       }
+      //Se calculan los valores minimos y máximos del trámite
+      $costoMinimo = $min * $actual_uma;
+      $costoMin = $this->redondeo($costoMinimo);
 
+      $costoMaximo = $max * $actual_uma;
+      $costoMax = $this->redondeo($costoMaximo);
+      //dd($costoMax);
       try{
         if ($tipo == "F"){
           if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
             $costo_real = $actual_uma * $min;
 
-            //Redondeo
-            $exacto = floor($costo_real);
-            $dec = $costo_real - $exacto;
-            if($dec <= "0.50"){
-              $costo_real = floor($costo_real);
-            }else{
-              $costo_real = $exacto + 1;
-            }
-
-            return json_encode($costo_real);
+            $costo_final = $this->redondeo($costo_real);
+            //dd($costo_final);
+            return json_encode($costo_final);
           }
           elseif ($costoX == "L") { //costo x lote
             // code...
@@ -171,12 +173,48 @@ class TramitesController extends Controller
               $costo_real = $valor_catastral * $min;
             }
           }
+        }elseif ($tipo == "V") {
+          if($costoX == "L"){
 
+          }elseif ($costoX == "M") {
+            if( $valor_catastral > $valor_operacion){
+              $operacion = $valor_catastral;
+            }else{
+              $operacion = $valor_operacion;
+            }
+
+            $precio = ($operacion * $valor) / 1000;
+
+            $precioRedondeo = $this->redondeo($precio);
+
+            if ($precioRedondeo < $costoMin ){
+              $costo_final = $costoMin;
+            }elseif ($precioRedondeo > $costoMax) {
+              $costo_final = $costoMax;
+            }else{
+              $costo_final = $precioRedondeo;
+            }
+            return json_encode($costo_final);
+          }
         }
       }catch(\Exception $e){
         Log::info('Error - costo Trámite: '.$e->getMessage());
       }
     }
 
+    public function redondeo($costo_real){
+      //Redondeo
+      $exacto = floor($costo_real);
+
+      $dec = $costo_real - $exacto;
+
+      if($dec <= "0.50"){
+        $costo_real = floor($costo_real);
+      }else{
+        $costo_real = $exacto + 1;
+      }
+
+      return $costo_real;
+    }
 
 }
