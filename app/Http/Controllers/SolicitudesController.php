@@ -119,7 +119,7 @@ class SolicitudesController extends Controller
       # checar los que no tenemos
       if( !in_array((int)$k->tramite_id, $t) )
       {
-        $t[] = array(int)$k->tramite_id;
+        $t[] = (int)$k->tramite_id;
       }
     }
 
