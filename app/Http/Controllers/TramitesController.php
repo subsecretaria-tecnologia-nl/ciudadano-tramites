@@ -136,8 +136,8 @@ class TramitesController extends Controller
         $actual_uma = $val->daily;
       }
 
+      //Informacion del costo y reglas del trámite
       $data_costo = $this->costotramites->where('tramite_id', $tramite_id)->where('status', 1)->get();
-
       foreach($data_costo as $data){
         $tipo = $data->tipo;
         $costoX = $data->costo;
@@ -163,20 +163,15 @@ class TramitesController extends Controller
             return json_encode($costo_final);
           }
           elseif ($costoX == "L") { //costo x lote
-            // code...
-          }
-          elseif ($costoX == "M") { //costo x millares
-            if (empty($valor_operacion)){
-              //primero se valida la equivalencia de los millares
+            $costo_real = $actual_uma * $valor;
+            $primer_costo = $this->redondeo($costo_real);
 
+            $costo_final = $primer_costo * $lotes;
 
-              $costo_real = $valor_catastral * $min;
-            }
+            return json_encode($costo_final);
           }
         }elseif ($tipo == "V") {
-          if($costoX == "L"){
-
-          }elseif ($costoX == "M") {
+          if ($costoX == "M") {
             if( $valor_catastral > $valor_operacion){
               $operacion = $valor_catastral;
             }else{
