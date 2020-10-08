@@ -21,5 +21,9 @@ Input.prototype = {
 			type:"text",
 			required: !!this.caracteristicas.required
 		}).addClass("form-control");
+    },
+
+    isValid: function(){
+      
     }
 };

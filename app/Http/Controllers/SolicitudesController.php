@@ -17,6 +17,10 @@ use App\Repositories\PortalcampoRepositoryEloquent;
 
 use App\Repositories\EgobiernopartidasRepositoryEloquent;
 
+use App\Repositories\EgobiernopartidasRepositoryEloquent;
+
+
+
 class SolicitudesController extends Controller
 {
   protected $solicitudes;
@@ -51,6 +55,7 @@ class SolicitudesController extends Controller
       $this->campo = $campo;
 
       $this->partidas = $partidas;
+
       // creamos los catalogos iniciales
 
       $this->loadInfo();
@@ -115,7 +120,7 @@ class SolicitudesController extends Controller
       # checar los que no tenemos
       if( !in_array((int)$k->tramite_id, $t) )
       {
-        $t[] = (int)$k->tramite_id;
+        $t[] = array(int)$k->tramite_id;
       }
     }
 
@@ -129,7 +134,7 @@ class SolicitudesController extends Controller
       $tmts []=array(
           'id_tramite'=> $s->Tipo_Code,
           'tramite' => $s->Tipo_Descripcion,
-          'partidas' => $this->getPartidasTramites($s->Tipo_Code),
+          'partidas' => $this->getPartidasTramites($s->Tipo_Code), // aqui mando los datos de la partida
         );
     }
 
@@ -220,4 +225,5 @@ class SolicitudesController extends Controller
     return $data;
 
   }
+
 }

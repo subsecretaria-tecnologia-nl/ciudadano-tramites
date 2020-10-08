@@ -13,10 +13,21 @@ ShoppingCarBuilder = {
 			let divTres = $("<div>");
 
 			let divContenedorPrincipal = $("<div>").addClass("d-flex justify-content-between");
-			let divContenedorDatos = $("<div>").append("<h5>" +  tramite.id_tramite + "</h5>");
-				divContenedorDatos.append('<p class="mb-3 text-muted text-uppercase small">Shirt - blue</p>');
-				divContenedorDatos.append('<p class="mb-2 text-muted text-uppercase small">Color - blue</p>');
-				divContenedorDatos.append('<p class="mb-3 text-muted text-uppercase small">Size - M</p>');
+
+			let divContenedorDatos = $("<div>").append("<h5>" +  tramite.tramite + "</h5>");
+				if( tramite.nombre ) {
+					let apPat = tramite.apellido_paterno || "";
+					let apMat = tramite.apellido_materno || "";
+
+					divContenedorDatos.append('<p class="mb-3 text-muted text-uppercase small"> Nombre - ' +  tramite.nombre + " " + apPat + " " + apMat +  '</p>');
+				}
+
+				if( tramite.subsidio ) {
+					divContenedorDatos.append('<p class="mb-2 text-muted text-uppercase small">Subsidio - ' +  tramite.subsidio +'</p>');
+				}
+				if( tramite.rfc ){
+					divContenedorDatos.append('<p class="mb-3 text-muted text-uppercase small">RFC - ' +  tramite.rfc + '</p>');
+				}
 
 				divContenedorPrincipal.append( divContenedorDatos );
 				divTres.append( divContenedorPrincipal );

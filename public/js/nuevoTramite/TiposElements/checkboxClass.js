@@ -22,6 +22,10 @@ Checkbox.prototype = {
 			type:"checkbox",
 			required: !!this.caracteristicas.required
 		});
+    },
+
+    isValid: function(){
+      
     }
 
 };

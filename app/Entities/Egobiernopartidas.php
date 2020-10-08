@@ -20,10 +20,12 @@ class Egobiernopartidas extends Model implements Transformable
      *
      * @var array
      */
-     protected $connection = "db_egobierno";
 
-     protected $fillable = ['id_servicio','id_partida','descripcion'];
+    protected $connection = "db_egobierno";
 
-     protected $table = "partidas";
+    protected $fillable = ['id_servicio','id_partida','descripcion'];
 
+    protected $table = "partidas";
+
+	public $timestamps = false;
 }

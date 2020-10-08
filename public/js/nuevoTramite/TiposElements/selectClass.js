@@ -37,6 +37,10 @@ Select.prototype = {
 
     addOptionToSelect: function( element, name, key ){
       element.append( new Option(name , key) );
+    },
+
+    isValid: function(){
+      
     }
 
 

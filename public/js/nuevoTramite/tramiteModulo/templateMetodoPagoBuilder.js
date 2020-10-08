@@ -4,17 +4,17 @@ templateMetodoPagoBulder = {
 
     	$("#containerMetodoPago").empty();
     	let tieneVentanilla =  cuentas.find( cuenta => cuenta.metodopago_id == 3 );
-		let tieneSPEI =  cuentas.find( cuenta => cuenta.metodopago_id == 2 );
+		let tienePagoBancoEnLinea =  cuentas.find( cuenta => cuenta.metodopago_id == 4 );
 
 		let totalTramites = $("<h5>").addClass("mb-4").append( "  <span> Proceso de Pago</span>" );
     	$("#containerMetodoPago").append(totalTramites);
-    	console.log( folio )
+
     	if(  tieneVentanilla ){
     		this.getTemplateVentanillaBancaria( folio, tieneVentanilla );
     	}
 
-    	if(  tieneSPEI ){
-    		this.getTemplateSPEI( folio, tieneSPEI );
+    	if(  tienePagoBancoEnLinea ){
+    		this.getTemplateBancoEnLinea( folio, tienePagoBancoEnLinea );
     	}		
 		
     },
@@ -23,10 +23,10 @@ templateMetodoPagoBulder = {
 	getTemplateVentanillaBancaria: function( folio, tieneVentanilla ){
 		let divContenedor = $("<div>").addClass("card border-secondary shadow p-3 mb-5 bg-white rounded metodopago");
 		let divInicial = $("<div>").addClass("pt-4");
-			divInicial.append('<h6 class="mb-3"><strong>Ventanilla Bancaria</strong></h6>');
+			divInicial.append('<h6 class="mb-3"><strong>Pago Referenciado</strong></h6>');
 
 		let divContenedorSecundario= $("<div>").addClass("text-center");
-			divContenedorSecundario.append('<button type="button" class="btn btn-default btn-metodopago" id="metodopagoBtnRef">Referencia </button>');
+			divContenedorSecundario.append('<button type="button" class="btn btn-default btn-metodopago" id="metodopagoBtnRef"> Pago Referenciado </button>');
 
 
 			
@@ -66,21 +66,21 @@ templateMetodoPagoBulder = {
 
 	},
 
-	getTemplateSPEI: function( folio, tieneSPEI ){
+	getTemplateBancoEnLinea: function( folio, tienePagoBancoEnLinea ){
 		let divContenedor = $("<div>").addClass("card border-secondary  shadow p-3 mb-5 bg-white rounded metodopago");
 		let divInicial = $("<div>").addClass("pt-4");
-			divInicial.append('<h6 class="mb-3"><strong>SPEI Interbancario</strong></h6>');
+			divInicial.append('<h6 class="mb-3"><strong>Banco En Linea</strong></h6>');
 
 		let divContenedorSecundario= $("<div>").addClass("text-center");
-			divContenedorSecundario.append('<button type="button" class="btn btn-default btn-metodopago" id="metodopagoBtnSPEI">SPEI  </button>');
+			divContenedorSecundario.append('<button type="button" class="btn btn-default btn-metodopago" id="metodopagoBtnSPEI">Banco En Linea  </button>');
 
 			divInicial.append( divContenedorSecundario );
 			divContenedor.append( divInicial );
 		$("#containerMetodoPago").append( divContenedor );
 		$("#containerMetodoPago").append( '<br/>' );
 
-
-				$("#metodopagoBtnSPEI").on("click", () => {
+		/*
+			$("#metodopagoBtnSPEI").on("click", () => {
 				$("#metodopagoBtnSPEI").append('<div id="spinner-spei" class="spinner-border spinner-border-sm float-right" role="status"><span class="sr-only">Loading...</span></div>');
 
 
@@ -106,7 +106,7 @@ templateMetodoPagoBulder = {
 				});
 
 
-			});
+			});*/
 	}
 
 
