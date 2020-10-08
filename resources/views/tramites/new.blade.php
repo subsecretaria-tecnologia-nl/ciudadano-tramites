@@ -48,16 +48,20 @@
 							          		<ul class="list-group list-group-flush">
 							            		<li class="list-group-item d-flex justify-content-between align-items-center px-0 pb-0">
 							              			Subtotal
-							              			<span>$25.98</span>
+							              			<span id="subTotalTramites">$0.00</span>
 							            		</li>
 							            		<li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
 							              			<div>
 							                			<strong>Total</strong>
 							                			<strong>
-							                  				<p class="mb-0">(incluy IVA)</p>
+							                  				<p class="mb-0"></p>
 							                			</strong>
 							              			</div>
-							              			<span><strong>$53.98</strong></span>
+							              			<span>
+							              				<strong id="totalTramites">
+							              					$0.00
+							              				</strong>
+							              			</span>
 							            		</li>
 							          		</ul>
 
@@ -113,7 +117,7 @@
 </div>
 
 <div id="addTramite" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ></button>
@@ -141,13 +145,84 @@
 						</div>
 					</div>
 				    <div id="camposDinamicosDiv" class="row"></div>
+
+
+ 					<fieldset  class="border border-secondary p-2" style="display: none;" id="fieldsetSolicitantes">
+					    <legend class="w-auto"> 
+					    	<span style="margin-left: 10px;"> Solicitantes </span>   
+					    	<i class="fa fa-plus" title="Agregar Solicitante" style="cursor: pointer; color: blue; margin-left: 50px; margin-right: 50px;" 
+					    	 onclick="openModalAddSolicitante()"></i>
+					   	</legend>
+
+						<table class="table" id="tablaSolicitantes">
+						    <thead>
+						      	<tr>
+							        <th>#</th>
+							        <th>Tipo</th>
+							        <th>Nombre o Razón Social</th>
+							        <th>Acciones</th>
+						      	</tr>
+						    </thead>
+						    <tbody id="tbodySolicitantes"></tbody>
+						</table>
+
+					</fieldset>
+				
+
 				</form>
 
             </div>
             <div class="modal-footer">
 	         	<button type="button" data-dismiss="modal" class="btn default" >Cancelar</button>
-	            <button type="button"  class="btn green" onclick="eliminar()" id="btnAdd">
+	            <button type="button"  class="btn green"  id="btnAdd">
 	            	<i class="fa fa-check" id="iconBtnAdd"></i> 
+	            	Aceptar
+	            </button>
+	        </div>
+	   </div>
+	</div>
+</div>
+
+<div id="modalAddSolicitante" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ></button>
+                <h4 class="modal-title">Agregar Solicitante</h4>
+            </div>
+            <div class="modal-body">
+	            <div class="form-check-inline">
+	                <label class="form-check-label">
+	                 	<input type="radio" class="form-check-input" value="pf" name="tipoPersona" id="pfRadio">Persona Física
+	                </label>
+	            </div>
+	            <div class="form-check-inline">
+	                <label class="form-check-label">
+	                  	<input type="radio" class="form-check-input" value="pm" name="tipoPersona" id="pmRadio">Persona Moral
+	                </label>
+	            </div>
+				<input type="hidden" name="idSolicitante" class="form-control" id="idSolicitante">
+	            <div class="row" id="divPF">
+	            	<div class="col-lg-4">
+	                	Nombre: <input type="text" name="nombreSolicitante" class="form-control" id="nombreSolicitante">
+	                </div>
+	                <div class="col-lg-4">
+	               		Apellido Paterno: <input type="text" name="apMatSolicitante" class="form-control" id="apMatSolicitante">
+	                </div>
+	                <div class="col-lg-4">
+	                	Apellido Materno: <input type="text" name="apPatSolicitante" class="form-control" id="apPatSolicitante">
+	                </div>
+	            </div>
+	            <div class="row" id="divPM" style="display: none;">
+	            	<div class="col-lg-12">
+	                	RFC: <input type="text" name="rfc" class="form-control" id="rfcSolicitante">
+	                </div>
+	            </div>
+            </div>
+            <div class="modal-footer">
+	         	<button type="button" data-dismiss="modal" class="btn default" >Cancelar</button>
+	            <button type="button"  class="btn green" onclick="agregarSolicitante()" id="btnDel">
+	            	<i class="fa fa-check" id="iconBtnDel"></i> 
 	            	Aceptar
 	            </button>
 	        </div>
@@ -158,20 +233,21 @@
 <link href="{{ asset('css/newTramite.css') }}" rel="stylesheet" type="text/css" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="{{ asset('js/nuevoTramite/inputClass.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/nuevoTramite/selectClass.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/nuevoTramite/checkboxClass.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/TiposElements/inputClass.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/TiposElements/selectClass.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/TiposElements/checkboxClass.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/TiposElements/optionClass.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/TiposElements/TextBoxClass.js') }}"></script>
 
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/ElementFactory.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/FormularioBuilder.js') }}"></script>
 
-<script type="text/javascript" src="{{ asset('js/nuevoTramite/JSONGeneraReferencia.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/JSONGeneraReferenciaBuilder.js') }}"></script>
 
 
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/shoppingCarModule/shoppingCarBuilder.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/templateMetodoPagoBuilder.js') }}"></script>
-
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/tramiteBuilder.js') }}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script><divid="conteudo">
@@ -180,23 +256,137 @@
 
 	let tramitesGuardar = [];
 
+	let nuevoTramiteModal;
+
 	$(document).ready(() => {
     	getTramites();
+	    
 
-		JSONGeneraReferenciaBuilder.setToken("9E1345508F2EBF30BD4D227D7E625111CFA6")
-									.setUrlRetorno("http://10.153.144.94/egobDes/CNAPRetorno.php")
-									.setImporteTransaccion(500)
-									.setIdTransaccion("201910")
+ let datosTramite1 = {
+          "nombre": "BEBIDAS MUNDIALES S DE RL DE CV",
+          "apellido_paterno": "",
+          "apellido_materno": "",
+          "razon_social": "BEBIDAS MUNDIALES S DE RL DE CV",
+          "rfc": "BMU8605134I8 ",
+          "curp": "",
+          "email": "",
+          "calle": "AV LA JUVENTUD",
+          "colonia": "BOSQUES DEL NOGALAR",
+          "numexterior": "",
+          "numinterior": "120",
+          "municipio": "SAN NICOLAS DE LOS GARZA",
+          "codigopostal": 66480
+    }
+
+      let tramite1 = new  TramiteClass().setIdSeguimiento(4254).setIdTipoServicio(3).setIdTramite("BMU8605134I81FM5K7D80EGA56944")
+              .setImporteTramite(3041).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ").setAuxiliar_2("").setAuxiliar_3("")
+              .setDatosSolicitante(datosTramite1).setDatosFactura(datosTramite1).setDetalle([
+                    {
+                      "concepto": "REFRENDO PTE.AÑO",
+                      "importe_concepto": "3041",
+                      "partida": 95101
+                      
+                    },
+                    {
+                      "concepto": "SANCION REFRENDO PTE.AÑO",
+                      "importe_concepto": "130",
+                      "partida": 95123,
+                      "descuentos": [
+                        {
+                          "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
+                          "importe_descuento": "130",
+                          "partida_descuento": 95136
+                        }
+                      ]
+                    }
+                  ]).build();
+      let tramite3 = new TramiteClass().setIdSeguimiento(43).setIdTipoServicio(3).setIdTramite("BMU8605134I81GBKC34JXWJ103325")
+              .setImporteTramite(826).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ").setAuxiliar_2("").setAuxiliar_3("")
+              .setDatosSolicitante(datosTramite1).setDatosFactura(datosTramite1).setDetalle([{
+                    "concepto": "REFRENDO PTE.AÑO",
+                    "importe_concepto": "3041",
+                    "partida": 95101,
+                    "descuentos": [
+                      {
+                        "concepto_descuento": "SUBSIDIO ANTIGUEDAD 15 AÑOS",
+                        "importe_descuento": "2215",
+                        "partida_descuento": 95106
+                      }
+                    ]
+                  },
+                  {
+                    "concepto": "SANCION REFRENDO PTE.AÑO",
+                    "importe_concepto": "130",
+                    "partida": 95123,
+                    "descuentos": [
+                      {
+                        "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
+                        "importe_descuento": "130",
+                        "partida_descuento": 95136
+                      }
+                    ]
+                  }
+                ]).build();
+console.log( tramite3 )
+      let tramite2 = new TramiteClass().setIdSeguimiento(334).setIdTipoServicio(3).setIdTramite("BMU8605134I81GBKC34J9WJ108483")
+              .setImporteTramite(820).setAuxiliar_1("GRUPOS ICV BMU8605134I8").setAuxiliar_2("").setAuxiliar_3("")
+              .setDatosSolicitante(datosTramite1).setDatosFactura(datosTramite1).setDetalle(
+                [
+                    {
+                      "concepto": "REFRENDO PTE.AÑO",
+                      "importe_concepto": "3035",
+                      "partida": 95101,
+                      "descuentos": [
+                        {
+                          "concepto_descuento": "SUBSIDIO ANTIGUEDAD 15 AÑOS",
+                          "importe_descuento": "2215",
+                          "partida_descuento": 95106
+                        }
+                      ]
+                    },
+                    {
+                      "concepto": "SANCION REFRENDO PTE.AÑO",
+                      "importe_concepto": "130",
+                      "partida": 95123,
+                      "descuentos": [
+                        {
+                          "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
+                          "importe_descuento": "130",
+                          "partida_descuento": 95136
+                        }
+                      ]
+                    }
+                  ]).build();
+
+
+      let tramitesSeleccionados = [];
+      tramitesSeleccionados.push( tramite1 );
+      tramitesSeleccionados.push( tramite2 );
+      tramitesSeleccionados.push( tramite3 );
+
+		JSONGeneraReferenciaBuilder.setToken("DD0FDED2FE302392164520BF7090E1B3BEB7")
+									.setReferencia("")
+									.setUrlRetorno("url")
+									.setImporteTransaccion(4687)
+									.setIdTransaccion("BMU8605134I82915082020")
 									.setEntidad("3")
-									.setUrlConfirmaPago("http://10.153.144.94/egobDes/CNAConfirma.php");
+									.setUrlConfirmaPago("url")
+									.setEsReferencia("1")
+									.setTramites(tramitesSeleccionados);
 
     	
     });
 
     function openModalAdd(){
+
+    	nuevoTramiteModal = new  TramiteClass();
+    	nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
+
+		$("#fieldsetSolicitantes").hide();
     	$("#tramitesSelect").val("limpia").trigger('change');
     	$("#camposDinamicosDiv").empty();
     	$("#addTramite").modal({show: true}); 
+
     }
 
 	function getTramites(){
@@ -250,7 +440,12 @@
 	function buildForm( campos ){
 		let arrToDOm = FormularioBuilder.build( campos );
 		$("#camposDinamicosDiv").hide().empty().append( arrToDOm ).fadeIn(100);  
-		$("#btnAdd").attr("disabled", false);                                             
+		$("#btnAdd").attr("disabled", false);   
+
+		$("#fieldsetSolicitantes").fadeIn( "slow", () =>{
+			construirTablaSolicitantes();
+		});
+    	                                         
 	}
 
 	$("#btnAdd").on("click", () => {
@@ -258,6 +453,7 @@
 	});
 
 	function validarForm( campos, id_tramite ){
+
 		let isValid = true;		
 		let tramite = FormularioBuilder.isValid( campos );
 
@@ -274,6 +470,9 @@
 			for (var campo in tramite) { 
 				nuevoTramite[campo] = tramite[campo].valor;
 			}
+			
+			let elTtramite = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
+			nuevoTramite = Object.assign( nuevoTramite,  elTtramite);
 			tramitesGuardar.push( nuevoTramite );
 			Command: toastr.success("Se agrego el trámite a su lista", "Notifications") ;
 			$("#camposDinamicosDiv").fadeOut(60).empty();
@@ -286,6 +485,7 @@
 
 	function buildTablaDetalles(){
 		ShoppingCarBuilder.build( tramitesGuardar );
+		$("#totalTramites, #subTotalTramites").text( "$" +  tramitesGuardar.length *  17.99)
 	}
 
 	function deleteTramite( tramite ){
@@ -307,7 +507,6 @@
 
 		$("#metodoPagoBtn").append('<div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status"><span class="sr-only">Loading...</span></div>');
 		
-		console.log( JSON.stringify(JSONGeneraReferenciaBuilder.build()) );
 		let url = "https://payments-api-stage.herokuapp.com/v1/pay";
 		$.ajax({
 		  	type: "POST",
@@ -358,8 +557,151 @@
 
 	}
 
+	function openModalAddSolicitante(){
+		$('#pfRadio').click();
+		$("#nombreSolicitante, #apMatSolicitante, #apPatSolicitante, #rfcSolicitante, #idSolicitante").val("");
+
+		$("#modalAddSolicitante").modal("show");
+
+		$('#pfRadio').change( () => { 
+			if( $('#pfRadio').is(":checked") ){
+				$("#divPF").show();
+				$("#divPM").hide()
+			}
+		});
+
+		$('#pmRadio').change( () => { 
+			if( $('#pmRadio').is(":checked") ){
+				$("#divPM").show();
+				$("#divPF").hide()
+			}
+		});
+
+	}
+
+	function agregarSolicitante(){
+
+		let idSolicitante = $("#idSolicitante").val();
+
+		let solicitante = { tipoPersona: $('input[name=tipoPersona]:checked').val()  };
+		solicitante.id = !!$("#idSolicitante").val() ? $("#idSolicitante").val() : generarUUIDTramite();
+
+		if( solicitante.tipoPersona == "pf" ){ 
+			solicitante.nombreSolicitante = $("#nombreSolicitante").val();
+			solicitante.apPatSolicitante = $("#apPatSolicitante").val();
+			solicitante.apMatSolicitante = $("#apMatSolicitante").val();
+		} else if ( solicitante.tipoPersona == "pm" ){
+			solicitante.rfc = $("#rfcSolicitante").val();
+		}
+
+		if( !idSolicitante ){
+			nuevoTramiteModal.setSolicitanteToList( solicitante );
+		} else {
+			nuevoTramiteModal.editSolicitanteToList( solicitante, idSolicitante );
+		}
+		
+
+		$("#modalAddSolicitante").modal("hide");
+
+		construirTablaSolicitantes();
+	}
+
+
+	function generarUUIDTramite(){
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+		    return v.toString(16);
+		  });
+	}
+
+	function construirTablaSolicitantes(){
+		$("#tbodySolicitantes").empty();
+
+		let listaSolicitantes = nuevoTramiteModal.getSolicitanteToList();
+		if( listaSolicitantes.length > 0 ) {
+			listaSolicitantes.forEach( (solicitante, index) => {
+				let tr = $("<tr>");
+
+				let tdN = $("<td>").append(index + 1);
+
+				let txtTipoPersona = solicitante.tipoPersona == "pf" ? "Persona Física" : "Persona Moral";
+				let tdTipo = $("<td>").append( txtTipoPersona );
+				let txtNombreORazonSocial = solicitante.tipoPersona == "pf" ? solicitante.nombreSolicitante + " " + solicitante.apPatSolicitante + " " + solicitante.apMatSolicitante : solicitante.rfc;
+				let tdNombreORazonSocial = $("<td>").append( txtNombreORazonSocial ); 
+				let tdAccions = $("<td>").append( '<a type="button" onclick=editarSolicitante('  +  "'"+ solicitante.id + "'"   +   ')><i class="fas fa-edit"></i></a><a type="button" onclick=quitarSolicitante('  +  "'"+ solicitante.id + "'"   +   ')><i class="far fa-trash-alt"></i></a>');
+
+				tr.append( tdN );
+				tr.append( tdTipo );
+				tr.append( tdNombreORazonSocial  );
+				tr.append( tdAccions );
+
+				$("#tbodySolicitantes").append( tr );
+
+			});
+
+
+		} else  {
+			let tr = $("<tr>");
+			let tdN = $("<td colspan='4' class='text-center'>").append("No se han agregado solicitantes");
+			tr.append( tdN );
+			$("#tbodySolicitantes").append( tr );
+		}
+	}
+
+
+	function quitarSolicitante( id  ){
+		nuevoTramiteModal.quitarSolicitante(id);
+		construirTablaSolicitantes();
+	}
+
+
+	function editarSolicitante( id ){
+	  	let solicitante = nuevoTramiteModal.obtenerSolicitante(id);
+
+	  	$("#idSolicitante").val( solicitante.id );
+	  	if( solicitante.tipoPersona == "pf"){
+	  		$('#pfRadio').click();
+	  		$("#nombreSolicitante").val( solicitante.nombreSolicitante );
+	  		$("#apMatSolicitante").val( solicitante.apMatSolicitante);
+	  		$("#apPatSolicitante").val( solicitante.apPatSolicitante );
+	  		$("#rfcSolicitante").val("");
+	  	}
+
+	  	if( solicitante.tipoPersona == "pm"){
+	  		$('#pmRadio').click();
+	  		$("#nombreSolicitante").val( "" );
+	  		$("#apMatSolicitante").val( "");
+	  		$("#apPatSolicitante").val( "");
+	  		$("#rfcSolicitante").val( solicitante.rfc );
+	  	}
+
+	  	
+
+		$("#modalAddSolicitante").modal("show");
+
+		$('#pfRadio').change( () => { 
+			if( $('#pfRadio').is(":checked") ){
+				$("#divPF").show();
+				$("#divPM").hide()
+			}
+		});
+
+		$('#pmRadio').change( () => { 
+			if( $('#pmRadio').is(":checked") ){
+				$("#divPM").show();
+				$("#divPF").hide()
+			}
+		});
+
+	}
+
+
+
+
 </script>
 
 							        		
 
 							       
+
+

@@ -3,6 +3,7 @@ FormularioBuilder = {
 
     build: function( campos ) {
 		let arrCampos = JSON.parse( campos );
+
 		this.arrElementos = [];
 		arrCampos.forEach( ( campo, index ) => {
 			this.arrElementos.push(	ElementFactory.create( campo ) );
@@ -17,19 +18,6 @@ FormularioBuilder = {
 			let divCol =  $("<div>").addClass("col-lg-4").append(divFormGroup);
 			arrToDOm.push( divCol )
 		});
-/*
-		let botonCancel = $("<button>").addClass("btn btn-danger").attr({
-			type:"button"
-		}).append("Cancelar");
-		let botonAdd = $("<button>").addClass("btn btn-success").attr({
-			type:"button", id:"buttonSave"
-		}).append("Guardar");
-
-
-		botonAdd.on("click", () => {
-			fnValid( arrElementos, id_tramite );
-		});*/
-		//arrToDOm.push(botonAdd);
 		return arrToDOm;
 		
     },
@@ -45,7 +33,7 @@ FormularioBuilder = {
 			let idElement = campo.id;
 			let valor = $("#" + idElement).val();
 			if( campo.tipo != "checkbox" ){
-				if( campo.tipo != "select" ){
+				if( campo.tipo != "select" && campo.tipo != "option"){
 
 					if( campo.caracteristicas.required && (!valor || valor.length < 1 ) ){
 						tramite[idElement] = { isValid: false };
@@ -58,5 +46,14 @@ FormularioBuilder = {
 			}
 		});
 		return valido ? tramite : valido;
+    },
+
+
+    buildSeccionSolicitantes: function( campos ){
+    	let tieneSeccionSolicitante = campos.find( campo => campo.tipo == "option" && campo.nombre == "Razón Social" );
+
     }
+
+
+
 };

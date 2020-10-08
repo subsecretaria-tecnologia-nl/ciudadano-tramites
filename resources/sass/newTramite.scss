@@ -1,12 +1,1 @@
 @import "./_tramite.scss";
-
-.nav-tabs{
-	border: none !important;
-}
-
-.nav-tabs .nav-link {
-	border: none !important;
-}
-.nav .show>.nav-link, .nav .nav-link:hover:not(.disabled), .nav .nav-link.active{
-	border-bottom: 1px solid blue !important;
-}
