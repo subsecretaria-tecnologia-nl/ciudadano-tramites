@@ -26,6 +26,6 @@ class Egobiernopartidas extends Model implements Transformable
     protected $fillable = ['id_servicio','id_partida','descripcion'];
 
     protected $table = "partidas";
-	
+
 	public $timestamps = false;
 }

@@ -15,9 +15,7 @@ use App\Repositories\EgobiernotiposerviciosRepositoryEloquent;
 use App\Repositories\PortalcampotypeRepositoryEloquent;
 use App\Repositories\PortalcampoRepositoryEloquent;
 
-
 use App\Repositories\EgobiernopartidasRepositoryEloquent;
-
 
 
 class SolicitudesController extends Controller
@@ -119,7 +117,9 @@ class SolicitudesController extends Controller
       # checar los que no tenemos
       if( !in_array((int)$k->tramite_id, $t) )
       {
+
         $t[] = (int)$k->tramite_id;
+
       }
     }
 
