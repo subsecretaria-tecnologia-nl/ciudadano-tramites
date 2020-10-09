@@ -146,12 +146,7 @@ class TramitesController extends Controller
         $valor = $data->valor;
         $status = $data->status;
       }
-      //Se calculan los valores minimos y máximos del trámite
-      $costoMinimo = $min * $actual_uma;
-      $costoMin = $this->redondeo($costoMinimo);
 
-      $costoMaximo = $max * $actual_uma;
-      $costoMax = $this->redondeo($costoMaximo);
       //dd($costoMax);
       try{
         if ($tipo == "F"){
@@ -166,31 +161,47 @@ class TramitesController extends Controller
             $costo_real = $actual_uma * $valor;
             $primer_costo = $this->redondeo($costo_real);
 
-            $costo_final = $primer_costo * $lotes;
+            if (!empty($lotes)){
+              $costoxlote = $primer_costo * $lotes;
+
+              if($costoxlote < $primer_costo){
+                $costo_final = $primer_costo;
+              }else{
+                $costo_final = $costoxlote;
+              }
+            }else{
+              $costo_final = $primer_costo;
+            }
 
             return json_encode($costo_final);
           }
         }elseif ($tipo == "V") {
-          if ($costoX == "M") {
-            if( $valor_catastral > $valor_operacion){
-              $operacion = $valor_catastral;
-            }else{
-              $operacion = $valor_operacion;
-            }
+          //Se calculan los valores minimos y máximos del trámite
+          $costoMinimo = $min * $actual_uma;
+          $costoMin = $this->redondeo($costoMinimo);
 
-            $precio = ($operacion * $valor) / 1000;
+          $costoMaximo = $max * $actual_uma;
+          $costoMax = $this->redondeo($costoMaximo);
 
-            $precioRedondeo = $this->redondeo($precio);
-
-            if ($precioRedondeo < $costoMin ){
-              $costo_final = $costoMin;
-            }elseif ($precioRedondeo > $costoMax) {
-              $costo_final = $costoMax;
-            }else{
-              $costo_final = $precioRedondeo;
-            }
-            return json_encode($costo_final);
+          if( $valor_catastral > $valor_operacion){
+            $operacion = $valor_catastral;
+          }else{
+            $operacion = $valor_operacion;
           }
+
+          $precio = ($operacion * $valor) / 1000;
+
+          $precioRedondeo = $this->redondeo($precio);
+
+          if ($precioRedondeo < $costoMin ){
+            $costo_final = $costoMin;
+          }elseif ($precioRedondeo > $costoMax) {
+            $costo_final = $costoMax;
+          }else{
+            $costo_final = $precioRedondeo;
+          }
+          return json_encode($costo_final);
+
         }
       }catch(\Exception $e){
         Log::info('Error - costo Trámite: '.$e->getMessage());
