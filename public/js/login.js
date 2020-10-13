@@ -41,7 +41,7 @@ $('#kt_login_signin_submit').on('click', function(e) {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location = "/dashboard";
+                        redirect("/dashboard");
                     });
                 },
                 error: function(res) {
@@ -55,7 +55,7 @@ $('#kt_login_signin_submit').on('click', function(e) {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location = "/login";
+                        redirect("/login");
                     });
                 }
             });
