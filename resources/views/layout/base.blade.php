@@ -6,7 +6,7 @@
 <html lang="en">
 	<!--begin::Head-->
 	<head>
-		<base href="{{ env("APP_HOSTNAME") }}">
+		<base href="{{ env("APP_URL") }}">
 		<meta charset="utf-8" />
 		<title>{{ isset($subtitle) ? "{$subtitle} | " : "" }}{{ $title ?? "" }}</title>
 		<meta name="description" content="{{ $description ?? "" }}" />
