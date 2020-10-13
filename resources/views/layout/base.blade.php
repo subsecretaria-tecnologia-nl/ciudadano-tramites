@@ -329,38 +329,38 @@
 												<!--begin::Nav-->
 												<ul class="menu-nav flex-column w-100 px-4">
 													<li class="menu-item <?= ($currentPath == "/avisos") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/nuevo-tramite" class="menu-link bg-success w-100">
+														<a href="{{ url()->route("tramite.nuevo") }}" class="menu-link bg-success w-100">
 															<span class="menu-icon"><i class="fas fa-folder-plus text-white"></i></span>
 															<span class="menu-text text-white d-flex d-md-none d-xl-flex">Iniciar Trámite</span>
 														</a>
 													</li>
 													<li><hr></li>
 													<li class="menu-item <?= ($currentPath == "/dashboard") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/dashboard" class="menu-link w-100">
+														<a href="{{ url()->route("dashboard") }}" class="menu-link w-100">
 															<span class="menu-icon"><i class="fas fa-home"></i></span>
 															<span class="menu-text d-flex d-md-none d-xl-flex">Inicio</span>
 														</a>
 													</li>
 													<li class="menu-item <?= ($currentPath == "/tramites/pendientes") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/tramites/pendientes" class="menu-link w-100">
+														<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="menu-link w-100">
 															<span class="menu-icon"><i class="fas fa-clock"></i></span>
 															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Pendientes</span>
 														</a>
 													</li>
 													<li class="menu-item <?= ($currentPath == "/tramites/curso") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/tramites/curso" class="menu-link w-100">
+														<a href="{{ url()->route("tramites", ["curso"]) }}" class="menu-link w-100">
 															<span class="menu-icon"><i class="fas fa-play-circle"></i></span>
 															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites en Curso</span>
 														</a>
 													</li>
 													<li class="menu-item <?= ($currentPath == "/tramites/finalizados") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/tramites/finalizados" class="menu-link w-100">
+														<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="menu-link w-100">
 															<span class="menu-icon"><i class="fas fa-check-circle"></i></span>
 															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Finalizados</span>
 														</a>
 													</li>
 													<li class="menu-item <?= ($currentPath == "/tramites/finalizados") ? "menu-item-active" : "" ?>" aria-haspopup="true">
-														<a href="/tramites/por-pagar" class="menu-link w-100">
+														<a href="{{ url()->route("tramites", ["por-pagar"]) }}" class="menu-link w-100">
 															<span class="menu-icon"><i class="fas fa-money-bill"></i></span>
 															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Por Pagar</span>
 														</a>
@@ -508,7 +508,7 @@
 									<span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">{{ $user ? $user->email : "" }}</span>
 								</span>
 							</a>
-							<a href="/logout" class="btn btn-sm btn-light-danger font-weight-bolder text-danger text-hover-white py-2 px-5">Cerrar Sesión</a>
+							<a href="{{ url()->route("logout") }}" class="btn btn-sm btn-light-danger font-weight-bolder text-danger text-hover-white py-2 px-5">Cerrar Sesión</a>
 						</div>
 					</div>
 				</div>
@@ -765,7 +765,7 @@
 									<span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">{{ $user ? $user->email : "" }}</span>
 								</span>
 							</a>
-							<a href="/logout" class="btn btn-sm btn-light-danger font-weight-bolder text-danger text-hover-white py-2 px-5">Cerrar Sesión</a>
+							<a href="{{ url()->route("logout") }}" class="btn btn-sm btn-light-danger font-weight-bolder text-danger text-hover-white py-2 px-5">Cerrar Sesión</a>
 						</div>
 					</div>
 				</div>
@@ -1196,10 +1196,22 @@
 		<script src="{{ asset("plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3") }}"></script>
 		<script src="{{ asset("js/scripts.bundle.js?v=7.0.3") }}"></script>
 		<script>
+			const APP_URL = '{{ getenv("APP_URL") }}';
+			function redirect(path) {
+				if (!(new RegExp('^(http(s)?[:]//)','i')).test(path)) {
+					newPath = APP_URL + (path.search(/\//) != 0 ? "/" : "") + path;
+				}
+				console.log(newPath);
+				window.location = newPath;
+			}
+
 			$.ajaxSetup({
 			    data: {
 			        '_token': "{{ csrf_token() }}"
-			    }
+			    },
+				beforeSend: function(xhr, options) {
+					options.url = APP_URL + options.url;
+				}
 			});
 		</script>	
 		<!--end::Global Theme Bundle-->
