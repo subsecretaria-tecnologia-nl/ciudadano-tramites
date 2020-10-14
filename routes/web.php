@@ -27,19 +27,19 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		Route::get('/dashboard', "DashboardController@index")->name("dashboard");
 		Route::get('/tramites/{type}', "TramitesController@index")->name("tramites");
 		Route::get('/nuevo-tramite', "TramitesController@new")->name("tramite.nuevo");
-		Route::get('/perfil',  "AcountInfoController@index");
-		Route::get('/informacion-cuenta', "ProfileController@index");
-		Route::get('/cambiar-contraseña', "changePassword@index");
-		Route::get('/usuarios', "UsersController@index");
+		Route::get('/perfil',  "AcountInfoController@index")->name("perfil");
+		Route::get('/informacion-cuenta', "ProfileController@index")->name("informacion-cuenta");
+		Route::get('/cambiar-contraseña', "changePassword@index")->name("cambiar-contraseña");
+		Route::get('/usuarios', "UsersController@index")->name("usuarios");
 		
 		// LOGIN
 		Route::get('/login', "LoginController@index")->name("login");
 		Route::post('/login', "LoginController@validation");
 		Route::get('/logout', "LoginController@logout")->name("logout");
-		Route::get('/password/recovery', "RecoveryController@index");
+		Route::get('/password/recovery', "RecoveryController@index")->name("password/recovery");
 		Route::get('/password/recovery/{token}', [ConfirmPasswordController::class,'index'], function($token){
 			return $token;
-		});
+		})->name('/password/recovery/{token}');
 		
 		Route::get('/getTramites', 'TramitesController@listaTramites');
 
