@@ -38,8 +38,16 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		Route::get('/logout', "LoginController@logout")->name("logout");
 		Route::get('/password/recovery', "RecoveryController@index");
 		Route::get('/password/recovery/{token}', [ConfirmPasswordController::class,'index'], function($token){
-				return $token;
+			return $token;
 		});
+		
+		Route::get('/getTramites', 'TramitesController@listaTramites');
+
+		//Solicitudes
+		Route::get('/allTramites', 'SolicitudesController@getTramites');
+		Route::get('/getCampos', 'SolicitudesController@getCampos');
+		Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
+
+		Route::get('/getcostoTramite', 'TramitesController@getcostoTramite');
 	});
 });
-

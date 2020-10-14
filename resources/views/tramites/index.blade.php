@@ -9,574 +9,50 @@
                     </div>
                     <div class="cuadro-listado tramite-lista" style="padding-top: 10px">
                         <div class="titulo-cuadro">
-                            <div class="p-6">
-
-                                <div  class="row">
-                                    <div class="col-md-5 col-sm-12">
-                                        <span style="font-size: .6cm; color: black"> Trámites pendientes</span>
-                                    </div>
-                                    <div class="col-md-7 col-sm-12 pt-sm-6 pt-6 pt-md-0">
-                                        <a class="col-sm-12 btn  btn-primary btn-exportar-registro" ><i class="la la-plus"></i> Exportar registro</a>
-                                        <a class="col-sm-12 btn  btn-primary btn-exportar "> <i style="color: #0c4d8b" class="la la-download"></i>Exportar</a>
-                                     </div>
-                                </div>
+                            <div style="padding-top: 20px;">
+                                <span class="tituloTabla">
+                                    Trámites pendientes
+                                </span>
+                                <a class="btn btn-icon btn-primary btn-exportar-registro" ><i class="la la-plus"></i> Exportar registro</a>
+                                <a class="btn btn-icon btn-primary btn-exportar "> <i style="color: #0c4d8b" class="la la-download"></i>Exportar</a>
                             </div>
                             <div class="dropdown-divider"></div>
                             <table id="listado" class="table .table-bordered table-responsive tabla-horizontal " >
                                 <thead>
                                     <tr >
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div >
                                                 <span>id tramites</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div >
                                                 <span>Nombre del Tramite</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div>
                                                 <span>Nombre del solicitante</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
+                                            <div>
                                                 <span>Fecha de creacion</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
-                                                <span>Fecha de ultima modificacion</span></span>
+                                            <div>
+                                                <span>Fecha de ultima modificacion</span>
                                             </div>
                                         </th>
                                         <th > 
-                                            <div style="padding-left: 1%">
-                                                <span>Acciones</span></span>
+                                            <div>
+                                                <span>Acciones</span>
                                             </div>
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Certificado de libertad de gravamen
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite" style="padding-right: 10%">
-                                                    M-5 Constitucion/modificacion de sociedad microindustrial
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Disolucion de copropiedad y aplicacion de bienes 
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="nombre-tramite">
-                                                    Promesa Compra venta
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    <tr>
-                                            <td style="vertical-align: middle">
-                                                <div class="text-center">
-                                                    <span class="identificador">
-                                                        14200034   
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td >
-                                                <span class="nombre-tramite">
-                                                    Promesa Compra venta
-                                                </span>
-                                            </td>
-                                            <td >
-                                                <div class="nombre">
-                                                    jaime castillo
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="nombre">
-                                                    10-08-2020
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a type="button" ><i class="fas fa-edit"></i></a>
-                                                <a type="button" ><i class="far fa-trash-alt"></i></a>
-                                            </td>
-                                    </tr>
-                                    
-                                </tbody>
-                                
-                            </table>
-                            <div>
-                                {{-- <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav> --}}
-                            </div>
-                        
+                            </table>                        
                         </div>
                     </div>
                 </div>
@@ -585,10 +61,21 @@
         
     </div>
 </div>    
-
+<link href="{{ asset('css/tramites.css') }}" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script>
-  $(document).ready(function() {
-      $('#listado').DataTable({
+$(document).ready(() => createTable());
+
+function createTable( ){
+    let url = "{{ url('/getTramites') }}";
+    $('#listado').DataTable({
+        initComplete:initTableComplete,
+        "ajax": {
+            "url":url,"dataSrc":""
+        },
         pagingType: "simple_numbers"  ,
         ordering: false,
         dom:" <'grid' <f> <l>   <p>   <i>  >t  <'grid' <f> <l> <p>  <i> >",
@@ -607,7 +94,55 @@
             },
             "sProcessing" : "Procesando...",
         },
-      
-      });
-  } );
+        "columns": [
+            { "data": "id_tramite", class:"alineacionVertical",render: renderTd }, 
+            { "data": "nombre", render: renderTitulo },
+            { "data": "user", render: renderNombre },
+            { "data": "created_at", render: renderDate },
+            { "data": "updated_at", render: renderDate },
+            { "data": "id", "render": getTemplateAcciones}
+        ]
+    });
+}
+
+function initTableComplete(){
+    $("#listado").removeClass('dataTable');
+    $(".dataTables_filter").hide();    
+}
+
+function getTemplateAcciones( data, type, row, meta  ){
+    let botonEditar = '<a type="button" ><i class="fas fa-edit"></i></a>';
+    let botonEliminar = '<a type="button" ><i class="far fa-trash-alt"></i></a>';
+    return botonEditar + botonEliminar; 
+}
+
+function renderTd( data ){
+   return '<div class="text-center"><span class="identificador">' + data + '</span></div>';                              
+}
+
+function renderTitulo( data, type, row, meta ){
+    return data ? '<span class="nombre-tramite">' + data + '</span>' : "";
+}
+
+function renderNombre( data){
+    return data ? '<span class="nombre">' + data + '</span>' : "";
+}
+
+function renderDate( data ){
+    if( data){
+        let f = new Date("2020-09-10T11:51:23.000000Z");
+        let mes =  f.getMonth() > 9 ? + f.getMonth() :  "0" + f.getMonth();
+        let fecha = f.getDate() + "-"+ mes + "-" +f.getFullYear();
+
+        return '<span class="nombre">' + fecha + '</span>';
+    } else {
+        return "";
+    }
+}
+
+$("#busqueda").on("keyup", (s) => {
+    $('#listado').DataTable().search( $("#busqueda").val() ).draw();
+})
+
+
 </script>
