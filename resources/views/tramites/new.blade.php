@@ -276,7 +276,7 @@
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/ElementFactory.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/FormularioBuilder.js') }}"></script>
 
-<script type="text/javascript" src="{{ asset('js/nuevoTramite/JSONGeneraReferenciaBuilder.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/JsonGeneraReferenciaBuilder.js') }}"></script>
 
 
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/shoppingCarModule/shoppingCarBuilder.js') }}"></script>
@@ -321,7 +321,7 @@
     }
 
 	function getTramites(){
-		let url = "{{ url('/allTramites') }}";
+		let url = "{{ url()->route('allTramites') }}";
 		getApi( url,false , ((response) => {  
         	tramites = JSON.parse(response);
         	setTramites( $("#tramitesSelect") );
@@ -356,7 +356,7 @@
 
 	function getCampos(){
 		$("#btnAdd").attr("disabled", true);
-		let url = "{{ url('/getCampos') }}";
+		let url = "{{ url()->route('getCampos') }}";
 		let data =  { id_tramite:$("#tramitesSelect").val()  } 
 		getApi( url, data , ((response) => {  
         	buildForm( response );

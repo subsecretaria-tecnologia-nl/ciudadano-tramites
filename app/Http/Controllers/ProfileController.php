@@ -11,7 +11,8 @@ class ProfileController extends Controller
 			"subtitle" => "perfil",
 			"fluid_container"=> true
 		]);
+		$user = session()->get("user");
 
-		return layout_view("profile");
+		return layout_view("profile", ['user' => $user]);
     }
 }

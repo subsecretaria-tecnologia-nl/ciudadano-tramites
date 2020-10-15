@@ -11,7 +11,8 @@ class AcountInfoController extends Controller
 			"subtitle" => "Informacion de la cuenta",
 			"fluid_container"=> true
 		]);
+		$user = session()->get("user");
 
-		return layout_view("accountinfo");
+		return layout_view("accountinfo", ["user" => $user]);
     }
 }

@@ -119,6 +119,7 @@ class TramitesController extends Controller
     *	@return json costo e informacion del trámite
     */
     public function getcostoTramite(Request $request) {
+
       $tramite_id = $request->tramite_id;
       //$tramite_id = 102;
       $dt = date("Y");

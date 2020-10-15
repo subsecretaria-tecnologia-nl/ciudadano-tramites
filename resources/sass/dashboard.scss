@@ -8,8 +8,9 @@ body {
 }
 
 .dashboard {
-    max-height: 210px;
-    position: relative;
+    // max-height: 210px;
+    // position: relative;
+    padding-top: 20%;
 }
 
 .gradient {
@@ -43,14 +44,6 @@ body {
 .busqueda-sub {
     font-size: .4cm;
     color: $white;
-}
-
-.tramites {
-    padding: 20px;
-    margin: 0 auto;
-    max-width: 1300px;
-    height: 600px;
-    margin-bottom: 100px;
 }
 
 .cuadros {
@@ -94,12 +87,14 @@ body {
     border-radius: 5px;
     padding: 8px 15px 8px 15px;
     color: $blue;
+    font-weight: 550;
 }
 
 .nombre-tramite {
     font-size: 15px;
     color: $blue;
     text-decoration: underline;
+    font-weight: 550;
 }
 
 .nombre {
