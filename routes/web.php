@@ -45,5 +45,5 @@ use App\Http\Controllers\ConfirmPasswordController;
 	Route::get('/getCampos', 'SolicitudesController@getCampos');
 	Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
 
-	Route::get('/getcostoTramite', 'TramitesController@getcostoTramite');
+	Route::post('/getcostoTramite', 'TramitesController@getcostoTramite');
 // });
