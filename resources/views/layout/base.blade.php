@@ -1220,7 +1220,7 @@
 		{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.3"></script> --}}
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
-		<script src="js/pages/widgets.js?v=7.0.3"></script>
+		<script src="{{ asset("js/pages/widgets.js?v=7.0.3") }}"></script>
 		<!--end::Page Scripts-->
 		<?php
 			if(isset($script)){
