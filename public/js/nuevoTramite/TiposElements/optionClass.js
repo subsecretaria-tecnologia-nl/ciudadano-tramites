@@ -17,7 +17,7 @@ Radio.prototype = {
     build: function(){
 
       let divOptions = $("<div>");
-      if( this.caracteristicas.opciones ){
+      if( this.caracteristicas && this.caracteristicas.opciones ){
         this.caracteristicas.opciones.forEach( (opcion, key) => {
             let clave =  Object.keys(opcion)[0];
             let element = $("<input>").attr({
