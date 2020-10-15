@@ -424,7 +424,7 @@
 
 
 		if( isValid ) {
-			let url = "{{ url()->route('getcostoTramite') }}";
+			let url = "{{ url()->route('costo-tramite') }}";
 
 			let data = {
 				valor_catastral:3000,
