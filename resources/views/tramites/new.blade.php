@@ -425,7 +425,7 @@ console.log( tramite3 )
 
 	function getCampos(){
 		$("#btnAdd").attr("disabled", true);
-		let url = "{{ url('/getCampos') }}";
+		let url = "{{ url()->route('getCampos') }}";
 		let data =  { id_tramite:$("#tramitesSelect").val()  } 
 		getApi( url, data , ((response) => {  
         	buildForm( response );
