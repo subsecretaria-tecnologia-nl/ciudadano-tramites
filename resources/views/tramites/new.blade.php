@@ -390,7 +390,7 @@ console.log( tramite3 )
     }
 
 	function getTramites(){
-		let url = "{{ url()->name('allTramites') }}";
+		let url = "{{ url()->route('allTramites') }}";
 		getApi( url,false , ((response) => {  
         	tramites = JSON.parse(response);
         	setTramites( $("#tramitesSelect") );
