@@ -53,15 +53,14 @@ document.addEventListener('DOMContentLoaded', function(e) {
 
 $('#kt_recovery_submit').on('click', function(e) {
     e.preventDefault();
-    var url = window.location.href;
-    const urlExt = url.replace(window.location.hostname, "");
+    const url = window.location.href;
     const email = new URL(url).searchParams.get('e');
     const password = $(document).find('input[name="password"]').val();
     const password_confirmation = $(document).find('input[name="confirmPassword"]').val();
     validation.validate().then(function(status) {
         if (status == 'Valid') {
             $.ajaxSetup({
-                url: "/password/recovery/" + urlExt,
+                url: "/password/recovery",
                 type: "POST",
                 data: {
                     "email": email,

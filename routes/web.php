@@ -15,35 +15,39 @@ use App\Http\Controllers\ConfirmPasswordController;
 |
 */
 
-// Route::middleware(["validate_session"])->group(function(){
-	Route::get('/', function () {
-		return redirect("/dashboard");
-	});
-	Route::get('/dashboard', "DashboardController@index");
-	Route::get('/tramites/{type}', "TramitesController@index");
+Route::get("/", function(){
+	return redirect()->route("dashboard");
+});
 
-	Route::get('/getTramites', 'TramitesController@listaTramites');
+Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
+	Route::middleware(["validate_session"])->group(function(){
+		Route::get('/', function () {
+			return redirect()->route("dashboard");
+		});
+		Route::get('/dashboard', "DashboardController@index")->name("dashboard");
+		Route::get('/tramites/{type}', "TramitesController@index")->name("tramites");
+		Route::get('/nuevo-tramite', "TramitesController@new")->name("tramite.nuevo");
+		Route::get('/perfil',  "AcountInfoController@index")->name("perfil");
+		Route::get('/informacion-cuenta', "ProfileController@index")->name("informacion-cuenta");
+		Route::get('/cambiar-contraseña', "changePassword@index")->name("cambiar-contraseña");
+		Route::get('/usuarios', "UsersController@index")->name("usuarios");
 
-	Route::get('/nuevo-tramite', "TramitesController@new");
-
-	Route::get('/perfil', "ProfileController@index");
-	Route::get('/informacion-cuenta', "AcountInfoController@index");
-	Route::get('/cambiar-contraseña', "changePassword@index");
-	Route::get('/usuarios', "UsersController@index");
-
-	// LOGIN
-	Route::get('/login', "LoginController@index");
-	Route::post('/login', "LoginController@validation");
-	Route::get('/logout', "LoginController@logout");
-	Route::get('/password/recovery', "RecoveryController@index");
-	Route::get('/password/recovery/{token}', [ConfirmPasswordController::class,'index'], function($token){
+		// LOGIN
+		Route::get('/login', "LoginController@index")->name("login");
+		Route::post('/login', "LoginController@validation");
+		Route::get('/logout', "LoginController@logout")->name("logout");
+		Route::get('/password/recovery', "RecoveryController@index")->name("password/recovery");
+		Route::get('/password/recovery/{token}', [ConfirmPasswordController::class,'index'], function($token){
 			return $token;
-	});
+		})->name('/password/recovery/{token}');
 
-	//Solicitudes
-	Route::get('/allTramites', 'SolicitudesController@getTramites');
-	Route::get('/getCampos', 'SolicitudesController@getCampos');
-	Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
+		Route::get('/getTramites', 'TramitesController@listaTramites');
+
+		//Solicitudes
+		Route::get('/allTramites', 'SolicitudesController@getTramites');
+		Route::get('/getCampos', 'SolicitudesController@getCampos');
+		Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
 
 	Route::post('/getcostoTramite', 'TramitesController@getcostoTramite');
-// });
+ });
+});

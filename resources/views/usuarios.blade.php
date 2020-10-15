@@ -1,11 +1,11 @@
 <div class="content" id="kt_content">
     <div class="d-flex flex-column-fluid">
-        <div class="container">
+        <div class="container view-usuarios">
             <span style="font-size: .8cm" class="6p">
                 Usuarios
             </span>
             <div>
-                <table id="usuarios">
+                <table class="usuarios tabla-horizontal table-responsive" id="usuarios">
                     <thead>
                         <tr>
                             <th>
