@@ -1,4 +1,4 @@
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+<div class="content" id="kt_content">
     <div class="d-flex flex-column-fluid">
         <div class="container">
 
@@ -17,7 +17,7 @@
                                 <a class="btn btn-icon btn-primary btn-exportar "> <i style="color: #0c4d8b" class="la la-download"></i>Exportar</a>
                             </div>
                             <div class="dropdown-divider"></div>
-                            <table id="listado" class="table .table-bordered" >
+                            <table id="listado" class="table .table-bordered table-responsive tabla-horizontal " >
                                 <thead>
                                     <tr >
                                         <th > 
@@ -52,7 +52,6 @@
                                         </th>
                                     </tr>
                                 </thead>
-                            
                             </table>                        
                         </div>
                     </div>
