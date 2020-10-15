@@ -1210,7 +1210,8 @@
 			        '_token': "{{ csrf_token() }}"
 			    },
 				beforeSend: function(xhr, options) {
-					options.url = APP_URL + options.url;
+					if(options.url.search(/http(s)?:\/\//i) < 0)
+						options.url = APP_URL + options.url;
 				}
 			});
 		</script>	
