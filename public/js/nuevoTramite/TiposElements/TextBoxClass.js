@@ -21,5 +21,10 @@ TextBox.prototype = {
         required: !!this.caracteristicas.required
       }).addClass("form-control");
       return element;
+    },
+
+
+    isValid: function(){
+      
     }
 };

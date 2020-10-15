@@ -125,6 +125,10 @@
             </div>
             <div class="modal-body">
 
+            	<div class="text-center">
+            		<strong> Total  ( <span id="cantidadTramitesModal"> 0 </span> trámites ) </strong> : <span id="totalTramitesModal"> $0.00 </span>
+            	</div>
+
 				<form class="p-5" action="#!" id="formularioDinamico">
 				    <!-- Tramite -->
 				    <div class="row">
@@ -174,6 +178,10 @@
             </div>
             <div class="modal-footer">
 	         	<button type="button" data-dismiss="modal" class="btn default" >Cancelar</button>
+	         	<button type="button"  class="btn green"  id="btnAddMore">
+	            	<i class="fa fa-check" id="iconBtnAddMore"></i> 
+	            	Continuar agregando trámites
+	            </button>
 	            <button type="button"  class="btn green"  id="btnAdd">
 	            	<i class="fa fa-check" id="iconBtnAdd"></i> 
 	            	Aceptar
@@ -230,6 +238,32 @@
 	</div>
 </div>
 
+
+<!--simulacion banco-->
+
+<div id="modalSimulacion" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ></button>
+                <h4 class="modal-title">Simulación</h4>
+            </div>
+            <div class="modal-body">   
+            </div>
+            <div class="modal-footer">
+	         	<button type="button" class="btn default accionSimuluacion" id="idBtnRechazar" data-stado="111">
+	         		Rechazar
+	         	</button>
+	            <button type="button"  class="btn green accionSimuluacion"  id="idBtnAprob" data-stado="00">
+	            	<i class="fa fa-check" id="idIconAprob"></i> 
+	            	Aprobar
+	            </button>
+	        </div>
+	   </div>
+	</div>
+</div>
+
+
 <link href="{{ asset('css/newTramite.css') }}" rel="stylesheet" type="text/css" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -250,7 +284,8 @@
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/tramiteBuilder.js') }}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script><divid="conteudo">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 	let tramites = [];
 
@@ -262,117 +297,13 @@
     	getTramites();
 	    
 
- let datosTramite1 = {
-          "nombre": "BEBIDAS MUNDIALES S DE RL DE CV",
-          "apellido_paterno": "",
-          "apellido_materno": "",
-          "razon_social": "BEBIDAS MUNDIALES S DE RL DE CV",
-          "rfc": "BMU8605134I8 ",
-          "curp": "",
-          "email": "",
-          "calle": "AV LA JUVENTUD",
-          "colonia": "BOSQUES DEL NOGALAR",
-          "numexterior": "",
-          "numinterior": "120",
-          "municipio": "SAN NICOLAS DE LOS GARZA",
-          "codigopostal": 66480
-    }
-
-      let tramite1 = new  TramiteClass().setIdSeguimiento(4254).setIdTipoServicio(3).setIdTramite("BMU8605134I81FM5K7D80EGA56944")
-              .setImporteTramite(3041).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ").setAuxiliar_2("").setAuxiliar_3("")
-              .setDatosSolicitante(datosTramite1).setDatosFactura(datosTramite1).setDetalle([
-                    {
-                      "concepto": "REFRENDO PTE.AÑO",
-                      "importe_concepto": "3041",
-                      "partida": 95101
-                      
-                    },
-                    {
-                      "concepto": "SANCION REFRENDO PTE.AÑO",
-                      "importe_concepto": "130",
-                      "partida": 95123,
-                      "descuentos": [
-                        {
-                          "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
-                          "importe_descuento": "130",
-                          "partida_descuento": 95136
-                        }
-                      ]
-                    }
-                  ]).build();
-      let tramite3 = new TramiteClass().setIdSeguimiento(43).setIdTipoServicio(3).setIdTramite("BMU8605134I81GBKC34JXWJ103325")
-              .setImporteTramite(826).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ").setAuxiliar_2("").setAuxiliar_3("")
-              .setDatosSolicitante(datosTramite1).setDatosFactura(datosTramite1).setDetalle([{
-                    "concepto": "REFRENDO PTE.AÑO",
-                    "importe_concepto": "3041",
-                    "partida": 95101,
-                    "descuentos": [
-                      {
-                        "concepto_descuento": "SUBSIDIO ANTIGUEDAD 15 AÑOS",
-                        "importe_descuento": "2215",
-                        "partida_descuento": 95106
-                      }
-                    ]
-                  },
-                  {
-                    "concepto": "SANCION REFRENDO PTE.AÑO",
-                    "importe_concepto": "130",
-                    "partida": 95123,
-                    "descuentos": [
-                      {
-                        "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
-                        "importe_descuento": "130",
-                        "partida_descuento": 95136
-                      }
-                    ]
-                  }
-                ]).build();
-console.log( tramite3 )
-      let tramite2 = new TramiteClass().setIdSeguimiento(334).setIdTipoServicio(3).setIdTramite("BMU8605134I81GBKC34J9WJ108483")
-              .setImporteTramite(820).setAuxiliar_1("GRUPOS ICV BMU8605134I8").setAuxiliar_2("").setAuxiliar_3("")
-              .setDatosSolicitante(datosTramite1).setDatosFactura(datosTramite1).setDetalle(
-                [
-                    {
-                      "concepto": "REFRENDO PTE.AÑO",
-                      "importe_concepto": "3035",
-                      "partida": 95101,
-                      "descuentos": [
-                        {
-                          "concepto_descuento": "SUBSIDIO ANTIGUEDAD 15 AÑOS",
-                          "importe_descuento": "2215",
-                          "partida_descuento": 95106
-                        }
-                      ]
-                    },
-                    {
-                      "concepto": "SANCION REFRENDO PTE.AÑO",
-                      "importe_concepto": "130",
-                      "partida": 95123,
-                      "descuentos": [
-                        {
-                          "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
-                          "importe_descuento": "130",
-                          "partida_descuento": 95136
-                        }
-                      ]
-                    }
-                  ]).build();
-
-
-      let tramitesSeleccionados = [];
-      tramitesSeleccionados.push( tramite1 );
-      tramitesSeleccionados.push( tramite2 );
-      tramitesSeleccionados.push( tramite3 );
-
 		JSONGeneraReferenciaBuilder.setToken("DD0FDED2FE302392164520BF7090E1B3BEB7")
 									.setReferencia("")
 									.setUrlRetorno("url")
-									.setImporteTransaccion(4687)
 									.setIdTransaccion("BMU8605134I82915082020")
 									.setEntidad("3")
 									.setUrlConfirmaPago("url")
-									.setEsReferencia("1")
-									.setTramites(tramitesSeleccionados);
+									.setEsReferencia("1");
 
     	
     });
@@ -449,43 +380,152 @@ console.log( tramite3 )
 	}
 
 	$("#btnAdd").on("click", () => {
-		validarForm( FormularioBuilder.getElements(), $("#tramitesSelect").val() );
+		if( $("#tramitesSelect").val() != "limpia" ){
+			$("#btnAdd").attr("disabled", true);   
+			$("#iconBtnAdd").removeClass("fa-check").addClass("fa-spin fa-spinner");
+
+			validarForm( FormularioBuilder.getElements(), $("#tramitesSelect").val(), true, $("#btnAdd"), $("#iconBtnAdd"));
+		} else {
+			Command: toastr.warning("Seleccione un tramite", "Notifications") ;
+		}
 	});
 
-	function validarForm( campos, id_tramite ){
+
+
+	$("#btnAddMore").on("click", () => {
+		if( $("#tramitesSelect").val() != "limpia" ){
+			$("#btnAddMore").attr("disabled", true);   
+			$("#iconBtnAddMore").removeClass("fa-check").addClass("fa-spin fa-spinner");
+
+			validarForm( FormularioBuilder.getElements(), $("#tramitesSelect").val(), false, $("#btnAddMore"), $("#iconBtnAddMore"));
+		} else {
+			Command: toastr.warning("Seleccione un tramite", "Notifications") ;
+		}
+	});
+
+
+	
+
+
+
+	function validarForm( campos, id_tramite, closeModal, btn, iconBtn ){
+		
 
 		let isValid = true;		
-		let tramite = FormularioBuilder.isValid( campos );
+		let camposTramite = FormularioBuilder.isValid( campos );
 
-		for (var campo in tramite) { 
-			if( !tramite[campo].isValid) {
+		for (var campo in camposTramite) { 
+			if( !camposTramite[campo].isValid) {
 				isValid = false;
 				Command: toastr.warning(campo.split("_").join(" ") + " es requerido", "Notifications") ;
 				break;
 			} 
 		}
 
-		if( isValid ) {
-			let nuevoTramite = { id_tramite };
-			for (var campo in tramite) { 
-				nuevoTramite[campo] = tramite[campo].valor;
-			}
-			
-			let elTtramite = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
-			nuevoTramite = Object.assign( nuevoTramite,  elTtramite);
-			tramitesGuardar.push( nuevoTramite );
-			Command: toastr.success("Se agrego el trámite a su lista", "Notifications") ;
-			$("#camposDinamicosDiv").fadeOut(60).empty();
-			$("#tramitesSelect").val("limpia").trigger('change');
 
-			$("#addTramite").modal("hide"); 
-			buildTablaDetalles();
+		if( isValid ) {
+			let url = "{{ url('/getcostoTramite') }}";
+
+			let data = {
+				valor_catastral:3000,
+   				id_seguimiento:"72be7568-8793-4de0-90a2-a07404d0b4f7",
+    			tramite_id: 100,
+    			valor_operacion:0
+			};
+
+			$.ajax({
+			  	type: "POST",
+			  	url,
+			  	data: JSON.stringify(data),
+			  	dataType:"json",
+			   	headers: {
+			        "Authorization":"Bearer B6C8XvbNouJj!ds@.NXjfeswtzehVN",
+			        "Content-type":"application/json"
+			    }
+			}).done((response) => {
+		
+				let nuevoTramite = { id_tramite };
+				for (var campo in camposTramite) { 
+					nuevoTramite[campo] = camposTramite[campo].valor;
+				}
+				
+				let tramiteFull = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
+				console.log( tramiteFull )
+				nuevoTramiteModal.setTramite( tramiteFull );
+				let datosTramite = {
+				      "nombre": "BEBIDAS MUNDIALES S DE RL DE CV",
+				      "apellido_paterno": "",
+				      "apellido_materno": "",
+				      "razon_social": "BEBIDAS MUNDIALES S DE RL DE CV",
+				      "rfc": "BMU8605134I8 ",
+				      "curp": "",
+				      "email": "",
+				      "calle": "AV LA JUVENTUD",
+				      "colonia": "BOSQUES DEL NOGALAR",
+				      "numexterior": "",
+				      "numinterior": "120",
+				      "municipio": "SAN NICOLAS DE LOS GARZA",
+				      "codigopostal": 66480
+				}				
+
+				//nuevoTramite = Object.assign( nuevoTramite,  elTtramite);
+				//tramitesGuardar.push( nuevoTramite );
+
+				nuevoTramiteModal
+				.setIdSeguimiento(4254)
+				.setIdTipoServicio(3)
+				.setImporteTramite(response)
+				.setDatosSolicitante(datosTramite)
+				.setDatosFactura(datosTramite).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ")
+				.setDetalle([
+	                    {
+	                      "concepto": "REFRENDO PTE.AÑO",
+	                      "importe_concepto": "0",
+	                      "partida": 95101
+	                      
+	                    },
+	                    {
+	                      "concepto": "SANCION REFRENDO PTE.AÑO",
+	                      "importe_concepto": "0",
+	                      "partida": 95123,
+	                      "descuentos": [
+	                        {
+	                          "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
+	                          "importe_descuento": "0",
+	                          "partida_descuento": 95136
+	                        }
+	                      ]
+	                    }
+	                  ])
+				.build();
+
+				tramitesGuardar.push( nuevoTramiteModal );
+				
+				Command: toastr.success("Se agrego el trámite a su lista", "Notifications") ;
+				$("#camposDinamicosDiv").fadeOut(60).empty();
+				$("#tramitesSelect").val("limpia").trigger('change');
+
+				if( closeModal ){
+					$("#addTramite").modal("hide"); 
+				}
+				buildTablaDetalles();
+			}).fail((rror)=> {
+				console.log("rror")
+				console.log( rror)
+			}).always(() => {
+				btn.attr("disabled", false);  
+				iconBtn.removeClass("fa-spin fa-spinner").addClass("fa-check");
+			});
+		} else {
+			btn.attr("disabled", false);  
+			iconBtn.removeClass("fa-spin fa-spinner").addClass("fa-check");
 		}
 	}
 
 	function buildTablaDetalles(){
 		ShoppingCarBuilder.build( tramitesGuardar );
-		$("#totalTramites, #subTotalTramites").text( "$" +  tramitesGuardar.length *  17.99)
+		$("#totalTramites, #subTotalTramites, #totalTramitesModal").text( "$" +  JSONGeneraReferenciaBuilder.getImporteTransaccion() );
+		$("#cantidadTramitesModal").text( tramitesGuardar.length );
 	}
 
 	function deleteTramite( tramite ){
@@ -507,6 +547,14 @@ console.log( tramite3 )
 
 		$("#metodoPagoBtn").append('<div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status"><span class="sr-only">Loading...</span></div>');
 		
+		let tramitesSeleccionados = [];
+		tramitesGuardar.forEach( tramite => {
+			tramitesSeleccionados.push( tramite.getJson() );
+		});
+
+		
+		JSONGeneraReferenciaBuilder.setTramites(tramitesSeleccionados);
+
 		let url = "https://payments-api-stage.herokuapp.com/v1/pay";
 		$.ajax({
 		  	type: "POST",
@@ -526,7 +574,6 @@ console.log( tramite3 )
 				templateMetodoPagoBulder.build(cuentas, folio);
 
 				$(".btn-metodopago").on("click", (e) => {
-					console.log(e.currentTarget.id)
 					$("#" + e.currentTarget.id)
 				});
 
@@ -539,8 +586,9 @@ console.log( tramite3 )
 				});
 			}
 			
-		}).fail((rror)=> {
-			console.log( rror)
+		}).fail((error)=> {
+			$("#addTramiteBTN").slideDown();
+			console.log( error);
 		}).always(() => {
 			$("#spinner-pago").remove();
 		});

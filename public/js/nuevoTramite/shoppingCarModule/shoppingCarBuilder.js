@@ -5,7 +5,12 @@ ShoppingCarBuilder = {
 		let totalTramites = $("<h5>").addClass("mb-4").append( "  <span>" + tramitesGuardar.length  + "</span> tramités " )
     	$("#listTramites").append(totalTramites).addClass("shadow-sm p-3 bg-white rounded");
 
+    	let total = 0;
 		tramitesGuardar.forEach( ( tramite, index ) => {
+
+
+			total = total + tramite.importe_tramite;
+			
 			let divInicial = $("<div>").addClass("row mb-4");
 
 			let divSecundario = $("<div>").addClass("col-md-7 col-lg-9 col-xl-9");
@@ -14,7 +19,7 @@ ShoppingCarBuilder = {
 
 			let divContenedorPrincipal = $("<div>").addClass("d-flex justify-content-between");
 
-			let divContenedorDatos = $("<div>").append("<h5>" +  tramite.tramite + "</h5>");
+			let divContenedorDatos = $("<div>").append("<h5>" +  tramite.tramite.tramite + "</h5>");
 				if( tramite.nombre ) {
 					let apPat = tramite.apellido_paterno || "";
 					let apMat = tramite.apellido_materno || "";
@@ -39,7 +44,8 @@ ShoppingCarBuilder = {
 			// <a href="#!" type="button" class="card-link-secondary small text-uppercase mr-3"><i class="fas fa-trash-alt mr-1"></i> Eliminar </a>
 			let divContenedorAccion = $("<div>").append( btnDl );
 				divContenedorSecundario.append( divContenedorAccion );
-				divContenedorSecundario.append('<p class="mb-0"><span><strong id="summary">$17.99</strong></span></p class="mb-0">');
+				console.log( tramite )
+				divContenedorSecundario.append('<p class="mb-0"><span><strong id="summary"> $' + tramite.importe_tramite +'</strong></span></p class="mb-0">');
 
 				divTres.append( divContenedorSecundario );
 
@@ -51,7 +57,7 @@ ShoppingCarBuilder = {
 
 
 		});
-
+		JSONGeneraReferenciaBuilder.setImporteTransaccion(total);
 		//return arrToDOm;
 		
     }
