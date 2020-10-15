@@ -1210,7 +1210,8 @@
 			        '_token': "{{ csrf_token() }}"
 			    },
 				beforeSend: function(xhr, options) {
-					options.url = APP_URL + options.url;
+					if(options.url.search(/http(s)?:\/\//i) < 0)
+						options.url = APP_URL + options.url;
 				}
 			});
 		</script>	
@@ -1219,13 +1220,16 @@
 		{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.3"></script> --}}
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
-		<script src="js/pages/widgets.js?v=7.0.3"></script>
+		<script src="{{ asset("js/pages/widgets.js?v=7.0.3") }}"></script>
 		<!--end::Page Scripts-->
-		@if(isset($script))
-			@foreach ($script as $js)
-				<script src="{{ $js }}" type="text/javascript"></script>
-			@endforeach
-		@endif
+		<?php
+			if(isset($script)){
+				foreach ($script as $js) {
+					preg_match("/http(s)?:\/\//", $js, $matches);
+					echo '<script src="'.(!empty($matches) ? $js : asset($js)).'" type="text/javascript"></script>';
+				}
+			}
+		?>
 
 		<!-- dataTable -->
 		<script src="https://unpkg.com/@popperjs/core@2"></script>

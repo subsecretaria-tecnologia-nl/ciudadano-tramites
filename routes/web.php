@@ -41,12 +41,12 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 			return $token;
 		})->name('/password/recovery/{token}');
 
-		Route::get('/getTramites', 'TramitesController@listaTramites')->name("traer-tramites");
+		Route::get('/getTramites', 'TramitesController@listaTramites')->name("getTramites");
 
 		//Solicitudes
-		Route::get('/allTramites', 'SolicitudesController@getTramites')->name("all-tramites");
-		Route::get('/getCampos', 'SolicitudesController@getCampos')->name("campos");
-		Route::post('/crearSolicitud', 'TramitesController@crearSolicitud')->name("crear-solicitud");
+		Route::get('/allTramites', 'SolicitudesController@getTramites')->name("allTramites");
+		Route::get('/getCampos', 'SolicitudesController@getCampos')->name("getCampos");
+		Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
 
 	Route::post('/getcostoTramite', 'TramitesController@getcostoTramite')->name("costo-tramite");
  });

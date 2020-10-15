@@ -9,7 +9,7 @@ var TramiteClass = function() {
 		this.auxiliar_3 = "";
 		this.datos_solicitante = "";
 		this.datos_factura = "";
-		this.detalle = "";
+		this.detalle = [];
 
 		this.listaSolicitantes = [];
 };
@@ -86,6 +86,10 @@ TramiteClass.prototype = {
 	editSolicitanteToList: function( nuevoSolicitante, idSolicitante ){
 		let indexSolicitanteEditar = this.listaSolicitantes.findIndex(  solicitante => solicitante.id == idSolicitante );
 		this.listaSolicitantes[indexSolicitanteEditar] = nuevoSolicitante;
+	},
+
+	setTramite: function( tramite ){
+		this.tramite = tramite;
 	},
 
 	build: function(  ) {

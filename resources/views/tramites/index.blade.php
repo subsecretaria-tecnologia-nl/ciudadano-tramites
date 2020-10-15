@@ -70,7 +70,7 @@
 $(document).ready(() => createTable());
 
 function createTable( ){
-    let url = "{{ url('/getTramites') }}";
+    let url = "{{ url()->route('getTramites') }}";
     $('#listado').DataTable({
         initComplete:initTableComplete,
         "ajax": {
