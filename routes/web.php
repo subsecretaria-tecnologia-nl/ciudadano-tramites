@@ -44,7 +44,7 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		Route::get('/getTramites', 'TramitesController@listaTramites');
 
 		//Solicitudes
-		Route::get('/allTramites', 'SolicitudesController@getTramites');
+		Route::get('/allTramites', 'SolicitudesController@getTramites')->name("allTramites");
 		Route::get('/getCampos', 'SolicitudesController@getCampos');
 		Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
 
