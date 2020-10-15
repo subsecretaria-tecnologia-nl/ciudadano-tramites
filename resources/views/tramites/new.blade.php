@@ -242,7 +242,7 @@
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/ElementFactory.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/FormularioBuilder.js') }}"></script>
 
-<script type="text/javascript" src="{{ asset('js/nuevoTramite/JSONGeneraReferenciaBuilder.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/JsonGeneraReferenciaBuilder.js') }}"></script>
 
 
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/shoppingCarModule/shoppingCarBuilder.js') }}"></script>
@@ -390,7 +390,7 @@ console.log( tramite3 )
     }
 
 	function getTramites(){
-		let url = "{{ url('/allTramites') }}";
+		let url = "{{ url()->name('allTramites') }}";
 		getApi( url,false , ((response) => {  
         	tramites = JSON.parse(response);
         	setTramites( $("#tramitesSelect") );
