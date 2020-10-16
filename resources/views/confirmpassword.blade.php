@@ -45,7 +45,7 @@
 		<img src="https://ciudadano-tramites-stage.herokuapp.com/images/logo.svg" alt="" width="400">
 		<h1 class="mt-20"><strong>RECUPERAR CONTRASEÑA</strong></h1>
 		<p class="alert alert-danger w-50 mx-auto my-5"><strong>¡LO SENTIMOS!</strong> El token de solicitud a vencido o no es válido. Por favor, intenta nuevamente reestablecer tu contraseña <a href="https://google.com" class="text-white" style="text-decoration: underline;">aquí</a></p>
-		<a href="/" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4 text-white mt-2">Regresar</a>
+		<a href="{{ url()->route("home") }}" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4 text-white mt-2">Regresar</a>
 	</div>
 	@endif
 </div>
