@@ -123,7 +123,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ></button>
                 <h4 class="modal-title">Agregar trámite</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="height:544px; overflow:auto;">
 
             	<div class="text-center">
             		<strong> Total  ( <span id="cantidadTramitesModal"> 0 </span> trámites ) </strong> : <span id="totalTramitesModal"> $0.00 </span>
