@@ -24,7 +24,6 @@ class ConfirmPasswordController extends Controller
     if(getenv("APP_PREFIX")) unset($actual_link[1]);
     // $result = curlSendRequest("GET", env("SESSION_HOSTNAME"). "$_SERVER[REQUEST_URI]" , [], [ "Authorization: Basic ".base64_encode("email".":".$email) ]);
     $result = curlSendRequest("GET", env("SESSION_HOSTNAME") . implode("/", $actual_link) , [], [ "Authorization: Basic ".base64_encode("email".":".$email) ]);
-    var_dump($result);
     $valid_token = ($result->data == 'response' ) ? true : false;
     return layout_view("confirmpassword", ["valid_token"=> $valid_token ]);
     }
