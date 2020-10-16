@@ -263,7 +263,7 @@
                                             <label  class="col-md-3 col-sm-12col-form-label">Verificacion Inicio de Sesion</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <a href="" class="p-1 pr-5 pl-5" style="background-color: #a9c7d3; color: #088cbc;border-radius: 3px;" > Configurar Verificacion de inicio de sesion  </a>
-                                                <span class="form-text text-muted">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae omnis ipsum consectetur ea, sequi ratione quos laborum officiis <a href="/perfil">leer mas</a></span>
+                                                <span class="form-text text-muted">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae omnis ipsum consectetur ea, sequi ratione quos laborum officiis <a href="{{ url()->route("perfil") }}">leer mas</a></span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -275,7 +275,7 @@
                                                         <span></span>
                                                     </label>
                                                 </div>
-                                                <span class="form-text text-muted">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae omnis ipsum consectetur ea, sequi ratione quos laborum officiis <a href="/perfil">leer mas</a></span>
+                                                <span class="form-text text-muted">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae omnis ipsum consectetur ea, sequi ratione quos laborum officiis <a href="{{ url()->route("perfil") }}">leer mas</a></span>
                                                 <a href=""  class="p-1 pr-5 pl-5 mt-2" style="background-color: rgb(251, 189, 189); color:#bc1408 !important; border-radius: 3px;" > ¿Quieres desactivar tu cuenta?  </a>
                                             </div>
                                         </div>
