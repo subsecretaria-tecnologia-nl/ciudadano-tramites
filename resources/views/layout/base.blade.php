@@ -519,7 +519,7 @@
 				<!--begin::Nav-->
 				<div class="navi navi-spacer-x-0 p-0">
 					<!--begin::Item-->
-					<a href="/dashboard" class="navi-item">
+					<a href="{{ url()->route("dashboard") }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -544,7 +544,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/pendientes" class="navi-item">
+					<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -571,7 +571,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/curso" class="navi-item">
+					<a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -596,7 +596,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/finalizados" class="navi-item">
+					<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -744,7 +744,7 @@
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="/perfil" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $user ? $user->name : "" }} {{ $user ? $user->fathers_surname : "" }} </a>
+						<a href="{{ url()->route("perfil") }}" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $user ? $user->name : "" }} {{ $user ? $user->fathers_surname : "" }} </a>
 						{{-- <div class="text-muted mt-1">Frontend Development</div> --}}
 						<div class="navi mt-2">
 							<a href="mailto:{{ $user ? $user->email : "" }}" class="navi-item">
@@ -776,7 +776,7 @@
 				<!--begin::Nav-->
 				<div class="navi navi-spacer-x-0 p-0">
 					<!--begin::Item-->
-					<a href="/dashboard" class="navi-item">
+					<a href="{{ url()->route("dashboard") }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -801,7 +801,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/pendientes" class="navi-item">
+					<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -828,7 +828,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/curso" class="navi-item">
+					<a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -853,7 +853,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/finalizados" class="navi-item">
+					<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
