@@ -11,9 +11,11 @@ var TramiteClass = function() {
 		this.datos_factura = "";
 		this.detalle = [];
 
-		this.listaSolicitantes = [];
+	//	this.listaSolicitantes = [];
 };
 TramiteClass.prototype = {
+	listaSolicitantes: [],
+
 	setIdSeguimiento: function( id_seguimiento){
     	this.id_seguimiento =  id_seguimiento;
     	return this;
