@@ -267,43 +267,43 @@
                                  <form>
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label  class="col-3 col-form-label"></label>
+                                            <label  class="col-md-3 col-sm-12 col-form-label"></label>
                                             <div class="col-md-8 col-sm-12">
                                                 <label  class="col-8 col-form-label">Informacion del contacto:</label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label  class="col-3 col-form-label">Correo Electronioco</label>
+                                            <label  class="col-md-3 col-sm-12 col-form-label">Correo Electronioco</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text"  value="{{ $user->email }}" disabled id="example-text-input"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-search-input" class="col-3 col-form-label">Contraseña</label>
+                                            <label for="example-search-input" class="col-md-3 col-sm-12 col-form-label">Contraseña</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text" placeholder="Contraseña"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">Curp </label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">Curp </label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text"  value="{{ $user->curp }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">RFC</label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">RFC</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text"  value="{{ $user->rfc }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">Numero de Contacto </label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">Numero de Contacto </label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text" value="{{ $user->phone }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">Persona Fisica/Moral </label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">Persona Fisica/Moral </label>
                                             <div class="col-md-8 col-sm-12">
                                                 <select class="form-control" id="exampleSelect1">
                                                     <option>Fisica</option>
