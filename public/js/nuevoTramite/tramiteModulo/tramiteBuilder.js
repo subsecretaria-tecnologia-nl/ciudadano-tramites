@@ -27,6 +27,10 @@ TramiteClass.prototype = {
 	setIdTramite: function ( id_tramite) {
 		this.id_tramite = id_tramite;
 		return this;
+	}, 
+
+	getIdTramite: function(){
+		return this.id_tramite;
 	},
 
 	setImporteTramite: function( importe_tramite ){
