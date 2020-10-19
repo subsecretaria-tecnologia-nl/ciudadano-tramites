@@ -282,6 +282,8 @@
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/shoppingCarModule/shoppingCarBuilder.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/templateMetodoPagoBuilder.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/tramiteBuilder.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/seccionSolicitante/SolicitantesCtrl.js') }}"></script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
@@ -292,6 +294,7 @@
 	let tramitesGuardar = [];
 
 	var nuevoTramiteModal;
+	var solicitanteCtrl;
 
 	$(document).ready(() => {
     	getTramites();
@@ -305,6 +308,10 @@
 									.setUrlConfirmaPago("url")
 									.setEsReferencia("1");
 
+	    $('#addTramite').on('hidden.bs.modal', function (e) { 
+			solicitanteCtrl.reset();
+		});
+
     	
     });
 
@@ -315,8 +322,11 @@
     	$("#addTramite").modal({show: true}); 
 
 		nuevoTramiteModal  = Object.assign({},  TramiteClass.prototype);
-		//Object.assign(Object.create(User.prototype), instance);
+		solicitanteCtrl = SolicitantesCtrl()// Object.create(SolicitantesCtrl);
+		
     }
+
+
 
 	function getTramites(){
 		let url = "{{ url()->route('allTramites') }}";
@@ -372,7 +382,7 @@
 		$("#btnAdd").attr("disabled", false);   
 
 		$("#fieldsetSolicitantes").fadeIn( "slow", () =>{
-			construirTablaSolicitantes();
+			solicitanteCtrl.construirTablaSolicitantes();
 		});
     	                                         
 	}
@@ -402,10 +412,6 @@
 	});
 
 
-	
-
-
-
 	function validarForm( campos, id_tramite, closeModal, btn, iconBtn ){
 		
 
@@ -422,39 +428,28 @@
 
 			
 		if( isValid ) {
-			//let nuevoTramiteModal =   Object.create(TramiteClass.prototype);
-    		//nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
-
 			let url = "{{ url()->route('costo-tramite') }}";
-/*
-			let nuevoTramite = { id_tramite };
-			for (var campo in camposTramite) { 
-				nuevoTramite[campo] = camposTramite[campo].valor;
-			}*/
-			//let tramiteFull = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
-				//console.log( tramiteFull )
-				//nuevoTramiteModal.setTramite( tramiteFull );
 			let data = {
 				valor_catastral: $("#valor_catastral").val(),
    				id_seguimiento: nuevoTramiteModal.getIdTramite(),
     			tramite_id: id_tramite,
     			valor_operacion: $("#valor_de_operacion").val()
 			};
-				let datosTramite = {
-				      "nombre": "BEBIDAS MUNDIALES S DE RL DE CV",
-				      "apellido_paterno": "",
-				      "apellido_materno": "",
-				      "razon_social": "BEBIDAS MUNDIALES S DE RL DE CV",
-				      "rfc": "BMU8605134I8 ",
-				      "curp": "",
-				      "email": "",
-				      "calle": "AV LA JUVENTUD",
-				      "colonia": "BOSQUES DEL NOGALAR",
-				      "numexterior": "",
-				      "numinterior": "120",
-				      "municipio": "SAN NICOLAS DE LOS GARZA",
-				      "codigopostal": 66480
-				}	
+			let datosTramite = {
+			      "nombre": "BEBIDAS MUNDIALES S DE RL DE CV",
+			      "apellido_paterno": "",
+			      "apellido_materno": "",
+			      "razon_social": "BEBIDAS MUNDIALES S DE RL DE CV",
+			      "rfc": "BMU8605134I8 ",
+			      "curp": "",
+			      "email": "",
+			      "calle": "AV LA JUVENTUD",
+			      "colonia": "BOSQUES DEL NOGALAR",
+			      "numexterior": "",
+			      "numinterior": "120",
+			      "municipio": "SAN NICOLAS DE LOS GARZA",
+			      "codigopostal": 66480
+			}	
 				nuevoTramiteModal
 				.setIdSeguimiento(4254).setIdTramite( generarUUIDTramite() )
 				.setIdTipoServicio(3)
@@ -499,11 +494,6 @@
 			        "Content-type":"application/json"
 			    }
 			}).done((response) => {
-					
-
-				//nuevoTramite = Object.assign( nuevoTramite,  elTtramite);
-				//tramitesGuardar.push( nuevoTramite );
-
 				nuevoTramiteModal.setImporteTramite(response)
 				nuevoTramiteSave  = Object.assign({},  nuevoTramiteModal);
 				tramitesGuardar.push( nuevoTramiteSave );
@@ -515,13 +505,7 @@
 				if( closeModal ){
 					$("#addTramite").modal("hide"); 
 				}
-
-				//let nuevoTramiteModal =   Object.create(TramiteClass.prototype);
-    			//nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
-
 				buildTablaDetalles();
-
-				//nuevoTramiteModal.clean();
 			}).fail((rror)=> {
 				console.log("rror")
 				console.log( rror)
@@ -618,55 +602,6 @@
 
 	}
 
-	function openModalAddSolicitante(){
-		$('#pfRadio').click();
-		$("#nombreSolicitante, #apMatSolicitante, #apPatSolicitante, #rfcSolicitante, #idSolicitante").val("");
-
-		$("#modalAddSolicitante").modal("show");
-
-		$('#pfRadio').change( () => { 
-			if( $('#pfRadio').is(":checked") ){
-				$("#divPF").show();
-				$("#divPM").hide()
-			}
-		});
-
-		$('#pmRadio').change( () => { 
-			if( $('#pmRadio').is(":checked") ){
-				$("#divPM").show();
-				$("#divPF").hide()
-			}
-		});
-
-	}
-
-	function agregarSolicitante(){
-
-		let idSolicitante = $("#idSolicitante").val();
-
-		let solicitante = { tipoPersona: $('input[name=tipoPersona]:checked').val()  };
-		solicitante.id = !!$("#idSolicitante").val() ? $("#idSolicitante").val() : generarUUIDTramite();
-
-		if( solicitante.tipoPersona == "pf" ){ 
-			solicitante.nombreSolicitante = $("#nombreSolicitante").val();
-			solicitante.apPatSolicitante = $("#apPatSolicitante").val();
-			solicitante.apMatSolicitante = $("#apMatSolicitante").val();
-		} else if ( solicitante.tipoPersona == "pm" ){
-			solicitante.rfc = $("#rfcSolicitante").val();
-		}
-
-		if( !idSolicitante ){
-			nuevoTramiteModal.setSolicitanteToList( solicitante );
-		} else {
-			nuevoTramiteModal.editSolicitanteToList( solicitante, idSolicitante );
-		}
-		
-
-		$("#modalAddSolicitante").modal("hide");
-
-		construirTablaSolicitantes();
-	}
-
 
 	function generarUUIDTramite(){
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -675,89 +610,22 @@
 		  });
 	}
 
-	function construirTablaSolicitantes(){
-		$("#tbodySolicitantes").empty();
-
-		let listaSolicitantes = nuevoTramiteModal.getSolicitanteToList();
-		if( listaSolicitantes && listaSolicitantes.length > 0 ) {
-			listaSolicitantes.forEach( (solicitante, index) => {
-				let tr = $("<tr>");
-
-				let tdN = $("<td>").append(index + 1);
-
-				let txtTipoPersona = solicitante.tipoPersona == "pf" ? "Persona Física" : "Persona Moral";
-				let tdTipo = $("<td>").append( txtTipoPersona );
-				let txtNombreORazonSocial = solicitante.tipoPersona == "pf" ? solicitante.nombreSolicitante + " " + solicitante.apPatSolicitante + " " + solicitante.apMatSolicitante : solicitante.rfc;
-				let tdNombreORazonSocial = $("<td>").append( txtNombreORazonSocial ); 
-				let tdAccions = $("<td>").append( '<a type="button" onclick=editarSolicitante('  +  "'"+ solicitante.id + "'"   +   ')><i class="fas fa-edit"></i></a><a type="button" onclick=quitarSolicitante('  +  "'"+ solicitante.id + "'"   +   ')><i class="far fa-trash-alt"></i></a>');
-
-				tr.append( tdN );
-				tr.append( tdTipo );
-				tr.append( tdNombreORazonSocial  );
-				tr.append( tdAccions );
-
-				$("#tbodySolicitantes").append( tr );
-
-			});
-
-
-		} else  {
-			let tr = $("<tr>");
-			let tdN = $("<td colspan='4' class='text-center'>").append("No se han agregado solicitantes");
-			tr.append( tdN );
-			$("#tbodySolicitantes").append( tr );
-		}
+	function openModalAddSolicitante(){
+		solicitanteCtrl.openModalAddSolicitante();
 	}
 
+	function agregarSolicitante(){
+		solicitanteCtrl.agregarSolicitante();
+	}
 
 	function quitarSolicitante( id  ){
-		nuevoTramiteModal.quitarSolicitante(id);
-		construirTablaSolicitantes();
+		solicitanteCtrl.quitarSolicitante(id);
 	}
-
 
 	function editarSolicitante( id ){
-	  	let solicitante = nuevoTramiteModal.obtenerSolicitante(id);
-
-	  	$("#idSolicitante").val( solicitante.id );
-	  	if( solicitante.tipoPersona == "pf"){
-	  		$('#pfRadio').click();
-	  		$("#nombreSolicitante").val( solicitante.nombreSolicitante );
-	  		$("#apMatSolicitante").val( solicitante.apMatSolicitante);
-	  		$("#apPatSolicitante").val( solicitante.apPatSolicitante );
-	  		$("#rfcSolicitante").val("");
-	  	}
-
-	  	if( solicitante.tipoPersona == "pm"){
-	  		$('#pmRadio').click();
-	  		$("#nombreSolicitante").val( "" );
-	  		$("#apMatSolicitante").val( "");
-	  		$("#apPatSolicitante").val( "");
-	  		$("#rfcSolicitante").val( solicitante.rfc );
-	  	}
-
-	  	
-
-		$("#modalAddSolicitante").modal("show");
-
-		$('#pfRadio').change( () => { 
-			if( $('#pfRadio').is(":checked") ){
-				$("#divPF").show();
-				$("#divPM").hide()
-			}
-		});
-
-		$('#pmRadio').change( () => { 
-			if( $('#pmRadio').is(":checked") ){
-				$("#divPM").show();
-				$("#divPF").hide()
-			}
-		});
+		solicitanteCtrl.editarSolicitante(id);
 
 	}
-
-
-
 
 </script>
 
