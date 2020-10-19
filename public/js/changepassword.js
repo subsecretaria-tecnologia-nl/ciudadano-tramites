@@ -60,7 +60,7 @@ $('#kt_recovery_submit').on('click', function(e) {
     validation.validate().then(function(status) {
         if (status == 'Valid') {
             $.ajaxSetup({
-                url: "https://session-api-stage.herokuapp.com/password/recovery",
+                url: "/password/recovery",
                 type: "POST",
                 data: {
                     "email": email,
@@ -78,7 +78,7 @@ $('#kt_recovery_submit').on('click', function(e) {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location = "/login?e=" + btoa(res);
+                        redirect("/login?e=" + btoa(res));
                     });
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
