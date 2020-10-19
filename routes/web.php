@@ -23,7 +23,7 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 	Route::middleware(["validate_session"])->group(function(){
 		Route::get('/', function () {
 			return redirect()->route("dashboard");
-		});
+		})->name("home");
 		Route::get('/dashboard', "DashboardController@index")->name("dashboard");
 		Route::get('/tramites/{type}', "TramitesController@index")->name("tramites");
 		Route::get('/nuevo-tramite', "TramitesController@new")->name("tramite.nuevo");

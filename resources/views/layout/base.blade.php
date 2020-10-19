@@ -36,7 +36,7 @@
 		<!--begin::Header Mobile-->
 		<div id="kt_header_mobile" class="header-mobile bg-primary header-mobile-fixed">
 			<!--begin::Logo-->
-			<a href="/">
+			<a href="{{ url()->route("home") }}">
 				<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-30px" style="width: 70%" />
 			</a>
 			{{-- <a class="btn pl-0">
@@ -93,13 +93,13 @@
 						<!--begin::Left-->
 						<div class="d-none d-md-flex align-items-center align-items-stretch mx-auto">
 							<!--begin::Logo-->
-							{{-- <a href="index.html" class="mx-auto d-flex align-items-center py-2">
+							{{-- <a href="{{ url()->route("home") }}" class="mx-auto d-flex align-items-center py-2">
 								<img alt="Logo" src="{{ asset('images/icon.svg') }}" width="70" class="mr-4" />
 								Un sitio oficial del Gobierno del Estado de Nuevo León
 							</a> --}}
 							<!--end::Logo-->
 
-							<a href="/" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center bg-dark-o-30 d-flex ">
+							<a href="{{ url()->route("home") }}" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center bg-dark-o-30 d-flex ">
 								<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px mr-3 w-100" width="200" />
 							</a>
 							<!--begin::Topbar-->
@@ -107,22 +107,22 @@
 								<div class="mr-auto header-menu header-menu-mobile header-menu-layout-default">
 									<ul class="menu-nav">
 										<li class="menu-item">
-											<a href="/" class="menu-link">
+											<a href="#" class="menu-link">
 												<span class="menu-text m-0">Guía de Usuario</span>
 											</a>
 										</li>
 										<li class="menu-item">
-											<a href="/" class="menu-link">
+											<a href="#" class="menu-link">
 												<span class="menu-text m-0">Registro de Usuarios</span>
 											</a>
 										</li>
 										<li class="menu-item">
-											<a href="/" class="menu-link">
+											<a href="#" class="menu-link">
 												<span class="menu-text m-0">Noticias</span>
 											</a>
 										</li>
 										<li class="menu-item">
-											<a href="/" class="menu-link">
+											<a href="#" class="menu-link">
 												<span class="menu-text m-0">Nuevo Trámite</span>
 											</a>
 										</li>
@@ -456,7 +456,7 @@
 						<div class="order-2 order-md-1">
 							<span class="font-weight-bold mr-2"><?= date("Y")?> © Todos los Derechos Reservados</span>
 							<span class="ml-2 mr-2">|</span>
-							<a href="http://keenthemes.com/metronic" target="_blank" class="text-white text-hover-secondary">Gobierno del Estado de Nuevo León</a>
+							<a href="{{ getenv("APP_URL") }}" target="_blank" class="text-white text-hover-secondary">Gobierno del Estado de Nuevo León</a>
 						</div>
 						<!--end::Copyright-->
 					</div>
@@ -487,7 +487,7 @@
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="/perfil" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $user ? $user->name : "" }} {{ $user ? $user->fathers_surname : "" }} </a>
+						<a href="{{ url()->route("perfil") }}" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $user ? $user->name : "" }} {{ $user ? $user->fathers_surname : "" }} </a>
 						{{-- <div class="text-muted mt-1">Frontend Development</div> --}}
 						<div class="navi mt-2">
 							<a href="mailto:{{ $user ? $user->email : "" }}" class="navi-item">
@@ -519,7 +519,7 @@
 				<!--begin::Nav-->
 				<div class="navi navi-spacer-x-0 p-0">
 					<!--begin::Item-->
-					<a href="/dashboard" class="navi-item">
+					<a href="{{ url()->route("dashboard") }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -544,7 +544,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/pendientes" class="navi-item">
+					<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -571,7 +571,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/curso" class="navi-item">
+					<a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -596,7 +596,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/finalizados" class="navi-item">
+					<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -744,7 +744,7 @@
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="/perfil" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $user ? $user->name : "" }} {{ $user ? $user->fathers_surname : "" }} </a>
+						<a href="{{ url()->route("perfil") }}" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ $user ? $user->name : "" }} {{ $user ? $user->fathers_surname : "" }} </a>
 						{{-- <div class="text-muted mt-1">Frontend Development</div> --}}
 						<div class="navi mt-2">
 							<a href="mailto:{{ $user ? $user->email : "" }}" class="navi-item">
@@ -776,7 +776,7 @@
 				<!--begin::Nav-->
 				<div class="navi navi-spacer-x-0 p-0">
 					<!--begin::Item-->
-					<a href="/dashboard" class="navi-item">
+					<a href="{{ url()->route("dashboard") }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -801,7 +801,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/pendientes" class="navi-item">
+					<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -828,7 +828,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/curso" class="navi-item">
+					<a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
@@ -853,7 +853,7 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="/tramites/finalizados" class="navi-item">
+					<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
 						<div class="navi-link">
 							{{-- <div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">

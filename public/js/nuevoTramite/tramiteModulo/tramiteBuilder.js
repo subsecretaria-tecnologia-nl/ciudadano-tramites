@@ -11,9 +11,11 @@ var TramiteClass = function() {
 		this.datos_factura = "";
 		this.detalle = [];
 
-		this.listaSolicitantes = [];
+	//	this.listaSolicitantes = [];
 };
 TramiteClass.prototype = {
+	listaSolicitantes: [],
+
 	setIdSeguimiento: function( id_seguimiento){
     	this.id_seguimiento =  id_seguimiento;
     	return this;
@@ -27,6 +29,10 @@ TramiteClass.prototype = {
 	setIdTramite: function ( id_tramite) {
 		this.id_tramite = id_tramite;
 		return this;
+	}, 
+
+	getIdTramite: function(){
+		return this.id_tramite;
 	},
 
 	setImporteTramite: function( importe_tramite ){

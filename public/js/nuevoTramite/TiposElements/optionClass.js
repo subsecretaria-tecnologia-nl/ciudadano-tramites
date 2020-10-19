@@ -17,23 +17,23 @@ Radio.prototype = {
     build: function(){
 
       let divOptions = $("<div>");
+      if( this.caracteristicas && this.caracteristicas.opciones ){
+        this.caracteristicas.opciones.forEach( (opcion, key) => {
+            let clave =  Object.keys(opcion)[0];
+            let element = $("<input>").attr({
+              name: this.name,
+              id: this.id + "_" + clave,
+              type:"radio", value: clave, 
+              required: !!this.caracteristicas.required
+            });
+            let label = $("<label>").attr({
+              for: this.id + "_" + clave
+            }).append( opcion[clave] );
 
-      this.caracteristicas.opciones.forEach( (opcion, key) => {
-          let clave =  Object.keys(opcion)[0];
-          let element = $("<input>").attr({
-            name: this.name,
-            id: this.id + "_" + clave,
-            type:"radio", value: clave, 
-            required: !!this.caracteristicas.required
-          });
-          let label = $("<label>").attr({
-            for: this.id + "_" + clave
-          }).append( opcion[clave] );
-
-          divOptions.append( element );
-          divOptions.append( label );
-      });
-
+            divOptions.append( element );
+            divOptions.append( label );
+        });
+      }
       return divOptions;
     },
 

@@ -123,7 +123,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ></button>
                 <h4 class="modal-title">Agregar trámite</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="height:544px; overflow:auto;">
 
             	<div class="text-center">
             		<strong> Total  ( <span id="cantidadTramitesModal"> 0 </span> trámites ) </strong> : <span id="totalTramitesModal"> $0.00 </span>
@@ -291,7 +291,7 @@
 
 	let tramitesGuardar = [];
 
-	let nuevoTramiteModal;
+	var nuevoTramiteModal;
 
 	$(document).ready(() => {
     	getTramites();
@@ -309,15 +309,13 @@
     });
 
     function openModalAdd(){
-
-    	nuevoTramiteModal = new  TramiteClass();
-    	nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
-
 		$("#fieldsetSolicitantes").hide();
     	$("#tramitesSelect").val("limpia").trigger('change');
     	$("#camposDinamicosDiv").empty();
     	$("#addTramite").modal({show: true}); 
 
+		nuevoTramiteModal  = Object.assign({},  TramiteClass.prototype);
+		//Object.assign(Object.create(User.prototype), instance);
     }
 
 	function getTramites(){
@@ -422,36 +420,26 @@
 			} 
 		}
 
-
+			
 		if( isValid ) {
-			let url = "{{ url('/getcostoTramite') }}";
+			//let nuevoTramiteModal =   Object.create(TramiteClass.prototype);
+    		//nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
 
+			let url = "{{ url()->route('costo-tramite') }}";
+/*
+			let nuevoTramite = { id_tramite };
+			for (var campo in camposTramite) { 
+				nuevoTramite[campo] = camposTramite[campo].valor;
+			}*/
+			//let tramiteFull = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
+				//console.log( tramiteFull )
+				//nuevoTramiteModal.setTramite( tramiteFull );
 			let data = {
-				valor_catastral:3000,
-   				id_seguimiento:"72be7568-8793-4de0-90a2-a07404d0b4f7",
-    			tramite_id: 100,
-    			valor_operacion:0
+				valor_catastral: $("#valor_catastral").val(),
+   				id_seguimiento: nuevoTramiteModal.getIdTramite(),
+    			tramite_id: id_tramite,
+    			valor_operacion: $("#valor_de_operacion").val()
 			};
-
-			$.ajax({
-			  	type: "POST",
-			  	url,
-			  	data: JSON.stringify(data),
-			  	dataType:"json",
-			   	headers: {
-			        "Authorization":"Bearer B6C8XvbNouJj!ds@.NXjfeswtzehVN",
-			        "Content-type":"application/json"
-			    }
-			}).done((response) => {
-		
-				let nuevoTramite = { id_tramite };
-				for (var campo in camposTramite) { 
-					nuevoTramite[campo] = camposTramite[campo].valor;
-				}
-				
-				let tramiteFull = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
-				console.log( tramiteFull )
-				nuevoTramiteModal.setTramite( tramiteFull );
 				let datosTramite = {
 				      "nombre": "BEBIDAS MUNDIALES S DE RL DE CV",
 				      "apellido_paterno": "",
@@ -466,15 +454,10 @@
 				      "numinterior": "120",
 				      "municipio": "SAN NICOLAS DE LOS GARZA",
 				      "codigopostal": 66480
-				}				
-
-				//nuevoTramite = Object.assign( nuevoTramite,  elTtramite);
-				//tramitesGuardar.push( nuevoTramite );
-
+				}	
 				nuevoTramiteModal
-				.setIdSeguimiento(4254)
+				.setIdSeguimiento(4254).setIdTramite( generarUUIDTramite() )
 				.setIdTipoServicio(3)
-				.setImporteTramite(response)
 				.setDatosSolicitante(datosTramite)
 				.setDatosFactura(datosTramite).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ")
 				.setDetalle([
@@ -496,11 +479,35 @@
 	                        }
 	                      ]
 	                    }
-	                  ])
-				.build();
-
-				tramitesGuardar.push( nuevoTramiteModal );
+	                  ]);
+				let nuevoTramite = { id_tramite };
+				for (var campo in camposTramite) { 
+					nuevoTramite[campo] = camposTramite[campo].valor;
+				}
 				
+				let tramiteFull = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
+				console.log( tramiteFull )
+				nuevoTramiteModal.setTramite( tramiteFull );
+
+			$.ajax({
+			  	type: "POST",
+			  	url,
+			  	data: JSON.stringify(data),
+			  	dataType:"json",
+			   	headers: {
+			        "Authorization":"Bearer B6C8XvbNouJj!ds@.NXjfeswtzehVN",
+			        "Content-type":"application/json"
+			    }
+			}).done((response) => {
+					
+
+				//nuevoTramite = Object.assign( nuevoTramite,  elTtramite);
+				//tramitesGuardar.push( nuevoTramite );
+
+				nuevoTramiteModal.setImporteTramite(response)
+				nuevoTramiteSave  = Object.assign({},  nuevoTramiteModal);
+				tramitesGuardar.push( nuevoTramiteSave );
+				console.log( tramitesGuardar )
 				Command: toastr.success("Se agrego el trámite a su lista", "Notifications") ;
 				$("#camposDinamicosDiv").fadeOut(60).empty();
 				$("#tramitesSelect").val("limpia").trigger('change');
@@ -508,7 +515,13 @@
 				if( closeModal ){
 					$("#addTramite").modal("hide"); 
 				}
+
+				//let nuevoTramiteModal =   Object.create(TramiteClass.prototype);
+    			//nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
+
 				buildTablaDetalles();
+
+				//nuevoTramiteModal.clean();
 			}).fail((rror)=> {
 				console.log("rror")
 				console.log( rror)
@@ -666,7 +679,7 @@
 		$("#tbodySolicitantes").empty();
 
 		let listaSolicitantes = nuevoTramiteModal.getSolicitanteToList();
-		if( listaSolicitantes.length > 0 ) {
+		if( listaSolicitantes && listaSolicitantes.length > 0 ) {
 			listaSolicitantes.forEach( (solicitante, index) => {
 				let tr = $("<tr>");
 
