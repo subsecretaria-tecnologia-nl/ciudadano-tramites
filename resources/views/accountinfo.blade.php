@@ -18,7 +18,7 @@
                               <i class="symbol-badge bg-success"></i>
                           </div>
                           <div class="d-flex flex-column">
-                              <a href="/perfil" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">Raymundo Salazar</a>
+                              <a href="{{ url()->route("perfil") }}" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">Raymundo Salazar</a>
                               <div class="text-muted mt-1">Frontend Development</div>
                               <div class="navi mt-2">
                                   <a href="mailto:alberto.salazars@nuevoleon.gob.mx" class="navi-item">
@@ -39,8 +39,8 @@
                                           <span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">alberto.salazars@nuevoleon.gob.mx</span>
                                       </span>
                                   </a>
-                                  <a href="/logout" class="btn btn-sm btn-sidevar btn-info font-weight-bolder text-white  text-hover-white py-2 px-5">Chat</a>
-                                  <a href="/logout" class="btn btn-sm btn-sidevar btn-primary font-weight-bolder  text-white text-hover-white py-2 px-5">Seguir</a>
+                                  <a href="{{ url()->route("logout") }}" class="btn btn-sm btn-sidevar btn-info font-weight-bolder text-white  text-hover-white py-2 px-5">Chat</a>
+                                  <a href="{{ url()->route("logout") }}" class="btn btn-sm btn-sidevar btn-primary font-weight-bolder  text-white text-hover-white py-2 px-5">Seguir</a>
                               </div>
                           </div>
                       </div>
@@ -95,10 +95,10 @@
                                       
                                   </tbody>
                               </table>
-                              <a href="/perfil" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
-                              <a href="/informacion-cuenta" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion de la Cuenta</a>
-                              <a href="/cambiar-contraseña"  type="checkbox" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</a>
-                              <a href="/usuarios" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Usuario</a>
+                              <a href="{{ url()->route("perfil") }}" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
+                              <a href="{{ url()->route("informacion-cuenta") }}" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion de la Cuenta</a>
+                              <a href="{{ url()->route("cambiar-contraseña") }}"  type="checkbox" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</a>
+                              <a href="{{ url()->route("usuarios")}}" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Usuario</a>
                          </div>
                     </div>
               </div>  
@@ -116,7 +116,7 @@
                                     <i class="symbol-badge bg-success"></i>
                                 </div>
                                 <div class="d-flex flex-column">
-                                <a href="/perfil" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary"> {{ $user->name }} {{$user->fathers_surname}}</a>
+                                <a href="{{ url()->route("perfil") }}" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary"> {{ $user->name }} {{$user->fathers_surname}}</a>
                                     <div class="text-muted mt-1">Frontend Development</div>
                                     <div class="navi mt-2">
                                         <a href="mailto:alberto.salazars@nuevoleon.gob.mx" class="navi-item">
@@ -137,8 +137,8 @@
                                                 <span class="navi-text text-muted text-hover-primary text-truncate col-8 pl-0">{{ $user->email}}</span>
                                             </span>
                                         </a>
-                                        <a href="/logout" class="btn btn-sm  btn-info font-weight-bolder text-white  text-hover-white py-2 px-5">Chat</a>
-                                        <a href="/logout" class="btn btn-sm btn-primary font-weight-bolder  text-white text-hover-white py-2 px-5">Seguir</a>
+                                        <a href="{{ url()->route("logout") }}" class="btn btn-sm  btn-info font-weight-bolder text-white  text-hover-white py-2 px-5">Chat</a>
+                                        <a href="{{ url()->route("logout") }}" class="btn btn-sm btn-primary font-weight-bolder  text-white text-hover-white py-2 px-5">Seguir</a>
                                     </div>
                                 </div>
                             </div>
@@ -192,10 +192,10 @@
                                             
                                         </tbody>
                                     </table>
-                                    <a href="/perfil" selected type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
-                                    <a href="/informacion-cuenta" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion de la Cuenta</a>
-                                    <a href="/cambiar-contraseña" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</a>
-                                    <a href="/usuarios" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Usuario</a>
+                                    <a href="{{ url()->route("perfil") }}" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion Personal</a>
+                              <a href="{{ url()->route("informacion-cuenta") }}" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Informacion de la Cuenta</a>
+                              <a href="{{ url()->route("cambiar-contraseña") }}"  type="checkbox" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Cambiar Contraseña</a>
+                              <a href="{{ url()->route("usuarios")}}" type="button" class="btn btn-text-primary btn-hover-light-primary font-weight-bold btn-lg btn-block text-dark text-hover-primary">Usuario</a>
                                 </div>
                           </div>
                     </div>
@@ -267,43 +267,43 @@
                                  <form>
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label  class="col-3 col-form-label"></label>
+                                            <label  class="col-md-3 col-sm-12 col-form-label"></label>
                                             <div class="col-md-8 col-sm-12">
                                                 <label  class="col-8 col-form-label">Informacion del contacto:</label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label  class="col-3 col-form-label">Correo Electronioco</label>
+                                            <label  class="col-md-3 col-sm-12 col-form-label">Correo Electronioco</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text"  value="{{ $user->email }}" disabled id="example-text-input"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-search-input" class="col-3 col-form-label">Contraseña</label>
+                                            <label for="example-search-input" class="col-md-3 col-sm-12 col-form-label">Contraseña</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text" placeholder="Contraseña"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">Curp </label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">Curp </label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text"  value="{{ $user->curp }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">RFC</label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">RFC</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text"  value="{{ $user->rfc }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">Numero de Contacto </label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">Numero de Contacto </label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text" value="{{ $user->phone }}" disabled />
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="example-email-input" class="col-3 col-form-label">Persona Fisica/Moral </label>
+                                            <label for="example-email-input" class="col-md-3 col-sm-12 col-form-label">Persona Fisica/Moral </label>
                                             <div class="col-md-8 col-sm-12">
                                                 <select class="form-control" id="exampleSelect1">
                                                     <option>Fisica</option>

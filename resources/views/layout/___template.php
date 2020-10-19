@@ -30,7 +30,7 @@
 		<!--begin::Header Mobile-->
 		<div id="kt_header_mobile" class="header-mobile bg-primary header-mobile-fixed">
 			<!--begin::Logo-->
-			<a href="index.html">
+			<a href="{{ url()->route("home") }}">
 				<img alt="Logo" src="metronic/assets/media/logos/logo-letter-9.png" class="max-h-30px" />
 			</a>
 			<!--end::Logo-->
