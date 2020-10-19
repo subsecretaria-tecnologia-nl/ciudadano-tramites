@@ -7,6 +7,7 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\PortalcostotramitesRepository;
 use App\Entities\Portalcostotramites;
 use App\Validators\PortalcostotramitesValidator;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class PortalcostotramitesRepositoryEloquent.
@@ -15,6 +16,7 @@ use App\Validators\PortalcostotramitesValidator;
  */
 class PortalcostotramitesRepositoryEloquent extends BaseRepository implements PortalcostotramitesRepository
 {
+    // protected $db='db_egobierno';
     /**
      * Specify Model class name
      *
