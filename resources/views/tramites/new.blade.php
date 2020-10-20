@@ -1,3 +1,4 @@
+{{-- tabla resumen --}}
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="d-flex flex-column-fluid">
         <div class="container">                
@@ -64,11 +65,15 @@
 							              			</span>
 							            		</li>
 							          		</ul>
-
+	 									  	@if($user->role_id === 2 || $user->role_id === 5)
 							          		<button id="metodoPagoBtn" type="button" class="btn btn-primary btn-block" onclick="metodoPago()">
 							          			Elegir método de pago
-							          		</button>
-							          		<button  id="addTramiteBTN" type="button" class="btn btn-default btn-block" onclick="openModalAdd()">Agregar Trámite</button>
+											  </button>
+											@endif  
+											@if($user->role_id === 2 || $user->role_id === 6)
+											  <button  id="addTramiteBTN" type="button" class="btn btn-default btn-block" onclick="openModalAdd()">Agregar Trámite</button>
+											@endif  
+											  
 							          		<button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" onclick="cancelarPago()" style="display: none;">
 							          			Cancelar
 							          		</button>
@@ -91,7 +96,7 @@
     </div>
 </div> 
 
-
+{{-- eliminar registro --}}
 <div id="modalDelete" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -115,7 +120,7 @@
 	   </div>
 	</div>
 </div>
-
+{{-- agregar tramite --}}
 <div id="addTramite" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -190,7 +195,7 @@
 	   </div>
 	</div>
 </div>
-
+{{-- agregar solicitante --}}
 <div id="modalAddSolicitante" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -237,10 +242,10 @@
 	   </div>
 	</div>
 </div>
-
+ 
 
 <!--simulacion banco-->
-
+@if($user->role_id === 2 || $user->role_id === 5)
 <div id="modalSimulacion" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -262,7 +267,13 @@
 	   </div>
 	</div>
 </div>
-
+@else
+<div class="">
+	<p class="text-center">
+		No Tienes Permisos para esta Accion
+	</p>
+</div>
+@endif  
 
 <link href="{{ asset('css/newTramite.css') }}" rel="stylesheet" type="text/css" />
 

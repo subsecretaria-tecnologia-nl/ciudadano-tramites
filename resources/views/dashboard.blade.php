@@ -1,3 +1,5 @@
+@if($user->role_id === 2)
+
 <div id="buscador" class="mobile-aux">
     <div class="busqueda">
 
@@ -448,3 +450,11 @@
         </div>        
     </div>
 </div> 
+
+@else
+<div class="">
+    <p class="text-center">
+    No Tienes Permisos para esta Accion
+    </p>
+</div>
+@endif

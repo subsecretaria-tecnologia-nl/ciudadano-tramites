@@ -11,7 +11,7 @@ class UsersController extends Controller
 			"subtitle" => "Usuarios",
 			"fluid_container"=> true
 		]);
-
-		return layout_view("usuarios");
+		$user = session()->get("user"); 
+		return layout_view("usuarios" , ["user" => $user]);
     }
 }

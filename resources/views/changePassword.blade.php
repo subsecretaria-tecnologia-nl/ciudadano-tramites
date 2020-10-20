@@ -1,5 +1,6 @@
 <div class="content" id="kt_content">
     <div class="d-flex flex-column-fluid">
+        @if($user->role_id === 2 || $user->role_id === 6 || $user->role_id === 5)
         <div class="container">
             <span class="col-sm-12 col-md-3 sideNavBtn" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
             <span  class="col-sm-12 col-md-3">
@@ -267,6 +268,13 @@
             </div>
 
         </div>        
+        @else
+        <div class="">
+            <p class="text-center">
+                No Tienes Permisos para esta Accion
+            </p>
+        </div>
+        @endif
     </div>
 </div> 
 

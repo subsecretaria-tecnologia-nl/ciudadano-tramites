@@ -1,5 +1,6 @@
 <div class="content" id="kt_content">
     <div class="d-flex flex-column-fluid">
+        @if($user->role_id === 2 || $user->role_id === 6 || $user->role_id === 5)
         <div class="container view-usuarios">
             <span style="font-size: .8cm" class="6p">
                 Usuarios
@@ -700,7 +701,14 @@
 
             </div>
 
-        </div>        
+        </div>     
+        @else
+        <div class="">
+            <p class="text-center">
+                No Tienes Permisos para esta Accion
+            </p>
+        </div>
+        @endif   
     </div>
 </div> 
 

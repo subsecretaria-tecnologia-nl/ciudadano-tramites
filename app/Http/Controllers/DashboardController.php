@@ -11,7 +11,7 @@ class DashboardController extends Controller
 			"subtitle" => "Dashboard",
 			"fluid_container"=> true
 		]);
-
-		return layout_view("dashboard");
+		$user = session()->get("user");
+		return layout_view("dashboard", ["user" =>  $user ]);
     }
 }

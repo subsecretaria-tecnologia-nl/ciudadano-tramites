@@ -50,13 +50,15 @@ class TramitesController extends Controller
       }
 
     public function index ($type) {
+        $user = session()->get("user");
     	set_layout_arg(["subtitle" => "Trámites: {$type}","fluid_container"=> true]);
-    	return layout_view("tramites.index", [ "type" => $type ]);
+    	return layout_view("tramites.index", [ "type" => $type , "user" => $user]);
     }
 
     public function new () {
+        $user = session()->get("user");
     	set_layout_arg("subtitle", "Nuevo Trámite");
-    	return layout_view("tramites.new");
+    	return layout_view("tramites.new", ["user" => $user]);
     }
 
    /**
