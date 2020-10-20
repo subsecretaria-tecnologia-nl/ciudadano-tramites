@@ -307,7 +307,7 @@ class TramitesController extends Controller
                 );
                 return json_encode($detalle);
               }
-              return json_encode($costo_final);
+              //return json_encode($costo_final);
 
             }
 
@@ -325,7 +325,7 @@ class TramitesController extends Controller
                   'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
-                return json_encode($costo_final);
+                return json_encode($detalle);
               }
               elseif ($costoX == "L") { //costo x lote
                 $costo_real = $actual_uma * $valor;
@@ -349,7 +349,7 @@ class TramitesController extends Controller
                   'descuentos' => $descuentos,
                 );
 
-                return json_encode($costo_final);
+                return json_encode($detalle);
               }
             }elseif ($tipo == "V") {
               //Se calculan los valores minimos y máximos del trámite
@@ -382,7 +382,7 @@ class TramitesController extends Controller
                 'importe_concepto' => $costo_final,
                 'descuentos' => $descuentos,
               );
-              return json_encode($costo_final);
+              return json_encode($detalle);
 
             }
 
