@@ -10,8 +10,6 @@ var TramiteClass = function() {
 		this.datos_solicitante = "";
 		this.datos_factura = "";
 		this.detalle = [];
-
-	//	this.listaSolicitantes = [];
 };
 TramiteClass.prototype = {
 	listaSolicitantes: [],
@@ -69,29 +67,6 @@ TramiteClass.prototype = {
 	setDetalle: function( detalle ){
 		this.detalle = detalle;
 		return this;
-	},
-
-	setSolicitanteToList( solicitante ){
-		this.listaSolicitantes.push( solicitante );
-		return this;
-	},
-
-	getSolicitanteToList(  ){
-		return this.listaSolicitantes;
-	},
-
-	quitarSolicitante( id ){
-		this.listaSolicitantes = this.listaSolicitantes.filter(  solicitante => solicitante.id != id );
-	},
-
-	obtenerSolicitante: function( id ){
-		let solicitante =  this.listaSolicitantes.find(  solicitante => solicitante.id == id );
-		return solicitante ? solicitante : false;
-	},
-
-	editSolicitanteToList: function( nuevoSolicitante, idSolicitante ){
-		let indexSolicitanteEditar = this.listaSolicitantes.findIndex(  solicitante => solicitante.id == idSolicitante );
-		this.listaSolicitantes[indexSolicitanteEditar] = nuevoSolicitante;
 	},
 
 	setTramite: function( tramite ){
