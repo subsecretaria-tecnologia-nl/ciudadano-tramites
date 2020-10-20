@@ -322,7 +322,7 @@
     	$("#addTramite").modal({show: true}); 
 
 		nuevoTramiteModal  = Object.assign({},  TramiteClass.prototype);
-		solicitanteCtrl = SolicitantesCtrl()// Object.create(SolicitantesCtrl);
+		solicitanteCtrl = SolicitantesCtrl();
 		
     }
 
@@ -426,9 +426,11 @@
 			} 
 		}
 
-			
+
 		if( isValid ) {
-			let url = "{{ url()->route('costo-tramite') }}";
+			//let url = "{{ url()->route('costo-tramite') }}";
+			//nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
+			/*
 			let data = {
 				valor_catastral: $("#valor_catastral").val(),
    				id_seguimiento: nuevoTramiteModal.getIdTramite(),
@@ -451,7 +453,7 @@
 			      "codigopostal": 66480
 			}	
 				nuevoTramiteModal
-				.setIdSeguimiento(4254).setIdTramite( generarUUIDTramite() )
+				.setIdSeguimiento(4254)
 				.setIdTipoServicio(3)
 				.setDatosSolicitante(datosTramite)
 				.setDatosFactura(datosTramite).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ")
@@ -481,7 +483,7 @@
 				}
 				
 				let tramiteFull = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
-				console.log( tramiteFull )
+
 				nuevoTramiteModal.setTramite( tramiteFull );
 
 			$.ajax({
@@ -497,7 +499,7 @@
 				nuevoTramiteModal.setImporteTramite(response)
 				nuevoTramiteSave  = Object.assign({},  nuevoTramiteModal);
 				tramitesGuardar.push( nuevoTramiteSave );
-				console.log( tramitesGuardar )
+				
 				Command: toastr.success("Se agrego el trámite a su lista", "Notifications") ;
 				$("#camposDinamicosDiv").fadeOut(60).empty();
 				$("#tramitesSelect").val("limpia").trigger('change');
@@ -512,7 +514,7 @@
 			}).always(() => {
 				btn.attr("disabled", false);  
 				iconBtn.removeClass("fa-spin fa-spinner").addClass("fa-check");
-			});
+			});*/
 		} else {
 			btn.attr("disabled", false);  
 			iconBtn.removeClass("fa-spin fa-spinner").addClass("fa-check");
