@@ -13,7 +13,7 @@ class LoginController extends Controller
 			"empty_layout" => true,
 			"background_content" => "#ffffff",
 			"script" => [
-				asset("js/login.js")
+				// asset("js/login.js")
 			]
 		]);
 		return layout_view("login", []);

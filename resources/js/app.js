@@ -1,1 +1,2 @@
-require('./bootstrap');
+require('dotenv').config();
+console.log(process.env);
