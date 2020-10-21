@@ -1,5 +1,5 @@
 <div class="content" id="kt_content" style="min-width: -webkit-fill-available">
-    @if($user->role_id === 2 || $user->role_id === 6 || $user->role_id === 5)
+    @if($user->role_id === 2 ||$user->role_id === 5 || $user->role_id === 6 || $user->role_id === 7)
     <div class="d-flex flex-column-fluid">
         <div class="container">
             <span class="col-sm-12 col-md-3 sideNavBtn" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
@@ -322,7 +322,7 @@
     </div>
     @else
     <div class="">
-        <p class="text-center">
+        <p class="text-center pt-5">
             No Tienes Permisos para esta Accion
         </p>
     </div>

@@ -1,7 +1,7 @@
 <div class="content" id="kt_content">
     <div class="d-flex flex-column-fluid">
 
-        @if($user->role_id === 2 || $user->role_id === 6)
+        @if($user->role_id === 2 || $user->role_id === 5 || $user->role_id === 6)
         <div class="container">
 
             <div class="tramites">
@@ -62,7 +62,7 @@
         </div>
         @else
         <div class="container">
-            <p class="text-center">
+            <p class="text-center pt-5">
                 No Tienes Permisos para esta Accion
             </p>
         </div>

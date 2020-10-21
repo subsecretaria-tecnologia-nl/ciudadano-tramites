@@ -1,4 +1,4 @@
-@if($user->role_id === 2)
+@if($user->role_id === 2 ||$user->role_id === 5 || $user->role_id === 6 )
 
 <div id="buscador" class="mobile-aux">
     <div class="busqueda">
@@ -453,8 +453,8 @@
 
 @else
 <div class="">
-    <p class="text-center">
-    No Tienes Permisos para esta Accion
+    <p class="text-center pt-5">
+        No Tienes Permisos para esta Accion
     </p>
 </div>
 @endif

@@ -65,12 +65,12 @@
 							              			</span>
 							            		</li>
 							          		</ul>
-	 									  	@if($user->role_id === 2 || $user->role_id === 5)
+	 									  	@if($user->role_id === 2 || $user->role_id === 5 || $user->role_id === 7)
 							          		<button id="metodoPagoBtn" type="button" class="btn btn-primary btn-block" onclick="metodoPago()">
 							          			Elegir método de pago
 											  </button>
 											@endif  
-											@if($user->role_id === 2 || $user->role_id === 6)
+											@if($user->role_id === 2 || $user->role_id === 5 ||  $user->role_id === 6)
 											  <button  id="addTramiteBTN" type="button" class="btn btn-default btn-block" onclick="openModalAdd()">Agregar Trámite</button>
 											@endif  
 											  
@@ -245,7 +245,7 @@
  
 
 <!--simulacion banco-->
-@if($user->role_id === 2 || $user->role_id === 5)
+@if($user->role_id === 2 || $user->role_id === 5 ||$user->role_id === 7 )
 <div id="modalSimulacion" class="modal fade " tabindex="-1" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -269,7 +269,7 @@
 </div>
 @else
 <div class="">
-	<p class="text-center">
+	<p class="text-center pt-5">
 		No Tienes Permisos para esta Accion
 	</p>
 </div>
