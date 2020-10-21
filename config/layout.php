@@ -36,5 +36,5 @@ return [
 			]
 		]
 	],
-	"session_whitelist" => ["login","password/recovery", "password"],
+	"session_whitelist" => ["login","password/recovery", "password", "password/recovery/(.+)"],
 ];

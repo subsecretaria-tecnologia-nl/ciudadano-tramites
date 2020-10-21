@@ -32,12 +32,17 @@ class CheckSession
             return !empty($var);
         });
         $path = implode("/", $path);
-        if(getenv("APP_PREFIX"))
-            $session_whitelist = array_map(function($a){
-                return ((explode("/", getenv("APP_PREFIX"))[1]."/" ?? "").$a);
-            }, $session_whitelist);
+        // dd($session_whitelist, $path);
+        // if(getenv("APP_PREFIX"))
+        $pass = array_map(function($a) use ($path){
+            $whitePath = ((getenv("APP_PREFIX") ? explode("/", getenv("APP_PREFIX"))[1]."/" : "").$a);
+            preg_match("/^".str_replace("/", "\/", $whitePath)."$/", $path, $matches);
+            if(!empty($matches))
+                return true;
+        }, $session_whitelist);
+        $pass = array_filter($pass);
 
-        if( !in_array($path , $session_whitelist ) )
+        if(empty($pass))
             return redirect()->route('login');
         else
             return $next($request);
