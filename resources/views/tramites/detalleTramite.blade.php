@@ -25,7 +25,6 @@
         </div>
     </div>
 </div> 
-<script src="{{ asset('js/app.js') }}" defer></script>
 <script type="text/javascript">
     let urlObtnerCampos = "{{ url()->route('getCampos') }}";
 </script>

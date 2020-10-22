@@ -18,9 +18,6 @@
     </div>
 </div> 
 
-<link href="{{ asset('css/newTramite.css') }}" rel="stylesheet" type="text/css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{{ asset('js/app.js') }}" defer></script>
 <script type="text/javascript">
 	let url = "{{ url()->route('allTramites') }}";
 </script>
