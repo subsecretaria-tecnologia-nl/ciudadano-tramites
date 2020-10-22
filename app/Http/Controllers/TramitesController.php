@@ -485,8 +485,29 @@ class TramitesController extends Controller
 
     public function detalle ( Request $request ) {
       $id_tramite = $request->idTramite;
+
+      $detalle = array();
+      $data = $this->tiposer->where('Tipo_Code', $id_tramite)->get();
+      foreach ($data as $d) {
+        $nombre_tramite = $d->Tipo_Descripcion;
+      }
+
+      $info = $this->partidas->findWhere( ["id_servicio" =>  $id_tramite] );
+
+      foreach ($info as $i) {
+        $id_partida = $i->id_partida;
+        $partida = $i->descripcion;
+      }
+
+      $detalle [] = array(
+        'id_tramite'=>$id_tramite,
+        'tramite' => $nombre_tramite,
+        'id_partida' =>$id_partida,
+        'partida' => $partida
+      );
+
       set_layout_arg("subtitle", "Detalle Trámite");
-      return layout_view("tramites.detalleTramite",[ "id_tramite" => $id_tramite ] );
+      return layout_view("tramites.detalleTramite",[ "detalle" => $detalle ] );
     }
 
 }
