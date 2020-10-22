@@ -8,7 +8,16 @@
                 <div>
                     <div class="dropdown-divider"></div>
                     <section id="detalleTrammite">
-                        <wizard-component></wizard-component>
+                        <wizard-component :tramite="{
+  'id_tramite': 101,
+  'tramite': 'ADJUDICACIÃ?N POR HERENCIA',
+  'partidas': [
+    {
+      'id_partida': 21017,
+      'descripcion': 'ADJUDICACIÓN POR HERENCIA PAGO EN LÍNEA'
+    }
+  ]
+}"></wizard-component>
                     </section>
 
                 </div>
@@ -17,3 +26,6 @@
     </div>
 </div> 
 <script src="{{ asset('js/app.js') }}" defer></script>
+<script type="text/javascript">
+    let urlObtnerCampos = "{{ url()->route('getCampos') }}";
+</script>
