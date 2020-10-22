@@ -155,7 +155,7 @@
 					    <legend class="w-auto"> 
 					    	<span style="margin-left: 10px;"> Solicitantes </span>   
 					    	<i class="fa fa-plus" title="Agregar Solicitante" style="cursor: pointer; color: blue; margin-left: 50px; margin-right: 50px;" 
-					    	 onclick="openModalAddSolicitante()"></i>
+					    	 onclick="solicitanteCtrl.openModalAddSolicitante()"></i>
 					   	</legend>
 
 						<table class="table" id="tablaSolicitantes">
@@ -229,7 +229,7 @@
             </div>
             <div class="modal-footer">
 	         	<button type="button" data-dismiss="modal" class="btn default" >Cancelar</button>
-	            <button type="button"  class="btn green" onclick="agregarSolicitante()" id="btnDel">
+	            <button type="button"  class="btn green" onclick="solicitanteCtrl.agregarSolicitante();" id="btnDel">
 	            	<i class="fa fa-check" id="iconBtnDel"></i> 
 	            	Aceptar
 	            </button>
@@ -283,7 +283,7 @@
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/templateMetodoPagoBuilder.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/tramiteBuilder.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/nuevoTramite/seccionSolicitante/SolicitantesCtrl.js') }}"></script>
-
+<script type="text/javascript" src="{{ asset('js/nuevoTramite/tramiteModulo/TramiteCtrl.js') }}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
@@ -295,10 +295,13 @@
 
 	var nuevoTramiteModal;
 	var solicitanteCtrl;
+	var tramiteCtrl;
+	let urlCostos = "{{ url()->route('costo-tramite') }}";
 
 	$(document).ready(() => {
     	getTramites();
-	    
+	    tramiteCtrl  = TramiteCtrl();
+	    buildTablaDetalles();
 
 		JSONGeneraReferenciaBuilder.setToken("DD0FDED2FE302392164520BF7090E1B3BEB7")
 									.setReferencia("")
@@ -404,7 +407,6 @@
 		if( $("#tramitesSelect").val() != "limpia" ){
 			$("#btnAddMore").attr("disabled", true);   
 			$("#iconBtnAddMore").removeClass("fa-check").addClass("fa-spin fa-spinner");
-
 			validarForm( FormularioBuilder.getElements(), $("#tramitesSelect").val(), false, $("#btnAddMore"), $("#iconBtnAddMore"));
 		} else {
 			Command: toastr.warning("Seleccione un tramite", "Notifications") ;
@@ -413,8 +415,6 @@
 
 
 	function validarForm( campos, id_tramite, closeModal, btn, iconBtn ){
-		
-
 		let isValid = true;		
 		let camposTramite = FormularioBuilder.isValid( campos );
 
@@ -426,95 +426,8 @@
 			} 
 		}
 
-
 		if( isValid ) {
-			//let url = "{{ url()->route('costo-tramite') }}";
-			//nuevoTramiteModal.setIdTramite( generarUUIDTramite() );
-			/*
-			let data = {
-				valor_catastral: $("#valor_catastral").val(),
-   				id_seguimiento: nuevoTramiteModal.getIdTramite(),
-    			tramite_id: id_tramite,
-    			valor_operacion: $("#valor_de_operacion").val()
-			};
-			let datosTramite = {
-			      "nombre": "BEBIDAS MUNDIALES S DE RL DE CV",
-			      "apellido_paterno": "",
-			      "apellido_materno": "",
-			      "razon_social": "BEBIDAS MUNDIALES S DE RL DE CV",
-			      "rfc": "BMU8605134I8 ",
-			      "curp": "",
-			      "email": "",
-			      "calle": "AV LA JUVENTUD",
-			      "colonia": "BOSQUES DEL NOGALAR",
-			      "numexterior": "",
-			      "numinterior": "120",
-			      "municipio": "SAN NICOLAS DE LOS GARZA",
-			      "codigopostal": 66480
-			}	
-				nuevoTramiteModal
-				.setIdSeguimiento(4254)
-				.setIdTipoServicio(3)
-				.setDatosSolicitante(datosTramite)
-				.setDatosFactura(datosTramite).setAuxiliar_1("GRUPOS ICV BMU8605134I8 ")
-				.setDetalle([
-	                    {
-	                      "concepto": "REFRENDO PTE.AÑO",
-	                      "importe_concepto": "0",
-	                      "partida": 95101
-	                      
-	                    },
-	                    {
-	                      "concepto": "SANCION REFRENDO PTE.AÑO",
-	                      "importe_concepto": "0",
-	                      "partida": 95123,
-	                      "descuentos": [
-	                        {
-	                          "concepto_descuento": "SUBSIDIO PAPV REFRENDO PA",
-	                          "importe_descuento": "0",
-	                          "partida_descuento": 95136
-	                        }
-	                      ]
-	                    }
-	                  ]);
-				let nuevoTramite = { id_tramite };
-				for (var campo in camposTramite) { 
-					nuevoTramite[campo] = camposTramite[campo].valor;
-				}
-				
-				let tramiteFull = tramites.find( tramite => tramite.id_tramite == nuevoTramite.id_tramite ) ;
-
-				nuevoTramiteModal.setTramite( tramiteFull );
-
-			$.ajax({
-			  	type: "POST",
-			  	url,
-			  	data: JSON.stringify(data),
-			  	dataType:"json",
-			   	headers: {
-			        "Authorization":"Bearer B6C8XvbNouJj!ds@.NXjfeswtzehVN",
-			        "Content-type":"application/json"
-			    }
-			}).done((response) => {
-				nuevoTramiteModal.setImporteTramite(response)
-				nuevoTramiteSave  = Object.assign({},  nuevoTramiteModal);
-				tramitesGuardar.push( nuevoTramiteSave );
-				
-				Command: toastr.success("Se agrego el trámite a su lista", "Notifications") ;
-				$("#camposDinamicosDiv").fadeOut(60).empty();
-				$("#tramitesSelect").val("limpia").trigger('change');
-
-				if( closeModal ){
-					$("#addTramite").modal("hide"); 
-				}
-				buildTablaDetalles();
-			}).fail((rror)=> {
-				console.log("rror")
-				console.log( rror)
-			}).always(() => {
-				btn.attr("disabled", false);  
-				iconBtn.removeClass("fa-spin fa-spinner").addClass("fa-check");
-			});*/
+			tramiteCtrl.agregarTramite( id_tramite, campos, closeModal, btn, iconBtn, buildTablaDetalles );
 		} else {
 			btn.attr("disabled", false);  
 			iconBtn.removeClass("fa-spin fa-spinner").addClass("fa-check");
@@ -522,9 +435,9 @@
 	}
 
 	function buildTablaDetalles(){
-		ShoppingCarBuilder.build( tramitesGuardar );
+		ShoppingCarBuilder.build( tramiteCtrl.getListaTramites() );
 		$("#totalTramites, #subTotalTramites, #totalTramitesModal").text( "$" +  JSONGeneraReferenciaBuilder.getImporteTransaccion() );
-		$("#cantidadTramitesModal").text( tramitesGuardar.length );
+		$("#cantidadTramitesModal").text( tramiteCtrl.getListaTramites().length );
 	}
 
 	function deleteTramite( tramite ){
@@ -534,7 +447,7 @@
 
 	function eliminar(){
 		let tramiteDel = $( "#modalDelete" ).data( "tramite");
-		tramitesGuardar =  tramitesGuardar.filter( tramite => tramite.id_tramite != tramiteDel.id_tramite );
+		tramiteCtrl.quitarTramite( tramiteDel.id_tramite );
 		$("#modalDelete").modal('hide');
 		buildTablaDetalles();
 	}
@@ -595,29 +508,10 @@
 
 	function cancelarPago(){
 		$("#divMetodoPago").slideUp("slow", () => {
-			$("#metodoPagoBtn").slideDown( "slow");
-			$("#addTramiteBTN").slideDown( "slow");	
-			$("#listTramites").slideDown("slow");	
-
+			$("#metodoPagoBtn, #addTramiteBTN, #listTramites").slideDown( "slow");	
 			$("#metodoPagoCancBtn").hide("slow");	
 		});	
 
-	}
-
-
-	function generarUUIDTramite(){
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-		    return v.toString(16);
-		  });
-	}
-
-	function openModalAddSolicitante(){
-		solicitanteCtrl.openModalAddSolicitante();
-	}
-
-	function agregarSolicitante(){
-		solicitanteCtrl.agregarSolicitante();
 	}
 
 	function quitarSolicitante( id  ){
@@ -630,9 +524,3 @@
 	}
 
 </script>
-
-							        		
-
-							       
-
-
