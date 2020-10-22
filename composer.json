@@ -56,8 +56,8 @@
         "start": "npm run dev && php -S localhost:8080 -t public",
         "build" : "composer permissions-root && composer reset-build && npm install && composer install && npm run prod && composer permission-nginx",
         "reset-build" : "rm -rf ./vendor ./node_modules ./public/css ./public/images ./public/js ./public/plugins ./public/mix-manifest.json",
-        "permissions-root" : "chown -R root .",
-        "permissions-nginx" : "chown -R nginx .",
+        "permissions-root" : "sudo chown -R root .",
+        "permissions-nginx" : "sudo chown -R nginx .",
         "sass-dev": "sass --watch resources/sass:public/css --style compressed",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
