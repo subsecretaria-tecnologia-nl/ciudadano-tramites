@@ -53,7 +53,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "start": "php -S localhost:8080 -t public",
+        "start": "npm run dev && php -S localhost:8080 -t public",
+        "build" : "composer reset-build && npm install && composer install && npm run prod",
+        "reset-build" : "rm -rf ./vendor ./node_modules ./public/css ./public/images ./public/js ./public/plugins ./public/mix-manifest.json",
         "sass-dev": "sass --watch resources/sass:public/css --style compressed",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
