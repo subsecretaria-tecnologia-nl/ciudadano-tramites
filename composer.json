@@ -54,7 +54,7 @@
     "prefer-stable": true,
     "scripts": {
         "start": "npm run dev && php -S localhost:8080 -t public",
-        "build" : "composer permissions-root && composer reset-build && npm install && composer install && npm run prod && composer permission-nginx",
+        "build" : "composer permissions-root && composer reset-build && sudo npm install && composer install && npm run prod && composer permission-nginx",
         "reset-build" : "sudo rm -rf ./vendor ./node_modules ./public/css ./public/images ./public/js ./public/plugins ./public/mix-manifest.json",
         "permissions-root" : "sudo chown -R root .",
         "permissions-nginx" : "sudo chown -R nginx .",
