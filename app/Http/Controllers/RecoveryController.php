@@ -10,10 +10,7 @@ class RecoveryController extends Controller
 		set_layout_arg([
             "subtitle" => "Olvidaste tu contraseña",
             "empty_layout" => true,
-            "background_content" => "#ffffff",
-            "script" => [
-              asset("js/recovery.js")
-            ]
+            "background_content" => "#ffffff"
 		]);
 
 		return layout_view("recovery");
