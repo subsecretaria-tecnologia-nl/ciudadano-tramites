@@ -11,6 +11,8 @@ let webpack = require('webpack')
  |
  */
 
+// Bearer: lasjhflsajhflsajhflsajfh
+
 let dotenvplugin = new webpack.DefinePlugin({
 	'process.env': {
 		APP_URL: JSON.stringify(process.env.APP_URL || null),
