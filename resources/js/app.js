@@ -1,4 +1,6 @@
 require('./bootstrap');
+require('dotenv').config();
+
 
 window.Vue = require('vue');
 
@@ -16,12 +18,14 @@ window.Vue = require('vue');
 Vue.component('listado-tramites-component', require('./components/ListadoTramitesComponent.vue').default);
 Vue.component('tramite-component', require('./components/TramiteComponent.vue').default);
 Vue.component('wizard-component', require('./components/WizardComponent.vue').default);
+Vue.component('tramite-component', require('./components/TramiteComponent.vue').default);
+Vue.component('campos-tramite-component', require('./components/CamposTramiteComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+console.log(process.env);
  Vue.filter("capitalize", function (value) {
     if (!value) 
         return '';
@@ -32,5 +36,3 @@ Vue.component('wizard-component', require('./components/WizardComponent.vue').de
 const app = new Vue({
     el: '#app',
 });
-
-

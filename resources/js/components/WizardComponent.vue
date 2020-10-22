@@ -55,43 +55,9 @@
                                                         <div class="col-xl-12 col-xxl-7">
                                                             <!--begin: Wizard Form-->
                                                             <form class="form mt-0 mt-lg-10 fv-plugins-bootstrap fv-plugins-framework" id="kt_form">
-                                                                <!--begin: Wizard Step 1-->
+                                                                <!--begin: Wizard Step 1 Campos tramite-->
                                                                 <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                                                    <div class="mb-10 font-weight-bold text-dark">Enter your Account Details</div>
-                                                                    <!--begin::Input-->
-                                                                    <div class="form-group fv-plugins-icon-container">
-                                                                        <label>First Name</label>
-                                                                        <input type="text" class="form-control form-control-solid form-control-lg" name="fname" placeholder="First Name" value="John">
-                                                                        <span class="form-text text-muted">Please enter your first name.</span>
-                                                                    <div class="fv-plugins-message-container"></div></div>
-                                                                    <!--end::Input-->
-                                                                    <!--begin::Input-->
-                                                                    <div class="form-group fv-plugins-icon-container">
-                                                                        <label>Last Name</label>
-                                                                        <input type="text" class="form-control form-control-solid form-control-lg" name="lname" placeholder="Last Name" value="Wick">
-                                                                        <span class="form-text text-muted">Please enter your last name.</span>
-                                                                    <div class="fv-plugins-message-container"></div></div>
-                                                                    <!--end::Input-->
-                                                                    <div class="row">
-                                                                        <div class="col-xl-6">
-                                                                            <!--begin::Input-->
-                                                                            <div class="form-group fv-plugins-icon-container">
-                                                                                <label>Phone</label>
-                                                                                <input type="tel" class="form-control form-control-solid form-control-lg" name="phone" placeholder="phone" value="+61412345678">
-                                                                                <span class="form-text text-muted">Please enter your phone number.</span>
-                                                                            <div class="fv-plugins-message-container"></div></div>
-                                                                            <!--end::Input-->
-                                                                        </div>
-                                                                        <div class="col-xl-6">
-                                                                            <!--begin::Input-->
-                                                                            <div class="form-group fv-plugins-icon-container">
-                                                                                <label>Email</label>
-                                                                                <input type="email" class="form-control form-control-solid form-control-lg" name="email" placeholder="Email" value="john.wick@reeves.com">
-                                                                                <span class="form-text text-muted">Please enter your email address.</span>
-                                                                            <div class="fv-plugins-message-container"></div></div>
-                                                                            <!--end::Input-->
-                                                                        </div>
-                                                                    </div>
+                                                                    <campos-tramite-component :tramite="tramite"></campos-tramite-component>
                                                                 </div>
                                                                 <!--end: Wizard Step 1-->
                                                                 <!--begin: Wizard Step 2-->
@@ -263,8 +229,10 @@
 
 <script>
     export default {
+        props: ['tramite'],
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component wizar.')
+            console.log( this.tramite)
         }
     }
 </script>

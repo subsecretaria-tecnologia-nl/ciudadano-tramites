@@ -219,7 +219,7 @@
                                 </div>
                                 <div class="col-md-7 col-sm-12 pt-sm-6 pt-6 pt-md-0">
                                     <a class="btn btn-icon btn-primary btn-cancelar ">Cancelar</a>
-                                    <a class="btn btn-icon btn-primary btn-guardar" id="kt_recovery_submit" > Guardar cambios</a>
+                                    <a class="btn btn-icon btn-primary btn-guardar" id="kt_recovery_submit_change" > Guardar cambios</a>
                                 </div>
                             </div>
                         </div>
