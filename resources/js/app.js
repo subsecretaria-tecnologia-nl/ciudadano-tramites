@@ -1,4 +1,6 @@
 require('./bootstrap');
+require('dotenv').config();
+
 
 window.Vue = require('vue');
 
@@ -23,7 +25,7 @@ Vue.component('campos-tramite-component', require('./components/CamposTramiteCom
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+console.log(process.env);
  Vue.filter("capitalize", function (value) {
     if (!value) 
         return '';
@@ -34,5 +36,3 @@ Vue.component('campos-tramite-component', require('./components/CamposTramiteCom
 const app = new Vue({
     el: '#app',
 });
-
-

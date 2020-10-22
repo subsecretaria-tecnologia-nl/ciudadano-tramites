@@ -54,7 +54,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "start": "php -S localhost:8080 -t public",
+        "start": "npm run dev && php -S localhost:8080 -t public",
+        "build" : "composer permissions-root && composer reset-build && sudo npm install && composer install && npm run prod && composer permissions-nginx",
+        "reset-build" : "sudo rm -rf ./vendor ./node_modules ./public/css ./public/images ./public/js ./public/plugins ./public/mix-manifest.json",
+        "permissions-root" : "sudo chown -R root .",
+        "permissions-nginx" : "sudo chown -R nginx .",
         "sass-dev": "sass --watch resources/sass:public/css --style compressed",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
