@@ -483,9 +483,10 @@ class TramitesController extends Controller
     }
 
 
-    public function detalle ( $idTramite ) {
+    public function detalle ( Request $request ) {
+      $id_tramite = $request->idTramite;
       set_layout_arg("subtitle", "Detalle Trámite");
-      return layout_view("tramites.detalleTramite");
+      return layout_view("tramites.detalleTramite",[ "id_tramite" => $id_tramite ] );
     }
 
 }
