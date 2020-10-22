@@ -1,5 +1,5 @@
 <template>
-    <div class="card card-custom gutter-b col-lg-10" >
+    <div class="card card-custom gutter-b col-lg-12" >
         <div class="card-body">
             <!--begin::Top-->
             <div class="d-flex">
@@ -18,8 +18,13 @@
                         <!--begin::User-->
                         <!--begin::Actions-->
                         <div class="my-lg-0 my-1">
-                            <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2">Ask</a>
-                            <a href="#" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">Hire</a>
+                            <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2">
+                                Precio
+                            </a>
+                            <a v-bind:href="'detalle-tramite/'+ tramite.id_tramite" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">
+                                INICIAR TRAMITE 
+                            </a>
+
                         </div>
                         <!--end::Actions-->
                     </div>

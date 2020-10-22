@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
             <tramite-component v-for="(tramite, index) in tramites" :tramite="tramite"></tramite-component>
         </div>
     </div>

@@ -482,4 +482,10 @@ class TramitesController extends Controller
       return $costo_real;
     }
 
+
+    public function detalle ( $idTramite ) {
+      set_layout_arg("subtitle", "Detalle Trámite");
+      return layout_view("tramites.detalleTramite");
+    }
+
 }
