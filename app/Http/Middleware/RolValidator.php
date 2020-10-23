@@ -16,10 +16,10 @@ class RolValidator
     public function handle($request, Closure $next)
     {
         $validator = [
-            "notary_titular" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios"],
-            "notary_substitute" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios"],
-            "notary_capturist" => ["/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña"],
-            "notary_payments" => [ "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña"]
+            "notary_titular" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout"],
+            "notary_substitute" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout"],
+            "notary_capturist" => ["/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/logout"],
+            "notary_payments" => [ "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/logout"]
         ];
 
         // dd($request->getPathInfo());
