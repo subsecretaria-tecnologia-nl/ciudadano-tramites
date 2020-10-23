@@ -8,9 +8,10 @@
 	<link rel="stylesheet" href="<?= asset("css/app.css")?>">
 </head>
 <body>
-	<div id="error" class="error-404">
+	<div id="error" class="error-403">
 		<div class="error-text">
 			<h1>¡Lo sentimos no tienes permisos para estar aquí!</h1>
+			<p>Contacta con tu administrador si crees que esto es un error.</p>
 		</div>
 	</div>
 </body>

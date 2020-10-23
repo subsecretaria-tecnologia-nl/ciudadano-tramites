@@ -17,22 +17,25 @@ class RolValidator
     {
         $validator = [
             "notary_titular" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios"],
-            "notary_subsitute" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios"],
-            "2" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios"],
+            "notary_substitute" => [ "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios"],
             "notary_capturist" => ["/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña"],
             "notary_payments" => [ "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña"]
         ];
 
         // dd($request->getPathInfo());
         $session = to_object(session()->get("user"));
-        if (!empty($session) && isset($validator[$session->role_id]) ) {
-            if( in_array($request->getPathInfo()  ,$validator[$session->role_id])  ){
-                return $next($request);
+        if(!empty($session->role_name)){
+            if (!empty($session) && isset($validator[$session->role_name]) ) {
+                if( in_array($request->getPathInfo()  ,$validator[$session->role_name])  ){
+                    return $next($request);
+                }else{
+                    return abort(403);    
+                };
             }else{
-                return response(403);
-            };
+                 return abort(403);
+            }
         }else{
-            return response(403);
+            return $next($request);
         }
     }
 }
