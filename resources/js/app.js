@@ -24,7 +24,7 @@ Vue.component('campos-tramite-component', require('./components/CamposTramiteCom
 Vue.component('solicitantes-component', require('./components/SolicitantesComponent.vue').default);
 Vue.component('resumen-tramite-component', require('./components/ResumenTramiteComponent.vue').default);
 /*Componentes tipo de campos*/
-Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
+// Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

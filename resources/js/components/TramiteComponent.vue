@@ -1,5 +1,5 @@
 <template>
-    <div class="card card-custom gutter-b col-lg-12" >
+    <div class="card list-item card-custom gutter-b col-lg-12" >
         <div class="card-body">
             <!--begin::Top-->
             <div class="d-flex">
@@ -10,7 +10,7 @@
                         <!--begin::User-->
                         <div class="mr-3">
                             <!--begin::Name-->
-                            <a href="#" class="d-flex align-items-center text-dark over-primary font-size-h5 font-weight-bold mr-3">
+                            <a v-bind:href="'detalle-tramite/'+ tramite.id_tramite" class="d-flex align-items-center text-dark over-primary font-size-h5 font-weight-bold mr-3">
                                 {{ tramite.tramite | capitalize }}
                             </a>
                             <!--end::Name-->
@@ -21,7 +21,7 @@
                             <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2">
                                 Precio
                             </a>
-                            <a v-bind:href="'detalle-tramite/'+ tramite.id_tramite" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">
+                            <a v-bind:href="'detalle-tramite/'+ tramite.id_tramite" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white">
                                 INICIAR TRAMITE 
                             </a>
 

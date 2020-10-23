@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-column-fluid">
         <div class="container">
-            <tramite-component v-for="(tramite, index) in tramites" :tramite="tramite"></tramite-component>
+            <tramite-component v-for="(tramite, index) in tramites" :tramite="tramite" v-bind:key="index"></tramite-component>
         </div>
     </div>
 </template>
