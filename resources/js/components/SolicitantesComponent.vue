@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
-        <div v-if="listaSolicitantes.length > 0 && !agregarMas" >
-            <div v-for="(sol, index) in listaSolicitantes" >
+        <div v-if="listaSolicitantes.length > 0 && !agregarMas" class="row">
+            <div v-for="(sol, index) in listaSolicitantes" class="col-lg-12" style="border-bottom-width: 0.5px; border-bottom-color: rgba(156,156,156,0.5); border-bottom-style: solid; padding-bottom: 9px; margin-top: 5px;">
                 <h6 class="font-weight-bolder mb-3">{{ sol.rfc }}</h6>
                 <div class="text-dark-50 line-height-lg">
                     <div class="float-lg-left">
@@ -16,17 +16,10 @@
                             <button type="button"  class="btn btn-info"  id="btnEditar" v-on:click="solicitante = sol ; editando = true; agregarMas = true; indiceEditando = index;">
                                 <i class="fa fa-edit" id="iconBtnEditar"></i>
                             </button> 
-
                     </div> 
                 </div>
-                <!--
-                <div class="text-center" style="margin-top: 2px">
-                    <div class="border-top my-3"></div>  
-                </div>
-                -->
-                
             </div>
-            <div >
+            <div class="col-lg-12">
                     <button type="button"  class="btn"  id="btnAddMore" v-on:click="agregarMas = true">
                         <i class="fa fa-check" id="iconBtnAddMore"></i> 
                         Agregar Solicitante
@@ -104,7 +97,13 @@
     export default {
         props: ['tramite'],
         mounted() {
-
+            if (localStorage.getItem('listaSolicitantes')) {
+              try {
+                this.listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
+              } catch(e) {
+                localStorage.removeItem('listaSolicitantes');
+              }
+            }
         },
 
         data(){
@@ -122,10 +121,14 @@
                 this.listaSolicitantes.push( this.solicitante );
                 this.solicitante = { tipoPersona:"pf" };
                 this.agregarMas = false;
+
+                this.guardarInStorage();
             },
 
             eliminar( index ){
+                this.listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
                 this.listaSolicitantes.splice(index, 1);
+                this.guardarInStorage();
             },
 
             editar(index, solicitanteNuevo){
@@ -134,6 +137,12 @@
                 this.editando = false;
                 this.indiceEditando = null;
                 this.agregarMas = false;
+                this.guardarInStorage();
+            },
+
+            guardarInStorage(){
+                const parsed = JSON.stringify(this.listaSolicitantes);
+                localStorage.setItem('listaSolicitantes', parsed);  
             }
 
         }

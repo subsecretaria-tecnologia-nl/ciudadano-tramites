@@ -21,7 +21,8 @@ Vue.component('tramite-component', require('./components/TramiteComponent.vue').
 Vue.component('wizard-component', require('./components/WizardComponent.vue').default);
 Vue.component('tramite-component', require('./components/TramiteComponent.vue').default);
 Vue.component('campos-tramite-component', require('./components/CamposTramiteComponent.vue').default);
-Vue.component('solicitantes-component', require('./components/SolicitantesComponent.vue').default)
+Vue.component('solicitantes-component', require('./components/SolicitantesComponent.vue').default);
+Vue.component('resumen-tramite-component', require('./components/ResumenTramiteComponent.vue').default);
 /*Componentes tipo de campos*/
 Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
 

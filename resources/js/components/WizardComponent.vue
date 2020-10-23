@@ -1,13 +1,14 @@
 <template>
                         <div class="card card-custom card-transparent">
                                     <div class="card-body p-0">
+                                      {{ currentStep }}
                                         <!--begin: Wizard-->
                                         <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="first" data-wizard-clickable="true" >
                                             <!--begin: Wizard Nav-->
                                             <div class="wizard-nav">
                                                 <div class="wizard-steps">
                                                     <!--begin::Wizard Step 1 Nav-->
-                                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current" id="tab1" v-on:click="goTo('1')">
+                                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="current" id="tab1" v-on:click="goTo(1)">
                                                         <div class="wizard-wrapper">
                                                             <div class="wizard-number">1</div>
                                                             <div class="wizard-label">
@@ -20,7 +21,7 @@
                                                     </div>
                                                     <!--end::Wizard Step 1 Nav-->
                                                     <!--begin::Wizard Step 2 Nav-->
-                                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo('2')">
+                                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo(2)">
                                                         <div class="wizard-wrapper">
                                                             <div class="wizard-number">2</div>
                                                             <div class="wizard-label">
@@ -33,7 +34,7 @@
                                                     </div>
                                                     <!--end::Wizard Step 2 Nav-->
                                                     <!--begin::Wizard Step 3 Nav-->
-                                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab3" v-on:click="goTo('3')">
+                                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab3" v-on:click="goTo(3)">
                                                         <div class="wizard-wrapper">
                                                             <div class="wizard-number">3</div>
                                                             <div class="wizard-label">
@@ -66,8 +67,8 @@
                                                                 </div>
                                                                 <!--end: Wizard Step 2-->
                                                                 <!--begin: Wizard Step 3-->
-                                                                <div class="pb-5" data-wizard-type="step-content" id="step3">
-                                                                    3
+                                                                <div class="pb-5" data-wizard-type="step-content" id="step3" >
+                                                                    <resumen-tramite-component v-if="currentStep == 3"></resumen-tramite-component>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                                     <div class="mr-2">
@@ -97,8 +98,8 @@
     export default {
         props: ['tramite'],
         mounted() {
-            console.log('Component wizar.')
-            console.log( this.tramite)
+            const parsed = JSON.stringify(this.tramite);
+            localStorage.setItem('tramite', parsed);  
         },
   
         data() {
@@ -111,10 +112,10 @@
             next: function (event) {
                 
               $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-              $("#tab" + this.currentStep).attr("data-wizard-state", "");
+              $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
 
               $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-              $("#step" + this.currentStep ).attr("data-wizard-state", "");
+              $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
               this.currentStep = this.currentStep + 1;
 //$("#tab" + this.currentStep + 1).data("wizard-state", "current")
 //              $("#step" + this.currentStep + 1).data("wizard-state", "current")
