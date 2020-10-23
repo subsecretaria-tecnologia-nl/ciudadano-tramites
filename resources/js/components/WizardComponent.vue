@@ -54,7 +54,6 @@
                                                     <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
                                                         <div class="col-xl-12 col-xxl-7">
                                                             <!--begin: Wizard Form-->
-                                                            
                                                                 <!--begin: Wizard Step 1 Campos tramite-->
                                                                 <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
                                                                     <campos-tramite-component :tramite="tramite"></campos-tramite-component>

@@ -8,20 +8,10 @@
                 <div>
                     <div class="dropdown-divider"></div>
                     <section id="detalleTrammite">
-@php
-$i = 1
-@endphp
-
-                        <wizard-component :tramite="{
-  'id_tramite': 101,
-  'tramite': 'ADJUDICACIÃ?N POR HERENCIA',
-  'partidas': [
-    {
-      'id_partida': 21017,
-      'descripcion': 'ADJUDICACIÓN POR HERENCIA PAGO EN LÍNEA'
-    }
-  ]
-}"></wizard-component>
+                      @php
+                        $jsonTramite = json_encode($detalle[0]);
+                      @endphp
+                      <wizard-component :tramite="{{$jsonTramite}}"></wizard-component>
                     </section>
 
                 </div>
@@ -31,5 +21,8 @@ $i = 1
 </div> 
 <script type="text/javascript">
     let urlObtnerCampos = "{{ url()->route('getCampos') }}";
+    
+
+    console.log(process.env);
 
 </script>

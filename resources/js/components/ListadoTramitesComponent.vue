@@ -25,6 +25,10 @@
             }
         },
         mounted() {
+
+            localStorage.removeItem('listaSolicitantes');
+            localStorage.removeItem('tramite');
+            
             axios
               .get(url)
               .then(response => {
