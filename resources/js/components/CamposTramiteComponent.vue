@@ -1,58 +1,105 @@
 <template>
-	<div id="contenedorCampos">
-        <div class="mb-10 font-weight-bold text-dark">Enter your Account detalles men</div>
-        <!--begin::Input-->
-        <div class="form-group fv-plugins-icon-container">
-            <label>First Name</label>
-            <input type="text" class="form-control form-control-solid form-control-lg" name="fname" placeholder="First Name" value="John">
-            <span class="form-text text-muted">Please enter your first name.</span>
-        <div class="fv-plugins-message-container"></div></div>
-        <!--end::Input-->
-        <!--begin::Input-->
-        <div class="form-group fv-plugins-icon-container">
-            <label>Last Name</label>
-            <input type="text" class="form-control form-control-solid form-control-lg" name="lname" placeholder="Last Name" value="Wick">
-            <span class="form-text text-muted">Please enter your last name.</span>
-        <div class="fv-plugins-message-container"></div></div>
-        <!--end::Input-->
-        <div class="row">
-            <div class="col-xl-6">
-                <!--begin::Input-->
-                <div class="form-group fv-plugins-icon-container">
-                    <label>Phone</label>
-                    <input type="tel" class="form-control form-control-solid form-control-lg" name="phone" placeholder="phone" value="+61412345678">
-                    <span class="form-text text-muted">Please enter your phone number.</span>
-                <div class="fv-plugins-message-container"></div></div>
-                <!--end::Input-->
-            </div>
-            <div class="col-xl-6">
-                <!--begin::Input-->
-                <div class="form-group fv-plugins-icon-container">
-                    <label>Email</label>
-                    <input type="email" class="form-control form-control-solid form-control-lg" name="email" placeholder="Email" value="john.wick@reeves.com">
-                    <span class="form-text text-muted">Please enter your email address.</span>
-                <div class="fv-plugins-message-container"></div></div>
-                <!--end::Input-->
-            </div>
-        </div>
+	<div id="contenedorCampos" class="container-fluid">
+		<div :is="compiled" v-if="mostrar"></div>
+		<div class="text-center" id="loadin" style=" margin-bottom: 9px;" v-if="!mostrar" >
+			<div class="spinner-grow" role="status">
+			  	<span class="sr-only">Loading...</span>
+			</div>
+		</div>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['campos'],
+        props: ['tramite'],
         data() {
             return {
-                tramites: []
+                campos: [],
+                compiled: null,
+                datos:null,
+                mostrar:false
             }
         },
+  
         mounted() {
+
             axios
-              .get(urlObtnerCampos)
-              .then(response => {
-              	console.log( response )
-                this.campos = response.data;
-              })
-        }
+              	.get(urlObtnerCampos, { params: { id_tramite: this.tramite.id_tramite } })
+              	.then(response => {
+                	let html  = "";
+                	this.campos = response.data;
+                	this.campos.forEach( ( campo, index ) => {
+                		let jsonstr = JSON.stringify(campo);
+                		
+                		if( campo.tipo == "input" ){
+							//html += "<div class='col-xl-6'><input-component :info='" +  jsonstr + "'' :inputData.sync=" + this.infocomplete+ "></input-component></div>";
+							
+							html += "<div class='col-xl-6'> "+ this.getInputTemplate( campo ) + "</div>" ;
+						} else if( campo.tipo == "select" ){
+							html += "<div class='col-xl-6'> "+ this.getSelectTemplate( campo ) + "</div>" ;
+						} else if( campo.tipo == "option" ){
+							html += "<div class='col-xl-6'> "+ this.getOptionTemplate( campo ) + "</div>" ;
+						} else if( campo.tipo == "textbox"){
+							console.log( campo)
+							html += "<div class='col-xl-6'> "+ this.getTextBoxTemplate( campo ) + "</div>" ;
+						}
+					})
+					this.compiled  = Vue.compile( "<div class='row'> " + html + "</div>" );
+            	}).finally( () => {
+					this.mostrar = true;
+				});
+
+        },
+
+        methods: {
+		    getInputTemplate(campo) {
+		    	let name = campo.nombre.toLowerCase().split(" ").join("_");
+	            let id = campo.nombre.toLowerCase().split(" ").join("_");
+	            let caracteristicas = JSON.parse(campo.caracteristicas);
+	            let descripcion = campo.nombre;
+	            return   '<div class="form-group fv-plugins-icon-container"><label>'+  descripcion +'</label><input type="text" class="form-control form-control-solid form-control-lg"  placeholder="'+  descripcion +' " id="' +  id + '" ></div>';
+		    },
+
+		    getSelectTemplate(campo){
+		    	let name = campo.nombre.toLowerCase().split(" ").join("_");
+	            let id = campo.nombre.toLowerCase().split(" ").join("_");
+	            let caracteristicas = JSON.parse(campo.caracteristicas);
+	            let descripcion = campo.nombre;
+	            
+	            let strOpciones = '<option value="">Select</option>';
+	            caracteristicas.opciones.forEach( (opcion) => {
+	            	 let clave =  Object.keys(opcion)[0];
+	            	strOpciones += '<option value="' + clave + '">' + opcion[clave] + '</option>'
+	            });
+		    	return '<div class="form-group fv-plugins-icon-container"><label>' + descripcion + '</label><select name="'+ name +'" class="form-control form-control-solid form-control-lg">'  +  strOpciones +  '</select></div>';
+		    },
+
+		    getOptionTemplate(campo){
+
+		    	let name = campo.nombre.toLowerCase().split(" ").join("_");
+	            let id = campo.nombre.toLowerCase().split(" ").join("_");
+	            let caracteristicas = JSON.parse(campo.caracteristicas);
+	            let descripcion = campo.nombre;
+
+	            let html ="";
+		        caracteristicas.opciones.forEach( (opcion, key) => {
+		        	let clave =  Object.keys(opcion)[0];
+		        	html += '<div class="form-group"><input type="radio" class=" form-control-solid"  placeholder="'+  descripcion +' " id="' +  id + '" value="' +  clave + '" ><label>'+  opcion[clave] +'</label></div>';
+		        });
+
+		    	return html;
+		    },
+
+		    getTextBoxTemplate(  campo ){
+				let id = campo.nombre.toLowerCase().split(" ").join("_");
+	            let caracteristicas = JSON.parse(campo.caracteristicas);
+	            let descripcion = campo.nombre;
+	            let name = campo.nombre.toLowerCase().split(" ").join("_");
+
+		    	return '<div class="form-group fv-plugins-icon-container"><label>' + descripcion + '</label><textarea id="'+ id +'" class="form-control form-control-solid form-control-lg"></textarea></div>';		    	
+		    }
+
+		}
+
     }
 </script>

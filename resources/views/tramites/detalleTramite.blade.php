@@ -8,6 +8,10 @@
                 <div>
                     <div class="dropdown-divider"></div>
                     <section id="detalleTrammite">
+@php
+$i = 1
+@endphp
+
                         <wizard-component :tramite="{
   'id_tramite': 101,
   'tramite': 'ADJUDICACIÃ?N POR HERENCIA',
@@ -27,4 +31,5 @@
 </div> 
 <script type="text/javascript">
     let urlObtnerCampos = "{{ url()->route('getCampos') }}";
+
 </script>

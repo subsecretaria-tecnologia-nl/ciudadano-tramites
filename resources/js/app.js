@@ -1,5 +1,6 @@
 require('./bootstrap');
-require('dotenv').config();
+
+//require('dotenv').config();
 
 
 window.Vue = require('vue');
@@ -20,6 +21,10 @@ Vue.component('tramite-component', require('./components/TramiteComponent.vue').
 Vue.component('wizard-component', require('./components/WizardComponent.vue').default);
 Vue.component('tramite-component', require('./components/TramiteComponent.vue').default);
 Vue.component('campos-tramite-component', require('./components/CamposTramiteComponent.vue').default);
+Vue.component('solicitantes-component', require('./components/SolicitantesComponent.vue').default)
+/*Componentes tipo de campos*/
+Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
