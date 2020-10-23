@@ -16,13 +16,12 @@ class RolValidator
     public function handle($request, Closure $next)
     {
         $validator = [
-            "notary_titular" => [ "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes",  "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
-            "notary_substitute" => [ "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
-            "notary_capturist" => ["/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/logout", "/nuevo-tramite" ],
-            "notary_payments" => [ "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/logout"]
+            "notary_titular" => ["/", "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes",  "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
+            "notary_substitute" => ["/", "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
+            "notary_capturist" => ["/", "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/logout", "/nuevo-tramite" ],
+            "notary_payments" => ["/", "/dashboard", "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/tramites/por-pagar", "/logout"]
         ];
 
-        // dd($request->getPathInfo());
         $session = to_object(session()->get("user"));
         if(!empty($session->role_name)){
             if (!empty($session) && isset($validator[$session->role_name]) ) {
