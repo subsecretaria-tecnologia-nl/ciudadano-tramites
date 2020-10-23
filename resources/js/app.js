@@ -5,6 +5,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import Vuetify from 'vuetify';
+Vue.use(Vuetify);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -24,7 +26,7 @@ Vue.component('campos-tramite-component', require('./components/CamposTramiteCom
 Vue.component('solicitantes-component', require('./components/SolicitantesComponent.vue').default);
 Vue.component('resumen-tramite-component', require('./components/ResumenTramiteComponent.vue').default);
 /*Componentes tipo de campos*/
-Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
+// Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

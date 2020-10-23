@@ -1,7 +1,6 @@
 <template>
                         <div class="card card-custom card-transparent">
                                     <div class="card-body p-0">
-                                      {{ currentStep }}
                                         <!--begin: Wizard-->
                                         <div class="wizard wizard-4" id="kt_wizard" data-wizard-state="first" data-wizard-clickable="true" >
                                             <!--begin: Wizard Nav-->
@@ -34,7 +33,7 @@
                                                     </div>
                                                     <!--end::Wizard Step 2 Nav-->
                                                     <!--begin::Wizard Step 3 Nav-->
-                                                    <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab3" v-on:click="goTo(3)">
+                                                    <div class="wizard-step mr-auto" data-wizard-type="step" data-wizard-state="pending" id="tab3" v-on:click="goTo(3)">
                                                         <div class="wizard-wrapper">
                                                             <div class="wizard-number">3</div>
                                                             <div class="wizard-label">

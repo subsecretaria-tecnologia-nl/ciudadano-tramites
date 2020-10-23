@@ -1,7 +1,17 @@
 <template>
     <div class="d-flex flex-column-fluid">
-        <div class="container">
-            <tramite-component v-for="(tramite, index) in tramites" :tramite="tramite"></tramite-component>
+
+        <v-container v-if="loading">
+            <v-row>
+                <v-col cols="12" md="12">
+                    <v-skeleton-loader  type="list-item" v-for="(r,i) in [1,2,3,4,5,6]" height="90px" style="margin-bottom: 8px;"></v-skeleton-loader>
+                </v-col>
+            </v-row>
+        </v-container>
+
+
+        <div class="container" v-if="!loading">
+            <tramite-component v-for="(tramite, index) in tramites" :tramite="tramite" v-bind:key="index"></tramite-component>
         </div>
     </div>
 </template>
@@ -11,7 +21,7 @@
 
         data() {
             return {
-                tramites: []
+                tramites: [], loading:true
             }
         },
         mounted() {
@@ -19,6 +29,8 @@
               .get(url)
               .then(response => {
                 this.tramites = response.data;
+              }).finally(  () =>{
+                    this.loading = false;
               })
         }
     }
