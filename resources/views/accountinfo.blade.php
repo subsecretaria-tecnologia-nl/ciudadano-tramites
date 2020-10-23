@@ -249,6 +249,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label  class="col-md-3 col-sm-12 col-form-label">Rol Asignado</label>
+                                            <div class="col-md-8 col-sm-12">
+                                                <input class="form-control" type="text" value="{{ $user->role_name }}" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="example-search-input" class="col-md-3 col-sm-12 col-form-label">Nombres(s)</label>
                                             <div class="col-md-8 col-sm-12">
                                                 <input class="form-control" type="text" value="{{ $user->name }} {{ $user->mothers_surname}} {{ $user->fathers_surname }}" disabled/>
