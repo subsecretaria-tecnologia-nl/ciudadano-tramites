@@ -19,6 +19,7 @@ Route::get("/", function(){
 	return redirect()->route("dashboard");
 });
 
+
 Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 	Route::middleware(["validate_session", "validate_rol"])->group(function(){
 		Route::get('/', function () {
@@ -48,6 +49,6 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		Route::get('/getCampos', 'SolicitudesController@getCampos')->name("getCampos");
 		Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
 
-	Route::post('/getcostoTramite', 'TramitesController@getcostoTramite')->name("costo-tramite");
- });
+		Route::post('/getcostoTramite', 'TramitesController@getcostoTramite')->name("costo-tramite");
+	});
 });
