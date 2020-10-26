@@ -95,9 +95,12 @@
 </template>
 
 <script>
+    import { uuid } from 'vue-uuid';
+  
     export default {
         props: ['tramite'],
         mounted() {
+            this.tramite.id_seguimiento =  uuid.v4();
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);  
         },
@@ -117,8 +120,6 @@
               $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
               $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
               this.currentStep = this.currentStep + 1;
-//$("#tab" + this.currentStep + 1).data("wizard-state", "current")
-//              $("#step" + this.currentStep + 1).data("wizard-state", "current")
 
             },
 

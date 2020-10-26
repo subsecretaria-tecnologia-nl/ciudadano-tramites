@@ -1,6 +1,4 @@
 <template>
-
-
         <div class="container">
             <div class="card">
                 <div class="card-header"></div>
@@ -11,14 +9,16 @@
                             <div>
                                 <strong> {{ tramite.tramite }}</strong>
                             </div>
-                            <div>Madalinskiego 8</div>
-                            <div>71-101 Szczecin, Poland</div>
-                            <div>Email: info@webz.com.pl</div>
-                            <div>Phone: +48 444 666 3333</div>
+                            <div >
+                                Total: 
+                                <span v-if="tramite.detalle"> $ {{tramite.detalle.costo_final }} </span>
+                                <span class="spinner-border spinner-border-sm" v-if="!tramite.detalle"></span>
+                            </div>
+                            
                         </div>
                     </div>
 
-                    <div class="table-responsive-sm">
+                    <div class="table-responsive-sm" v-if="listaSolicitantes.length > 0">
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -46,7 +46,6 @@
 
 <script>
     export default {
-        props: ['tramite'],
         mounted() {
             if (localStorage.getItem('listaSolicitantes')) {
               try {
@@ -63,12 +62,38 @@
                 localStorage.removeItem('tramite');
               }
             }
+
+            if (localStorage.getItem('datosFormulario')) {
+                try {
+                    this.datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
+                } catch(e) {
+                    localStorage.removeItem('datosFormulario');
+                }
+            }
+
+            axios
+              .post(urlCostos, {  
+                    valor_catastral: this.datosFormulario.valor_catastral,
+                    id_seguimiento: this.tramite.id_seguimiento,
+                    tramite_id: this.tramite.id_tramite,
+                    valor_operacion: this.datosFormulario.valor_de_operacion,
+                    oficio:62
+               })
+              .then(response => {
+                this.tramite.detalle =  response.data[0];
+                this.$forceUpdate();
+              }).finally(  () => {
+                    
+              })
+
+            
         },
 
         data(){
             return {
                 tramite: {  },
                 listaSolicitantes:[],
+                datosFormulario:{}
             }
         },
   
@@ -81,3 +106,4 @@
         }
     }
 </script>
+

@@ -547,4 +547,9 @@ class TramitesController extends Controller
 
     }
 
+    public function carshop ( Request $request ) {
+      set_layout_arg("subtitle", "CarShop");
+      return layout_view("tramites.carshop" );
+    }
+
 }

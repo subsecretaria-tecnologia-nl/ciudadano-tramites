@@ -41,8 +41,7 @@
     export default {
         props: ['tramite'],
         mounted() {
-            console.log('Component mounted.')
-            console.log(this.tramite)
+
         }
     }
 </script>

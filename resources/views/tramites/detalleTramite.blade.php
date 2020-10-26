@@ -21,8 +21,5 @@
 </div> 
 <script type="text/javascript">
     let urlObtnerCampos = "{{ url()->route('getCampos') }}";
-    
-
-    console.log(process.env);
-
+    let urlCostos = "{{ url()->route('costo-tramite') }}";
 </script>

@@ -25,7 +25,7 @@
             }
         },
         mounted() {
-
+            localStorage.removeItem('datosFormulario');
             localStorage.removeItem('listaSolicitantes');
             localStorage.removeItem('tramite');
             

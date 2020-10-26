@@ -4,8 +4,9 @@ require('./bootstrap');
 
 
 window.Vue = require('vue');
-
+import UUID from "vue-uuid";
 import Vuetify from 'vuetify';
+Vue.use(UUID);
 Vue.use(Vuetify);
 /**
  * The following block of code may be used to automatically register your
@@ -27,14 +28,15 @@ Vue.component('solicitantes-component', require('./components/SolicitantesCompon
 Vue.component('resumen-tramite-component', require('./components/ResumenTramiteComponent.vue').default);
 /*Componentes tipo de campos*/
 // Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
+Vue.component('car-shop-component', require('./components/carShop/CarShopComponent.vue').default);
 
+Vue.component('metodos-pago-component', require('./components/carShop/MetodosDePagoComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-console.log(process.env);
- Vue.filter("capitalize", function (value) {
+Vue.filter("capitalize", function (value) {
     if (!value) 
         return '';
     value = value.toString();

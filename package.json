@@ -22,6 +22,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "vue-uuid": "^2.0.2",
         "vuetify": "^2.3.15"
     }
 }
