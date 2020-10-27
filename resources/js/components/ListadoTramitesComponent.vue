@@ -24,18 +24,29 @@
                 tramites: [], loading:true
             }
         },
-        mounted() {
+        created() {
             localStorage.removeItem('datosFormulario');
             localStorage.removeItem('listaSolicitantes');
             localStorage.removeItem('tramite');
-            
-            axios
-              .get(url)
-              .then(response => {
-                this.tramites = response.data;
-              }).finally(  () =>{
-                    this.loading = false;
-              })
+            this.obtenerTramites();
+        },
+
+        methods: {
+
+
+            async obtenerTramites(){
+                let url = process.env.APP_URL + "/allTramites";
+                try {
+                    let response = await axios.get(url);
+                    this.tramites = response.data;
+                } catch (error) {
+                    console.log(error);
+                }
+                this.loading = false;
+            }
+
         }
+
+
     }
 </script>
