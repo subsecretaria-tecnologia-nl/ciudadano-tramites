@@ -14,7 +14,6 @@
                                 <span v-if="tramite.detalle"> $ {{tramite.detalle.costo_final }} </span>
                                 <span class="spinner-border spinner-border-sm" v-if="!tramite.detalle"></span>
                             </div>
-                            
                         </div>
                     </div>
 
@@ -47,46 +46,8 @@
 <script>
     export default {
         mounted() {
-            if (localStorage.getItem('listaSolicitantes')) {
-              try {
-                this.listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
-              } catch(e) {
-                localStorage.removeItem('listaSolicitantes');
-              }
-            }
-
-            if (localStorage.getItem('tramite')) {
-              try {
-                this.tramite = JSON.parse(localStorage.getItem('tramite'));
-              } catch(e) {
-                localStorage.removeItem('tramite');
-              }
-            }
-
-            if (localStorage.getItem('datosFormulario')) {
-                try {
-                    this.datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
-                } catch(e) {
-                    localStorage.removeItem('datosFormulario');
-                }
-            }
-
-            axios
-              .post(urlCostos, {  
-                    valor_catastral: this.datosFormulario.valor_catastral,
-                    id_seguimiento: this.tramite.id_seguimiento,
-                    tramite_id: this.tramite.id_tramite,
-                    valor_operacion: this.datosFormulario.valor_de_operacion,
-                    oficio:62
-               })
-              .then(response => {
-                this.tramite.detalle =  response.data[0];
-                this.$forceUpdate();
-              }).finally(  () => {
-                    
-              })
-
-            
+            this.obtenerInformacionDelTramite();
+            this.obtenerCosto();
         },
 
         data(){
@@ -98,10 +59,38 @@
         },
   
         methods: {
-            agregar: function (event) {
-
+            obtenerInformacionDelTramite(){
+                let informacionEnStorage = ["listaSolicitantes", "tramite", "datosFormulario"];
+                informacionEnStorage.forEach( name => {
+                    if (localStorage.getItem(name)) {
+                      try {
+                        this[name] = JSON.parse(localStorage.getItem(name));
+                      } catch(e) {
+                        letocalStorage.removeItem(name);
+                      }
+                    }
+                });
             },
 
+            async obtenerCosto(){
+                let url = process.env.APP_URL + "/getcostoTramite";
+                let data = {  
+                    valor_catastral: this.datosFormulario.valor_catastral,
+                    id_seguimiento: this.tramite.id_seguimiento,
+                    tramite_id: this.tramite.id_tramite,
+                    valor_operacion: this.datosFormulario.valor_de_operacion,
+                    oficio:62
+                }
+                
+                try {
+                    let response = await axios.post(url, data);
+                    let detalleTramite = response.data;
+                    this.tramite.detalle =  detalleTramite[0];
+                    this.$forceUpdate();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
 
         }
     }
