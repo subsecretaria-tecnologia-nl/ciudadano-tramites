@@ -68,31 +68,39 @@
             }
         },
   
-        mounted() {
-            if (localStorage.getItem('datosFormulario')) {
-              try {
-                this.model = JSON.parse(localStorage.getItem('datosFormulario'));
-              } catch(e) {
-                localStorage.removeItem('datosFormulario');
-              }
-            }
-
-            axios
-              	.get(urlObtnerCampos, { params: { id_tramite: this.tramite.id_tramite } })
-              	.then(response => {
-                	let html  = "";
-                	this.campos = response.data;
-            	}).finally( () => {
-					this.mostrar = true;
-				});
-
+        created() {
+            this.recuperarDatosInStorage();
+			this.obtenerCampos();
         },
 
         methods: {
 		    cambioModelo() {
 		    	const parsed = JSON.stringify(this.model);
                 localStorage.setItem('datosFormulario', parsed); 
+		    },
+
+		    recuperarDatosInStorage(){
+	            if (localStorage.getItem('datosFormulario')) {
+	              	try {
+	                	this.model = JSON.parse(localStorage.getItem('datosFormulario'));
+	              	} catch(e) {
+	                	localStorage.removeItem('datosFormulario');
+	              	}
+	            }	    	
+		    },
+
+		    async obtenerCampos(){
+		    	let url = process.env.APP_URL + "/getCampos";
+		    	try {
+				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
+				  	this.campos = response.data;
+				} catch (error) {
+				  	console.log(error);
+				}
+				this.mostrar = true;
 		    }
+
+
 		}
 
     }
