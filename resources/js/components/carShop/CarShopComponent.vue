@@ -7,8 +7,8 @@
 
 		      	<!-- Card -->
 		      	<div class="mb-3" v-if="!mostrarMetodos">
-		        	<div class="pt-4 wish-list" id="listTramites" v-for="tramite in tramites">
-		        		<div class="row mb-4">
+		        	<div class="pt-4 wish-list " id="listTramites" v-for="tramite in tramites" >
+		        		<div class="row mb-4 mb-3 shadow-sm p-3 bg-white rounded" 	>
 		        			<div class="col-md-7 col-lg-9 col-xl-9">
 		        				<div>
 		        					<div class="d-flex justify-content-between">
@@ -37,7 +37,6 @@
 		        				</div>
 		        			</div>
 		        		</div>
-		        		<hr class="mb-4">
 		        	</div>
 		      	</div>
 		      	<!-- Card -->
@@ -76,7 +75,7 @@
 		          		</ul>
 
 		          		<button id="metodoPagoBtn" type="button" class="btn btn-primary btn-block" v-on:click="metodoPago()" :disabled="diabledBtnMedtodo" >
-		          			Elegir método de pago 
+		          			Pagar
 		          			<div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status" v-if="diabledBtnMedtodo">
 		          				<span class="sr-only">Loading...</span>
 		          			</div>
@@ -112,6 +111,7 @@
 	}
 </style>
 <script>
+	import { uuid } from 'vue-uuid';
     export default {
         data() {
             return {
@@ -126,7 +126,7 @@
            this.tramites =  [
 			    {
 			      "id_seguimiento": 4254,
-			      "id_tipo_servicio": 3,
+			      "id_tipo_servicio": 397,
 			      "id_tramite": "BMU8605134I81FM5K7D80EGA56944",
 			      "importe_tramite": "3041",
 			      "auxiliar_1": "GRUPOS ICV BMU8605134I8 ",
@@ -185,7 +185,7 @@
 			    },
 			    {
 			      "id_seguimiento":334,
-			      "id_tipo_servicio": 3,
+			      "id_tipo_servicio": 397,
 			      "id_tramite": "BMU8605134I81GBKC34J9WJ108483",
 			      "importe_tramite": "820",
 			      "auxiliar_1": "GRUPOS ICV BMU8605134I8 ",
@@ -250,7 +250,7 @@
 			    },
 			    {
 			      "id_seguimiento":43,
-			      "id_tipo_servicio": 3,
+			      "id_tipo_servicio": 397,
 			      "id_tramite": "BMU8605134I81GBKC34JXWJ103325",
 			      "importe_tramite": "826",
 			      "auxiliar_1": "GRUPOS ICV BMU8605134I8 ",
@@ -328,32 +328,28 @@
 
 		    metodoPago() {
 		    	this.diabledBtnMedtodo = true;
-		    	console.log( process.env.PAYMENTS_HOSTNAME )
-		    	let url = process.env.PAYMENTS_HOSTNAME  + "/pay"
-		    	//let url = "https://payments-api-stage.herokuapp.com/v1/pay";
-
-
-
+		    	let url = process.env.PAYMENTS_HOSTNAME  + "/v1/pay"
 				let data = {
 					"token": "DD0FDED2FE302392164520BF7090E1B3BEB7",
 					"referencia": "",
 					"url_retorno": "url",
 					"importe_transaccion": "4687",
-					"id_transaccion": "BMU8605134I82915082020",
-					"entidad": 3,
+					"id_transaccion": uuid.v4(),//"BMU8605134I82915082020",
+					"entidad": 2,
 					"url_confirma_pago": "url",
 					"es_referencia": "1",
 					"tramite": this.tramites 
 				}
             	axios.post(url, data, {
             		headers:{
-            			"Authorization":"Bearer B6C8XvbNouJj!ds@.NXjfeswtzehVN",
+            			"Authorization":"Bearer " + process.env.PAYMENTS_KEY,
 				        "Content-type":"application/json"
             		},
             	} )
               	.then(response => {
+              		console.log( response.data.response)
                 	this.infoMetodosPago = response.data.response;
-              }).catch((error)=> {
+              	}).catch((error)=> {
 					this.diabledBtnMedtodo = false;
 				}).finally(() => {
 					this.diabledBtnMedtodo = false;
