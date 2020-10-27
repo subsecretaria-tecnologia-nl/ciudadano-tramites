@@ -20,6 +20,5 @@
     </div>
 </div> 
 <script type="text/javascript">
-    let urlObtnerCampos = "{{ url()->route('getCampos') }}";
-    let urlCostos = "{{ url()->route('costo-tramite') }}";
+    let token = '{{ csrf_token() }}';
 </script>

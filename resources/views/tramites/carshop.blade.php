@@ -4,8 +4,8 @@
             <div>
                 <span > inicio-> Trámites en curso -> Selección de Trámite</span>
             </div>
-            <div class="card" style="padding-top: 10px; min-height: 600px;">
-                <div class="card-body">
+            <div class="" style="padding-top: 10px; min-height: 600px;">
+                <div class="">
                     <div class="dropdown-divider"></div>
                     <car-shop-component></car-shop-component>
                 </div>

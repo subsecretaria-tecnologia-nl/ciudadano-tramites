@@ -16,8 +16,4 @@
         </div>
         
     </div>
-</div> 
-
-<script type="text/javascript">
-	let url = "{{ url()->route('allTramites') }}";
-</script>
+</div>
