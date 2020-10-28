@@ -153,7 +153,7 @@
             	mostrarMetodos:false,
             	infoMetodosPago:{},
 
-            	porPage : 5, pages:[0], currentPage :1, tramitesPaginados:{}
+            	porPage : 10, pages:[0], currentPage :1, tramitesPaginados:{}
             }
         },
   
