@@ -73,8 +73,11 @@
                                                                         <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
                                                                     </div>
                                                                     <div >
-                                                                        <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3">
-                                                                          Agregar al carrito
+                                                                        <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar()" :disabled="enviando">
+                                                                          Agregar al carrito 
+                                                                          <div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
+                                                                              <span class="sr-only">Loading...</span>
+                                                                          </div>
                                                                         </button>
                                                                         <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
                                                                             Next
@@ -108,6 +111,8 @@
         data() {
             return {
                 currentStep: 1,
+                datosIncompletos: true,
+                enviando:false
             }
         },
   
@@ -124,34 +129,102 @@
             },
 
             goTo( idStep ){
-                $("#tab" + idStep).attr("data-wizard-state", "current");
-                $("#step" + idStep).attr("data-wizard-state", "current");
-
                 $("#step" + this.currentStep ).attr("data-wizard-state", "");
                 $("#tab" + this.currentStep).attr("data-wizard-state", "");
+
+                $("#tab" + idStep).attr("data-wizard-state", "current");
+                $("#step" + idStep).attr("data-wizard-state", "current");
                 this.currentStep = idStep;
+            }, 
+
+            agregar(){
+                let listaSolicitantes = [];
+                let tramite = {};
+                let datosFormulario = {};
+                if (localStorage.getItem('listaSolicitantes')) {
+                  try {
+                    listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
+                  } catch(e) {
+                    localStorage.removeItem('listaSolicitantes');
+                    goTo(2);
+                  }
+                }
+
+                if (localStorage.getItem('tramite')) {
+                  try {
+                    tramite = JSON.parse(localStorage.getItem('tramite'));
+                  } catch(e) {
+                    localStorage.removeItem('tramite');
+                  }
+                }
+
+                if (localStorage.getItem('datosFormulario')) {
+                  try {
+                    datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
+                  } catch(e) {
+                    localStorage.removeItem('datosFormulario');
+                    goTo(1)
+                  }
+                }
+
+
+
+                let data = {
+                  clave: tramite.id_seguimiento,
+                  catalogo_id: tramite.id_tramite,
+                  solicitantes: listaSolicitantes,
+                  info:datosFormulario,
+                  _token:token
+                }
+
+                data = JSON.stringify(data);
+
+                this.enviando = true;
+                console.log( data )
+
+        axios.post("http://10.153.162.42/solicitudes-register", 
+          data, {
+                headers:{
+                "Content-type":"application/json"
+                },
+              } )
+                .then(response => {
+                  console.log( response )
+              }).catch((error)=> {
+  console.log(error)
+        }).finally(() => {
+          this.enviando = false;
+        });
+
+
+
+
+
+
             }
         }
     }
 </script>
 <style type="text/css">
-   .wizard.wizard-4 {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column; }
-  .wizard.wizard-4 .wizard-nav .wizard-steps {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: end;
-    -ms-flex-align: end;
-    align-items: flex-end;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap; }
+    .wizard.wizard-4 {
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column; 
+    }
+    .wizard.wizard-4 .wizard-nav .wizard-steps {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap; 
+    }
     .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -170,8 +243,9 @@
       width: calc(25% - 0.25rem);
       background-color: #F3F6F9;
       border-top-left-radius: 0.5rem;
-      border-top-right-radius: 0.5rem; }
-      .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper {
+      border-top-right-radius: 0.5rem; 
+    }
+    .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper {
         -webkit-box-flex: 1;
         -ms-flex: 1;
         flex: 1;
@@ -184,8 +258,9 @@
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
         color: #3F4254;
-        padding: 2rem 2.5rem; }
-        .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper .wizard-number {
+        padding: 2rem 2.5rem; 
+    }
+    .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper .wizard-number {
           font-size: 1.3rem;
           font-weight: 600;
           -webkit-box-flex: 0;
@@ -205,18 +280,21 @@
           background-color: rgba(54, 153, 255, 0.08);
           color: #3699FF;
           margin-right: 1rem;
-          border-radius: 0.5rem; }
-        .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper .wizard-label {
+          border-radius: 0.5rem; 
+      }
+      .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper .wizard-label {
           display: -webkit-box;
           display: -ms-flexbox;
           display: flex;
           -webkit-box-orient: vertical;
           -webkit-box-direction: normal;
           -ms-flex-direction: column;
-          flex-direction: column; }
-          .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper .wizard-label .wizard-title {
-            font-size: 1.1rem;
-            font-weight: 600; }
+          flex-direction: column; 
+      }
+      .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step .wizard-wrapper .wizard-label .wizard-title {
+          font-size: 1.1rem;
+          font-weight: 600; 
+      }
       .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step[data-wizard-state="current"] {
         background-color: #ffffff; }
         .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step[data-wizard-state="current"] .wizard-wrapper .wizard-number {
