@@ -62,11 +62,13 @@ body {
     }
     .gradient {
         height: 320px;
+        margin-top: 55px;
         padding-left: 8%;
         padding-right: 8%;
     }
     .busqueda {
         height: 320px;
+        margin-top: 55px;
         background-size: auto !important;
     }
     .mobile-aux {
@@ -166,6 +168,12 @@ body {
     }
     .tramites {
         width: 45% !important;
+    }
+}
+
+@media only screen and (max-width: 390px) {
+    .dashboard {
+        padding-top: 270px;
     }
 }
 
