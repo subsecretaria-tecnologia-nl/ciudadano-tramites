@@ -6,9 +6,9 @@
 		    <div class="col-lg-8">
 
 		      	<!-- Card -->
-		      	<div class="mb-3" v-if="!mostrarMetodos">
-		        	<div class="pt-4 wish-list " id="listTramites" v-for="tramite in tramites" >
-		        		<div class="row mb-4 mb-3 shadow-sm p-3 bg-white rounded" 	>
+		      	<div v-if="!mostrarMetodos">
+		        	
+		        		<div class="container-fluid mb-4 mb-3 shadow-sm p-3 bg-white rounded" id="listTramites" v-for="tramite in tramitesPaginados" >
 		        			<div class="col-md-7 col-lg-9 col-xl-9">
 		        				<div>
 		        					<div class="d-flex justify-content-between">
@@ -37,7 +37,40 @@
 		        				</div>
 		        			</div>
 		        		</div>
-		        	</div>
+
+
+		        	<div class="card card-custom">
+                    	<div class="card-body py-7">
+	                        <!--begin::Pagination-->
+	                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+	                            <div class="d-flex flex-wrap mr-3" >
+	                                <a  class="btn btn-icon btn-sm btn-light-primary" v-if="currentPage !== 1" v-on:click="goto(currentPage - 1)">
+	                                    <i class="ki ki-bold-arrow-back icon-xs"></i>
+	                                </a>
+	                                <a class="btn btn-icon btn-sm border-0 btn-hover-primary" v-for="(r) in pages"
+	                                v-bind:class="[ currentPage === r ? 'active' : '']" v-on:click="goto(r)"> 
+	                                   {{ r }}
+	                                </a>
+	                                <a  class="btn btn-icon btn-sm btn-light-primary" v-if="currentPage !== (pages.length)"  v-on:click="goto(currentPage + 1)">
+	                                    <i class="ki ki-bold-arrow-next icon-xs"></i>
+	                                </a>
+	                            </div>
+	                            <div class="d-flex align-items-center">
+	                                <select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model="porPage" @change="calcularPage">
+	                                    <option value="10">10</option>
+	                                    <option value="20">20</option>
+	                                    <option value="30">30</option>
+	                                </select>
+	                            </div>
+	                        </div>
+	                        <!--end:: Pagination-->
+	                    </div>
+	                </div>
+
+
+		        	
+
+
 		      	</div>
 		      	<!-- Card -->
       			<metodos-pago-component v-if="mostrarMetodos" :infoMetodosPago="infoMetodosPago"></metodos-pago-component>
@@ -118,12 +151,16 @@
             	diabledBtnMedtodo:false,
             	tramites:[],
             	mostrarMetodos:false,
-            	infoMetodosPago:{}
+            	infoMetodosPago:{},
+
+            	porPage : 5, pages:[0], currentPage :1, tramitesPaginados:{}
             }
         },
   
         mounted() {
-           this.tramites =  [
+
+
+           	this.tramites =  [
 			    {
 			      "id_seguimiento": 4254,
 			      "id_tipo_servicio": 397,
@@ -314,10 +351,17 @@
 			      ]
 			    }
 			    
-			  ]
+			];
 
-			  console.log( this.tramites ) 
+			this.tramitesFiltrados = this.tramites;
+			let pagesTotal = Math.ceil( this.tramitesFiltrados.length / this.porPage);
+		    let pages = [];
 
+            for (var i = 0; i < pagesTotal; i++) {
+                pages.push( i + 1 );
+            }
+            this.pages = pages;
+            this.pagination(1);
         },
 
         methods: {
@@ -356,7 +400,43 @@
 					this.mostrarMetodos = true;
 				});
 
-	    	}
+	    	},
+
+	    	pagination( page ){
+                let porPageInt = parseInt(this.porPage);
+                let indiceInicial = (page - 1 ) * porPageInt;
+                let indiceFinal =   ( (page - 1 ) * porPageInt  )  + porPageInt;
+
+                //this.tramitesFiltrados = this.tramites.filter( tramite => tramite.tramite.toLocaleLowerCase().includes(this.strBusqueda.toLocaleLowerCase()) ) ;
+                this.tramitesPaginados = this.tramites.slice( indiceInicial,  indiceFinal );
+                this.totalTramites = this.tramitesPaginados.length;
+            },
+
+
+            goto( page ){ 
+                this.pagination( page );
+                this.currentPage = page;
+            },
+
+            search(){
+                this.calcularPage()
+                this.currentPage = 1;
+                this.pagination(1);
+            },
+
+            calcularPage(){
+                let pages = [];
+                let pagesTotal = Math.ceil( /*this.tramitesFiltrados.length*/ this.tramites.length  / this.porPage);
+                for (var i = 0; i < pagesTotal; i++) {
+                    pages.push( i + 1 );
+                }
+                this.pages = pages;
+
+
+                this.goto(1);
+            },
+
+
 		}
 
     }

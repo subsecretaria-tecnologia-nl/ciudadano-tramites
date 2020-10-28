@@ -13,14 +13,14 @@
                             <button type="button"  class="btn btn-danger"  id="btnEliminar" v-on:click="eliminar( index )">
                                 <i class="fa fa-times" id="iconBtnEliminar"></i> 
                             </button>
-                            <button type="button"  class="btn btn-info"  id="btnEditar" v-on:click="solicitante = sol ; editando = true; agregarMas = true; indiceEditando = index;">
+                            <button type="button"  class="btn btn-info"  id="btnEditar" v-on:click="mostrarEditarSolicitante( sol, index )">
                                 <i class="fa fa-edit" id="iconBtnEditar"></i>
                             </button> 
                     </div> 
                 </div>
             </div>
             <div class="col-lg-12">
-                    <button type="button"  class="btn"  id="btnAddMore" v-on:click="agregarMas = true">
+                    <button type="button"  class="btn"  id="btnAddMore" v-on:click="mostrarAgregarSolicitante()">
                         <i class="fa fa-check" id="iconBtnAddMore"></i> 
                         Agregar Solicitante
                     </button>     
@@ -132,6 +132,13 @@
             },
 
             editar(index, solicitanteNuevo){
+                if( solicitanteNuevo.tipoPersona === "pf" ){
+                    delete solicitanteNuevo.razonSocial;
+                } else {
+                    delete solicitanteNuevo.nombreSolicitante
+                    delete solicitanteNuevo.apPat
+                    delete solicitanteNuevo.apMat;
+                }
                 this.listaSolicitantes[index] = solicitanteNuevo;
                 this.solicitante = { tipoPersona:"pf" };
                 this.editando = false;
@@ -143,8 +150,20 @@
             guardarInStorage(){
                 const parsed = JSON.stringify(this.listaSolicitantes);
                 localStorage.setItem('listaSolicitantes', parsed);  
-            }
+            },
 
+            mostrarAgregarSolicitante(){
+                this.agregarMas = true;
+                this.solicitante = { tipoPersona:"pf" };
+            },
+
+            mostrarEditarSolicitante( solicitante, index ){
+               this.solicitante = Object.assign({}, solicitante);
+               this.editando = true; 
+               this.agregarMas = true;  
+               this.indiceEditando = index;
+            }
+            
         }
     }
 </script>
