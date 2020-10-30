@@ -35,9 +35,12 @@ mix.js([
 	"resources/js/login.js",
 	"resources/js/recovery.js",
 ], 'public/js/bundle.js')
-.sass('resources/sass/app.scss', 'public/css');
+.sass('resources/sass/app.scss', 'public/css')
+.options({
+    processCssUrls: false
+});
 
-mix.copyDirectory('resources/images', 'public/images');
+mix.copyDirectory('resources/images', 'public/img');
 mix.copyDirectory('resources/js/pages', 'public/js/pages');
 mix.copyDirectory('resources/js/plugins', 'public/plugins');
 mix.copy('resources/js/scripts.bundle.min.js', 'public/js/scripts.bundle.min.js');
