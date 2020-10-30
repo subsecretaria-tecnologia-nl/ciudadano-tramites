@@ -21,7 +21,7 @@ Route::get("/", function(){
 
 
 Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
-	Route::middleware(["validate_session"])->group(function(){
+	Route::middleware(["validate_session", "validate_rol"])->group(function(){
 		Route::get('/', function () {
 			return redirect()->route("dashboard");
 		})->name("home");

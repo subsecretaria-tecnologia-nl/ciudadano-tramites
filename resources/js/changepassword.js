@@ -60,7 +60,7 @@ $('#kt_recovery_submit_change').on('click', function(e) {
     validation.validate().then(function(status) {
         if (status == 'Valid') {
             $.ajaxSetup({
-                url: "/password/recovery",
+                url: `${process.env.SESSION_HOSTNAME}/password/recovery`,
                 type: "POST",
                 data: {
                     "email": email,
