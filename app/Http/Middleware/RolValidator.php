@@ -22,10 +22,16 @@ class RolValidator
             "notary_payments" => ["/", "/dashboard", "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/tramites/por-pagar", "/logout"]
         ];
 
+        foreach($validator as $key => $val){
+            foreach($val as $k => $route){
+                $validator[$key][$k] = getenv("APP_PREFIX")??"".$val;
+            }
+        }
+
         $session = to_object(session()->get("user"));
         if(!empty($session->role_name)){
             if (!empty($session) && isset($validator[$session->role_name]) ) {
-                if( in_array($request->getPathInfo(), getenv("APP_PREFIX")??"".$validator[$session->role_name])  ){
+                if( in_array($request->getPathInfo(), $validator[$session->role_name])  ){
                     return $next($request);
                 }else{
                     return abort(403);    
