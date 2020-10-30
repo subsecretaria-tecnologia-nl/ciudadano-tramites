@@ -6,7 +6,7 @@
 			</div>
 		</div>
 		<div class="" v-if="mostrar">
-			<form>
+			<form id="formularioDinamico">
 				<div v-for="campo in campos" class="">
 					<div v-if="campo.tipo === 'input'">
 					  	<div class="form-group fv-plugins-icon-container">
@@ -14,9 +14,11 @@
 						  		<label>{{ campo.nombre }}</label>
 						  		<input type="text" class="form-control form-control-solid form-control-lg"  
 						  			:placeholder="[[campo.nombre]]" :id="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
-						  			v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]"  @change="cambioModelo"/>
+						  			v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]"  @change="cambioModelo" :required="isRequired( campo )"/>
+						  		<small  class="form-text text-muted" v-if="errors[campo.nombre.toLowerCase().split(' ').join('_')]">
+						  			Campo requerido
+						  		</small>
 						  	</div>
-					  		
 					  	</div>
 					</div>
 					<div v-else-if="campo.tipo === 'select'">
@@ -24,12 +26,15 @@
 					  		<label>{{ campo.nombre }}</label>
 					  		<select :id="[[campo.nombre.toLowerCase().split(' ').join('_')]]" :name="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
 					  			class="form-control form-control-solid form-control-lg"
-					  			v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]" @change="cambioModelo">
+					  			v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]" @change="cambioModelo" :required="isRequired( campo )">
 					  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 					  			:value="[[Object.keys(opcion)[0] ]]">
 					  				{{ opcion[ Object.keys(opcion)[0] ] }}
 					  			</option>
 					  		</select>
+						  		<small  class="form-text text-muted" v-if="errors[campo.nombre.toLowerCase().split(' ').join('_')]">
+						  			Campo requerido
+						  		</small>
 					  	</div>
 					</div>
 					<div v-else-if="campo.tipo === 'option'">
@@ -37,7 +42,7 @@
 							<input type="radio" class=" form-control-solid"   
 								:id="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
 							 	:name="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
-							 	:value="[[Object.keys(opcion)[0] ]]" v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]" @change="cambioModelo">
+							 	:value="[[Object.keys(opcion)[0] ]]" v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]" @change="cambioModelo" :required="isRequired( campo )">
 							 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
 						</div>
 					</div>
@@ -48,7 +53,7 @@
 								:id="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
 							 	:name="[[campo.nombre.toLowerCase().split(' ').join('_')]]" 
 							 	class="form-control form-control-solid form-control-lg" v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]"
-							 	@change="cambioModelo"></textarea>
+							 	@change="cambioModelo" :required="isRequired( campo )"</textarea>
 						</div>
 					</div>
 				</div>
@@ -59,12 +64,13 @@
 
 <script>
     export default {
-        props: ['tramite'],
+        props: ['tramite','formularioValido'],
         data() {
             return {
                 campos: [],
                 mostrar:false,
-                model:{}
+                model:{},
+                errors: {}
             }
         },
   
@@ -76,8 +82,30 @@
         methods: {
 		    cambioModelo() {
 		    	const parsed = JSON.stringify(this.model);
-                localStorage.setItem('datosFormulario', parsed); 
+                if( this.validarFormulario() ){
+                	localStorage.setItem('datosFormulario', parsed); 
+                }
 		    },
+
+		    validarFormulario(){
+		    	let valido = true;
+		    	 this.campos.forEach( campo =>{
+                	if( this.isRequired(campo)) {
+                		let nombreCampo = campo.nombre.toLowerCase().split(' ').join('_'); 
+                		let campoValido = !!this.model[nombreCampo];
+                		/*if( campoValido ){
+                			delete this.errors[nombreCampo];
+                		} else{
+                			this.errors[nombreCampo] = true;
+                		}*/
+                		
+                		valido = valido && campoValido;
+                	}
+                });
+                this.$emit('updatingScore', valido);
+                return valido;
+		    },
+
 
 		    recuperarDatosInStorage(){
 	            if (localStorage.getItem('datosFormulario')) {
@@ -94,11 +122,18 @@
 		    	try {
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.campos = response.data;
+				  	this.validarFormulario();
 				} catch (error) {
 				  	console.log(error);
 				}
 				this.mostrar = true;
-		    }
+				
+		    },
+
+		    isRequired(campo  ){
+		    	let caracteristicas = JSON.parse(campo.caracteristicas);
+	        	return !!caracteristicas.required;
+	        },
 
 
 		}
