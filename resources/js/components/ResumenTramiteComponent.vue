@@ -11,8 +11,8 @@
                             </div>
                             <div >
                                 Total: 
-                                <span v-if="tramite.detalle"> $ {{tramite.detalle.costo_final }} </span>
-                                <span class="spinner-border spinner-border-sm" v-if="!tramite.detalle"></span>
+                                <span v-if="!obteniendoCosto"> $ {{tramite.detalle.costo_final }} </span>
+                                <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,8 @@
             return {
                 tramite: {  },
                 listaSolicitantes:[],
-                datosFormulario:{}
+                datosFormulario:{},
+                obteniendoCosto:true
             }
         },
   
@@ -75,10 +76,10 @@
             async obtenerCosto(){
                 let url = process.env.APP_URL + "/getcostoTramite";
                 let data = {  
-                    valor_catastral: this.datosFormulario.valor_catastral,
+                    valor_catastral: this.datosFormulario.valor_catastral || 0,
                     id_seguimiento: this.tramite.id_seguimiento,
                     tramite_id: this.tramite.id_tramite,
-                    valor_operacion: this.datosFormulario.valor_de_operacion,
+                    valor_operacion: this.datosFormulario.valor_de_operacion || 0,
                     oficio:62
                 }
                 
@@ -86,9 +87,14 @@
                     let response = await axios.post(url, data);
                     let detalleTramite = response.data;
                     this.tramite.detalle =  detalleTramite[0];
+
+                    const parsed = JSON.stringify(this.tramite);
+                    localStorage.setItem('tramite', parsed);  
                     this.$forceUpdate();
+                    this.obteniendoCosto = false;
                 } catch (error) {
                     console.log(error);
+                    this.obteniendoCosto = false;
                 }
             }
 
