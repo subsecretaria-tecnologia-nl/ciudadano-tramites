@@ -99,7 +99,7 @@
 							</a> --}}
 							<!--end::Logo-->
 
-							<a href="{{ url()->route("home") }}" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center bg-dark-o-30 d-flex ">
+							<a href="{{ url()->route("home") }}" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center d-flex ">
 								<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px mr-3 w-100" width="200" />
 							</a>
 							<!--begin::Topbar-->
@@ -289,7 +289,7 @@
 				<!--begin::Wrapper-->
 				<div class="d-flex flex-row flex-row-fluid wrapper " id="kt_wrapper">
 					<!--begin::Header-->
-					<div id="kt_header" class="col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @else d-lg-flex @endif h-100 px-0">
+					<div id="kt_header" class="col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @else d-lg-flex @endif h-100 px-0 pt-0">
 						<!--begin::Bottom-->
 						<div class="header-sidebar bg-dark-o-20 h-100">
 							<!--begin::Container-->
