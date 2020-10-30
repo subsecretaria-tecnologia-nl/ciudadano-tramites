@@ -11,8 +11,6 @@ let webpack = require('webpack')
  |
  */
 
-// Bearer: lasjhflsajhflsajhflsajfh
-
 let dotenvplugin = new webpack.DefinePlugin({
 	'process.env': {
 		APP_URL: JSON.stringify(process.env.APP_URL || null),
@@ -44,3 +42,4 @@ mix.copyDirectory('resources/js/pages', 'public/js/pages');
 mix.copyDirectory('resources/js/plugins', 'public/plugins');
 mix.copy('resources/js/scripts.bundle.min.js', 'public/js/scripts.bundle.min.js');
 mix.copy('resources/js/scripts.bundle.js', 'public/js/scripts.bundle.js');
+mix.copy('resources/images/error-403.jpg', 'resources/images/error-403.jpg');
