@@ -1,6 +1,6 @@
 <div class="content " id="kt_content">
     <div class="d-flex flex-column-fluid">
-        <div class="container dashboard">
+        <div class="container dashboard pt-0">
             <div class="row">
                 <div class="col-lg-6" style="margin-bottom: 30px;"> 
                     <div class="card" >
