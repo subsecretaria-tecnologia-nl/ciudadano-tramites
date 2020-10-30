@@ -55,7 +55,7 @@
                                     <div class="col-xl-12 col-xxl-7">
                                         <!--begin: Wizard Form-->
                                             <!--begin: Wizard Step 1 Campos tramite-->
-                                            
+
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"  
                                                 :formularioValido="formularioValido" @updatingScore="updateScore"></campos-tramite-component>
@@ -229,7 +229,7 @@
                   this.enviando = true;
                 }
 
-                let url = "http://10.153.162.42/solicitudes-register";
+                let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register";
                 try {
                   let response = await axios.post(url, data, {
                     headers:{
