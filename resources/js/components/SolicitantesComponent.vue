@@ -104,6 +104,7 @@
                 localStorage.removeItem('listaSolicitantes');
               }
             }
+            this.$emit('updatingSolicitante', this.listaSolicitantes.length > 0);
         },
 
         data(){
@@ -148,6 +149,7 @@
             },
 
             guardarInStorage(){
+                this.$emit('updatingSolicitante', this.listaSolicitantes.length > 0);
                 const parsed = JSON.stringify(this.listaSolicitantes);
                 localStorage.setItem('listaSolicitantes', parsed);  
             },
