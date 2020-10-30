@@ -25,7 +25,7 @@ class RolValidator
         $session = to_object(session()->get("user"));
         if(!empty($session->role_name)){
             if (!empty($session) && isset($validator[$session->role_name]) ) {
-                if( in_array($request->getPathInfo()  ,$validator[$session->role_name])  ){
+                if( in_array($request->getPathInfo(), getenv("APP_PREFIX")??"".$validator[$session->role_name])  ){
                     return $next($request);
                 }else{
                     return abort(403);    
