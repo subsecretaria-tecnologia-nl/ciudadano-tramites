@@ -19,6 +19,23 @@ Vue.use(Vuetify);
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+document.getElementById("close-header").addEventListener("click", () => {
+    let sideBar = document.getElementById("kt-header-sidebar");
+    let content = document.getElementById("kt_content");
+    let fas = document.getElementById("close-header").querySelector(".fas");
+    if(!sideBar.classList.contains("close")){
+        fas.classList.remove("fa-chevron-left")
+        fas.classList.add("fa-chevron-right")
+        sideBar.classList.add("close");
+        content.classList.add("header-closed");
+    }else{
+        fas.classList.remove("fa-chevron-right")
+        fas.classList.add("fa-chevron-left")
+        sideBar.classList.remove("close");
+        content.classList.remove("header-closed");
+    }
+})
+
 Vue.component('listado-tramites-component', require('./components/ListadoTramitesComponent.vue').default);
 Vue.component('tramite-component', require('./components/TramiteComponent.vue').default);
 Vue.component('wizard-component', require('./components/WizardComponent.vue').default);

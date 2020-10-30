@@ -6,7 +6,7 @@
 <html lang="en">
 	<!--begin::Head-->
 	<head>
-		<base href="{{ env("APP_URL") }}">
+		<base href="{{ getenv("APP_URL") }}">
 		<meta charset="utf-8" />
 		<title>{{ isset($subtitle) ? "{$subtitle} | " : "" }}{{ $title ?? "" }}</title>
 		<meta name="description" content="{{ $description ?? "" }}" />
@@ -290,8 +290,11 @@
 				<div class="d-flex flex-row flex-row-fluid wrapper " id="kt_wrapper">
 					<!--begin::Header-->
 					<div id="kt_header" class="col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @else d-lg-flex @endif h-100 px-0 pt-0">
+						<div id="close-header">
+							<i class="fas fa-chevron-left"></i>
+						</div>
 						<!--begin::Bottom-->
-						<div class="header-sidebar bg-dark-o-20 h-100">
+						<div class="header-sidebar bg-dark-o-20 h-100" id="kt-header-sidebar">
 							<!--begin::Container-->
 							<div class="container px-0">
 								<!--begin::Header Menu Wrapper-->

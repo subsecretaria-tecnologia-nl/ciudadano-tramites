@@ -47,7 +47,7 @@
             <v-container v-if="loading">
                 <v-row>
                     <v-col cols="12" md="12">
-                        <v-skeleton-loader  type="list-item" v-for="(r,i) in [1,2,3,4,5,6]" height="90px" style="margin-bottom: 8px;"></v-skeleton-loader>
+                        <v-skeleton-loader  type="list-item" v-for="(r,i) in [1,2,3,4,5,6]" height="90px" style="margin-bottom: 8px;" v-bind:key="i"></v-skeleton-loader>
                     </v-col>
                 </v-row>
             </v-container>

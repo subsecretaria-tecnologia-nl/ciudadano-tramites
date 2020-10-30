@@ -1,4 +1,4 @@
-<div class="content" id="kt_content">
+<div class="content">
     <div class="d-flex flex-column-fluid">
         <div class="container">
 

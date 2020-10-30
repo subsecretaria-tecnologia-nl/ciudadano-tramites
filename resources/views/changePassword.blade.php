@@ -1,4 +1,4 @@
-<div class="content" id="kt_content">
+<div class="content">
     <div class="d-flex flex-column-fluid">
         <div class="container">
             <span class="col-sm-12 col-md-3 sideNavBtn" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
