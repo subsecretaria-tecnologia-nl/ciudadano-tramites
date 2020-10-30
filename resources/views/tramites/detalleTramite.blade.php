@@ -1,3 +1,7 @@
+<?php
+    $user = session()->get("user");
+    $id = $user->id;
+?>
 <div class="content d-flex flex-column flex-column-fluid" id="app">
     <div class="d-flex flex-column-fluid">
         <div class="container">              
@@ -11,9 +15,8 @@
                       @php
                         $jsonTramite = json_encode($detalle[0]);
                       @endphp
-                      <wizard-component :tramite="{{$jsonTramite}}"></wizard-component>
+                      <wizard-component :tramite="{{$jsonTramite}}" id-usuario="{{ $id }}"></wizard-component>
                     </section>
-
                 </div>
             </div>
         </div>
@@ -21,4 +24,5 @@
 </div> 
 <script type="text/javascript">
     let token = '{{ csrf_token() }}';
+    let idUsuario = "{{ $id  }}";
 </script>
