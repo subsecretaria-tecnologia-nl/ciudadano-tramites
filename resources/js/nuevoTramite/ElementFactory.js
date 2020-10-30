@@ -2,16 +2,25 @@ ElementFactory = {
     create: function( campo) {
 		switch( campo.tipo ) {
 			case "input":
-				return new Input().setInfo( campo );
+				var input = new Input().setInfo( campo );
+				var obj = Object.create( input );
+				return input;//;
 			case "select":
-				return new Select().setInfo( campo );
+				var select = new Select(campo);
+				var obj = Object.create( select );
+				return select;//.setInfo( campo );
 			case "checkbox":
-				return new Checkbox().setInfo( campo );
+				var checkbox = new Checkbox(campo);
+				var obj = Object.create( checkbox );
+				return checkbox//.setInfo( campo );
 			case "option":
-				let elem = new Radio();
-				return elem.setInfo( campo );
+				var option = new Radio(campo);
+				var obj = Object.create( option );
+				return option//.setInfo( campo );
 			case "textbox":
-				return new TextBox().setInfo( campo );
+				var textbox = new TextBox(campo);
+				var obj = Object.create( textbox );
+				return textbox//.setInfo( campo );
 			default:
 				return false;
 		}

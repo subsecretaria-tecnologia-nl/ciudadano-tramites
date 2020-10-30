@@ -18,7 +18,11 @@
         "resolve-url-loader": "^3.1.2",
         "sass": "^1.27.0",
         "sass-loader": "^8.0.0",
+        "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.12"
     },
-    "dependencies": {}
+    "dependencies": {
+        "vue-uuid": "^2.0.2",
+        "vuetify": "^2.3.15"
+    }
 }

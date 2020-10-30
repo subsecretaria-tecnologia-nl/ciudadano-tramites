@@ -19,7 +19,8 @@ let dotenvplugin = new webpack.DefinePlugin({
 		SESSION_HOSTNAME: JSON.stringify(process.env.SESSION_HOSTNAME || null),
 		PAYMENTS_HOSTNAME: JSON.stringify(process.env.PAYMENTS_HOSTNAME || null),
 		PAYMENTS_KEY: JSON.stringify(process.env.PAYMENTS_KEY || null),
-		NODE_ENV: JSON.stringify(process.env.NODE_ENV || null)
+		NODE_ENV: JSON.stringify(process.env.NODE_ENV || null),
+		TESORERIA_HOSTNAME: JSON.stringify(process.env.TESORERIA_HOSTNAME || null)
 	}
 })
 
