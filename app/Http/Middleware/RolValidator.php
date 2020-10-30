@@ -16,15 +16,15 @@ class RolValidator
     public function handle($request, Closure $next)
     {
         $validator = [
-            "notary_titular" => ["/", "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes",  "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
-            "notary_substitute" => ["/", "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
-            "notary_capturist" => ["/", "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/logout", "/nuevo-tramite" ],
-            "notary_payments" => ["/", "/dashboard", "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/tramites/por-pagar", "/logout"]
+            "notary_titular" => ["/getTramites", "/allTramites", "/getCampos", "/crearSolicitud", "/getcostoTramite", "/detalle-tramite", "/carshop", "/", "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes",  "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
+            "notary_substitute" => ["/getTramites", "/allTramites", "/getCampos", "/crearSolicitud", "/getcostoTramite", "/detalle-tramite", "/carshop", "/", "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
+            "notary_capturist" => ["/getTramites", "/allTramites", "/getCampos", "/crearSolicitud", "/getcostoTramite", "/detalle-tramite", "/carshop", "/", "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/logout", "/nuevo-tramite" ],
+            "notary_payments" => ["/getTramites", "/allTramites", "/getCampos", "/crearSolicitud", "/getcostoTramite", "/detalle-tramite", "/carshop", "/", "/dashboard", "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/tramites/por-pagar", "/logout"]
         ];
 
         foreach($validator as $key => $val){
             foreach($val as $k => $route){
-                $validator[$key][$k] = getenv("APP_PREFIX")??"".$val;
+                $validator[$key][$k] = (getenv("APP_PREFIX")??"").$route;
             }
         }
 
