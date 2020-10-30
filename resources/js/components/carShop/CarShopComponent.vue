@@ -29,7 +29,7 @@
 		        					</div>
 		        					<div class="d-flex justify-content-between align-items-center">
 		        						<div>
-		        							<a type='button' class='card-link-secondary small text-uppercase mr-3' v-on:click="eliminar( tramite.id_tramite )" >
+		        							<a type='button' class='card-link-secondary small text-uppercase mr-3' v-on:click="eliminar( tramite )" >
 		        								<i class='fas fa-trash-alt mr-1'></i>Eliminar
 		        							</a>
 		        						</div>
@@ -176,8 +176,30 @@
 
         methods: {
 
-        	eliminar(id_tramite){
-        		this.tramites = this.tramites.filter( tramite => tramite.id_tramite != id_tramite );
+        	eliminar(tramiteDelete){
+        		this.tramites = this.tramites.filter( tramite => tramite.id_tramite != tramiteDelete.id_tramite );
+        		/*confirm({
+					  title: "Eliminar tramite",
+					  message: tramite.nombre,
+					  okButtonText: "Your OK button text",
+					  cancelButtonText: "Your Cancel text"
+					}).then(result => {
+					  console.log(result);
+					});*/
+
+				this.tramitesFiltrados = this.tramites;
+				let pagesTotal = Math.ceil( this.tramitesFiltrados.length / this.porPage);
+			    let pages = [];
+
+	            for (var i = 0; i < pagesTotal; i++) {
+	                pages.push( i + 1 );
+	            }
+	            this.pages = pages;
+	            this.pagination(1);
+
+	            					let total = 0;
+					this.tramites.forEach(tramite => total = total + tramite.importe_tramite );
+ 					this.totalImporte = total;
         	},
 
 
