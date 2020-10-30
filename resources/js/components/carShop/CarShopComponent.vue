@@ -19,8 +19,13 @@
 		        					<div class="d-flex justify-content-between">
 		        						<div>
 		        							<h5> {{ tramite.nombre }} </h5>
-		        							<p class="mb-3 text-muted text-uppercase small"> 
-		        								Nombre : {{ tramite.datos_solicitante.nombre }} {{ tramite.datos_solicitante.apellido_paterno  }} {{ tramite.datos_solicitante.apellido_materno }}
+		        							<p class="mb-3 text-muted text-uppercase small">
+		        								<span v-if="tramite.datos_solicitante.razon_social">
+		        									Razón Social: {{ tramite.datos_solicitante.razon_social }}
+		        								</span>
+		        								<span v-if="!tramite.datos_solicitante.razon_social">
+		        									Nombre : {{ tramite.datos_solicitante.nombre }} {{ tramite.datos_solicitante.apellido_paterno  }} {{ tramite.datos_solicitante.apellido_materno }}
+		        								</span>
 		        							</p>
 		        							<p class="mb-3 text-muted text-uppercase small">
 		        								RFC: {{ tramite.datos_solicitante.rfc }}
@@ -29,9 +34,9 @@
 		        					</div>
 		        					<div class="d-flex justify-content-between align-items-center">
 		        						<div>
-		        							<a type='button' class='card-link-secondary small text-uppercase mr-3' v-on:click="eliminar( tramite )" >
+		        							<button  type='button' class='card-link-secondary small text-uppercase mr-3' v-on:click="eliminar( tramite )" >
 		        								<i class='fas fa-trash-alt mr-1'></i>Eliminar
-		        							</a>
+		        							</button>
 		        						</div>
 		        						<p class="mb-0">
 		        							<span>
@@ -115,7 +120,7 @@
 		            		</li>
 		          		</ul>
 
-		          		<button id="metodoPagoBtn" type="button" class="btn btn-primary btn-block" v-on:click="metodoPago()" :disabled="diabledBtnMedtodo" >
+		          		<button id="metodoPagoBtn" type="button" class="btn btn-primary btn-block" v-on:click="metodoPago()" :disabled="diabledBtnMedtodo || !costosObtenidos " v-if="!mostrarMetodos">
 		          			Pagar
 		          			<div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status" v-if="diabledBtnMedtodo">
 		          				<span class="sr-only">Loading...</span>
@@ -129,7 +134,7 @@
   						</transition>
 		          		-->
 		          		
-		          		<button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" onclick="cancelarPago()" style="display: none;">
+		          		<button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" v-on:click="cancelarPago()" v-if="mostrarMetodos">
 		          			Cancelar
 		          		</button>
 		        	</div>
@@ -166,7 +171,8 @@
 
             	porPage : 10, pages:[0], currentPage :1, tramitesPaginados:{},
             	totalImporte:0,
-            	obteniendoTramites:false
+            	obteniendoTramites:false,
+            	costosObtenidos:false
             }
         },
   
@@ -175,6 +181,9 @@
         },
 
         methods: {
+        	cancelarPago(){
+        		this.mostrarMetodos = !this.mostrarMetodos;
+        	},
 
         	eliminar(tramiteDelete){
         		this.tramites = this.tramites.filter( tramite => tramite.id_tramite != tramiteDelete.id_tramite );
@@ -204,13 +213,13 @@
 
 
 		    metodoPago() {
-		    	this.diabledBtnMedtodo = true;
-		    	const clone = items => items.map(item => (Array.isArray(item) ? clone(item) : item))
-		    	let tramitesAEnviar =clone( this.tramites);
-		    	tramitesAEnviar = tramitesAEnviar.map( tramite =>{
+		    	let tramitesAEnviar = [];
+		    	this.tramites.forEach(  tr =>{
+		    		let tramite = Object.assign({}, tr);
 		    		delete tramite.nombre;
-		    		return tramite;
-		    	})
+		    		tramitesAEnviar.push( tramite );
+		    	} )
+		    	this.diabledBtnMedtodo = true;
 
 		    	let url = process.env.PAYMENTS_HOSTNAME  + "/v1/pay"
 				let data = {
@@ -420,6 +429,7 @@
 				  console.log( errors )
 				}).finally( () =>{
 					console.log("termino de consulttar")
+					this.costosObtenidos = true;
 /*
 					listadoTramites = listadoTramites.filter( elTramite => { 
 
