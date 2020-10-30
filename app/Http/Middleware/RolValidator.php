@@ -36,6 +36,7 @@ class RolValidator
         $pass = array_map(function($a) use ($path){
             if($a == "*") return $a;
             $whitePath = ((getenv("APP_PREFIX") ? explode("/", getenv("APP_PREFIX"))[1]."" : "").$a);
+            if(substr($whitePath, -1) == "/") $whitePath = substr($whitePath, 0, -1);
             preg_match("/^".str_replace("/", "\/", $whitePath)."$/", $path, $matches);
             if(!empty($matches))
                 return $a;
