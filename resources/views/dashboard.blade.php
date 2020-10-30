@@ -17,8 +17,13 @@
 
 <div class="content " id="kt_content">
     <div class="d-flex flex-column-fluid">
+
         <div class="container dashboard">
             <div class="row">
+                    <!--[if IE]>
+                    <div class="error"><span>ESTAS EN INTERNET EXPLORER</span></div>
+                    ![endif]-->
+
                 <div class="col-lg-6" style="margin-bottom: 30px;"> 
                     <div class="card" >
                           <div class="card-body">
