@@ -16,6 +16,9 @@ class RolValidator
     public function handle($request, Closure $next)
     {
         $session = to_object(session()->get("user"));
+        if(!$session)
+            return $next($request);
+        
         $validator = [
             "notary_titular" => ["*"],
             "notary_substitute" => ["*"],

@@ -1213,8 +1213,10 @@
 			        '_token': "{{ csrf_token() }}"
 			    },
 				beforeSend: function(xhr, options) {
-					if(options.url.search(/http(s)?:\/\//i) < 0)
+					if(options.url.search(/http(s)?:\/\//i) < 0){
+						console.log(APP_URL);
 						options.url = APP_URL + options.url;
+					}
 				}
 			});
 		</script>	
