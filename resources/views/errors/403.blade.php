@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<base href="{{ getenv("APP_URL") }}">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Página no Encontrada | {{ Config::get("layout.args.title") }}</title>
