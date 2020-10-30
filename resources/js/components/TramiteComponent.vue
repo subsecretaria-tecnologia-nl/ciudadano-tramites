@@ -18,10 +18,7 @@
                         <!--begin::User-->
                         <!--begin::Actions-->
                         <div class="my-lg-0 my-1">
-                            <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2">
-                                Precio
-                            </a>
-                            <a v-bind:href="'detalle-tramite/'+ tramite.id_tramite" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white">
+                            <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white">
                                 INICIAR TRAMITE 
                             </a>
 
@@ -42,6 +39,12 @@
         props: ['tramite'],
         mounted() {
 
+        },
+
+        methods:{
+            goTo(tramite){ 
+                redirect("/detalle-tramite/" +  tramite.id_tramite);
+            }
         }
     }
 </script>
