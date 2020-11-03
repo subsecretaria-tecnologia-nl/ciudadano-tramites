@@ -59,7 +59,7 @@
                 $("#spinner-pago-solicitud-" + this.solicitud.idSolicitante ).show();
                 let url = process.env.TESORERIA_HOSTNAME +  "/solicitudes-discard/" + this.solicitud.idSolicitante;
                 let elItem = this;
-                axios.put(url).then(response => {
+                axios.put(url, {tipo:"u"}).then(response => {
                     let data = { response, index: elItem.index };
                     this.$emit('updatingParent', data);
                 }).catch(error => {
