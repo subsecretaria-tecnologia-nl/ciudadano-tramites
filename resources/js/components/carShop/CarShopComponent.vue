@@ -1,59 +1,24 @@
 <template>	                
     <div class="container-fluid">
 		<div class="row">
-
 		    <!--Grid column-->
 		    <div class="col-lg-8">
 		      	<!-- Card -->
 		      	<div v-if="!mostrarMetodos">
-		      		     <v-container v-if="obteniendoTramites">
-			                <v-row>
-			                    <v-col cols="12" md="12">
-			                        <v-skeleton-loader v-bind:key="i" type="list-item" v-for="(r,i) in [1,2,3,4,5,6]" height="90px" style="margin-bottom: 8px;"></v-skeleton-loader>
-			                    </v-col>
-			                </v-row>
-			            </v-container>
-		        		<div class="container-fluid mb-4 mb-3 shadow-sm p-3 bg-white rounded" id="listTramites" v-for="tramite in tramitesPaginados"  v-if="!obteniendoTramites" >
-		        			<div class="col-md-7 col-lg-9 col-xl-9">
-		        				<div>
-		        					<div class="d-flex justify-content-between">
-		        						<div>
-		        							<h5> {{ tramite.nombre }} </h5>
-		        							<p class="mb-3 text-muted text-uppercase small">
-		        								<span v-if="tramite.datos_solicitante.razon_social">
-		        									Razón Social: {{ tramite.datos_solicitante.razon_social }}
-		        								</span>
-		        								<span v-if="!tramite.datos_solicitante.razon_social">
-		        									Nombre : {{ tramite.datos_solicitante.nombre }} {{ tramite.datos_solicitante.apellido_paterno  }} {{ tramite.datos_solicitante.apellido_materno }}
-		        								</span>
-		        							</p>
-		        							<p class="mb-3 text-muted text-uppercase small">
-		        								RFC: {{ tramite.datos_solicitante.rfc }}
-		        							</p>
-		        						</div>
-		        					</div>
-		        					<div class="d-flex justify-content-between align-items-center">
-		        						<div>
-		        							<button  type='button' class='card-link-secondary small text-uppercase mr-3' v-on:click="eliminar( tramite )" >
-		        								<i class='fas fa-trash-alt mr-1'></i>Eliminar
-		        							</button>
-		        						</div>
-		        						<p class="mb-0">
-		        							<span>
-		        								<strong > 
-		        									$<span v-html="tramite.importe_tramite"> </span>
-		        									<!--
-		        								$ {{ tramite.importe_tramite}}
-		        							-->
-		        								</strong>
-		        							</span>
-		        						</p>
-		        					</div>
-		        				</div>
-		        			</div>
-		        		</div>
-
-
+		      		<v-container v-if="obteniendoTramites">
+		                <v-row>
+		                    <v-col cols="12" md="12">
+		                        <v-skeleton-loader v-bind:key="i" type="list-item" v-for="(r,i) in [1,2,3,4,5,6]" height="90px" style="margin-bottom: 8px;"></v-skeleton-loader>
+		                    </v-col>
+		                </v-row>
+		            </v-container>
+	        		<div class="container-fluid mb-4 mb-3 shadow-sm p-3 bg-white rounded" id="listTramites" v-for="(tramite, index) in tramitesPaginados"  v-if="!obteniendoTramites && tramitesPaginados.length > 0" >
+						<item-solictud-carshop-component 
+							:solicitud="tramite"
+							@updatingParent="updateList" 
+							:index="index">
+						 </item-solictud-carshop-component>
+	        		</div>
 		        	<div class="card card-custom">
                     	<div class="card-body py-7">
 	                        <!--begin::Pagination-->
@@ -89,59 +54,12 @@
 
 		    </div>
 		    <!--Grid column-->
-
 		    <!--Grid column-->
 		    <div class="col-lg-4">
-
-		    	<!-- Card -->
-		      	<div class="mb-3 shadow-sm p-3 bg-white rounded">  
-		        	<div class="pt-4 ">
-
-		          		<h5 class="mb-3">Total:</h5>
-
-		          		<ul class="list-group list-group-flush">
-		          			<!--
-		            		<li class="list-group-item d-flex justify-content-between align-items-center px-0 pb-0">
-		              			Subtotal
-		              			<span id="subTotalTramites">$0.00</span>
-		            		</li>-->
-		            		<li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-		              			<div>
-		                			<strong>Total</strong>
-		                			<strong>
-		                  				<p class="mb-0"></p>
-		                			</strong>
-		              			</div>
-		              			<span>
-		              				<strong id="totalTramites" >
-		              					${{ totalImporte }}
-		              				</strong>
-		              			</span>
-		            		</li>
-		          		</ul>
-
-		          		<button id="metodoPagoBtn" type="button" class="btn btn-primary btn-block" v-on:click="metodoPago()" :disabled="diabledBtnMedtodo || !costosObtenidos " v-if="!mostrarMetodos">
-		          			Pagar
-		          			<div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status" v-if="diabledBtnMedtodo">
-		          				<span class="sr-only">Loading...</span>
-		          			</div>
-		          		</button>
-<!--
-		          		<transition name="fade">
-    						<p v-if="!diabledBtnMedtodo">
-    							<button  id="addTramiteBTN" type="button" class="btn btn-default btn-block" onclick="openModalAdd()">Agregar Trámite</button>
-    						</p>
-  						</transition>
-		          		-->
-		          		
-		          		<button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" v-on:click="cancelarPago()" v-if="mostrarMetodos">
-		          			Cancelar
-		          		</button>
-		        	</div>
-
-
-		     	</div>
-		      	<!-- Card -->
+        		<detalle-pago-component 
+        			:tramites="tramites" 
+        			:obtenidoCostos="costosObtenidos" @updatingParent="recibirMetodosPago"  @cancelarPago="cancelarPago" >
+        		</detalle-pago-component>
 		    </div>
 		    <!--Grid column-->
 		</div>
@@ -157,20 +75,15 @@
 	}
 </style>
 <script>
-	import { uuid } from 'vue-uuid';
     export default {
     	props: ['idUsuario'],
 
-
         data() {
             return {
-            	diabledBtnMedtodo:false,
             	tramites:[],
             	mostrarMetodos:false,
             	infoMetodosPago:{},
-
             	porPage : 10, pages:[0], currentPage :1, tramitesPaginados:{},
-            	totalImporte:0,
             	obteniendoTramites:false,
             	costosObtenidos:false
             }
@@ -180,86 +93,28 @@
         	this.obtenerTramitesAgregados();
         },
 
+
         methods: {
+        	updateList(  data ){
+    		    this.tramites.splice( data.index, 1 );
+                this.tramitesFiltrados = this.tramites;
+                let pagesTotal = Math.ceil( this.tramitesFiltrados.length / this.porPage);
+                let pages = [];
+                for (var i = 0; i < pagesTotal; i++) {
+                    pages.push( i + 1 );
+                }
+                this.pages = pages;
+                this.pagination(1);
+        	},
+
         	cancelarPago(){
         		this.mostrarMetodos = !this.mostrarMetodos;
         	},
-
-        	eliminar(tramiteDelete){
-        		this.tramites = this.tramites.filter( tramite => tramite.id_tramite != tramiteDelete.id_tramite );
-        		/*confirm({
-					  title: "Eliminar tramite",
-					  message: tramite.nombre,
-					  okButtonText: "Your OK button text",
-					  cancelButtonText: "Your Cancel text"
-					}).then(result => {
-					  console.log(result);
-					});*/
-
-				this.tramitesFiltrados = this.tramites;
-				let pagesTotal = Math.ceil( this.tramitesFiltrados.length / this.porPage);
-			    let pages = [];
-
-	            for (var i = 0; i < pagesTotal; i++) {
-	                pages.push( i + 1 );
-	            }
-	            this.pages = pages;
-	            this.pagination(1);
-
-	            					let total = 0;
-					this.tramites.forEach(tramite => total = total + tramite.importe_tramite );
- 					this.totalImporte = total;
-        	},
-
-
-		    metodoPago() {
-		    	let tramitesAEnviar = [];
-		    	this.tramites.forEach(  tr =>{
-		    		let tramite = Object.assign({}, tr);
-		    		delete tramite.nombre;
-		    		tramitesAEnviar.push( tramite );
-		    	} )
-		    	this.diabledBtnMedtodo = true;
-
-		    	let url = process.env.PAYMENTS_HOSTNAME  + "/v1/pay"
-				let data = {
-					"token": "DD0FDED2FE302392164520BF7090E1B3BEB7",
-					"referencia": "",
-					"url_retorno": "url",
-					"importe_transaccion":  this.totalImporte, //"4687",
-					"id_transaccion": uuid.v4(),//"BMU8605134I82915082020",
-					"entidad": 2,
-					"url_confirma_pago": "url",
-					"es_referencia": "1",
-					"tramite": tramitesAEnviar
-				}
-				
-            	axios.post(url, data, {
-            		headers:{
-            			"Authorization":"Bearer " + process.env.PAYMENTS_KEY,
-				        "Content-type":"application/json"
-            		},
-            	} )
-              	.then(response => {
-
-                	this.infoMetodosPago = response.data.response;
-                	this.mostrarMetodos = true;
-              	}).catch((error)=> {
-					this.diabledBtnMedtodo = false;
-					this.mostrarMetodos = false;
-				}).finally(() => {
-					this.diabledBtnMedtodo = false;
-					
-				});
-
-	    	},
 
 	    	pagination( page ){
                 let porPageInt = parseInt(this.porPage);
                 let indiceInicial = (page - 1 ) * porPageInt;
                 let indiceFinal =   ( (page - 1 ) * porPageInt  )  + porPageInt;
-
-                //this.tramitesFiltrados = this.tramites.filter( tramite => tramite.tramite.toLocaleLowerCase().includes(this.strBusqueda.toLocaleLowerCase()) ) ;
                 this.tramitesPaginados = this.tramites.slice( indiceInicial,  indiceFinal );
                 this.totalTramites = this.tramitesPaginados.length;
             },
@@ -278,16 +133,12 @@
 
             calcularPage(){
                 let pages = [];
-                let pagesTotal = Math.ceil( /*this.tramitesFiltrados.length*/ this.tramites.length  / this.porPage);
+                let pagesTotal = Math.ceil( this.tramites.length  / this.porPage);
                 for (var i = 0; i < pagesTotal; i++) {
                     pages.push( i + 1 );
                 }
                 this.pages = pages;
-
-
                 this.goto(1);
-
-
             },
 
 
@@ -305,21 +156,13 @@
                     console.log(error);
                     this.obteniendoTramites = false;
                 }
-                //this.loading = false;
             },
 
-            async obtenerCosto( data ){
-                let url = process.env.APP_URL + "/getcostoTramite";                
-                try {
-                    let response = await axios.post(url, data);
-                    let detalleTramite = response.data;
-                    
-                    return detalleTramite[0];
-                } catch (error) {
-                    console.log(error);
-                    return false;
-                }
-            },
+
+			recibirMetodosPago( response ){
+	            this.infoMetodosPago = response.data.response;
+	            this.mostrarMetodos = true;
+			},
 
             async construirJSONTramites( tramites ){
             	let listadoTramites = [];
@@ -332,11 +175,12 @@
 						tramitesJson.nombre = tramiteInarray.tramite;
 						tramitesJson.id_seguimiento = tramiteInarray.tramite_id;
 						tramitesJson.id_tipo_servicio = 397;//tramiteInarray.tramite_id;//397;//
-						tramitesJson.id_tramite = soliciante.clave;
+						tramitesJson.idSolicitante = soliciante.id; 
+						tramitesJson.id_tramite = soliciante.id;//soliciante.clave;
 						tramitesJson.auxiliar_1 = "";
 						tramitesJson.auxiliar_2 = "";
 						tramitesJson.auxiliar_3 = "";
-						tramitesJson.importe_tramite = '<div id="spinner-pago" class="spinner-border spinner-border-sm float-right" role="status" ><span class="sr-only">Loading...</span>	</div>'
+						tramitesJson.importe_tramite = '';
 						let info = JSON.parse(soliciante.info);
 						let solicianteInfo = info.solicitante;
 
@@ -349,9 +193,9 @@
 						}
 
 						tramitesJson.datos_solicitante = {
-					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante,
-					        "apellido_paterno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apPat,
-					        "apellido_materno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apMat,
+					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante || "",
+					        "apellido_paterno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apPat || "",
+					        "apellido_materno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apMat || "",
 					        "razon_social": solicianteInfo.tipoPersona == "pm" ? solicianteInfo.razonSocial : "",
 					        "rfc": solicianteInfo.rfc,
 					        "curp": solicianteInfo.curp || "",
@@ -375,15 +219,11 @@
                 		}
                 		
                 		let url = process.env.APP_URL + "/getcostoTramite";
-
                 		requestCostos.push(axios.post(url, data,{headers:{
                 			contadorSolicitantes:contadorSolicitantes
                 		}}));
-                		
-
 						listadoTramites.push( tramitesJson );
 						contadorSolicitantes=contadorSolicitantes+1;
-
 
 					});
 
@@ -402,60 +242,18 @@
 	            this.pagination(1);
 
 			    axios.all(requestCostos).then(axios.spread((...responses) => {
-
 					responses.forEach( respuesta => {
-
 						let indiceTramite = respuesta.config.headers.contadorSolicitantes;
 						listadoTramites[indiceTramite].importe_tramite = respuesta.data ? respuesta.data[0].costo_final : 1;
-
-
 						listadoTramites[indiceTramite].detalle[0].importe_concepto = listadoTramites[indiceTramite].importe_tramite;
-/*
-						let descuento =  respuesta.data ? respuesta.data[0].descuentos[0] : false;
-						if( descuento ){
-							if(listadoTramites[indiceTramite].detalle){
-								listadoTramites[indiceTramite].detalle[0].importe_concepto = descuento.importe_concepto;
-							}  else {
-								listadoTramites[indiceTramite].detalle[0].importe_concepto = listadoTramites[indiceTramite].importe_tramite;;
-							}
-							
-						}else {
-							listadoTramites[indiceTramite].detalle[0].importe_concepto = listadoTramites[indiceTramite].importe_tramite;
-						}*/
 						
 					});
-					  // use/access the results 
 				})).catch(errors => {
 				  console.log( errors )
 				}).finally( () =>{
 					console.log("termino de consulttar")
 					this.costosObtenidos = true;
-/*
-					listadoTramites = listadoTramites.filter( elTramite => { 
-
-						return elTramite.importe_tramite > 0 && elTramite.detalle && elTramite.detalle[0].concepto != "No aplica"
-					});*/
-//console.log( JSON.parse( listadoTramites ) )
-
-					//this.tramites = listadoTramites;
-					//this.tramitesFiltrados = this.tramites;
-
-					let total = 0;
-					this.tramites.forEach(tramite => total = total + tramite.importe_tramite );
- 					this.totalImporte = total;
-/*
-					let pagesTotal = Math.ceil( this.tramitesFiltrados.length / this.porPage);
-				    let pages = [];
-
-		            for (var i = 0; i < pagesTotal; i++) {
-		                pages.push( i + 1 );
-		            }
-		            this.pages = pages;
-		            this.pagination(1);*/
-				} )
-
-			    
-
+				});
             }
 
 		}
