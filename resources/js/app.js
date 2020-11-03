@@ -46,8 +46,9 @@ Vue.component('resumen-tramite-component', require('./components/ResumenTramiteC
 /*Componentes tipo de campos*/
 // Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
 Vue.component('car-shop-component', require('./components/carShop/CarShopComponent.vue').default);
-
 Vue.component('metodos-pago-component', require('./components/carShop/MetodosDePagoComponent.vue').default);
+Vue.component('item-solictud-carshop-component', require('./components/carShop/ItemSolicitudCarShopComponent.vue').default);
+Vue.component('detalle-pago-component', require('./components/carShop/DetallePagoComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
