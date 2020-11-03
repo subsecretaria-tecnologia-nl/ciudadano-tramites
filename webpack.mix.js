@@ -11,15 +11,14 @@ let webpack = require('webpack')
  |
  */
 
-// Bearer: lasjhflsajhflsajhflsajfh
-
 let dotenvplugin = new webpack.DefinePlugin({
 	'process.env': {
 		APP_URL: JSON.stringify(process.env.APP_URL || null),
 		SESSION_HOSTNAME: JSON.stringify(process.env.SESSION_HOSTNAME || null),
 		PAYMENTS_HOSTNAME: JSON.stringify(process.env.PAYMENTS_HOSTNAME || null),
 		PAYMENTS_KEY: JSON.stringify(process.env.PAYMENTS_KEY || null),
-		NODE_ENV: JSON.stringify(process.env.NODE_ENV || null)
+		NODE_ENV: JSON.stringify(process.env.NODE_ENV || null),
+		TESORERIA_HOSTNAME: JSON.stringify(process.env.TESORERIA_HOSTNAME || null)
 	}
 })
 
@@ -36,9 +35,12 @@ mix.js([
 	"resources/js/login.js",
 	"resources/js/recovery.js",
 ], 'public/js/bundle.js')
-.sass('resources/sass/app.scss', 'public/css');
+.sass('resources/sass/app.scss', 'public/css')
+.options({
+    processCssUrls: false
+});
 
-mix.copyDirectory('resources/images', 'public/images');
+mix.copyDirectory('resources/images', 'public/img');
 mix.copyDirectory('resources/js/pages', 'public/js/pages');
 mix.copyDirectory('resources/js/plugins', 'public/plugins');
 mix.copy('resources/js/scripts.bundle.min.js', 'public/js/scripts.bundle.min.js');

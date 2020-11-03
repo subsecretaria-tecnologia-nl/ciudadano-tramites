@@ -15,26 +15,37 @@ class RolValidator
      */
     public function handle($request, Closure $next)
     {
+        $session = to_object(session()->get("user"));
+        if(!$session)
+            return $next($request);
+        
         $validator = [
-            "notary_titular" => ["/", "/dashboard","/dashboard/" ,"/perfil" , "/tramites", "/tramites/pendientes",  "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
-            "notary_substitute" => ["/", "/dashboard", "/perfil" , "/tramites", "/tramites/pendientes", "/informacion-cuenta" , "/cambiar-contraseña", "/usuarios", "/logout", "/nuevo-tramite" ],
-            "notary_capturist" => ["/", "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/logout", "/nuevo-tramite" ],
-            "notary_payments" => ["/", "/dashboard", "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/tramites/por-pagar", "/logout"]
+            "notary_titular" => ["*"],
+            "notary_substitute" => ["*"],
+            "notary_capturist" => ["/getTramites", "/allTramites", "/getCampos", "/crearSolicitud", "/getcostoTramite", "/detalle-tramite", "/carshop", "/", "/dashboard", "/perfil" , "/tramites", "/informacion-cuenta" , "/cambiar-contraseña", "/logout", "/nuevo-tramite", "/detalle-tramite/(.+)" ],
+            "notary_payments" => ["/getTramites", "/allTramites", "/getCampos", "/crearSolicitud", "/getcostoTramite", "/detalle-tramite", "/carshop", "/", "/dashboard", "/perfil" ,  "/informacion-cuenta" , "/cambiar-contraseña", "/tramites/por-pagar", "/logout"]
         ];
 
-        $session = to_object(session()->get("user"));
-        if(!empty($session->role_name)){
-            if (!empty($session) && isset($validator[$session->role_name]) ) {
-                if( in_array($request->getPathInfo()  ,$validator[$session->role_name])  ){
-                    return $next($request);
-                }else{
-                    return abort(403);    
-                };
-            }else{
-                 return abort(403);
-            }
-        }else{
+        $session_whitelist = $validator;
+        $path = explode("/", $request->getPathInfo());
+        $path = array_filter($path, function($var){
+            return !empty($var);
+        });
+        $path = implode("/", $path);
+
+        $pass = array_map(function($a) use ($path){
+            if($a == "*") return $a;
+            $whitePath = ((getenv("APP_PREFIX") ? explode("/", getenv("APP_PREFIX"))[1]."" : "").$a);
+            if(substr($whitePath, -1) == "/") $whitePath = substr($whitePath, 0, -1);
+            preg_match("/^".str_replace("/", "\/", $whitePath)."$/", $path, $matches);
+            if(!empty($matches))
+                return $a;
+        }, $session_whitelist[$session->role_name]);
+        $pass = array_filter($pass);
+
+        if(empty($pass))
+            return abort(403);
+        else
             return $next($request);
-        }
     }
 }

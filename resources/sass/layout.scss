@@ -99,10 +99,66 @@
 }
 
 #kt_header{
-	z-index: 1;
+	// z-index: 1;
+	flex: initial;
+    width: fit-content;
+
+	.header-sidebar{
+		background-color: white !important;
+		padding: 10px;
+		transition: all .5s;
+		overflow: hidden;
+
+		&.close{
+			width: 20px;
+		}
+	}
+}
+
+.header-top{
+	border-bottom: 2px solid rgb(244, 245, 247);
 }
 
 #busquedaInputGroup:hover {
 	opacity: 1;
 	width: 500px;
+}
+
+#close-header{
+	display: flex;
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    color: white;
+    border-radius: 20px;
+    position: absolute;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+    margin-right: -12px;
+    border: 1px solid lightgray;
+    top: 10px;
+
+    &:hover{
+    	background-color: #3699FF;
+
+    	i{
+    		color:white;
+    	}
+    }
+
+    i{
+    	color: black;
+    	font-size: 10px;
+    }
+}
+
+#kt_content{
+	box-shadow: -5px 0px 7px -5px rgba(0,0,0,.2)!important;
+
+	&.header-closed {
+		max-width: 100%;
+    	flex: inherit;
+	}
 }

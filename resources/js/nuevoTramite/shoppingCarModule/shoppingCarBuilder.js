@@ -58,7 +58,5 @@ ShoppingCarBuilder = {
 
 		});
 		JSONGeneraReferenciaBuilder.setImporteTransaccion(total);
-		//return arrToDOm;
-		
     }
 };

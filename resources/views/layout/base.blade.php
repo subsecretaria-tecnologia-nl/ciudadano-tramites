@@ -6,7 +6,7 @@
 <html lang="en">
 	<!--begin::Head-->
 	<head>
-		<base href="{{ env("APP_URL") }}">
+		<base href="{{ getenv("APP_URL") }}">
 		<meta charset="utf-8" />
 		<title>{{ isset($subtitle) ? "{$subtitle} | " : "" }}{{ $title ?? "" }}</title>
 		<meta name="description" content="{{ $description ?? "" }}" />
@@ -99,7 +99,7 @@
 							</a> --}}
 							<!--end::Logo-->
 
-							<a href="{{ url()->route("home") }}" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center bg-dark-o-30 d-flex ">
+							<a href="{{ url()->route("home") }}" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center d-flex ">
 								<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px mr-3 w-100" width="200" />
 							</a>
 							<!--begin::Topbar-->
@@ -289,9 +289,12 @@
 				<!--begin::Wrapper-->
 				<div class="d-flex flex-row flex-row-fluid wrapper " id="kt_wrapper">
 					<!--begin::Header-->
-					<div id="kt_header" class="col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @else d-lg-flex @endif h-100 px-0">
+					<div id="kt_header" class="col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @else d-lg-flex @endif h-100 px-0 pt-0">
+						<div id="close-header">
+							<i class="fas fa-chevron-left"></i>
+						</div>
 						<!--begin::Bottom-->
-						<div class="header-sidebar bg-dark-o-20 h-100">
+						<div class="header-sidebar bg-dark-o-20 h-100" id="kt-header-sidebar">
 							<!--begin::Container-->
 							<div class="container px-0">
 								<!--begin::Header Menu Wrapper-->
@@ -1474,6 +1477,7 @@
 			function destroyBackground(){
 				document.getElementById('background-ie').remove();
 			}
+<<<<<<< HEAD
 			</script>
 			<script>
 				const APP_URL = '{{ getenv("APP_URL") }}';
@@ -1483,6 +1487,18 @@
 					}
 					console.log(newPath);
 					window.location = newPath;
+=======
+
+			$.ajaxSetup({
+			    data: {
+			        '_token': "{{ csrf_token() }}"
+			    },
+				beforeSend: function(xhr, options) {
+					if(options.url.search(/http(s)?:\/\//i) < 0){
+						console.log(APP_URL);
+						options.url = APP_URL + options.url;
+					}
+>>>>>>> 48cc47cf1f9edd08ced3e6762cdddee48927b850
 				}
 
 				$.ajaxSetup({

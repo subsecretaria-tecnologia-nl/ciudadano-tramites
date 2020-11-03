@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {{-- <div id="buscador" class="mobile-aux" style="width: 100%; display:contents" >
     <div class="busqueda">
 
@@ -19,6 +20,11 @@
     <div class="d-flex flex-column-fluid">
 
         <div class="container dashboard">
+=======
+<div class="content ">
+    <div class="d-flex flex-column-fluid">
+        <div class="container dashboard pt-0">
+>>>>>>> 48cc47cf1f9edd08ced3e6762cdddee48927b850
             <div class="row">
                     <!--[if IE]>
                     <div class="error"><span>ESTAS EN INTERNET EXPLORER</span></div>

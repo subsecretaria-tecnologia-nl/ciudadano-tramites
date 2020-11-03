@@ -307,7 +307,7 @@ class TramitesController extends Controller
                 );
                 return json_encode($detalle);
               }
-              return json_encode($costo_final);
+              //return json_encode($costo_final);
 
             }
 
@@ -325,7 +325,7 @@ class TramitesController extends Controller
                   'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
-                return json_encode($costo_final);
+                return json_encode($detalle);
               }
               elseif ($costoX == "L") { //costo x lote
                 $costo_real = $actual_uma * $valor;
@@ -349,7 +349,7 @@ class TramitesController extends Controller
                   'descuentos' => $descuentos,
                 );
 
-                return json_encode($costo_final);
+                return json_encode($detalle);
               }
             }elseif ($tipo == "V") {
               //Se calculan los valores minimos y máximos del trámite
@@ -382,7 +382,7 @@ class TramitesController extends Controller
                 'importe_concepto' => $costo_final,
                 'descuentos' => $descuentos,
               );
-              return json_encode($costo_final);
+              return json_encode($detalle);
 
             }
 
@@ -480,6 +480,76 @@ class TramitesController extends Controller
       }
 
       return $costo_real;
+    }
+
+
+    public function detalle ( Request $request ) {
+      $id_tramite = $request->idTramite;
+
+      $detalle = array();
+      $data = $this->tiposer->where('Tipo_Code', $id_tramite)->get();
+      foreach ($data as $d) {
+        $nombre_tramite = $d->Tipo_Descripcion;
+      }
+
+      $info = $this->getPartidasTramites($id_tramite);
+
+      $detalle [] = array(
+        'id_tramite'=>$id_tramite,
+        'tramite' => $nombre_tramite,
+        'partidas' => $info,
+      );
+
+      set_layout_arg("subtitle", "Detalle Trámite");
+      return layout_view("tramites.detalleTramite",[ "detalle" => $detalle ] );
+    }
+
+    /**
+     *
+     * getPartidasTramites . Busca en la tabla de partidas los valores
+     *
+     * @param $id es el valor del tramite
+     *
+     * @return Array con los valores de la partida
+     *
+     */
+
+    public function getPartidasTramites($id)
+    {
+      $data = array();
+      try{
+
+        $info = $this->partidas->findWhere( ["id_servicio" =>  $id] );
+
+        if($info->count() > 0){
+          foreach($info as $i)
+          {
+            $data []= array(
+              "id_partida"  => $i->id_partida,
+              "descripcion" => $i->descripcion
+            );
+          }
+        }else{
+          $data = 0;
+        }
+
+      }catch(\Exception $e){
+        Log::info('Error Eliminar Solicitud '.$e->getMessage());
+        return response()->json(
+          [
+            "Code" => "400",
+            "Message" => "Error al getPartidasTramites",
+          ]
+        );
+      }
+
+      return $data;
+
+    }
+
+    public function carshop ( Request $request ) {
+      set_layout_arg("subtitle", "CarShop");
+      return layout_view("tramites.carshop" );
     }
 
 }
