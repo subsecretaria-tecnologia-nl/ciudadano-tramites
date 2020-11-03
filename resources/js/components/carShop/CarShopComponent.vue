@@ -193,9 +193,9 @@
 						}
 
 						tramitesJson.datos_solicitante = {
-					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante,
-					        "apellido_paterno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apPat,
-					        "apellido_materno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apMat,
+					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante || "",
+					        "apellido_paterno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apPat || "",
+					        "apellido_materno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apMat || "",
 					        "razon_social": solicianteInfo.tipoPersona == "pm" ? solicianteInfo.razonSocial : "",
 					        "rfc": solicianteInfo.rfc,
 					        "curp": solicianteInfo.curp || "",
