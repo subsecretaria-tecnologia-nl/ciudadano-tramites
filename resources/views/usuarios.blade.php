@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 <div class="content iecontent" id="kt_content">
-=======
-<div class="content">
->>>>>>> 48cc47cf1f9edd08ced3e6762cdddee48927b850
     <div class="d-flex flex-column-fluid">
         <div class="container view-usuarios">
             <span style="font-size: .8cm" class="6p">
