@@ -156,15 +156,16 @@ class TramitesController extends Controller
       $detalle = array();
       //Validamos si el tramite tiene subsidio
       $subsidio = $this->subsidiotramites->where('tramite_id', $tramite_id)->get();
+      foreach ($subsidio as $sub) {
+        $cuotas_sub = $sub->cuotas;
+        $limite_cuotassub = $sub->limite_cuotas;
+        $id_partida = $sub->id_partida;
+        $oficio_sub = $sub->oficio;
+      }
 
-      if (!empty($subsidio)){
+      if (!empty($oficio_sub)){
         try{
-          foreach ($subsidio as $sub) {
-            $cuotas_sub = $sub->cuotas;
-            $limite_cuotassub = $sub->limite_cuotas;
-            $id_partida = $sub->id_partida;
-            $oficio_sub = $sub->oficio;
-          }
+
           $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
           foreach ($data_partida as $p) {
             $id_servicio = $p->id_servicio;
