@@ -1,4 +1,4 @@
-<div id="buscador" class="mobile-aux" style="width: 100%; display:contents" >
+{{-- <div id="buscador" class="mobile-aux" style="width: 100%; display:contents" >
     <div class="busqueda">
 
     </div>
@@ -13,7 +13,7 @@
                 </div>
             </div>
     </div>
-</div>
+</div> --}}
 
 <div class="content " id="kt_content">
     <div class="d-flex flex-column-fluid">

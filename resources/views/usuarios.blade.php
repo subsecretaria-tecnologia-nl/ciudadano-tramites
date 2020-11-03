@@ -1,4 +1,4 @@
-<div class="content" id="kt_content">
+<div class="content iecontent" id="kt_content">
     <div class="d-flex flex-column-fluid">
         <div class="container view-usuarios">
             <span style="font-size: .8cm" class="6p">
