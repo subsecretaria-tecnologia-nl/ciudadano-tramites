@@ -169,7 +169,7 @@
             	let requestCostos = [];
             	let contadorSolicitantes = 0;
 			    tramites.forEach(  tramiteInarray => {
-					
+										 
 					tramiteInarray.solicitudes.forEach(  soliciante => {
 						let tramitesJson = {};
 						tramitesJson.nombre = tramiteInarray.tramite;
@@ -211,15 +211,15 @@
 					    tramitesJson.datos_factura = tramitesJson.datos_solicitante;
 
 						let data = {  
-		                    valor_catastral: info.valor_catastral || 0,
+		                    valor_catastral: info.campos["Valor catastral"] || 0,
 		                    id_seguimiento: soliciante.clave,
 		                    tramite_id: tramiteInarray.tramite_id,
-		                    valor_operacion: info.valor_de_operacion || 0,
+		                    valor_operacion: info["Valor de operacion"] || 0,
 		                    oficio:62
                 		}
                 		
                 		let url = process.env.APP_URL + "/getcostoTramite";
-                		requestCostos.push(axios.post(url, data,{headers:{
+                		requestCostos.push(axios.post(url,   data,{headers:{
                 			contadorSolicitantes:contadorSolicitantes
                 		}}));
 						listadoTramites.push( tramitesJson );

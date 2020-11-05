@@ -169,6 +169,7 @@ class SolicitudesController extends Controller
           'tipo' => $this->catalogo_type[$c->tipo_id],
           'nombre' => $this->catalogo_campos[$c->campo_id],
           'caracteristicas' => $c->caracteristicas,
+          'campo_id' => $c->campo_id,
         );
       }
 

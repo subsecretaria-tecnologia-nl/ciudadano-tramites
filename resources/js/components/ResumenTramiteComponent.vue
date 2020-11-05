@@ -76,10 +76,10 @@
             async obtenerCosto(){
                 let url = process.env.APP_URL + "/getcostoTramite";
                 let data = {  
-                    valor_catastral: this.datosFormulario.valor_catastral || 0,
+                    valor_catastral: this.datosFormulario[13] || 0,
                     id_seguimiento: this.tramite.id_seguimiento,
                     tramite_id: this.tramite.id_tramite,
-                    valor_operacion: this.datosFormulario.valor_de_operacion || 0,
+                    valor_operacion: this.datosFormulario[14] || 0,
                     oficio:62
                 }
                 

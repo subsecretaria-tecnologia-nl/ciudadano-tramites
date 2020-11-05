@@ -13,9 +13,9 @@
 						  	<div class="form-group fv-plugins-icon-container">
 						  		<label>{{ campo.nombre }}</label>
 						  		<input type="text" class="form-control form-control-solid form-control-lg"  
-						  			:placeholder="[[campo.nombre]]" :id="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
-						  			v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]"  @change="cambioModelo" :required="isRequired( campo )"/>
-						  		<small  class="form-text text-muted" v-if="errors[campo.nombre.toLowerCase().split(' ').join('_')]">
+						  			:placeholder="[[campo.nombre]]" :id="[[campo.campo_id]]"
+						  			v-model="model[campo.campo_id]"  @change="cambioModelo" :required="isRequired( campo )"/>
+						  		<small  class="form-text text-muted" v-if="errors[campo.campo_id]">
 						  			Campo requerido
 						  		</small>
 						  	</div>
@@ -24,15 +24,15 @@
 					<div v-else-if="campo.tipo === 'select'">
 					  	<div class="form-group fv-plugins-icon-container">
 					  		<label>{{ campo.nombre }}</label>
-					  		<select :id="[[campo.nombre.toLowerCase().split(' ').join('_')]]" :name="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
+					  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]"
 					  			class="form-control form-control-solid form-control-lg"
-					  			v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]" @change="cambioModelo" :required="isRequired( campo )">
+					  			v-model="model[campo.campo_id]" @change="cambioModelo" :required="isRequired( campo )">
 					  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 					  			:value="[[Object.keys(opcion)[0] ]]">
 					  				{{ opcion[ Object.keys(opcion)[0] ] }}
 					  			</option>
 					  		</select>
-						  		<small  class="form-text text-muted" v-if="errors[campo.nombre.toLowerCase().split(' ').join('_')]">
+						  		<small  class="form-text text-muted" v-if="errors[campo.campo_id]">
 						  			Campo requerido
 						  		</small>
 					  	</div>
@@ -40,9 +40,9 @@
 					<div v-else-if="campo.tipo === 'option'">
 						<div class="form-group" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
 							<input type="radio" class=" form-control-solid"   
-								:id="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
-							 	:name="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
-							 	:value="[[Object.keys(opcion)[0] ]]" v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]" @change="cambioModelo" :required="isRequired( campo )">
+								:id="[[campo.campo_id]]"
+							 	:name="[[campo.campo_id]]"
+							 	:value="[[Object.keys(opcion)[0] ]]" v-model="model[campo.campo_id]" @change="cambioModelo" :required="isRequired( campo )">
 							 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
 						</div>
 					</div>
@@ -50,9 +50,9 @@
 						<div class="form-group fv-plugins-icon-container">
 							<label>{{ campo.nombre }}</label>
 							<textarea 
-								:id="[[campo.nombre.toLowerCase().split(' ').join('_')]]"
-							 	:name="[[campo.nombre.toLowerCase().split(' ').join('_')]]" 
-							 	class="form-control form-control-solid form-control-lg" v-model="model[campo.nombre.toLowerCase().split(' ').join('_')]"
+								:id="[[campo.campo_id]]"
+							 	:name="[[campo.campo_id]]" 
+							 	class="form-control form-control-solid form-control-lg" v-model="model[campo.campo_id]"
 							 	@change="cambioModelo" :required="isRequired( campo )"</textarea>
 						</div>
 					</div>
@@ -81,6 +81,13 @@
 
         methods: {
 		    cambioModelo() {
+		    	let info = {};
+		    	for (const property in this.model) {
+				  	let campo = this.campos.find( campo => campo.campo_id == property  );
+				  	
+				  	info[property] = { name: campo.nombre.toLowerCase().split(' ').join('_'), value: this.model[property] };
+				}
+				
 		    	const parsed = JSON.stringify(this.model);
                 if( this.validarFormulario() ){
                 	localStorage.setItem('datosFormulario', parsed); 
@@ -91,8 +98,7 @@
 		    	let valido = true;
 		    	 this.campos.forEach( campo =>{
                 	if( this.isRequired(campo)) {
-                		let nombreCampo = campo.nombre.toLowerCase().split(' ').join('_'); 
-                		let campoValido = !!this.model[nombreCampo];
+                		let campoValido = !!this.model[campo.campo_id];
                 		/*if( campoValido ){
                 			delete this.errors[nombreCampo];
                 		} else{
