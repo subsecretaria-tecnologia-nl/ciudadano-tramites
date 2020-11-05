@@ -22,7 +22,6 @@ $('#kt_login_signin_submit').on('click', function(e) {
 
     validation.validate().then(function(status) {
         if (status == 'Valid') {
-            console.log("");
             $.ajax({
                 url: `/login`,
                 type: "POST",

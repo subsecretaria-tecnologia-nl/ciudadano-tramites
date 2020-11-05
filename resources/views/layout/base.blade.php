@@ -1471,28 +1471,27 @@
 			<script src="{{ asset("plugins/global/plugins.bundle.js?v=7.0.3") }}"></script>
 			<script src="{{ asset("plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3") }}"></script>
 			<script>
-			function iehelper() {
-				var isAtLeastIE11 = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
-				if (isAtLeastIE11) {
-					// console.log('xxx estas en IE11  D:');
-					document.getElementById('iehelper').style.display ="block";
-					var div = document.createElement('div');
-					div.style.background = "rgba(0, 0, 0, 0.1)";
-					div.style.position ="-ms-page";
-					div.style.top ="0px";
-					div.style.left ="0px";
-					div.style.right ="0px";
-					div.style.bottom ="0px";
-					div.style.overflow ="hidden";
-					div.style.zIndex ="1000";
-					div.id = "background-ie";
-					document.getElementById('iehelper').appendChild(div);
+				function iehelper() {
+					var isAtLeastIE11 = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+					if (isAtLeastIE11) {
+						// console.log('xxx estas en IE11  D:');
+						document.getElementById('iehelper').style.display ="block";
+						var div = document.createElement('div');
+						div.style.background = "rgba(0, 0, 0, 0.1)";
+						div.style.position ="-ms-page";
+						div.style.top ="0px";
+						div.style.left ="0px";
+						div.style.right ="0px";
+						div.style.bottom ="0px";
+						div.style.overflow ="hidden";
+						div.style.zIndex ="1000";
+						div.id = "background-ie";
+						document.getElementById('iehelper').appendChild(div);
+					}
+				};
+				function destroyBackground(){
+					document.getElementById('background-ie').remove();
 				}
-			};
-			function destroyBackground(){
-				document.getElementById('background-ie').remove();
-			}
-<<<<<<< HEAD
 			</script>
 			<script>
 				const APP_URL = '{{ getenv("APP_URL") }}';
@@ -1502,18 +1501,6 @@
 					}
 					console.log(newPath);
 					window.location = newPath;
-=======
-
-			$.ajaxSetup({
-			    data: {
-			        '_token': "{{ csrf_token() }}"
-			    },
-				beforeSend: function(xhr, options) {
-					if(options.url.search(/http(s)?:\/\//i) < 0){
-						console.log(APP_URL);
-						options.url = APP_URL + options.url;
-					}
->>>>>>> 48cc47cf1f9edd08ced3e6762cdddee48927b850
 				}
 
 				$.ajaxSetup({
