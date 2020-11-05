@@ -18,7 +18,11 @@ class CheckSession
         $session = to_object(session()->all());
         if(!empty($session->authenticated)){
             $cart = curlSendRequest("GET", env("TESORERIA_HOSTNAME") . "/solicitudes-info/".session()->get("user")->id, []);
-            session()->put("tramites", count($cart->tramites));
+            $cartCount = 0;
+            foreach($cart->tramites as $tramite){
+                $cartCount += count($tramite->solicitudes);
+            }
+            session()->put("tramites", $cartCount);
             if(!empty($session->authenticated->until) && $session->authenticated->until <= date()){
                 return self::redirectLogin($request, $next);
             }
