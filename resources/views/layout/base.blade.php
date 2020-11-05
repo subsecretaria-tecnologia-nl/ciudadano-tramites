@@ -209,7 +209,7 @@
 								<!--begin::Notifications-->
 								<div class="dropdown mr-3 ml-2">
 									<!--begin::Toggle-->
-									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" id="notifications">
+									<a href="{{ url()->route("tramite.cart") }}" class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" id="notifications">
 										<div class="btn btn-icon btn-hover-transparent-dark bg-secondary btn-dropdown btn-lg mr-1 pulse pulse-white">
 											<span class="svg-icon svg-icon-xl">
 												<!--begin::Svg Icon | path:media/svg/icons/Code/Compiling.svg-->
@@ -217,7 +217,7 @@
 												<span class="badge badge-danger">{{ session()->get("tramites") }}</span>
 											</span>
 										</div>
-									</div>
+									</a>
 									<!--end::Toggle-->
 								</div>
 								<!--end::Notifications-->
