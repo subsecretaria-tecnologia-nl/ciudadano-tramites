@@ -15,6 +15,8 @@ class CheckSession
      */
     public function handle($request, Closure $next)
     {
+        $cart = curlSendRequest("GET", env("TESORERIA_HOSTNAME") . "/solicitudes-info/".session()->get("user")->id, []);
+        session()->put("tramites", count($cart->tramites));
         $session = to_object(session()->all());
         if(!empty($session->authenticated)){
             if(!empty($session->authenticated->until) && $session->authenticated->until <= date()){
