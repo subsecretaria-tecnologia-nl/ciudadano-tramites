@@ -40,6 +40,7 @@
 <script>
     import { uuid } from 'vue-uuid';
     export default {
+        name:'detalle-pago-component',
         props: ['tramites', 'obtenidoCostos'],
         mounted() {
 
