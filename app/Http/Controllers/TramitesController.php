@@ -131,8 +131,8 @@ class TramitesController extends Controller
 
       //datos para el tramite
       $valor_catastral = $request->valor_catastral;
-      //$valor_catastral = 1500500;
-      // $valor_operacion = 0;
+      //$valor_catastral = 150050;
+      //$valor_operacion = 178960;
       $valor_operacion = $request->valor_operacion;
       $lotes = $request->lotes;
       $hojas =  $request->hojas;
@@ -147,6 +147,7 @@ class TramitesController extends Controller
       foreach($data_costo as $data){
         $tipo = $data->tipo;
         $costoX = $data->costo;
+        $costo_fijo = $data->costo_fijo;
         $min = $data->minimo;
         $max = $data->maximo;
         $valor = $data->valor;
@@ -155,15 +156,16 @@ class TramitesController extends Controller
       $detalle = array();
       //Validamos si el tramite tiene subsidio
       $subsidio = $this->subsidiotramites->where('tramite_id', $tramite_id)->get();
+      foreach ($subsidio as $sub) {
+        $cuotas_sub = $sub->cuotas;
+        $limite_cuotassub = $sub->limite_cuotas;
+        $id_partida = $sub->id_partida;
+        $oficio_sub = $sub->oficio;
+      }
 
-      if (!empty($subsidio)){
+      if (!empty($oficio_sub)){
         try{
-          foreach ($subsidio as $sub) {
-            $cuotas_sub = $sub->cuotas;
-            $limite_cuotassub = $sub->limite_cuotas;
-            $id_partida = $sub->id_partida;
-            $oficio_sub = $sub->oficio;
-          }
+
           $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
           foreach ($data_partida as $p) {
             $id_servicio = $p->id_servicio;
@@ -171,6 +173,7 @@ class TramitesController extends Controller
           }
 
           $oficio = $request->oficio; //se obtiene el oficio ingresado
+          //$oficio = 62;
 
           if($oficio == $oficio_sub) { //se valida que coincida el oficio ingresado con el registro
             //Se calculan minimos y maximos en base a cuotas establecidas
@@ -184,9 +187,13 @@ class TramitesController extends Controller
             //Se hace el calculo del costo normal en base a sus cuotas establecidas
             if ($tipo == "F"){
               if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
-                $costo_real = $actual_uma * $min;
 
-                $costo_final = $this->redondeo($costo_real);
+                if(!empty($costo_fijo)){
+                  $costo_final = $costo_fijo;
+                }else{
+                  $costo_real = $actual_uma * $min;
+                  $costo_final = $this->redondeo($costo_real);
+                }
               }
               elseif ($costoX == "L") { //costo x lote
                 $costo_real = $actual_uma * $valor;
@@ -207,14 +214,17 @@ class TramitesController extends Controller
 
               //Se hace la validacion si aplica o no el subsidio para costos fijos
               if ($costo_final < $sub_costoMin){
+                $costo_total = $costo_total;
                 $costo_final = $sub_costoMin;
+                $total_subsidiado = $costo_total - $costo_final;
                 $descuentos []= array(
                   'concepto_descuento' => $descripcion_part,
-                  'importe_concepto' => $costo_final,
+                  'importe_subsidio' => $total_subsidiado,
                   'partida_descuento' => $id_partida
                 );
                 $detalle []= array(
                   'tramite_id' => $tramite_id,
+                  'importe_total' => $costo_total,
                   'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
@@ -231,6 +241,10 @@ class TramitesController extends Controller
                 );
                 return json_encode($detalle);
               }else{
+                $costo_total = $costo_final;
+                $costo_final = $sub_costoMin;
+                $total_subsidiado = $costo_total - $costo_final;
+
                 $descuentos []= array(
                   'concepto_descuento' => $descripcion_part,
                   'importe_concepto' => $sub_costoMin,
@@ -271,17 +285,23 @@ class TramitesController extends Controller
 
               //Se hace la validacion si aplica o no el subsidio para costos variables
               if ($costo_final < $sub_costoMin){
+                $costo_total = $costo_final;
                 $costo_final = $sub_costoMin;
+
+                $total_subsidiado = $costo_total - $costo_final;
+
                 $descuentos []= array(
                   'concepto_descuento' => $descripcion_part,
-                  'importe_concepto' => $costo_final,
+                  'importe_concepto' => $total_subsidiado,
                   'partida_descuento' => $id_partida
                 );
                 $detalle []= array(
                   'tramite_id' => $tramite_id,
+                  'importe_total' => $costo_total,
                   'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
+                //dd($detalle);
                 return json_encode($detalle);
 
               }elseif($costo_final > $sub_costoMax){
@@ -295,19 +315,24 @@ class TramitesController extends Controller
                 );
                 return json_encode($detalle);
               }else{
+                $costo_total = $costo_final;
+                $costo_final = $sub_costoMin;
+                $total_subsidiado = $costo_total - $costo_final;
                 $descuentos []= array(
                   'concepto_descuento' => $descripcion_part,
-                  'importe_concepto' => $sub_costoMin,
+                  'importe_subsidio' => $total_subsidiado,
                   'partida_descuento' => $id_partida
                 );
                 $detalle []= array(
                   'tramite_id' => $tramite_id,
+                  'importe_total' => $costo_total,
                   'costo_final' => $sub_costoMin,
                   'descuentos' => $descuentos,
                 );
+
                 return json_encode($detalle);
               }
-              //return json_encode($costo_final);
+              return json_encode($detalle);
 
             }
 
@@ -395,9 +420,13 @@ class TramitesController extends Controller
         try{
           if ($tipo == "F"){
             if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
-              $costo_real = $actual_uma * $min;
 
-              $costo_final = $this->redondeo($costo_real);
+              if(!empty($costo_fijo)){
+                $costo_final = $costo_fijo;
+              }else{
+                $costo_real = $actual_uma * $min;
+                $costo_final = $this->redondeo($costo_real);
+              }
 
               $detalle []= array(
                 'tramite_id' => $tramite_id,

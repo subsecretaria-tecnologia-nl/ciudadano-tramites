@@ -384,6 +384,16 @@ body {
     }
 }
 
+#listaTramites{
+    .list-item{
+        margin-bottom: 10px;
+
+        .card-body{
+            padding: 10px 15px;
+        }
+    }
+}
+
 // @media screen and (max-height: 450px) {
 //     .sidenav {
 //         padding-top: 15px;
