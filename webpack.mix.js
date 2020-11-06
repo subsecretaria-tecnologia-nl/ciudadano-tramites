@@ -38,7 +38,8 @@ mix.js([
 .sass('resources/sass/app.scss', 'public/css')
 .options({
     processCssUrls: false
-});
+})
+.extract();
 
 mix.copyDirectory('resources/images', 'public/img');
 mix.copyDirectory('resources/js/pages', 'public/js/pages');
