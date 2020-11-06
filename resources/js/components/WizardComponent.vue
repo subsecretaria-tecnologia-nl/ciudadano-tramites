@@ -243,6 +243,8 @@
                       },
                   });
                   console.log(response.data);
+                  let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
+                  $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
                   Command: toastr.success("Listo!", response.data.Message);
                   this.registrado = true;
                   if( type == "finalizar" ){
