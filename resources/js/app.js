@@ -23,12 +23,12 @@ document.getElementById("close-header").addEventListener("click", () => {
     let sideBar = document.getElementById("kt-header-sidebar");
     let content = document.getElementById("kt_content");
     let fas = document.getElementById("close-header").querySelector(".fas");
-    if(!sideBar.classList.contains("close")){
+    if (!sideBar.classList.contains("close")) {
         fas.classList.remove("fa-chevron-left")
         fas.classList.add("fa-chevron-right")
         sideBar.classList.add("close");
         content.classList.add("header-closed");
-    }else{
+    } else {
         fas.classList.remove("fa-chevron-right")
         fas.classList.add("fa-chevron-left")
         sideBar.classList.remove("close");
@@ -43,6 +43,9 @@ Vue.component('tramite-component', require('./components/TramiteComponent.vue').
 Vue.component('campos-tramite-component', require('./components/CamposTramiteComponent.vue').default);
 Vue.component('solicitantes-component', require('./components/SolicitantesComponent.vue').default);
 Vue.component('resumen-tramite-component', require('./components/ResumenTramiteComponent.vue').default);
+// Vue.component('usuarios-component', require('./components/Usuarios.vue').default);
+Vue.component('usuarios-component', () =>
+    import ( /* webpackChunkName: "tramite-component" */ './components/Usuarios.vue'));
 /*Componentes tipo de campos*/
 // Vue.component('input-component', require('./components/tiposElementos/InputComponent.vue').default);
 Vue.component('car-shop-component', require('./components/carShop/CarShopComponent.vue').default);
@@ -54,8 +57,8 @@ Vue.component('detalle-pago-component', require('./components/carShop/DetallePag
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.filter("capitalize", function (value) {
-    if (!value) 
+Vue.filter("capitalize", function(value) {
+    if (!value)
         return '';
     value = value.toString();
     return value.charAt(0).toUpperCase() + value.slice(1);

@@ -119,6 +119,9 @@ body {
     .btn-exportar {
         width: 80% !important;
     }
+    .users-component {
+        min-width: 350px !important;
+    }
 }
 
 @media only screen and (max-width: 635px) {
@@ -302,16 +305,24 @@ body {
     color: lightgray;
 }
 
-.card{
-    &.list-item{
+.card {
+    &.list-item {
         cursor: pointer;
         transition: all .5s;
-
-        &:hover{
+        &:hover {
             transform: scale(1.02);
             box-shadow: 0px 0px 10px 10px rgba(82, 63, 105, 0.1);
         }
     }
+}
+
+.menuable__content__active {
+    left: auto !important;
+    top: 110px !important;
+}
+
+.users-component {
+    min-width: 1200px
 }
 
 // @media screen and (max-height: 450px) {
