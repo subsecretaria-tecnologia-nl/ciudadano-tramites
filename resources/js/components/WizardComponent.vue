@@ -211,14 +211,20 @@
                     goTo(1);
                   }
                 }
-                datosFormulario.costo_final = tramite.detalle.costo_final;
-                datosFormulario.partidas = tramite.partidas;
+                //datosFormulario.costo_final = tramite.detalle.costo_final;
+                //datosFormulario.partidas = tramite.partidas;
+
+                let informacion = {
+                  campos: datosFormulario,
+                  costo_final:tramite.detalle.costo_final,
+                  partidas: tramite.partidas 
+                }
 
                 let data = {
                   clave: tramite.id_seguimiento,
                   catalogo_id: tramite.id_tramite,
                   solicitantes: listaSolicitantes,
-                  info:datosFormulario,
+                  info:informacion,
                   user_id:this.idUsuario
                 }
                 data = JSON.stringify(data);

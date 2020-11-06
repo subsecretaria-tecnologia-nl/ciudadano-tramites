@@ -62,11 +62,13 @@ body {
     }
     .gradient {
         height: 320px;
+        margin-top: 55px;
         padding-left: 8%;
         padding-right: 8%;
     }
     .busqueda {
         height: 320px;
+        margin-top: 55px;
         background-size: auto !important;
     }
     .mobile-aux {
@@ -169,6 +171,61 @@ body {
     }
     .tramites {
         width: 45% !important;
+    }
+}
+
+@media only screen and (max-width: 390px) {
+    .dashboard {
+        padding-top: 270px;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .dashboard {
+        min-width: 1000px;
+    }
+    .mobile-aux {
+        height: 210px;
+    }
+}
+
+@media screen and (-ms-high-contrast: active),
+(-ms-high-contrast: none) and (max-width: 2700px) and (min-width: 2401px) {
+    /* IE10+ specific styles go here */
+    .dashboard {
+        margin-right: 600px;
+    }
+}
+
+@media screen and (-ms-high-contrast: active),
+(-ms-high-contrast: none) and (max-width: 2400px) and (min-width: 2001px) {
+    /* IE10+ specific styles go here */
+    .dashboard {
+        margin-right: 400px;
+    }
+}
+
+@media screen and (-ms-high-contrast: active),
+(-ms-high-contrast: none) and (max-width: 2000px) and (min-width: 1401px) {
+    /* IE10+ specific styles go here */
+    .dashboard {
+        margin-right: 200px;
+    }
+}
+
+@media screen and (-ms-high-contrast: active),
+(-ms-high-contrast: none) and (max-width: 1400px) and (min-width: 800px) {
+    /* IE10+ specific styles go here */
+    .dashboard {
+        margin-right: 100px;
+    }
+}
+
+@media screen and (-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+    /* IE10+ specific styles go here */
+    .iecontent {
+        width: 100%;
     }
 }
 
@@ -305,6 +362,20 @@ body {
     color: lightgray;
 }
 
+.ie-sidenav {
+    display: none;
+    position: fixed;
+    right: 0px;
+    left: auto;
+    top: 0px;
+    bottom: 0px;
+    width: 375px;
+    background-color: white;
+    transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+    box-shadow: 0px 1px 9px -3px rgba(0, 0, 0, 0.25);
+    z-index: 1001
+}
+
 .card {
     &.list-item {
         cursor: pointer;
@@ -323,6 +394,15 @@ body {
 
 .users-component {
     min-width: 1200px
+}
+
+#listaTramites {
+    .list-item {
+        margin-bottom: 10px;
+        .card-body {
+            padding: 10px 15px;
+        }
+    }
 }
 
 // @media screen and (max-height: 450px) {

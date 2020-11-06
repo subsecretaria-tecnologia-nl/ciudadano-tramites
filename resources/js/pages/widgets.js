@@ -3106,7 +3106,7 @@ var KTWidgets = function() {
                             show: true,
                             label: 'Total',
                             fontWeight: "bold",
-                            formatter: function (w) {
+                            formatter: function(w) {
                                 // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
                                 return '60%';
                             }
@@ -3158,7 +3158,7 @@ var KTWidgets = function() {
                     enabled: false
                 },
                 sparkline: {
-                	enabled: true
+                    enabled: true
                 }
             },
             plotOptions: {},
@@ -3592,7 +3592,7 @@ var KTWidgets = function() {
                 },
                 y: {
                     title: {
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return val + "";
                         }
                     }
@@ -3694,7 +3694,7 @@ var KTWidgets = function() {
                 },
                 y: {
                     title: {
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return val + "";
                         }
                     }
@@ -3959,7 +3959,7 @@ var KTWidgets = function() {
                 },
                 y: {
                     title: {
-                        formatter: function (val) {
+                        formatter: function(val) {
                             return val + "";
                         }
                     }
@@ -4058,7 +4058,7 @@ var KTWidgets = function() {
                     enabled: false
                 },
                 sparkline: {
-                	enabled: true
+                    enabled: true
                 }
             },
             plotOptions: {},
@@ -4193,7 +4193,7 @@ var KTWidgets = function() {
                     enabled: false
                 },
                 sparkline: {
-                	enabled: true
+                    enabled: true
                 }
             },
             plotOptions: {},
