@@ -11,8 +11,6 @@ body {
 @media only screen and (max-width: 770px) {
     .card {
         // border-color: #347ab8;
-        width: 90%;
-        margin-left: 5%;
         border: none;
     }
     .btn-guardar {
@@ -147,6 +145,20 @@ body {
     }
     .tramites {
         width: 65% !important;
+    }
+
+    .card{
+        &.list-item{
+            .flex-wrap{
+                flex-direction: column !important;
+                align-items: flex-start !important;
+
+                .my-lg-0{
+                    margin-top: 10px;
+                    margin-left: auto;
+                }
+            }
+        }
     }
 }
 
@@ -403,13 +415,20 @@ body {
             padding: 10px 15px;
         }
     }
-}
 
-// @media screen and (max-height: 450px) {
-//     .sidenav {
-//         padding-top: 15px;
-//     }
-//     .sidenav a {
-//         font-size: 18px;
-//     }
-// }
+    .v-skeleton-loader{
+        flex-direction: row;
+        align-items: center;
+        margin: 0px;
+        width: 100%;
+
+        .v-skeleton-loader__list-item-two-line {
+            width  : 85%;
+            margin-right: auto;
+        }
+
+        .v-skeleton-loader__button{
+            margin-right: 20px;
+        }
+    }
+}
