@@ -73,13 +73,18 @@
                 });
             },
 
+
+
             async obtenerCosto(){
+                let campoCatastral = this.datosFormulario.campos.find( campo => campo.nombre === "Valor catastral");
+                let campoValorOperacion = this.datosFormulario.campos.find( campo => campo.nombre === "Valor de operacion")
+             
                 let url = process.env.APP_URL + "/getcostoTramite";
                 let data = {  
-                    valor_catastral: this.datosFormulario[13] || 0,
+                    valor_catastral: campoCatastral.valor || 0,
                     id_seguimiento: this.tramite.id_seguimiento,
                     tramite_id: this.tramite.id_tramite,
-                    valor_operacion: this.datosFormulario[14] || 0,
+                    valor_operacion: campoValorOperacion.valor || 0,
                     oficio:62
                 }
                 
@@ -96,6 +101,7 @@
                     console.log(error);
                     this.obteniendoCosto = false;
                 }
+                
             }
 
         }
