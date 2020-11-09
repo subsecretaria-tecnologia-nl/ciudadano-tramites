@@ -22,7 +22,3 @@
         </div>
     </div>
 </div> 
-<script type="text/javascript">
-    let token = '{{ csrf_token() }}';
-    let idUsuario = "{{ $id  }}";
-</script>
