@@ -34,7 +34,7 @@
 		<link rel="icon" type="image/png" sizes="192x192" href="{{ asset("/images/favicon/android-chrome-192x192.png") }}">
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ asset("/images/favicon/favicon-16x16.png") }}">
 		<link rel="manifest" href="{{ asset("/images/favicon/site.webmanifest") }}">
-		<link rel="mask-icon" href="{{ asset("/images/favicon/safari-pinned-tab.svg" color="#088cbc") }}">
+		<link rel="mask-icon" href="{{ asset("/images/favicon/safari-pinned-tab.svg") }}" color="#088cbc">
 		<link rel="shortcut icon" href="{{ asset("/images/favicon/favicon.ico") }}">
 		<meta name="apple-mobile-web-app-title" content="Estado de Nuevo Le&oacute;n">
 		<meta name="application-name" content="Estado de Nuevo Le&oacute;n">
