@@ -31,7 +31,7 @@
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
-	<body id="kt_body" class="header-fixed header-mobile-fixed page-loading">
+	<body id="kt_body " class="header-fixed header-mobile-fixed page-loading">
 		<!--begin::Main-->
 		<!--begin::Header Mobile-->
 		<div id="kt_header_mobile" class="header-mobile bg-primary header-mobile-fixed">
@@ -214,7 +214,7 @@
 											<span class="svg-icon svg-icon-xl">
 												<!--begin::Svg Icon | path:media/svg/icons/Code/Compiling.svg-->
 												<i class="flaticon2-shopping-cart-1"></i>
-												<span class="badge badge-danger">{{ session()->get("tramites") }}</span>
+												<span id="totalTramitesCarrito"  class="badge badge-danger">{{ session()->get("tramites") }}</span>
 											</span>
 										</a>
 									</div>
@@ -303,6 +303,7 @@
 				<!--end::Top-->
 				<!--begin::Wrapper-->
 				<div class="d-flex flex-row flex-row-fluid wrapper " id="kt_wrapper">
+					
 					<!--begin::Header-->
 					<div id="kt_header" class="col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @else d-lg-flex @endif h-100 px-0 pt-0">
 						<div id="close-header">
@@ -402,10 +403,10 @@
 					<!--begin::Content-->
 					<div class="content col-12  @if($empty_layout === false) col-lg-11 col-xl-10 @endif d-flex flex-column flex-column-fluid pt-0" @if(isset($background_content)) style="background-color: {{$background_content}}" @endif id="kt_content">
 						<!--begin::Entry-->
-						<div class="d-flex flex-column-fluid justify-content-center {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) align-items-center @endif">
-							<?= view($viewPath, $args) ?>
-						</div>
-						<!--end::Entry-->
+							<div id="app" class="d-flex flex-column-fluid justify-content-center {{ $fluid_container ? '' : 'container-xl' }}  @if($empty_layout === true) align-items-center @endif">
+								<?= view($viewPath, $args) ?>
+							</div>
+							<!--end::Entry-->
 					</div>
 					<!--end::Content-->
 				</div>

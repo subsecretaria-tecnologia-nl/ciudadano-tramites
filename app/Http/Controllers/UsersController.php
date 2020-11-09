@@ -11,7 +11,13 @@ class UsersController extends Controller
 			"subtitle" => "Usuarios",
 			"fluid_container"=> true
 		]);
+		if(isset( session()->get('user')->notary->id ) ){
+			$notary =  session()->get('user')->notary->id;
+		}else{
+			$notary = null;
+		}
 
-		return layout_view("usuarios");
+		// dd($user);
+		return layout_view("usuarios", ['notary' => $notary]);
     }
 }

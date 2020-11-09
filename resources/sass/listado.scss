@@ -119,6 +119,9 @@ body {
     .btn-exportar {
         width: 80% !important;
     }
+    .users-component {
+        min-width: 350px !important;
+    }
 }
 
 @media only screen and (max-width: 635px) {
@@ -396,11 +399,19 @@ body {
     }
 }
 
-#listaTramites{
-    .list-item{
-        margin-bottom: 10px;
+.menuable__content__active {
+    left: auto !important;
+    top: 110px !important;
+}
 
-        .card-body{
+.users-component {
+    min-width: 1200px
+}
+
+#listaTramites {
+    .list-item {
+        margin-bottom: 10px;
+        .card-body {
             padding: 10px 15px;
         }
     }
