@@ -4,10 +4,13 @@
 
             <div class="tramites">
                 <div class="cuadros-cont">
-                    <div>
-                        <span > inicio->Tramites pendientes</span>
-                    </div>
-                    <div class="cuadro-listado tramite-lista" style="padding-top: 10px">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent">
+                    <li class="breadcrumb-item"><a href="{{ url()->route("home") }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" id="tramite-name">TRÁMITES</li>
+                </ol>
+            </nav>
+                    <div class="cuadro-listado tramite-lista pt-0">
                         <div class="titulo-cuadro">
                             <div style="padding-top: 20px;">
                                 <span class="tituloTabla">

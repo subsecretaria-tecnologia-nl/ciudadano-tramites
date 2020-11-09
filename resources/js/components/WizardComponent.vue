@@ -111,6 +111,7 @@
         props: ['tramite','idUsuario'],
         mounted() {
             this.tramite.id_seguimiento =  uuid.v4();
+            $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
         },
