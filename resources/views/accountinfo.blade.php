@@ -210,7 +210,7 @@
                                     <span >Cambiar la configuracion de la cuenta</span>
 
                                 </div>
-                                <div class="col-md-7 col-sm-12  pt-6  pt-sm-6 pt-md-0"">
+                                <div class="col-md-7 col-sm-12  pt-6  pt-sm-6 pt-md-0">
                                     <a class="btn btn-icon btn-primary btn-cancelar ">Cancelar</a>
                                     <a class="btn btn-icon btn-primary btn-guardar" > Guardar cambios</a>
                                 </div>
