@@ -214,7 +214,7 @@
 											<span class="svg-icon svg-icon-xl">
 												<!--begin::Svg Icon | path:media/svg/icons/Code/Compiling.svg-->
 												<i class="flaticon2-shopping-cart-1"></i>
-												<span class="badge badge-danger">{{ session()->get("tramites") }}</span>
+												<span id="totalTramitesCarrito"  class="badge badge-danger">{{ session()->get("tramites") }}</span>
 											</span>
 										</a>
 									</div>
