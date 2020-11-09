@@ -27,7 +27,21 @@
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<link rel="shortcut icon" href="media/logos/favicon.ico" />
+
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset("/images/favicon/apple-touch-icon.png") }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset("/images/favicon/favicon-32x32.png") }}">
+		<link rel="icon" type="image/png" sizes="194x194" href="{{ asset("/images/favicon/favicon-194x194.png") }}">
+		<link rel="icon" type="image/png" sizes="192x192" href="{{ asset("/images/favicon/android-chrome-192x192.png") }}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ asset("/images/favicon/favicon-16x16.png") }}">
+		<link rel="manifest" href="{{ asset("/images/favicon/site.webmanifest") }}">
+		<link rel="mask-icon" href="{{ asset("/images/favicon/safari-pinned-tab.svg" color="#088cbc") }}">
+		<link rel="shortcut icon" href="{{ asset("/images/favicon/favicon.ico") }}">
+		<meta name="apple-mobile-web-app-title" content="Estado de Nuevo Le&oacute;n">
+		<meta name="application-name" content="Estado de Nuevo Le&oacute;n">
+		<meta name="msapplication-TileColor" content="#088cbc">
+		<meta name="msapplication-TileImage" content="{{ asset("/images/favicon/mstile-144x144.png") }}">
+		<meta name="msapplication-config" content="{{ asset("/images/favicon/browserconfig.xml") }}">
+		<meta name="theme-color" content="#088cbc">
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
