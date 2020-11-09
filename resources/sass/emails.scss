@@ -1,0 +1,42 @@
+#nl-email-body{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+
+	#nl-email{
+		padding: 0px 20px;
+		width: 100%;
+		max-width: 800px;
+		margin: 0px auto;
+
+		header{
+			text-align: center;
+			padding: 40px 10px;
+			border-bottom: 1px solid gray;
+			margin-bottom: 20px;
+		}
+
+		content{
+			.card{
+				margin: 40px 20px;
+				margin-bottom: 80px;
+
+				.card-header{
+					background-color: #234374;
+					color: white;
+					font-weight: bolder;
+					font-size: 18px;
+				}
+			}
+		}
+	}
+
+	footer{
+		padding: 20px;
+		color: white;
+		background-color: #181C26;
+		text-align: center;
+	}
+}
