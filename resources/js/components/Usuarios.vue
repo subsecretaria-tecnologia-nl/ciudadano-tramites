@@ -2,7 +2,7 @@
     <div data-app>
         <div v-if="usuarios.length == 0">
             <div class="alert alert-warning d-flex justify-content-center mt-10 ml-25 mr-25">
-                    NO SE ENCONTRO NINGUN USUARIO
+                NO SE ENCONTRO NINGUN USUARIO
             </div>
         </div>
         <div v-if="usuarios.length != 0">

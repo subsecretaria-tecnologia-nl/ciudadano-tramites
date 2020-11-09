@@ -5,9 +5,8 @@
                 Usuarios
             </span>
             <div class="users-component">
-                <usuarios-component rolId = " {{$notary}} "></usuarios-component>
+                <usuarios-component notary="{{$notary}}"></usuarios-component>
             </div>
-
         </div>        
     </div>
 </div> 
