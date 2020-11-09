@@ -1,8 +1,5 @@
 <template>
     <div class="content d-flex flex-column flex-column-fluid">
-
-
-
         <div class="subheader py-2 py-lg-4 subheader-transparent" id="kt_subheader">
             <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
                 <!--begin::Details-->
@@ -47,11 +44,18 @@
             <v-container v-if="loading">
                 <v-row>
                     <v-col cols="12" md="12">
-                        <v-skeleton-loader  type="list-item" v-for="(r,i) in [1,2,3,4,5,6]" height="90px" style="margin-bottom: 8px;" v-bind:key="i"></v-skeleton-loader>
+                        <v-skeleton-loader
+                            class="card card-custom justify-content-center"
+                            type="list-item-two-line, button"
+                            v-for="(r,i) in [1,2,3,4,5,6]"
+                            v-bind:key="i"
+                            height="90px"
+                            style="margin-bottom: 8px;"
+                        ></v-skeleton-loader>
                     </v-col>
                 </v-row>
             </v-container>
-            <div class="container" v-if="!loading">     
+            <div class="w-100" v-if="!loading">     
                 <tramite-component v-for="(tramite, index) in tramitesPaginados" :tramite="tramite" v-bind:key="index"></tramite-component>
                 <div class="card card-custom">
                     <div class="card-body py-7">

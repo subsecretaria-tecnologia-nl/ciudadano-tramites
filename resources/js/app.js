@@ -37,20 +37,19 @@ document.getElementById("close-header").addEventListener("click", () => {
     }
 })
 
-Vue.component('listado-tramites-component', () => import( /* webpackChunkName: "listado-tramites-component" */  './components/ListadoTramitesComponent.vue'));
-Vue.component('tramite-component', () => import(/* webpackChunkName: "tramite-component" */  './components/TramiteComponent.vue'));
-Vue.component('wizard-component', () => import(/* webpackChunkName: "wizard-component" */ './components/WizardComponent.vue'));
+Vue.component('listado-tramites-component', () => import( /* webpackChunkName: "js/components/listado-tramites-component" */  './components/ListadoTramitesComponent.vue'));
+Vue.component('tramite-component', () => import(/* webpackChunkName: "js/components/tramite-component" */  './components/TramiteComponent.vue'));
+Vue.component('wizard-component', () => import(/* webpackChunkName: "js/components/wizard-component" */ './components/WizardComponent.vue'));
 
-Vue.component('campos-tramite-component', () => import(/* webpackChunkName: "campos-tramite-component" */ './components/CamposTramiteComponent.vue'));
-Vue.component('solicitantes-component', () => import(/* webpackChunkName: "solicitantes-component" */ './components/SolicitantesComponent.vue'));
-Vue.component('resumen-tramite-component', () => import(/* webpackChunkName: "resumen-tramite-component" */ './components/ResumenTramiteComponent.vue'));
+Vue.component('campos-tramite-component', () => import(/* webpackChunkName: "js/components/campos-tramite-component" */ './components/CamposTramiteComponent.vue'));
+Vue.component('solicitantes-component', () => import(/* webpackChunkName: "js/components/solicitantes-component" */ './components/SolicitantesComponent.vue'));
+Vue.component('resumen-tramite-component', () => import(/* webpackChunkName: "js/components/resumen-tramite-component" */ './components/ResumenTramiteComponent.vue'));
 
-Vue.component('car-shop-component', () => import(/* webpackChunkName: "car-shop-component" */  './components/carShop/CarShopComponent.vue'));
-Vue.component('metodos-pago-component', () => import(/* webpackChunkName: "metodos-pago-component" */ './components/carShop/MetodosDePagoComponent.vue'));
+Vue.component('car-shop-component', () => import(/* webpackChunkName: "js/components/car-shop-component" */  './components/carShop/CarShopComponent.vue'));
+Vue.component('metodos-pago-component', () => import(/* webpackChunkName: "js/components/metodos-pago-component" */ './components/carShop/MetodosDePagoComponent.vue'));
 
-
-Vue.component('item-solictud-carshop-component', () => import(/* webpackChunkName: "item-solictud-carshop-component" */ './components/carShop/ItemSolicitudCarShopComponent.vue'));
-Vue.component("detalle-pago-component",  () => import(/* webpackChunkName: "detalle-pago-component" */ './components/carShop/DetallePagoComponent.vue') );
+Vue.component('item-solictud-carshop-component', () => import(/* webpackChunkName: "js/components/item-solictud-carshop-component" */ './components/carShop/ItemSolicitudCarShopComponent.vue'));
+Vue.component("detalle-pago-component",  () => import(/* webpackChunkName: "js/components/detalle-pago-component" */ './components/carShop/DetallePagoComponent.vue') );
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
