@@ -86,7 +86,7 @@
                                                           <span class="sr-only">Loading...</span>
                                                       </div>
                                                     </button>
-                                                    <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
+                                                    <button type="button" id="btnWizard" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
                                                         Next
                                                     </button>
                                                 </div>
@@ -129,12 +129,20 @@
   
         methods: {
             updateScore(formularioValido) {
+              $("#btnWizard").attr("disabled", true);
+              if( formularioValido ){
+                $("#btnWizard").attr("disabled", false);
+              }
               this.formularioValido = formularioValido;
               this.$forceUpdate()
             },
 
             updateSolicitante(solicitantesValido){ 
+              $("#btnWizard").attr("disabled", true);
               this.solicitantesValido = solicitantesValido;
+              if( solicitantesValido ){
+                $("#btnWizard").attr("disabled", false);
+              }
             },
 
             next: function (event) {
