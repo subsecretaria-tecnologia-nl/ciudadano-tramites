@@ -19,7 +19,7 @@ Route::get("/", function(){
 	return redirect()->route("dashboard");
 });
 
-
+Route::get("/email/template", "EmailController@index");
 Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 	Route::middleware(["validate_session", "validate_rol"])->group(function(){
 		Route::get('/', function () {
