@@ -7,56 +7,70 @@
 		</div>
 		<div class="" v-if="mostrar">
 			<form id="formularioDinamico">
-				<div v-for="campo in campos" class="">
-					<div v-if="campo.tipo === 'input'">
-					  	<div class="form-group fv-plugins-icon-container">
-						  	<div class="form-group fv-plugins-icon-container">
-						  		<label>{{ campo.nombre }}</label>
-						  		<input type="text" class="form-control form-control-solid form-control-lg"  
-						  			:placeholder="[[campo.nombre]]" :id="[[campo.campo_id]]"
-						  			v-model="model[campo.campo_id]"  @change="cambioModelo" :required="isRequired( campo )"/>
-						  		<small  class="form-text text-muted" v-if="errors[campo.campo_id]">
-						  			Campo requerido
-						  		</small>
-						  	</div>
-					  	</div>
-					</div>
-					<div v-else-if="campo.tipo === 'select'">
-					  	<div class="form-group fv-plugins-icon-container">
-					  		<label>{{ campo.nombre }}</label>
-					  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]"
-					  			class="form-control form-control-solid form-control-lg"
-					  			v-model="model[campo.campo_id]" @change="cambioModelo" :required="isRequired( campo )">
-					  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
-					  			:value="[[Object.keys(opcion)[0] ]]">
-					  				{{ opcion[ Object.keys(opcion)[0] ] }}
-					  			</option>
-					  		</select>
-						  		<small  class="form-text text-muted" v-if="errors[campo.campo_id]">
-						  			Campo requerido
-						  		</small>
-					  	</div>
-					</div>
-					<div v-else-if="campo.tipo === 'option'">
-						<div class="form-group" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
-							<input type="radio" class=" form-control-solid"   
-								:id="[[campo.campo_id]]"
-							 	:name="[[campo.campo_id]]"
-							 	:value="[[Object.keys(opcion)[0] ]]" v-model="model[campo.campo_id]" @change="cambioModelo" :required="isRequired( campo )">
-							 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
-						</div>
-					</div>
-					<div v-else-if="campo.tipo === 'textbox' ">
-						<div class="form-group fv-plugins-icon-container">
-							<label>{{ campo.nombre }}</label>
-							<textarea 
-								:id="[[campo.campo_id]]"
-							 	:name="[[campo.campo_id]]" 
-							 	class="form-control form-control-solid form-control-lg" v-model="model[campo.campo_id]"
-							 	@change="cambioModelo" :required="isRequired( campo )"</textarea>
-						</div>
-					</div>
-				</div>
+				<div class="panel panel-default" >
+ 					<div class="panel-heading">
+ 						<div class="row">
+ 							<div v-for="campo in campos" class="col-md-6 col-sm-6 col-xs-6">
+							  	<div class="form-group fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
+							  		<label>{{ campo.nombre }}</label>
+							  		<input type="text" class="form-control form-control-solid form-control-lg"  
+							  			:placeholder="[[campo.nombre]]" :id="[[campo.campo_id]]"
+							  			v-model="campo.valor"  @keyup="cambioModelo"  @focus="cambioModelo"/>
+									<small  v-if="campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
+							  			<span v-for="mensaje in campo.mensajes" class="form-text text-danger">
+							  				{{ mensaje.mensajeStr }}
+							  			</span>
+							  		</small>
+							  	</div>
+
+							
+								<div class="form-group fv-plugins-icon-container"  v-else-if="campo.tipo === 'select'">
+								  		<label>{{ campo.nombre }}</label>
+								  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]"
+								  			class="form-control form-control-solid form-control-lg"
+								  			v-model="campo.valor" @change="cambioModelo" >
+								  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+								  			:value="[[Object.keys(opcion)[0] ]]">
+								  				{{ opcion[ Object.keys(opcion)[0] ] }}
+								  			</option>
+								  		</select>
+								  		<small  class="form-text text-muted" v-if="campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
+								  			<span v-for="mensaje in campo.mensajes">
+								  				{{ mensaje.mensajeStr }}
+								  			</span>
+								  		</small>
+								</div>
+								<div v-else-if="campo.tipo === 'option'">
+									<div class="form-group" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
+										<input type="radio" class=" form-control-solid"   
+											:id="[[campo.campo_id]]"
+										 	:name="[[campo.campo_id]]"
+										 	:value="[[Object.keys(opcion)[0] ]]" v-model="campo.valor" @change="cambioModelo" >
+										 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
+									</div>
+								</div>
+								<div v-else-if="campo.tipo === 'textbox'"  class="form-group fv-plugins-icon-container">
+									<label>{{ campo.nombre }}</label>
+									<textarea 
+										:id="[[campo.campo_id]]"
+									 	:name="[[campo.campo_id]]" 
+									 	class="form-control form-control-solid form-control-lg" v-model="campo.valor"
+									 	@change="cambioModelo" ></textarea>
+									 	<small  class="form-text text-muted" v-if="campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
+								  			<span v-for="mensaje in campo.mensajes">
+								  				{{ mensaje.mensajeStr }}
+								  			</span>
+								  		</small>
+									
+								</div>
+ 							</div>
+ 						</div>
+ 		
+
+
+
+ 					</div>
+ 				</div>
 			</form>
 		</div>
     </div>
@@ -64,49 +78,43 @@
 
 <script>
     export default {
-        props: ['tramite','formularioValido'],
+
+        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount'],
         data() {
             return {
                 campos: [],
                 mostrar:false,
-                model:{},
-                errors: {}
+                errors: {},
+                showMensajes:false
             }
         },
   
         created() {
-            this.recuperarDatosInStorage();
 			this.obtenerCampos();
         },
 
         methods: {
 		    cambioModelo() {
-		    	let info = {};
-		    	for (const property in this.model) {
-				  	let campo = this.campos.find( campo => campo.campo_id == property  );
-				  	
-				  	info[property] = { name: campo.nombre.toLowerCase().split(' ').join('_'), value: this.model[property] };
-				}
-				
-		    	const parsed = JSON.stringify(this.model);
-                if( this.validarFormulario() ){
-                	localStorage.setItem('datosFormulario', parsed); 
+
+		    	const parsed = JSON.parse(JSON.stringify(this.campos));
+		    	let formvALID = this.validarFormulario();
+                if( formvALID ){
+                	let datosFormulario = {
+                		tramite: this.tramite,
+                		campos: this.campos
+                	}
+                	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
                 }
 		    },
 
 		    validarFormulario(){
 		    	let valido = true;
-		    	 this.campos.forEach( campo =>{
-                	if( this.isRequired(campo)) {
-                		let campoValido = !!this.model[campo.campo_id];
-                		/*if( campoValido ){
-                			delete this.errors[nombreCampo];
-                		} else{
-                			this.errors[nombreCampo] = true;
-                		}*/
-                		
-                		valido = valido && campoValido;
-                	}
+		    	this.campos.forEach( (campo, indice) =>{
+		    	 	const campoOBJ = JSON.parse(JSON.stringify(campo));
+		    	 	this.isValido(campoOBJ, indice);
+                });
+                this.campos.forEach( (campo, indice) =>{
+                	valido = valido && campo.valido;
                 });
                 this.$emit('updatingScore', valido);
                 return valido;
@@ -116,7 +124,14 @@
 		    recuperarDatosInStorage(){
 	            if (localStorage.getItem('datosFormulario')) {
 	              	try {
-	                	this.model = JSON.parse(localStorage.getItem('datosFormulario'));
+	                	let datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
+	                	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite){
+	                		this.campos = datosFormulario.campos;
+	                		this.showMensajes = true;
+	                	} else {
+	                		localStorage.removeItem('datosFormulario');
+	                	}
+	                	
 	              	} catch(e) {
 	                	localStorage.removeItem('datosFormulario');
 	              	}
@@ -128,6 +143,9 @@
 		    	try {
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.campos = response.data;
+
+				  	this.recuperarDatosInStorage(); 
+
 				  	this.validarFormulario();
 				} catch (error) {
 				  	console.log(error);
@@ -136,10 +154,44 @@
 				
 		    },
 
-		    isRequired(campo  ){
-		    	let caracteristicas = JSON.parse(campo.caracteristicas);
-	        	return !!caracteristicas.required;
+		    isValido(campo, indice  ){
+
+		    	let curpValido = true;
+		    	let requeridoValido = true;
+				let caracteristicas = {};
+		    	var caracteristicasStr = campo.caracteristicas;
+		    	this.campos[indice].mensajes = [];
+		    	try {
+		    		caracteristicas  = JSON.parse( caracteristicasStr );
+		    	}catch(err){
+		    		console.log(err)
+		    	}
+
+		    	if( campo.nombre == "CURP" ){
+		    		var re = new RegExp(/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/, "i");
+		    		curpValido =  re.test(campo.valor) ;
+		    		if(  !curpValido ){
+		    			let mensaje = { 
+		    				tipo:'regex',
+		    				mensajeStr: "El campo " + campo.nombre + " no es válido"
+		    			}
+		    			this.campos[indice].mensajes.push( mensaje );
+		    		}
+		    		
+		    	} 
+		    	if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
+		    		requeridoValido =  !!campo.valor;
+		    		if( !requeridoValido ){
+		    			let mensaje = { 
+		    				tipo:'required',
+		    				mensajeStr: "El campo " + campo.nombre + " es requerido"
+		    			}
+		    			this.campos[indice].mensajes.push( mensaje );
+		    		}
+		    	}
+		    	this.campos[indice].valido = curpValido && requeridoValido;
 	        },
+
 
 
 		}
