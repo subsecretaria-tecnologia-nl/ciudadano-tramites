@@ -58,7 +58,7 @@
 
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"  
-                                                :formularioValido="formularioValido" @updatingScore="updateScore"></campos-tramite-component>
+                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount"></campos-tramite-component>
                                             </div>
                                             <!--end: Wizard Step 1-->
                                             <!--begin: Wizard Step 2-->
@@ -122,7 +122,8 @@
                 enviando:false, finalizando:false,
                 registrado: false,
                 formularioValido: false,
-                solicitantesValido: false
+                solicitantesValido: false,
+                comprobarEstadoFormularioCount:0
             }
         },
   
@@ -137,7 +138,10 @@
             },
 
             next: function (event) {
-                
+              if( (this.currentStep + 1) === 2 ){
+                  this.comprobarEstadoFormularioCount++;
+              }
+
               if( (this.currentStep + 1) === 3 && (!this.solicitantesValido || !this.formularioValido)){
                 Command: toastr.warning("Aviso!", "Datos requeridos");
                 return false;
@@ -147,6 +151,7 @@
                 Command: toastr.warning("Aviso!", "Campos requeridos");
                 return false;
               }
+
 
               $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
               $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
@@ -158,6 +163,11 @@
             },
 
             goTo( idStep ){
+
+                if(idStep == 2){
+                  this.comprobarEstadoFormularioCount++;
+                }
+                
                 if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
                   Command: toastr.warning("Aviso!", "Datos requeridos");
                   return false;
@@ -211,14 +221,17 @@
                     goTo(1);
                   }
                 }
-                //datosFormulario.costo_final = tramite.detalle.costo_final;
-                //datosFormulario.partidas = tramite.partidas;
-
+                let camposObj = {};
+                datosFormulario.campos.forEach( campo =>  {
+                  camposObj[campo.campo_id] = campo.valor;
+                });
+      
                 let informacion = {
-                  campos: datosFormulario,
+                  campos:camposObj,
                   costo_final:tramite.detalle.costo_final,
                   partidas: tramite.partidas 
                 }
+
 
                 let data = {
                   clave: tramite.id_seguimiento,
