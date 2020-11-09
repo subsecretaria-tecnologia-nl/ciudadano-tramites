@@ -50,6 +50,7 @@ Vue.component('metodos-pago-component', () => import ( /* webpackChunkName: "js/
 
 Vue.component('item-solictud-carshop-component', () => import ( /* webpackChunkName: "js/components/item-solictud-carshop-component" */ './components/carShop/ItemSolicitudCarShopComponent.vue'));
 Vue.component("detalle-pago-component", () => import ( /* webpackChunkName: "js/components/detalle-pago-component" */ './components/carShop/DetallePagoComponent.vue'));
+Vue.component("usuarios-component", () => import ( /* webpackChunkName: "js/components/usuarios-component" */ './components/Usuarios.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
