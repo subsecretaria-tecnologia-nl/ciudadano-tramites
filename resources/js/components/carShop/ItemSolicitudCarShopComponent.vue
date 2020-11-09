@@ -62,6 +62,8 @@
                 axios.put(url, {tipo:"u"}).then(response => {
                     let data = { response, index: elItem.index };
                     this.$emit('updatingParent', data);
+                    let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
+                    $("#totalTramitesCarrito" ).text( totalCarritoActual - 1  );
                 }).catch(error => {
                     console.log("no fue posible eliminar la solicitud");
                     console.log(error)

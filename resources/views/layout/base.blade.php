@@ -214,7 +214,7 @@
 											<span class="svg-icon svg-icon-xl">
 												<!--begin::Svg Icon | path:media/svg/icons/Code/Compiling.svg-->
 												<i class="flaticon2-shopping-cart-1"></i>
-												<span class="badge badge-danger">{{ session()->get("tramites") }}</span>
+												<span id="totalTramitesCarrito"  class="badge badge-danger">{{ session()->get("tramites") }}</span>
 											</span>
 										</a>
 									</div>
@@ -1534,7 +1534,7 @@
 			<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 			<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 			
-			<script src="{{ asset("/js/bundle.js") }}"></script>
+			<script src="{{ asset("js/bundle.js") }}"></script>
 		</body>
 	<!--end::Body-->
 </html>
