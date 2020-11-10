@@ -583,9 +583,12 @@ class TramitesController extends Controller
 
 
     public function respuestaPago(Request $request ){
+      $url = getenv("PAYMENTS_HOSTNAME");
+      $PAYMENTS_KEY = getenv("PAYMENTS_KEY");
+
       $response = Http::withHeaders([
-          'Authorization' => 'Bearer yf3puRWCxfgV9kTTg9xK8mmo74QAhatjtvN2662RUrfC9WVaH7RGD7yUFJQyNF22JJvdhibXKv7kc298wLKtEYd39H9mfijq6XLk'
-      ])->post('http://10.153.144.218/payments-api/v1/respuestabanco', [
+          'Authorization' => 'Bearer ' . $PAYMENTS_KEY
+      ])->post( $url . '/v1/respuestabanco', [
           'transactionToken' => $request->transactionToken,
       ]);
       
