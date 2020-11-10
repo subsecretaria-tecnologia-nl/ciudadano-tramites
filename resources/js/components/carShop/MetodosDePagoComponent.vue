@@ -18,7 +18,7 @@
 
             <div class="card border-secondary shadow p-3 mb-5 bg-white rounded metodopago"" id="idNetPay" v-if="tienePagoNetPay">
                 <div class="pt-4" >
-                    <h6 class="mb-3"><strong>Pago NetPay</strong></h6>
+                    <h6 class="mb-3"><strong>Pago en linea</strong></h6>
 
                     <div class="text-center">
                         <button type="button" class="btn btn-success btn-metodopago" id="metodopagoBtnNP"  v-on:click="pagoNetPay()"> 
@@ -35,7 +35,25 @@
                 </div>
             </div>
 
+            <div class="card border-secondary shadow p-3 mb-5 bg-white rounded metodopago"" id="idBancomer" v-if="tienePagoBancomer">
+                <div class="pt-4" >
+                    <h6 class="mb-3"><strong>Pago en Bnacomer</strong></h6>
 
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-success btn-metodopago" id="metodopagoBtnBancomer"  v-on:click="pagoBancomer()"> 
+                            Bancomer 
+                            <div id="spinner-ref" class="spinner-border spinner-border-sm float-right" role="status" v-if="obteniendoPagoBancomer">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
+                        <form v-if="urlBancomer.length > 0" id="formulariosBancomer" :action="urlBancomer" method="post">
+                            <input type="hidden" v-for="(value,name) in this.datos" :name="name" :value="value" >
+                            <button type="submit" style="display: none;">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>     
 
     </div>
@@ -49,28 +67,30 @@
             this.cuentas = this.infoMetodosPago.cuentas;
             this.folio = this.infoMetodosPago.folio;
             
-            this.cuentas.forEach( cuenta => {
-                console.log( cuenta.metodopago_id )
-            } )
 
-            this.tienePagoNetPay = this.cuentas.find( cuenta => cuenta.metodopago_id == 1 );
+            this.tienePagoNetPay = this.cuentas.find( cuenta => cuenta.metodopago_id == 1 && cuenta.banco_id == 17 );
             this.tieneVentanilla =  this.cuentas.find( cuenta => cuenta.metodopago_id == 3 );
-            this.tienePagoBancoEnLinea = this.cuentas.find( cuenta => cuenta.metodopago_id == 4 );
+            this.tienePagoBancomer = this.cuentas.find( cuenta => cuenta.metodopago_id == 1 && cuenta.banco_id == 3);
         },
 
         data(){
             return {
                 tieneVentanilla: false,
                 tienePagoNetPay:false,
+                tienePagoBancomer: false,
                 cuentas:[],
                 folio:0,
                 obteniendoRecibo:false,
                 obteniendoPagoEnLinea:false,
-                urlNetPay:"", JWT:""
+                obteniendoPagoBancomer:false,
+                urlNetPay:"", JWT:"",
+                urlBancomer:""
             }
         },
   
         methods: {
+
+
             obtenerReciboPagoVentanilla: function () {
                 this.obteniendoRecibo = true;
                 let url = process.env.PAYMENTS_HOSTNAME +  "/v1/databank";  
@@ -100,7 +120,7 @@
             pagoNetPay(){
                 this.obteniendoPagoEnLinea = true;
                 let url = process.env.PAYMENTS_HOSTNAME +  "/v1/databank"; 
-                console.log( this.tienePagoNetPay )
+
                 let data = JSON.stringify({ folio:this.folio, cuenta_id: this.tienePagoNetPay.cuenta_id });
 
                 axios.post(url, 
@@ -112,7 +132,6 @@
                     },
                 } )
                 .then(response => {
-                    console.log( response.data.response.url_response );
                     this.urlNetPay = response.data.response.url_response;
                     this.JWT= response.data.response.datos.jwt;
 
@@ -132,6 +151,40 @@
                     console.log(error)
                 }).finally(() => {
                     this.obteniendoPagoEnLinea = false;
+                });
+            },
+
+            pagoBancomer(){
+                this.obteniendoPagoBancomer = true;
+                let url = process.env.PAYMENTS_HOSTNAME +  "/v1/databank"; 
+
+                let data = JSON.stringify({ folio:this.folio, cuenta_id: this.tienePagoBancomer.cuenta_id });
+
+                axios.post(url, 
+                    data,
+                    {
+                    headers:{
+                        "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+                        "Content-type":"application/json"
+                    },
+                } )
+                .then(response => {
+                    this.urlBancomer = response.data.response.url_response;
+                    this.datos = response.data.response.datos;
+   
+                    setTimeout(function(){ 
+                        this.obteniendoPagoBancomer = false;
+                        $("#formulariosBancomer").submit();
+
+                    }, 3000);
+
+                    //https://prepro.adquiracloud.mx/clb/endpoint/gnl
+
+                }).catch((error)=> {
+                    console.log(error)
+                    this.obteniendoPagoBancomer = false;
+                }).finally(() => {
+                    
                 });
             }
 
