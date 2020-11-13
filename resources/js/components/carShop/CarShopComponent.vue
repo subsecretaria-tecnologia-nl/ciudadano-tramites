@@ -189,10 +189,11 @@
 						tramitesJson.detalle = [];
 
 						tramitesJson.detalle[0] = { 
-							concepto : info.partida ? info.partidas[0].descripcion : "Descripcion opcional",
-							partida: info.partida ? info.partidas[0].id_partida : 654656546,
-							importe_concepto:1						
+							concepto : info.partidas ? info.partidas[0].descripcion : "Descripcion opcional",
+							partida: info.partidas ? info.partidas[0].id_partida : 654656546,
+							importe_concepto:0						
 						}
+
 
 						tramitesJson.datos_solicitante = {
 					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante || "",
@@ -246,14 +247,25 @@
 			    axios.all(requestCostos).then(axios.spread((...responses) => {
 					responses.forEach( respuesta => {
 						let indiceTramite = respuesta.config.headers.contadorSolicitantes;
-						listadoTramites[indiceTramite].importe_tramite = respuesta.data ? respuesta.data[0].costo_final : 1;
-						listadoTramites[indiceTramite].detalle[0].importe_concepto = listadoTramites[indiceTramite].importe_tramite;
+						listadoTramites[indiceTramite].importe_tramite = respuesta.data ? respuesta.data[0].costo_final : 0;
+
+
+						listadoTramites[indiceTramite].detalle[0].importe_concepto = respuesta.data ? respuesta.data[0].importe_total : 0;
+						let descuentosAplicados = [];
+						respuesta.data[0].descuentos.forEach( descuento => {
+							let descuentoAplicado =  {
+				              concepto_descuento: descuento.concepto_descuento,
+				              importe_descuento: descuento.importe_subsidio,
+				              partida_descuento: descuento.partida_descuento
+				            }
+				            descuentosAplicados.push( descuentoAplicado )
+						});
+						listadoTramites[indiceTramite].detalle[0].descuentos = descuentosAplicados;
 						
 					});
 				})).catch(errors => {
 				  console.log( errors )
 				}).finally( () =>{
-					console.log("termino de consulttar")
 					this.obteniendoTramites = false;
 					this.costosObtenidos = true;
 				});
