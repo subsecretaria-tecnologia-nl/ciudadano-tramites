@@ -601,4 +601,29 @@ class TramitesController extends Controller
       
     }
 
+    public function respuestaPagoBBVA(Request $request){
+
+
+      $url = getenv("PAYMENTS_HOSTNAME");
+      $PAYMENTS_KEY = getenv("PAYMENTS_KEY");
+
+      $response = Http::withHeaders([
+          'Authorization' => 'Bearer ' . $PAYMENTS_KEY
+      ])->post( $url . '/v1/respuestabanco', [
+          's_transm' => $request->get('s_transm'),
+          'mp_response' => $request->get('mp_response'),
+          'mp_signature' => $request->get('mp_signature'),
+          'n_autoriz' => $request->get('n_autoriz'),
+      ]);
+      
+      $json = $response->json();
+
+      
+      if( $json['data'] ){
+        return layout_view("tramites.respuestaPagoBancomer",  [ "respuestabanco" =>$json] );
+      } else {
+        return layout_view("tramites.respuestaPagoBancomer",  [ "respuestabanco" =>[] ]);
+      }
+    }
+
 }

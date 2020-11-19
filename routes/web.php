@@ -55,5 +55,8 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		Route::get('/cart/', "TramitesController@carshop")->name("tramite.cart");
 
 		Route::get('/respuestaPago', "TramitesController@respuestaPago")->name("respuestaPago");
+
 	}); 
+
+	Route::post('/respuestaPagoBBVA', "TramitesController@respuestaPagoBBVA")->name("respuestaPagoBBVA");
 });
