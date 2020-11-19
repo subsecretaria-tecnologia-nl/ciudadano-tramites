@@ -41,6 +41,7 @@ Vue.component('listado-tramites-component', () => import ( /* webpackChunkName: 
 Vue.component('tramite-component', () => import ( /* webpackChunkName: "js/components/tramite-component" */ './components/TramiteComponent.vue'));
 Vue.component('wizard-component', () => import ( /* webpackChunkName: "js/components/wizard-component" */ './components/WizardComponent.vue'));
 
+
 Vue.component('campos-tramite-component', () => import(/* webpackChunkName: "js/components/campos-tramite-component" */ './components/CamposTramiteComponent.vue'));
 Vue.component('solicitantes-component', () => import(/* webpackChunkName: "js/components/solicitantes-component" */ './components/SolicitantesComponent.vue'));
 Vue.component('resumen-tramite-component', () => import(/* webpackChunkName: "js/components/resumen-tramite-component" */ './components/ResumenTramiteComponent.vue'));

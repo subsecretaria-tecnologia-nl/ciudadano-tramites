@@ -12,42 +12,51 @@
 		                    </v-col>
 		                </v-row>
 		            </v-container>
-	        		<div class="container-fluid mb-4 mb-3 shadow-sm p-3 bg-white rounded" id="listTramites" v-for="(tramite, index) in tramitesPaginados"  v-if="!obteniendoTramites && tramitesPaginados.length > 0" >
-						<item-solictud-carshop-component 
-							:solicitud="tramite"
-							@updatingParent="updateList" 
-							:index="index">
-						 </item-solictud-carshop-component>
-	        		</div>
-		        	<div class="card card-custom">
-                    	<div class="card-body py-7">
-	                        <!--begin::Pagination-->
-	                        <div class="d-flex justify-content-between align-items-center flex-wrap">
-	                            <div class="d-flex flex-wrap mr-3" >
-	                                <a  class="btn btn-icon btn-sm btn-light-primary" v-if="currentPage !== 1" v-on:click="goto(currentPage - 1)">
-	                                    <i class="ki ki-bold-arrow-back icon-xs"></i>
-	                                </a>
-	                                <a class="btn btn-icon btn-sm border-0 btn-hover-primary" v-for="(r) in pages"
-	                                v-bind:class="[ currentPage === r ? 'active' : '']" v-on:click="goto(r)"> 
-	                                   {{ r }}
-	                                </a>
-	                                <a  class="btn btn-icon btn-sm btn-light-primary" v-if="currentPage !== (pages.length)"  v-on:click="goto(currentPage + 1)">
-	                                    <i class="ki ki-bold-arrow-next icon-xs"></i>
-	                                </a>
-	                            </div>
-	                            <div class="d-flex align-items-center">
-	                                <select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model="porPage" @change="calcularPage">
-	                                    <option value="2">2</option>
-	                                    <option value="5">5</option>
-	                                    <option value="30">30</option>
-	                                </select>
-	                            </div>
-	                        </div>
-	                        <!--end:: Pagination-->
-	                    </div>
-	                </div>
+		            <div v-if="!obteniendoTramites && tramitesPaginados.length > 0">
+		        		<div class="container-fluid mb-4 mb-3 shadow-sm p-3 bg-white rounded" id="listTramites" v-for="(tramite, index) in tramitesPaginados"   >
+							<item-solictud-carshop-component 
+								:solicitud="tramite"
+								@updatingParent="updateList" 
+								:index="index">
+							 </item-solictud-carshop-component>
+		        		</div>
+			        	<div class="card card-custom">
+	                    	<div class="card-body py-7">
+		                        <!--begin::Pagination-->
+		                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+		                            <div class="d-flex flex-wrap mr-3" >
+		                                <a  class="btn btn-icon btn-sm btn-light-primary" v-if="currentPage !== 1" v-on:click="goto(currentPage - 1)">
+		                                    <i class="ki ki-bold-arrow-back icon-xs"></i>
+		                                </a>
+		                                <a class="btn btn-icon btn-sm border-0 btn-hover-primary" v-for="(r) in pages"
+		                                v-bind:class="[ currentPage === r ? 'active' : '']" v-on:click="goto(r)"> 
+		                                   {{ r }}
+		                                </a>
+		                                <a  class="btn btn-icon btn-sm btn-light-primary" v-if="currentPage !== (pages.length)"  v-on:click="goto(currentPage + 1)">
+		                                    <i class="ki ki-bold-arrow-next icon-xs"></i>
+		                                </a>
+		                            </div>
+		                            <div class="d-flex align-items-center">
+		                                <select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model="porPage" @change="calcularPage">
+		                                    <option value="2">2</option>
+		                                    <option value="5">5</option>
+		                                    <option value="30">30</option>
+		                                </select>
+		                            </div>
+		                        </div>
+		                        <!--end:: Pagination-->
+		                    </div>
+		                </div>
+		            </div>
 
-
+		        	<div v-else-if="!obteniendoTramites && tramitesPaginados.length == 0">
+		        		<div class="card" style="width: 60rem;">
+						  <div class="card-body text-center">
+						    <h5 class="card-title" >Aún no haz iniciado algún trámite</h5>
+						    Para continuar da click <a  class="card-link"  v-on:click="iniciarTramite()"> <span style="cursor: pointer;"> aquí </span> </a>
+						  </div>
+						</div>
+		        	</div>
 		      	</div>
 		      	<!-- Card -->
       			<metodos-pago-component v-if="mostrarMetodos" :infoMetodosPago="infoMetodosPago"></metodos-pago-component>
@@ -109,6 +118,7 @@
                 let indiceFinal =   ( (page - 1 ) * porPageInt  )  + porPageInt;
                 this.tramitesPaginados = this.tramites.slice( indiceInicial,  indiceFinal );
                 this.totalTramites = this.tramitesPaginados.length;
+
             },
 
 
@@ -143,7 +153,7 @@
                     let notary_offices = response.data.notary_offices;
                     let tramites =  response.data.tramites ;
                     this.construirJSONTramites( tramites );
-                    this.obteniendoTramites = false;
+                    
                 } catch (error) {
                     console.log(error);
                     this.obteniendoTramites = false;
@@ -179,10 +189,11 @@
 						tramitesJson.detalle = [];
 
 						tramitesJson.detalle[0] = { 
-							concepto : info.partida ? info.partidas[0].descripcion : "Descripcion opcional",
-							partida: info.partida ? info.partidas[0].id_partida : 654656546,
-							importe_concepto:1						
+							concepto : info.partidas ? info.partidas[0].descripcion : "Descripcion opcional",
+							partida: info.partidas ? info.partidas[0].id_partida : 654656546,
+							importe_concepto:0						
 						}
+
 
 						tramitesJson.datos_solicitante = {
 					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante || "",
@@ -236,16 +247,32 @@
 			    axios.all(requestCostos).then(axios.spread((...responses) => {
 					responses.forEach( respuesta => {
 						let indiceTramite = respuesta.config.headers.contadorSolicitantes;
-						listadoTramites[indiceTramite].importe_tramite = respuesta.data ? respuesta.data[0].costo_final : 1;
-						listadoTramites[indiceTramite].detalle[0].importe_concepto = listadoTramites[indiceTramite].importe_tramite;
+						listadoTramites[indiceTramite].importe_tramite = respuesta.data ? respuesta.data[0].costo_final : 0;
+
+
+						listadoTramites[indiceTramite].detalle[0].importe_concepto = respuesta.data ? respuesta.data[0].importe_total : 0;
+						let descuentosAplicados = [];
+						respuesta.data[0].descuentos.forEach( descuento => {
+							let descuentoAplicado =  {
+				              concepto_descuento: descuento.concepto_descuento,
+				              importe_descuento: descuento.importe_subsidio,
+				              partida_descuento: descuento.partida_descuento
+				            }
+				            descuentosAplicados.push( descuentoAplicado )
+						});
+						listadoTramites[indiceTramite].detalle[0].descuentos = descuentosAplicados;
 						
 					});
 				})).catch(errors => {
 				  console.log( errors )
 				}).finally( () =>{
-					console.log("termino de consulttar")
+					this.obteniendoTramites = false;
 					this.costosObtenidos = true;
 				});
+            },
+
+            iniciarTramite(){
+            	redirect("/nuevo-tramite");
             }
 
 		}

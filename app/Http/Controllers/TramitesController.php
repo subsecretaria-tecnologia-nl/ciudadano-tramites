@@ -19,7 +19,7 @@ use App\Repositories\EgobiernopartidasRepositoryEloquent;
 use App\Repositories\PortalcostotramitesRepositoryEloquent;
 use App\Repositories\PortalsubsidiotramitesRepositoryEloquent;
 use App\Repositories\PortalumaRepositoryEloquent;
-
+use Illuminate\Support\Facades\Http;
 
 class TramitesController extends Controller
 {
@@ -579,6 +579,26 @@ class TramitesController extends Controller
     public function carshop ( Request $request ) {
       set_layout_arg("subtitle", "CarShop");
       return layout_view("tramites.carshop" );
+    }
+
+
+    public function respuestaPago(Request $request ){
+      $url = getenv("PAYMENTS_HOSTNAME");
+      $PAYMENTS_KEY = getenv("PAYMENTS_KEY");
+
+      $response = Http::withHeaders([
+          'Authorization' => 'Bearer ' . $PAYMENTS_KEY
+      ])->post( $url . '/v1/respuestabanco', [
+          'transactionToken' => $request->transactionToken,
+      ]);
+      
+      $json = $response->json();
+      if( $json['data'] ){
+        return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>$json] );
+      } else {
+        return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>[] ]);
+      }
+      
     }
 
 }

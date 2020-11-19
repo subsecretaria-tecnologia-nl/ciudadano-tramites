@@ -162,13 +162,13 @@
 		    	var caracteristicasStr = campo.caracteristicas;
 		    	this.campos[indice].mensajes = [];
 		    	try {
-		    		caracteristicas  = JSON.parse( caracteristicasStr );
+		    		caracteristicas  = JSON.parse(  caracteristicasStr + '' );
 		    	}catch(err){
-		    		console.log(err)
+		    		console.log(err);
 		    	}
 
-		    	if( campo.nombre == "CURP" ){
-		    		var re = new RegExp(/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/, "i");
+		    	if( caracteristicas.expreg){
+		    		var re = new RegExp(caracteristicas.expreg, "i");
 		    		curpValido =  re.test(campo.valor) ;
 		    		if(  !curpValido ){
 		    			let mensaje = { 
@@ -177,7 +177,6 @@
 		    			}
 		    			this.campos[indice].mensajes.push( mensaje );
 		    		}
-		    		
 		    	} 
 		    	if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
 		    		requeridoValido =  !!campo.valor;
