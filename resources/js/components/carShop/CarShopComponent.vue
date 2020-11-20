@@ -92,6 +92,8 @@
   
         mounted() {
         	this.obtenerTramitesAgregados();
+console.log( "process.env" )
+        	console.log( process.env )
         },
 
 
