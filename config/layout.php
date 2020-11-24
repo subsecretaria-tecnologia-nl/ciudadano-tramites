@@ -37,4 +37,36 @@ return [
 		]
 	],
 	"session_whitelist" => ["login","password/recovery", "password", "password/recovery/(.+)"],
+	"menu" => [
+		[
+			"name" => "Inicio",
+			"icon" => "fas fa-home",
+			"path" => "dashboard",
+			"options" => null
+		],
+		[
+			"name" => "En espera de atención",
+			"icon" => "fas fa-clock",
+			"path" => "tramites",
+			"options" => ["hold"]
+		],
+		[
+			"name" => "En curso",
+			"icon" => "fas fa-play-circle",
+			"path" => "tramites",
+			"options" => ["open"]
+		],
+		[
+			"name" => "Pendiente de pago",
+			"icon" => "fas fa-money-bill",
+			"path" => "tramites",
+			"options" => ["pending-payment"]
+		],
+		[
+			"name" => "Cerrado",
+			"icon" => "fas fa-check-circle",
+			"path" => "tramites",
+			"options" => ["close"]
+		]
+	]
 ];

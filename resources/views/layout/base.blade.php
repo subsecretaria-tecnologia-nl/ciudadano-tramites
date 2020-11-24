@@ -368,7 +368,20 @@
 														</a>
 													</li>
 													<li><hr></li>
-													<li class="menu-item <?= ($currentPath == "/dashboard") ? "menu-item-active" : "" ?>" aria-haspopup="true">
+													<?php
+														foreach(config("layout.menu") as $item){
+															echo "
+																<li class=\"menu-item ".(($currentPath == $item["path"]) ? "menu-item-active" : "")."\" aria-haspopup=\"true\">
+																	<a href=\"".url()->route($item["path"], $item["options"])."\" class=\"menu-link w-100\">";
+																		if(isset($item["icon"]))
+																			echo "<span class=\"menu-icon\"><i class=\"{$item["icon"]}\"></i></span>";
+																		echo "<span class=\"menu-text d-flex d-md-none d-xl-flex\">{$item["name"]}</span>
+																	</a>
+																</li>
+															";
+														}
+													?>
+													{{-- <li class="menu-item <?= ($currentPath == "/dashboard") ? "menu-item-active" : "" ?>" aria-haspopup="true">
 														<a href="{{ url()->route("dashboard") }}" class="menu-link w-100">
 															<span class="menu-icon"><i class="fas fa-home"></i></span>
 															<span class="menu-text d-flex d-md-none d-xl-flex">Inicio</span>
@@ -397,7 +410,7 @@
 															<span class="menu-icon"><i class="fas fa-money-bill"></i></span>
 															<span class="menu-text d-flex d-md-none d-xl-flex">Trámites Por Pagar</span>
 														</a>
-													</li>
+													</li> --}}
 												</ul>
 												<!--end::Nav-->
 											</div>

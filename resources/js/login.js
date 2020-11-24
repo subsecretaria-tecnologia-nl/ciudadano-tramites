@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
 $('#kt_login_signin_submit').on('click', function(e) {
     e.preventDefault();
 
+    if($(this).find("i.fa-spinner").hasClass("d-none")){
+        $(this).attr("disabled")
+        $(this).find("i.fa-spinner").removeClass("d-none")
+    }
+
     var password = $(document).find('input[name="password"]').val();
     var username = $(document).find('input[name="username"]').val();
 
@@ -29,8 +34,14 @@ $('#kt_login_signin_submit').on('click', function(e) {
                     password,
                     username
                 },
+                done : function (res) {
+                    console.log(res)
+                    if(!$(this).find("i.fa-spinner").hasClass("d-none")){
+                        $(this).removeAttr("disabled")
+                        $(this).find("i.fa-spinner").addClass("d-none")
+                    }
+                },
                 success: function(res) {
-                    console.log(res);
                     swal.fire({
                         text: "All is cool! Now you submit this form",
                         icon: "success",
@@ -44,7 +55,6 @@ $('#kt_login_signin_submit').on('click', function(e) {
                     });
                 },
                 error: function(res) {
-                    console.log(res);
                     swal.fire({
                         text: "Sorry, looks like there are some errors detected, please try again.",
                         icon: "error",
