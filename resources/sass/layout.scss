@@ -177,3 +177,7 @@
 #app{
 	width:100%;
 }
+
+.header-fixed[data-header-scroll=on] .content{
+	padding-top: 25px !important;
+}

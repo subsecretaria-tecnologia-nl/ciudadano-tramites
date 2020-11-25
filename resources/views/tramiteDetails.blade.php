@@ -41,7 +41,12 @@
                 	</div>
                 </div>
                 <div class="card mt-5 <?= count($tramite->mensajes) == 0 ? "d-none" : ""?>">
-                	<div class="card-header"><strong>Mensajes</strong></div>
+                	<div class="card-header d-flex align-items-center">
+                		<p class="m-0">
+                			<strong>Mensajes</strong> <span class="badge badge-secondary"><?=count($tramite->mensajes)?></span>
+                		</p>
+                		<button class="btn btn-secondary ml-auto">Nuevo Mensaje</button>
+                	</div>
                 	<div class="card-body">
                 		<?php
                 			foreach($tramite->mensajes as $ind => $msg){
