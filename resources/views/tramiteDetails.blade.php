@@ -23,7 +23,7 @@
                 	</div>
                 </div>
                 <div class="card mt-5">
-                	<div class="card-header">Información</div>
+                	<div class="card-header"><strong>Información</strong></div>
                 	<div class="card-body">
                 		<div class="row">
                 			<?php
@@ -41,7 +41,7 @@
                 	</div>
                 </div>
                 <div class="card mt-5">
-                	<div class="card-header">Mensajes</div>
+                	<div class="card-header"><strong>Mensajes</strong></div>
                 	<div class="card-body">
                 		<?php
                 			foreach($tramite->mensajes as $ind => $msg){
