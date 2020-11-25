@@ -40,7 +40,7 @@
                 		</div>
                 	</div>
                 </div>
-                <div class="card mt-5">
+                <div class="card mt-5 <?= count($tramite->mensajes) == 0 ? "d-none" : ""?>">
                 	<div class="card-header"><strong>Mensajes</strong></div>
                 	<div class="card-body">
                 		<?php
