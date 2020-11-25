@@ -91,6 +91,9 @@
                     this.tramites = response.data;
                     // this.tramitesFiltrados = this.tramites;
                     this.tramitesFiltrados = this.tramites.filter( tramite => tramite.titulo.toLocaleLowerCase().includes(this.strBusqueda.toLocaleLowerCase()) ) ;
+                    this.tramitesFiltrados.map(tramite => {
+                        tramite.created_at = moment(tramite.created_at).format("MMMM Do YYYY, hh:mm A")
+                    })
                     let pagesTotal = Math.ceil( this.tramitesFiltrados.length / this.porPage);
                     let pages = [];
 

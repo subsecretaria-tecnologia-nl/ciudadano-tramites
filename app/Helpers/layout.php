@@ -46,7 +46,7 @@ if(!function_exists("curlSendRequest")){
 	function curlSendRequest ($method, $endpoint, $data, $headers = [], $timeout = null) {
 		if(!$timeout) $timeout = env("WS_TIMEOUT");
 		$req = curl_init();
-		$data = json_encode($data);
+		// $data = json_encode($data);
 		curl_setopt($req, CURLOPT_URL, $endpoint);
 		curl_setopt($req, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($req, CURLOPT_RETURNTRANSFER, 1);

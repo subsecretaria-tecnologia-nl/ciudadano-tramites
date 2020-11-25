@@ -27,6 +27,7 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		})->name("home");
 		Route::get('/dashboard', "DashboardController@index")->name("dashboard");
 		Route::get('/tramites/{type}', "TramitesController@index")->name("tramites");
+		Route::get('/detalle/{id}', "TramitesDetailsController@index")->name("tramites.details");
 		Route::get('/nuevo-tramite', "TramitesController@new")->name("tramite.nuevo");
 		Route::get('/perfil',  "AcountInfoController@index")->name("perfil");
 		Route::get('/informacion-cuenta', "ProfileController@index")->name("informacion-cuenta");

@@ -56,6 +56,8 @@
 			if(!attrs.pages) attrs.pages = 0;
 			if(!attrs.index) attrs.index = 1;
 			attrs.limit = 10;
+			attrs.totalItems = 0;
+			if(!attrs.message) attrs.message = null;
 			return attrs;
 		},
 		methods : {
@@ -75,7 +77,6 @@
 
                 this.tramitesPaginados = this.items.slice( indiceInicial,  indiceFinal );
                 this.totalItems = this.tramitesPaginados.length;
-                console.log(this.totalItems)
             },
             goto( page ){ 
                 this.pagination( page );

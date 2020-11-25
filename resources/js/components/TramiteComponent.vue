@@ -11,21 +11,23 @@
                         <div class="mr-3">
                             <!--begin::Name-->
                             <a v-bind:href="'detalle-tramite/'+ tramite.id_tramite" class="d-flex text-dark over-primary font-size-h5 font-weight-bold mr-3 flex-column">
-                                <strong>{{ (tramite.tramite || tramite.titulo) | capitalize }}</strong>
+                                <strong class="text-uppercase">{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.clave }}</span>
-                                <span class="mt-3" v-if="tramite.info">{{ tramite.info.solicitante ? tramite.info.solicitante.rfc : "" }} - {{ tramite.info.solicitante && tramite.info.solicitante.tipoPersona == "pm" ? tramite.info.solicitante.razonSocial : tramite.info.solicitante.razonSocial }}</span>
+                                <span class="text-muted" v-if="tramite.info">{{ tramite.created_at }}</span>
+                                <span class="mt-3" v-if="tramite.info">{{ tramite.info.solicitante ? tramite.info.solicitante.rfc : "" }} - {{ tramite.info.solicitante && tramite.info.solicitante.tipoPersona == "pm" ? tramite.info.solicitante.razonSocial : "tramite.info.solicitante.toString()" }}</span>
                             </a>
                             <!--end::Name-->
                         </div>
                         <!--begin::User-->
                         <!--begin::Actions-->
                         <div class="my-lg-0 my-1">
-                            <span v-if="tramite.info" class="btn btn-secondary mr-2">{{ tramite.descripcion }}</span>
+                            <span v-if="tramite.info" class="btn btn-secondary mr-2">{{ tramite.descripcion || "CERRADO" }}</span>
                             <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" v-if="!tramite.info">
                                 INICIAR TRAMITE
                             </a>
-                            <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" v-if="tramite.info">
-                                CONTINUAR
+                            <a v-on:click="goTo(tramite)" v-if="tramite.info" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white">
+                                <span v-if="tramite.mensajes.length > 0">VER MENSAJES ({{ tramite.mensajes.length }})</span>
+                                <span v-if="tramite.mensajes.length == 0">VER DETALLES</span>
                             </a>
 
                         </div>
@@ -51,7 +53,7 @@
 
         methods:{
             goTo(tramite){ 
-                redirect("/detalle-tramite/" +  tramite.id_tramite);
+                redirect("/detalle/" +  (tramite.id_tramite || tramite.id));
             }
         }
     }
