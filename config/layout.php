@@ -45,6 +45,12 @@ return [
 			"options" => null
 		],
 		[
+			"name" => "Pendiente de pago",
+			"icon" => "fas fa-money-bill",
+			"path" => "tramites",
+			"options" => ["pending-payment"]
+		],
+		[
 			"name" => "En espera de atención",
 			"icon" => "fas fa-clock",
 			"path" => "tramites",
@@ -55,12 +61,6 @@ return [
 			"icon" => "fas fa-play-circle",
 			"path" => "tramites",
 			"options" => ["open"]
-		],
-		[
-			"name" => "Pendiente de pago",
-			"icon" => "fas fa-money-bill",
-			"path" => "tramites",
-			"options" => ["pending-payment"]
 		],
 		[
 			"name" => "Cerrado",

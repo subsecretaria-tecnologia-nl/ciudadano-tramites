@@ -51,6 +51,11 @@
 
 <script>
     export default {
+        data() {
+            return {
+                files : []
+            }
+        },
         props: ['tramite'],
         mounted() {
             this.files = [];
@@ -67,7 +72,7 @@
 
         methods:{
             goTo(tramite){ 
-                redirect("/detalle/" +  (tramite.id_tramite || tramite.id));
+                redirect(`/detalle${ tramite.id_tramite ? "-tramite" : "" }/` +  (tramite.id_tramite || tramite.id));
             }
         }
     }

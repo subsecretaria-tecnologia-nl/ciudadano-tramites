@@ -45,7 +45,7 @@
                 		<p class="m-0">
                 			<strong>Mensajes</strong> <span class="badge badge-secondary"><?=count($tramite->mensajes)?></span>
                 		</p>
-                		<button class="btn btn-secondary ml-auto">Nuevo Mensaje</button>
+                		<button class="btn btn-secondary ml-auto d-none">Nuevo Mensaje</button>
                 	</div>
                 	<div class="card-body">
                 		<?php

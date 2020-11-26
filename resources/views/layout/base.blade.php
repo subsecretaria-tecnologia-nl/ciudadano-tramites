@@ -20,27 +20,27 @@
 		{{-- <link href="plugins/custom/fullcalendar/fullcalendar.bundle.css?v=7.0.3" rel="stylesheet" type="text/css" /> --}}
 		<!--end::Page Vendors Styles-->
 		<!--begin::Global Theme Styles(used by all pages)-->
-		<link href="{{ asset("plugins/global/plugins.bundle.css?v=7.0.3") }}" rel="stylesheet" type="text/css" />
+		<link href="{{ assets("plugins/global/plugins.bundle.css") }}" rel="stylesheet" type="text/css" />
 		{{-- <link href="plugins/custom/prismjs/prismjs.bundle.css?v=7.0.3" rel="stylesheet" type="text/css" /> --}}
-		<link href="{{ asset("css/app.css") }}" rel="stylesheet" type="text/css" />
+		<link href="{{ assets("css/app.css") }}" rel="stylesheet" type="text/css" />
 		<!--end::Global Theme Styles-->
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset("/images/favicon/apple-touch-icon.png") }}">
-		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset("/images/favicon/favicon-32x32.png") }}">
-		<link rel="icon" type="image/png" sizes="194x194" href="{{ asset("/images/favicon/favicon-194x194.png") }}">
-		<link rel="icon" type="image/png" sizes="192x192" href="{{ asset("/images/favicon/android-chrome-192x192.png") }}">
-		<link rel="icon" type="image/png" sizes="16x16" href="{{ asset("/images/favicon/favicon-16x16.png") }}">
-		<link rel="manifest" href="{{ asset("/images/favicon/site.webmanifest") }}">
-		<link rel="mask-icon" href="{{ asset("/images/favicon/safari-pinned-tab.svg") }}" color="#088cbc">
-		<link rel="shortcut icon" href="{{ asset("/images/favicon/favicon.ico") }}">
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ assets("/images/favicon/apple-touch-icon.png") }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ assets("/images/favicon/favicon-32x32.png") }}">
+		<link rel="icon" type="image/png" sizes="194x194" href="{{ assets("/images/favicon/favicon-194x194.png") }}">
+		<link rel="icon" type="image/png" sizes="192x192" href="{{ assets("/images/favicon/android-chrome-192x192.png") }}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ assets("/images/favicon/favicon-16x16.png") }}">
+		<link rel="manifest" href="{{ assets("/images/favicon/site.webmanifest") }}">
+		<link rel="mask-icon" href="{{ assets("/images/favicon/safari-pinned-tab.svg") }}" color="#088cbc">
+		<link rel="shortcut icon" href="{{ assets("/images/favicon/favicon.ico") }}">
 		<meta name="apple-mobile-web-app-title" content="Estado de Nuevo Le&oacute;n">
 		<meta name="application-name" content="Estado de Nuevo Le&oacute;n">
 		<meta name="msapplication-TileColor" content="#088cbc">
-		<meta name="msapplication-TileImage" content="{{ asset("/images/favicon/mstile-144x144.png") }}">
-		<meta name="msapplication-config" content="{{ asset("/images/favicon/browserconfig.xml") }}">
+		<meta name="msapplication-TileImage" content="{{ assets("/images/favicon/mstile-144x144.png") }}">
+		<meta name="msapplication-config" content="{{ assets("/images/favicon/browserconfig.xml") }}">
 		<meta name="theme-color" content="#088cbc">
 	</head>
 	<!--end::Head-->
@@ -51,7 +51,7 @@
 		<div id="kt_header_mobile" class="header-mobile bg-primary header-mobile-fixed">
 			<!--begin::Logo-->
 			<a href="{{ url()->route("home") }}">
-				<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-30px" style="width: 70%" />
+				<img alt="Logo" src="{{ assets('images/logo.svg') }}" class="max-h-30px" style="width: 70%" />
 			</a>
 			{{-- <a class="btn pl-0">
 				<span> portal</span>
@@ -108,13 +108,13 @@
 						<div class="d-none d-md-flex align-items-center align-items-stretch mx-auto">
 							<!--begin::Logo-->
 							{{-- <a href="{{ url()->route("home") }}" class="mx-auto d-flex align-items-center py-2">
-								<img alt="Logo" src="{{ asset('images/icon.svg') }}" width="70" class="mr-4" />
+								<img alt="Logo" src="{{ assets('images/icon.svg') }}" width="70" class="mr-4" />
 								Un sitio oficial del Gobierno del Estado de Nuevo León
 							</a> --}}
 							<!--end::Logo-->
 
 							<a href="{{ url()->route("home") }}" class="mr-2 d-lg-flex col-lg-1 col-xl-2 align-items-center justify-content-center text-center d-flex ">
-								<img alt="Logo" src="{{ asset('images/logo.svg') }}" class="max-h-35px mr-3 w-100" width="200" />
+								<img alt="Logo" src="{{ assets('images/logo.svg') }}" class="max-h-35px mr-3 w-100" width="200" />
 							</a>
 							<!--begin::Topbar-->
 							<div class="topbar text-secondary ml-auto py-4 w-100 px-3 align-items-center">
@@ -468,7 +468,7 @@
 					<div class="container-xl pt-10 pb-20 px-0 <?= isset($footer["style"]) && $footer["style"] == "minify" ? "d-none" : ""?>">
 						<div class="row d-flex align-items-center">
 							<div class="col">
-								<img src="{{ asset("images/escudo.svg") }}" alt="">
+								<img src="{{ assets("images/escudo.svg") }}" alt="">
 								<p class="mt-5 ml-15"><a target="_blank" class="text-white text-hover-primary" href="https://www.nl.gob.mx/sobre-tratamiento-datos-personales">Sobre el tratamiento de los datos personales</a></p>
 							</div>
 							<div class="col">
@@ -1495,9 +1495,9 @@
 			<script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1200 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#6993FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#F3F6F9", "dark": "#212121" }, "light": { "white": "#ffffff", "primary": "#E1E9FF", "secondary": "#ECF0F3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#212121", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#ECF0F3", "gray-300": "#E5EAEE", "gray-400": "#D6D6E0", "gray-500": "#B5B5C3", "gray-600": "#80808F", "gray-700": "#464E5F", "gray-800": "#1B283F", "gray-900": "#212121" } }, "font-family": "Poppins" };</script>
 			<!--end::Global Config-->
 			<!--begin::Global Theme Bundle(used by all pages)-->
-			<script src="{{ asset("js/scripts.bundle.js?v=7.0.3") }}"></script>
-			<script src="{{ asset("plugins/global/plugins.bundle.js?v=7.0.3") }}"></script>
-			<script src="{{ asset("plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3") }}"></script>
+			<script src="{{ assets("js/scripts.bundle.js?v=7.0.3") }}"></script>
+			<script src="{{ assets("plugins/global/plugins.bundle.js?v=7.0.3") }}"></script>
+			<script src="{{ assets("plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3") }}"></script>
 			<script>
 				function iehelper() {
 					var isAtLeastIE11 = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
@@ -1546,13 +1546,13 @@
 			{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.3"></script> --}}
 			<!--end::Page Vendors-->
 			<!--begin::Page Scripts(used by this page)-->
-			<script src="{{ asset("js/pages/widgets.js?v=7.0.3") }}"></script>
+			<script src="{{ assets("js/pages/widgets.js?v=7.0.3") }}"></script>
 			<!--end::Page Scripts-->
 			<?php
 				if(isset($script)){
 					foreach ($script as $js) {
 						preg_match("/http(s)?:\/\//", $js, $matches);
-						echo '<script src="'.(!empty($matches) ? $js : asset($js)).'" type="text/javascript"></script>';
+						echo '<script src="'.(!empty($matches) ? $js : assets($js)).'" type="text/javascript"></script>';
 					}
 				}
 			?>
@@ -1561,7 +1561,7 @@
 			<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 			<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 			
-			<script src="{{ asset("js/bundle.js") }}"></script>
+			<script src="{{ assets("js/bundle.js") }}"></script>
 		</body>
 	<!--end::Body-->
 </html>
