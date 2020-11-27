@@ -47,4 +47,9 @@ mix.copyDirectory('resources/js/plugins', 'public/plugins');
 mix.copy('resources/js/scripts.bundle.min.js', 'public/js/scripts.bundle.min.js');
 mix.copy('resources/js/scripts.bundle.js', 'public/js/scripts.bundle.js');
 
+mix.copy('resources/js/jquery.min.js', 'public/js/jquery.min.js');
+mix.copy('resources/js/popper.min.js', 'public/js/popper.min.js');
+mix.copy('resources/js/jquery.dataTables.min.js', 'public/js/jquery.dataTables.min.js');
+mix.copy('resources/js/dataTables.bootstrap4.min.js', 'public/js/dataTables.bootstrap4.min.js');
+
 // mix.browserSync(process.env.APP_URL);

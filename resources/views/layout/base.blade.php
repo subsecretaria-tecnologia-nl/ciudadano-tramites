@@ -17,16 +17,17 @@
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,600;0,900;1,700&display=swap" rel="stylesheet">
 		<!--end::Fonts-->
 		<!--begin::Page Vendors Styles(used by this page)-->
-		{{-- <link href="plugins/custom/fullcalendar/fullcalendar.bundle.css?v=7.0.3" rel="stylesheet" type="text/css" /> --}}
+		{{-- <link href="plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" /> --}}
 		<!--end::Page Vendors Styles-->
 		<!--begin::Global Theme Styles(used by all pages)-->
 		<link href="{{ assets("plugins/global/plugins.bundle.css") }}" rel="stylesheet" type="text/css" />
-		{{-- <link href="plugins/custom/prismjs/prismjs.bundle.css?v=7.0.3" rel="stylesheet" type="text/css" /> --}}
+		{{-- <link href="plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" /> --}}
 		<link href="{{ assets("css/app.css") }}" rel="stylesheet" type="text/css" />
 		<!--end::Global Theme Styles-->
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+		<script src="{{ assets("js/jquery.min.js") }}"></script>
 
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ assets("/images/favicon/apple-touch-icon.png") }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ assets("/images/favicon/favicon-32x32.png") }}">
@@ -1495,9 +1496,9 @@
 			<script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1200 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#6993FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#F3F6F9", "dark": "#212121" }, "light": { "white": "#ffffff", "primary": "#E1E9FF", "secondary": "#ECF0F3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#212121", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#ECF0F3", "gray-300": "#E5EAEE", "gray-400": "#D6D6E0", "gray-500": "#B5B5C3", "gray-600": "#80808F", "gray-700": "#464E5F", "gray-800": "#1B283F", "gray-900": "#212121" } }, "font-family": "Poppins" };</script>
 			<!--end::Global Config-->
 			<!--begin::Global Theme Bundle(used by all pages)-->
-			<script src="{{ assets("js/scripts.bundle.js?v=7.0.3") }}"></script>
-			<script src="{{ assets("plugins/global/plugins.bundle.js?v=7.0.3") }}"></script>
-			<script src="{{ assets("plugins/custom/prismjs/prismjs.bundle.js?v=7.0.3") }}"></script>
+			<script src="{{ assets("js/scripts.bundle.js") }}"></script>
+			<script src="{{ assets("plugins/global/plugins.bundle.js") }}"></script>
+			<script src="{{ assets("plugins/custom/prismjs/prismjs.bundle.js") }}"></script>
 			<script>
 				function iehelper() {
 					var isAtLeastIE11 = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
@@ -1543,10 +1544,10 @@
 			</script>	
 			<!--end::Global Theme Bundle-->
 			<!--begin::Page Vendors(used by this page)-->
-			{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.3"></script> --}}
+			{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js"></script> --}}
 			<!--end::Page Vendors-->
 			<!--begin::Page Scripts(used by this page)-->
-			<script src="{{ assets("js/pages/widgets.js?v=7.0.3") }}"></script>
+			<script src="{{ assets("js/pages/widgets.js") }}"></script>
 			<!--end::Page Scripts-->
 			<?php
 				if(isset($script)){
@@ -1557,9 +1558,12 @@
 				}
 			?>
 			<!-- dataTable -->
-			<script src="https://unpkg.com/@popperjs/core@2"></script>
+			{{-- <script src="https://unpkg.com/@popperjs/core@2"></script>
 			<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-			<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+			<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script> --}}
+			<script src="{{ assets("js/popper.min.js") }}"></script>
+			<script src="{{ assets("js/jquery.dataTables.min.js") }}"></script>
+			<script src="{{ assets("js/dataTables.bootstrap4.min.js") }}"></script>
 			
 			<script src="{{ assets("js/bundle.js") }}"></script>
 		</body>

@@ -1,7 +1,7 @@
 <?php
 if(!function_exists("assets")){
 	function assets ( $path ) {
-		if(preg_match( '/https?:\/\//', $path ))
+		if(preg_match( '/https?:\/\//', $path ) > 0)
 			return $path;
 
 		if(!file_exists($path))
