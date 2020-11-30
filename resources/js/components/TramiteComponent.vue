@@ -61,7 +61,7 @@
             this.files = [];
             if(this.tramite.info)
                 this.tramite.info = JSON.parse(this.tramite.info)
-            if(this.tramite.mensajes.length > 0){
+            if(this.tramite.mensajes && this.tramite.mensajes.length > 0){
                 this.tramite.mensajes.map(msg => {
                     if(msg.attach != "")
                         this.files.push(msg.attach);

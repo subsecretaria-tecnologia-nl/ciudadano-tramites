@@ -77,16 +77,40 @@
 
             async obtenerCosto(){
                 let campoCatastral = this.datosFormulario.campos.find( campo => campo.nombre === "Valor catastral");
-                let campoValorOperacion = this.datosFormulario.campos.find( campo => campo.nombre === "Valor de operacion")
+                let campoValorOperacion = this.datosFormulario.campos.find( campo => campo.nombre === "Valor de operacion");
+                let campoSubsidio = this.datosFormulario.campos.find( campo => campo.nombre === "Subsidio");
+                let campoHoja = this.datosFormulario.campos.find( campo => campo.nombre === "Hoja");
+                let campoLote = this.datosFormulario.campos.find( campo => campo.nombre === "Lote");
              
                 let url = process.env.APP_URL + "/getcostoTramite";
                 let data = {  
-                    valor_catastral: campoCatastral.valor || 0,
+                    //valor_catastral: campoCatastral.valor || 0,
                     id_seguimiento: this.tramite.id_seguimiento,
                     tramite_id: this.tramite.id_tramite,
-                    valor_operacion: campoValorOperacion.valor || 0,
-                    oficio:62
+                    //valor_operacion: campoValorOperacion.valor || 0,
+                    //oficio:62
                 }
+
+                if( campoCatastral ){
+                    data.valor_catastral = campoCatastral.valor;
+                }
+
+                if(campoSubsidio){
+                    data.subsidio = campoSubsidio.valor;//62
+                }
+
+                if(campoValorOperacion ){
+                    data.valor_operacion = campoValorOperacion.valor;
+                }
+
+                if( campoHoja ){
+                    data.hoja = campoHoja.valor; 
+                }
+
+                if( campoLote ){
+                    data.lote = campoLote.valor
+                }
+                console.log( data )
                 
                 try {
                     let response = await axios.post(url, data);

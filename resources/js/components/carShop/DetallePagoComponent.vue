@@ -59,6 +59,8 @@
         },
         methods: {
             metodoPago() {
+                $("#metodoPagoBtn").fadeOut();
+                
                 let tramitesAEnviar = [];
                 this.consultandoMetodos = true;
 
@@ -69,33 +71,77 @@
                     tramitesAEnviar.push( tramite );
                 });
 
+                let ids_tramites = tramitesAEnviar.map( tramite => { return {id:tramite.id_tramite}} );
 
-                let url = process.env.PAYMENTS_HOSTNAME  + "/v1/pay"
-                let data = {
-                    "token": "DD0FDED2FE302392164520BF7090E1B3BEB7",
-                    "referencia": "",
-                    "url_retorno": "url",
-                    "importe_transaccion":  this.calcularTotal, //"4687",
-                    "id_transaccion": uuid.v4(),//"BMU8605134I82915082020",
-                    "entidad": 2,
-                    "url_confirma_pago": "url",
-                    "es_referencia": "1",
-                    "tramite": tramitesAEnviar
+                let dataToSave = {
+                    ids_tramites,
+                    status:2
                 }
-                
-                axios.post(url, data, {
-                    headers:{
-                        "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+
+
+                let urlSaveTRANSACCION = process.env.TESORERIA_HOSTNAME +  "/save-transaccion"
+                axios.post(urlSaveTRANSACCION, dataToSave, {
+                     headers:{
                         "Content-type":"application/json"
-                    },
+                    }
                 } ).then(response => {
-                    this.mostrarCancelarPago = true;
-                    this.$emit('updatingParent', response);
+                    let url = process.env.PAYMENTS_HOSTNAME  + "/v1/pay";
+                    let idTRansaccion = response.data.id_transaccion;
+                    let data = {
+                        "token": "DD0FDED2FE302392164520BF7090E1B3BEB7",
+                        "referencia": "",
+                        "url_retorno": "url",
+                        "importe_transaccion":  this.calcularTotal, //"4687",
+                        "id_transaccion": '500000' + idTRansaccion ,//uuid.v4(),//"BMU8605134I82915082020",
+                        "entidad": 2,
+                        "url_confirma_pago": "url",
+                        "es_referencia": "1",
+                        "tramite": tramitesAEnviar
+                    }
+                    
+                    axios.post(url, data, {
+                        headers:{
+                            "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+                            "Content-type":"application/json"
+                        },
+                    } ).then(responseTransaccion => {
+console.log("respuesta pay")
+console.log(idTRansaccion)
+console.log(responseTransaccion.data)
+console.log(JSON.stringify(data))
+                        let dataMotor = {
+                            "status":2,
+                            "id_transaccion": idTRansaccion,
+                            "id_transaccion_motor": responseTransaccion.data.response.folio,
+                            "json_envio": JSON.stringify(data)
+                        }
+console.log(dataMotor);
+                        let urlSaveTRANSACCIONMotor = process.env.TESORERIA_HOSTNAME +  "/save-transaccion-motor"
+                        axios.post(urlSaveTRANSACCIONMotor, dataMotor, {
+                             headers:{
+                                "Content-type":"application/json"
+                            }
+                        } ).then(responseMotor => {
+                            console.log(responseMotor)
+                        })
+
+                        this.mostrarCancelarPago = true;
+                        this.$emit('updatingParent', responseTransaccion);
+
+
+                    }).catch((error)=> {
+                        //this.mostrarMetodos = false;
+                    }).finally(() => {
+                        this.consultandoMetodos = false;
+                    });
                 }).catch((error)=> {
                     //this.mostrarMetodos = false;
                 }).finally(() => {
                     this.consultandoMetodos = false;
                 });
+
+
+
 
             },
 
