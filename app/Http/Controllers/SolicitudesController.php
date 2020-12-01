@@ -16,7 +16,8 @@ use App\Repositories\PortalcampotypeRepositoryEloquent;
 use App\Repositories\PortalcampoRepositoryEloquent;
 
 use App\Repositories\EgobiernopartidasRepositoryEloquent;
-
+//use App\Repositories\PortalreglaoperativaRepositoryEloquent;
+use App\Repositories\PortalcostotramitesRepositoryEloquent;
 
 class SolicitudesController extends Controller
 {
@@ -26,6 +27,7 @@ class SolicitudesController extends Controller
   protected $tipocampo;
   protected $campo;
   protected $partidas;
+  protected $costo;
 
 // agregar catalogos
   protected $catalogo_campos;
@@ -37,7 +39,8 @@ class SolicitudesController extends Controller
     EgobiernotiposerviciosRepositoryEloquent $tiposer,
     PortalcampotypeRepositoryEloquent $tipocampo,
     PortalcampoRepositoryEloquent $campo,
-    EgobiernopartidasRepositoryEloquent $partidas
+    EgobiernopartidasRepositoryEloquent $partidas,
+    PortalcostotramitesRepositoryEloquent $costo
     )
     {
       // $this->middleware('auth');
@@ -52,6 +55,8 @@ class SolicitudesController extends Controller
       $this->campo = $campo;
 
       $this->partidas = $partidas;
+
+      $this->costo = $costo;
 
       // creamos los catalogos iniciales
 
@@ -93,6 +98,8 @@ class SolicitudesController extends Controller
     }
 
     $this->catalogo_type = $c_type;
+
+    $cost = $this->costo->all();
 
   }
 
