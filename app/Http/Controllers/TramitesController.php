@@ -537,7 +537,7 @@ class TramitesController extends Controller
 
                 $detalle []= array(
                   'tramite_id' => $tramite_id,
-                  'importe_concepto' => $costo_final,
+                  'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
                 return json_encode($detalle);
@@ -712,7 +712,7 @@ class TramitesController extends Controller
 
               $detalle []= array(
                 'tramite_id' => $tramite_id,
-                'importe_concepto' => $costo_final,
+                'costo_final' => $costo_final,
               );
               return json_encode($detalle);
             }
