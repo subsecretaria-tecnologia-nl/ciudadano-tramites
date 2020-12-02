@@ -397,13 +397,15 @@ class TramitesController extends Controller
 
                 return json_encode($detalle);
               }
-              //return json_encode($detalle);
+              return json_encode($detalle);
 
             }
 
 
           }else{ //si no coincide el registro del oficio se notifica al usuario y se hace el calculo normal
-            $descuentos = "El numero de oficio no coincide con el trámite";
+            $descuentos []= array(
+              'concepto_descuento' => 'El numero de oficio no coincide con el trámite',
+            );
             if ($tipo == "F"){
               if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
                 $costo_real = $actual_uma * $min;
@@ -452,6 +454,7 @@ class TramitesController extends Controller
                 $detalle []= array(
                   'tramite_id' => $tramite_id,
                   'costo_final' => $costo_final,
+                  'descuentos' => $descuentos,
                 );
                 return json_encode($detalle);
               }
