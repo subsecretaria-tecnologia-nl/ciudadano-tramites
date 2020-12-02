@@ -105,36 +105,36 @@
                             "Content-type":"application/json"
                         },
                     } ).then(responseTransaccion => {
-console.log("respuesta pay")
-console.log(idTRansaccion)
-console.log(responseTransaccion.data)
-console.log(JSON.stringify(data))
+
                         let dataMotor = {
                             "status":2,
                             "id_transaccion": idTRansaccion,
                             "id_transaccion_motor": responseTransaccion.data.response.folio,
-                            "json_envio": JSON.stringify(data)
+                            "json_envio": JSON.stringify(data),
+                            json_recibo:JSON.stringify(responseTransaccion.data)
                         }
-console.log(dataMotor);
-                        let urlSaveTRANSACCIONMotor = process.env.TESORERIA_HOSTNAME +  "/save-transaccion-motor"
-                        axios.post(urlSaveTRANSACCIONMotor, dataMotor, {
-                             headers:{
-                                "Content-type":"application/json"
-                            }
-                        } ).then(responseMotor => {
-                            console.log(responseMotor)
-                        })
+                        this.guardarTransaccionMotor( dataMotor );
 
                         this.mostrarCancelarPago = true;
                         this.$emit('updatingParent', responseTransaccion);
 
 
-                    }).catch((error)=> {
+                    }).catch(error=> {
+                        let dataMotor = {
+                            "status":3,
+                            "id_transaccion": null,
+                            "id_transaccion_motor":null,
+                            json_envio: JSON.stringify(data),
+                            json_recibo:JSON.stringify(error.response)
+                        }
+                        this.guardarTransaccionMotor( dataMotor );
                         //this.mostrarMetodos = false;
                     }).finally(() => {
                         this.consultandoMetodos = false;
                     });
                 }).catch((error)=> {
+                    console.log("transaccion")
+                    console.log( error )
                     //this.mostrarMetodos = false;
                 }).finally(() => {
                     this.consultandoMetodos = false;
@@ -148,6 +148,19 @@ console.log(dataMotor);
             cancelarPago(){
                 this.mostrarCancelarPago= false;
                 this.$emit('cancelarPago', true);
+            },
+
+
+            guardarTransaccionMotor(data){
+                let urlSaveTRANSACCIONMotor = process.env.TESORERIA_HOSTNAME +  "/save-transaccion-motor"
+                axios.post(urlSaveTRANSACCIONMotor, data, {
+                     headers:{
+                        "Content-type":"application/json"
+                    }
+                } ).then(response => {
+                    console.log("guardando transaccion motor")
+                    console.log(response)
+                });
             }
         },
 

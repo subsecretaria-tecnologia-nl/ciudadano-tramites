@@ -239,7 +239,8 @@
                 let informacion = {
                   campos:camposObj,
                   costo_final:tramite.detalle.costo_final,
-                  partidas: tramite.partidas 
+                  partidas: tramite.partidas,
+                  detalle: tramite.detalle
                 }
 
 
@@ -251,7 +252,8 @@
                   user_id:this.idUsuario
                 }
                 data = JSON.stringify(data);
-                
+                console.log(data)
+                console.log( JSON.parse(data) )
                 if( type == "finalizar" ){
                   this.finalizando = true;
                 } else {
