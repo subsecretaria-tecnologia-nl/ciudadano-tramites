@@ -64,7 +64,7 @@
 		    </div>
 		    <!--Grid column-->
 		    <!--Grid column-->
-		    <div class="col-lg-4">
+		    <div class="col-lg-4" v-if="tramites.length > 0">
         		<detalle-pago-component 
         			:tramites="tramites" 
         			:obtenidoCostos="costosObtenidos" @updatingParent="recibirMetodosPago"  @cancelarPago="cancelarPago" >
@@ -283,7 +283,7 @@
 						if(respuesta.data[0].descuentos && Array.isArray(respuesta.data[0].descuentos )  && respuesta.data[0].descuentos.length > 0  ){
 
 							let losdescuentos = respuesta.data[0].descuentos.find( descuento => !!descuento.importe_subsidio );		
-;
+
 							if( losdescuentos && losdescuentos.length > 0 ){
 								respuesta.data[0].descuentos.forEach( descuento => {
 									let descuentoAplicado =  {
