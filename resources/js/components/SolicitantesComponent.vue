@@ -121,11 +121,37 @@
   
         methods: {
             agregar: function (event) {
-                this.listaSolicitantes.push( this.solicitante );
-                this.solicitante = { tipoPersona:"pf" };
-                this.agregarMas = false;
+                if( this.solicitante.tipoPersona == 'pf' ){
+                    if(!!this.solicitante.rfc && !!this.solicitante.nombreSolicitante && !!this.solicitante.apPat){
+                        this.listaSolicitantes.push( this.solicitante );
+                        this.solicitante = { tipoPersona:"pf" };
+                        this.agregarMas = false;
+                        this.guardarInStorage();
+                    }  else {
+                        if(!this.solicitante.rfc ){
+                            Command: toastr.warning("Error!", "RFC Requerido");
+                        } else if( !this.solicitante.nombreSolicitante ) {
+                            Command: toastr.warning("Error!", "Nombre Requerido");
+                        } else {
+                            Command: toastr.warning("Error!", "Apellido paterno Requerido");
+                        }
+                    }
 
-                this.guardarInStorage();
+                } else {
+                    if(!!this.solicitante.rfc && !!this.solicitante.razonSocial){
+                        this.listaSolicitantes.push( this.solicitante );
+                        this.solicitante = { tipoPersona:"pf" };
+                        this.agregarMas = false;
+                        this.guardarInStorage();
+                    }  else {
+                        if(!this.solicitante.rfc ){
+                            Command: toastr.warning("Error!", "RFC Requerido");
+                        } else if( !this.solicitante.razonSocial ) {
+                            Command: toastr.warning("Error!", "Razón Social Requerido");
+                        }
+                    }
+                }
+
             },
 
             eliminar( index ){
@@ -135,19 +161,36 @@
             },
 
             editar(index, solicitanteNuevo){
+                if(!solicitanteNuevo.rfc ){
+                    Command: toastr.warning("Error!", "RFC Requerido");
+                    return false;
+                } 
+
                 if( solicitanteNuevo.tipoPersona === "pf" ){
                     delete solicitanteNuevo.razonSocial;
+                    if( !solicitanteNuevo.nombreSolicitante ) {
+                        Command: toastr.warning("Error!", "Nombre Requerido");
+                        return false;
+                    } else if( !solicitanteNuevo.apPat ){
+                        Command: toastr.warning("Error!", "Apellido paterno Requerido");
+                        return false;
+                    }
                 } else {
                     delete solicitanteNuevo.nombreSolicitante
                     delete solicitanteNuevo.apPat
                     delete solicitanteNuevo.apMat;
+                    if( !solicitanteNuevo.razonSocial ) {
+                        Command: toastr.warning("Error!", "Razón Social Requerido");
+                        return false;
+                    } 
                 }
-                this.listaSolicitantes[index] = solicitanteNuevo;
-                this.solicitante = { tipoPersona:"pf" };
-                this.editando = false;
-                this.indiceEditando = null;
-                this.agregarMas = false;
-                this.guardarInStorage();
+                    this.listaSolicitantes[index] = solicitanteNuevo;
+                    this.solicitante = { tipoPersona:"pf" };
+                    this.editando = false;
+                    this.indiceEditando = null;
+                    this.agregarMas = false;
+                    this.guardarInStorage();
+
             },
 
             guardarInStorage(){

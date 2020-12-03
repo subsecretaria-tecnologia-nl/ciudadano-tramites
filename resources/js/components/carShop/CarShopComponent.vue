@@ -50,7 +50,7 @@
 		            </div>
 
 		        	<div v-else-if="!obteniendoTramites && tramitesPaginados.length == 0">
-		        		<div class="card" style="width: 60rem;">
+		        		<div class="card" style="width: 100%;">
 						  <div class="card-body text-center">
 						    <h5 class="card-title" >Aún no haz iniciado algún trámite</h5>
 						    Para continuar da click <a  class="card-link"  v-on:click="iniciarTramite()"> <span style="cursor: pointer;"> aquí </span> </a>
@@ -64,7 +64,7 @@
 		    </div>
 		    <!--Grid column-->
 		    <!--Grid column-->
-		    <div class="col-lg-4">
+		    <div class="col-lg-4" v-if="tramites.length > 0">
         		<detalle-pago-component 
         			:tramites="tramites" 
         			:obtenidoCostos="costosObtenidos" @updatingParent="recibirMetodosPago"  @cancelarPago="cancelarPago" >
@@ -214,13 +214,33 @@
 					    tramitesJson.datos_factura = tramitesJson.datos_solicitante;
 
 						let data = {  
-		                    valor_catastral: info.campos["Valor catastral"] || 0,
+		                    //valor_catastral: info.campos["Valor catastral"] || 0,
 		                    id_seguimiento: soliciante.clave,
 		                    tramite_id: tramiteInarray.tramite_id,
-		                    valor_operacion: info["Valor de operacion"] || 0,
-		                    oficio:62
+		                    //valor_operacion: info["Valor de operacion"] || 0,
+		                    //oficio:62
                 		}
-                		
+
+                		if( info.campos["Valor catastral"] ){
+                			data.valor_catastral = info.campos["Valor catastral"];
+                		}
+
+                		if(info.campos["Subsidio"]){
+                			data.subsidio = info.campos["Subsidio"]//62
+                		}
+
+                		if(info.campos["Valor de operacion"]){
+ 							data.valor_operacion = info.campos["Valor de operacion"]
+                		}
+
+                		if( info.campos["Hoja"] ){
+                			data.hoja = info.campos["Hoja"] 
+                		}
+
+                		if( info.campos["Lotes"] ){
+                			data.lote = info.campos["Lotes"] 
+                		}
+               		
                 		let url = process.env.APP_URL + "/getcostoTramite";
                 		requestCostos.push(axios.post(url,   data,{headers:{
                 			contadorSolicitantes:contadorSolicitantes
@@ -249,23 +269,42 @@
 						let indiceTramite = respuesta.config.headers.contadorSolicitantes;
 						listadoTramites[indiceTramite].importe_tramite = respuesta.data ? respuesta.data[0].costo_final : 0;
 
+						if(respuesta.data &&  respuesta.data[0].importe_total ){
+							listadoTramites[indiceTramite].detalle[0].importe_concepto = respuesta.data[0].importe_total;	
+						} else if(respuesta.data &&  respuesta.data[0].costo_final ){
+							listadoTramites[indiceTramite].detalle[0].importe_concepto = respuesta.data[0].costo_final;
+						}
+						
+						
 
-						listadoTramites[indiceTramite].detalle[0].importe_concepto = respuesta.data ? respuesta.data[0].importe_total : 0;
+
 						let descuentosAplicados = [];
-						respuesta.data[0].descuentos.forEach( descuento => {
-							let descuentoAplicado =  {
-				              concepto_descuento: descuento.concepto_descuento,
-				              importe_descuento: descuento.importe_subsidio,
-				              partida_descuento: descuento.partida_descuento
-				            }
-				            descuentosAplicados.push( descuentoAplicado )
-						});
-						listadoTramites[indiceTramite].detalle[0].descuentos = descuentosAplicados;
+
+						if(respuesta.data[0].descuentos && Array.isArray(respuesta.data[0].descuentos )  && respuesta.data[0].descuentos.length > 0  ){
+
+							let losdescuentos = respuesta.data[0].descuentos.find( descuento => !!descuento.importe_subsidio );		
+
+							if( losdescuentos && losdescuentos.length > 0 ){
+								respuesta.data[0].descuentos.forEach( descuento => {
+									let descuentoAplicado =  {
+						              concepto_descuento: descuento.concepto_descuento,
+						              importe_descuento: descuento.importe_subsidio,
+						              partida_descuento: descuento.partida_descuento
+						            }
+						            descuentosAplicados.push( descuentoAplicado )
+								});
+								listadoTramites[indiceTramite].detalle[0].descuentos = descuentosAplicados;								
+							}
+
+						}
+						
 						
 					});
 				})).catch(errors => {
 				  console.log( errors )
 				}).finally( () =>{
+					console.log("tramittes lista");
+					console.log(JSON.parse(JSON.stringify(listadoTramites)) )
 					this.obteniendoTramites = false;
 					this.costosObtenidos = true;
 				});

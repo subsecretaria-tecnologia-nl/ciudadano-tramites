@@ -126,7 +126,7 @@ class TramitesController extends Controller
     public function getcostoTramite(Request $request) {
 
       $tramite_id = $request->tramite_id;
-      //$tramite_id = 101;
+      //$tramite_id = 100;
       $dt = date("Y");
 
       //datos para el tramite
@@ -134,9 +134,9 @@ class TramitesController extends Controller
       //$valor_catastral = 150050;
       //$valor_operacion = 178960;
       $valor_operacion = $request->valor_operacion;
-      $lotes = $request->lotes;
-      $hojas =  $request->hojas;
-
+      $lotes = $request->lote;
+      $hojas =  $request->hoja;
+      //$hojas = 5;
       $data_uma = $this->uma->where('year', $dt)->get();
       foreach ($data_uma as $val) {
         $actual_uma = $val->daily;
@@ -151,12 +151,13 @@ class TramitesController extends Controller
         $min = $data->minimo;
         $max = $data->maximo;
         $valor = $data->valor;
+        $vigencia = $data->vigencia;
         $status = $data->status;
       }
       $detalle = array();
       //Validamos si el tramite tiene subsidio
-      $subsidio = $this->subsidiotramites->where('tramite_id', $tramite_id)->get();
-      foreach ($subsidio as $sub) {
+      $subsidio_data = $this->subsidiotramites->where('tramite_id', $tramite_id)->get();
+      foreach ($subsidio_data as $sub) {
         $cuotas_sub = $sub->cuotas;
         $limite_cuotassub = $sub->limite_cuotas;
         $id_partida = $sub->id_partida;
@@ -165,17 +166,16 @@ class TramitesController extends Controller
 
       if (!empty($oficio_sub)){
         try{
-
           $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
           foreach ($data_partida as $p) {
             $id_servicio = $p->id_servicio;
             $descripcion_part = $p->descripcion;
           }
 
-          $oficio = $request->oficio; //se obtiene el oficio ingresado
-          //$oficio = 62;
+          $subsidio = $request->subsidio; //se obtiene el oficio ingresado
+          //$subsidio = "";
 
-          if($oficio == $oficio_sub) { //se valida que coincida el oficio ingresado con el registro
+          if($subsidio == $oficio_sub) { //se valida que coincida el oficio ingresado con el registro
             //Se calculan minimos y maximos en base a cuotas establecidas
             $sub_costoMinimo = $cuotas_sub * $actual_uma;
             $sub_costoMin = $this->redondeo($sub_costoMinimo);
@@ -209,6 +209,33 @@ class TramitesController extends Controller
                   }
                 }else{
                   $costo_final = $primer_costo;
+                }
+              }
+              elseif($costoX == "H"){
+                if(!empty($valor)){
+                  $costo_real = $actual_uma;
+                }else{
+                  $costo_real = $actual_uma * $valor;
+                }
+                $primer_costo = $this->redondeo($costo_real);
+                if (!empty($hojas)){
+                  $costoxhojas = $primer_costo * $hojas;
+
+                  if($costoxhojas < $primer_costo){
+                    $costo_final = $primer_costo;
+                  }else{
+                    $costo_final = $costoxhojas;
+                  }
+                }else{
+                  $costo_final = $primer_costo;
+                }
+              }
+              else{ // costo fijo
+                if(!empty($costo_fijo)){
+                  $costo_final = $costo_fijo;
+                }else{
+                  $costo_real = $actual_uma * $min;
+                  $costo_final = $this->redondeo($costo_real);
                 }
               }
 
@@ -257,32 +284,70 @@ class TramitesController extends Controller
                 );
                 return json_encode($detalle);
               }
-            }elseif ($tipo == "V") {
-              //Se calculan los valores minimos y máximos del trámite
-              $costoMinimo = $min * $actual_uma;
-              $costoMin = $this->redondeo($costoMinimo);
+            }
+            elseif ($tipo == "V") {
+              if($costoX == "L") { //costo x lote
+                $costo_real = $actual_uma * $valor;
+                $primer_costo = $this->redondeo($costo_real);
 
-              $costoMaximo = $max * $actual_uma;
-              $costoMax = $this->redondeo($costoMaximo);
+                if (!empty($lotes)){
+                  $costoxlote = $primer_costo * $lotes;
 
-              if( $valor_catastral > $valor_operacion){
-                $operacion = $valor_catastral;
-              }else{
-                $operacion = $valor_operacion;
+                  if($costoxlote < $primer_costo){
+                    $costo_final = $primer_costo;
+                  }else{
+                    $costo_final = $costoxlote;
+                  }
+                }else{
+                  $costo_final = $primer_costo;
+                }
               }
+              elseif ($costoX == "H") { // costo x hojas
+                if(!empty($valor)){
+                  $costo_real = $actual_uma;
+                }else{
+                  $costo_real = $actual_uma * $valor;
+                }
+                $primer_costo = $this->redondeo($costo_real);
 
-              $precio = ($operacion * $valor) / 1000;
+                if (!empty($hojas)){
+                  $costoxhoja = $primer_costo * $hojas;
 
-              $precioRedondeo = $this->redondeo($precio);
-
-              if ($precioRedondeo < $costoMin ){
-                $costo_final = $costoMin;
-              }elseif ($precioRedondeo > $costoMax) {
-                $costo_final = $costoMax;
-              }else{
-                $costo_final = $precioRedondeo;
+                  if($costoxhoja < $primer_costo){
+                    $costo_final = $primer_costo;
+                  }else{
+                    $costo_final = $costoxhoja;
+                  }
+                }else{
+                  $costo_final = $primer_costo;
+                }
               }
+              else{ //costo x Millar
+                //Se calculan los valores minimos y máximos del trámite
+                $costoMinimo = $min * $actual_uma;
+                $costoMin = $this->redondeo($costoMinimo);
 
+                $costoMaximo = $max * $actual_uma;
+                $costoMax = $this->redondeo($costoMaximo);
+
+                if( $valor_catastral > $valor_operacion){
+                  $operacion = $valor_catastral;
+                }else{
+                  $operacion = $valor_operacion;
+                }
+
+                $precio = ($operacion * $valor) / 1000;
+
+                $precioRedondeo = $this->redondeo($precio);
+
+                if ($precioRedondeo < $costoMin ){
+                  $costo_final = $costoMin;
+                }elseif ($precioRedondeo > $costoMax) {
+                  $costo_final = $costoMax;
+                }else{
+                  $costo_final = $precioRedondeo;
+                }
+              }
               //Se hace la validacion si aplica o no el subsidio para costos variables
               if ($costo_final < $sub_costoMin){
                 $costo_total = $costo_final;
@@ -301,7 +366,7 @@ class TramitesController extends Controller
                   'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
-                //dd($detalle);
+                dd($detalle);
                 return json_encode($detalle);
 
               }elseif($costo_final > $sub_costoMax){
@@ -338,7 +403,9 @@ class TramitesController extends Controller
 
 
           }else{ //si no coincide el registro del oficio se notifica al usuario y se hace el calculo normal
-            $descuentos = "El numero de oficio no coincide con el trámite";
+            $descuentos []= array(
+              'concepto_descuento' => 'El numero de oficio no coincide con el trámite',
+            );
             if ($tipo == "F"){
               if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
                 $costo_real = $actual_uma * $min;
@@ -376,39 +443,108 @@ class TramitesController extends Controller
 
                 return json_encode($detalle);
               }
-            }elseif ($tipo == "V") {
-              //Se calculan los valores minimos y máximos del trámite
-              $costoMinimo = $min * $actual_uma;
-              $costoMin = $this->redondeo($costoMinimo);
+              else{ // costo fijo
+                if(!empty($costo_fijo)){
+                  $costo_final = $costo_fijo;
+                }else{
+                  $costo_real = $actual_uma * $min;
+                  $costo_final = $this->redondeo($costo_real);
+                }
 
-              $costoMaximo = $max * $actual_uma;
-              $costoMax = $this->redondeo($costoMaximo);
-
-              if( $valor_catastral > $valor_operacion){
-                $operacion = $valor_catastral;
-              }else{
-                $operacion = $valor_operacion;
+                $detalle []= array(
+                  'tramite_id' => $tramite_id,
+                  'costo_final' => $costo_final,
+                  'descuentos' => $descuentos,
+                );
+                return json_encode($detalle);
               }
+            }
+            elseif ($tipo == "V") {
+              if($costoX == "L") { //costo x lote
+                $costo_real = $actual_uma * $valor;
+                $primer_costo = $this->redondeo($costo_real);
 
-              $precio = ($operacion * $valor) / 1000;
+                if (!empty($lotes)){
+                  $costoxlote = $primer_costo * $lotes;
 
-              $precioRedondeo = $this->redondeo($precio);
+                  if($costoxlote < $primer_costo){
+                    $costo_final = $primer_costo;
+                  }else{
+                    $costo_final = $costoxlote;
+                  }
+                }else{
+                  $costo_final = $primer_costo;
+                }
 
-              if ($precioRedondeo < $costoMin ){
-                $costo_final = $costoMin;
-              }elseif ($precioRedondeo > $costoMax) {
-                $costo_final = $costoMax;
-              }else{
-                $costo_final = $precioRedondeo;
+                $detalle []= array(
+                  'tramite_id' => $tramite_id,
+                  'costo_final' => $costo_final,
+                  'descuentos' => $descuentos,
+                );
+
+                return json_encode($detalle);
               }
+              elseif ($costoX == "H") { // costo x hojas
+                if(!empty($valor)){
+                  $costo_real = $actual_uma;
+                }else{
+                  $costo_real = $actual_uma * $valor;
+                }
+                $primer_costo = $this->redondeo($costo_real);
 
-              $detalle []= array(
-                'tramite_id' => $tramite_id,
-                'importe_concepto' => $costo_final,
-                'descuentos' => $descuentos,
-              );
-              return json_encode($detalle);
+                if (!empty($hojas)){
+                  $costoxhoja = $primer_costo * $hojas;
 
+                  if($costoxhoja < $primer_costo){
+                    $costo_final = $primer_costo;
+                  }else{
+                    $costo_final = $costoxhoja;
+                  }
+                }else{
+                  $costo_final = $primer_costo;
+                }
+
+                $detalle []= array(
+                  'tramite_id' => $tramite_id,
+                  'costo_final' => $costo_final,
+                  'descuentos' => $descuentos,
+                );
+
+                return json_encode($detalle);
+              }
+              else{ //costo x Millar
+                //Se calculan los valores minimos y máximos del trámite
+                $costoMinimo = $min * $actual_uma;
+                $costoMin = $this->redondeo($costoMinimo);
+
+                $costoMaximo = $max * $actual_uma;
+                $costoMax = $this->redondeo($costoMaximo);
+
+                if( $valor_catastral > $valor_operacion){
+                  $operacion = $valor_catastral;
+                }else{
+                  $operacion = $valor_operacion;
+                }
+
+                $precio = ($operacion * $valor) / 1000;
+
+                $precioRedondeo = $this->redondeo($precio);
+
+                if ($precioRedondeo < $costoMin ){
+                  $costo_final = $costoMin;
+                }elseif ($precioRedondeo > $costoMax) {
+                  $costo_final = $costoMax;
+                }else{
+                  $costo_final = $precioRedondeo;
+                }
+
+                $detalle []= array(
+                  'tramite_id' => $tramite_id,
+                  'costo_final' => $costo_final,
+                  'descuentos' => $descuentos,
+                );
+                return json_encode($detalle);
+              }
             }
 
           }
@@ -416,8 +552,8 @@ class TramitesController extends Controller
           Log::info('Error - costo Trámite: '.$e->getMessage());
         }
       }else{
-
         try{
+
           if ($tipo == "F"){
             if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
 
@@ -457,38 +593,132 @@ class TramitesController extends Controller
 
               return json_encode($detalle);
             }
+            elseif ($costoX == "H") { // costo x hojas
+              if(!empty($valor)){
+                $costo_real = $actual_uma;
+              }else{
+                $costo_real = $actual_uma * $valor;
+              }
+              $primer_costo = $this->redondeo($costo_real);
+
+              if (!empty($hojas)){
+                $costoxlote = $primer_costo * $hojas;
+
+                if($costoxlote < $primer_costo){
+                  $costo_final = $primer_costo;
+                }else{
+                  $costo_final = $costoxlote;
+                }
+              }else{
+                $costo_final = $primer_costo;
+              }
+
+              $detalle []= array(
+                'tramite_id' => $tramite_id,
+                'costo_final' => $costo_final,
+              );
+
+              return json_encode($detalle);
+            }
+            else{
+              if(!empty($costo_fijo)){
+                $costo_final = $costo_fijo;
+              }else{
+                $costo_real = $actual_uma * $min;
+                $costo_final = $this->redondeo($costo_real);
+              }
+
+              $detalle []= array(
+                'tramite_id' => $tramite_id,
+                'costo_final' => $costo_final,
+              );
+              return json_encode($detalle);
+            }
+
           }elseif ($tipo == "V") {
-            //Se calculan los valores minimos y máximos del trámite
-            $costoMinimo = $min * $actual_uma;
-            $costoMin = $this->redondeo($costoMinimo);
+            if($costoX == "L") { //costo x lote
+              $costo_real = $actual_uma * $valor;
+              $primer_costo = $this->redondeo($costo_real);
 
-            $costoMaximo = $max * $actual_uma;
-            $costoMax = $this->redondeo($costoMaximo);
+              if (!empty($lotes)){
+                $costoxlote = $primer_costo * $lotes;
 
-            if( $valor_catastral > $valor_operacion){
-              $operacion = $valor_catastral;
-            }else{
-              $operacion = $valor_operacion;
+                if($costoxlote < $primer_costo){
+                  $costo_final = $primer_costo;
+                }else{
+                  $costo_final = $costoxlote;
+                }
+              }else{
+                $costo_final = $primer_costo;
+              }
+
+              $detalle []= array(
+                'tramite_id' => $tramite_id,
+                'costo_final' => $costo_final,
+              );
+
+              return json_encode($detalle);
             }
+            elseif ($costoX == "H") { // costo x hojas
+              if(!empty($valor)){
+                $costo_real = $actual_uma;
+              }else{
+                $costo_real = $actual_uma * $valor;
+              }
 
-            $precio = ($operacion * $valor) / 1000;
+              $primer_costo = $this->redondeo($costo_real);
 
-            $precioRedondeo = $this->redondeo($precio);
+              if (!empty($hojas)){
+                $costoxlote = $primer_costo * $hojas;
 
-            if ($precioRedondeo < $costoMin ){
-              $costo_final = $costoMin;
-            }elseif ($precioRedondeo > $costoMax) {
-              $costo_final = $costoMax;
-            }else{
-              $costo_final = $precioRedondeo;
+                if($costoxlote < $primer_costo){
+                  $costo_final = $primer_costo;
+                }else{
+                  $costo_final = $costoxlote;
+                }
+              }else{
+                $costo_final = $primer_costo;
+              }
+
+              $detalle []= array(
+                'tramite_id' => $tramite_id,
+                'costo_final' => $costo_final,
+              );
+
+              return json_encode($detalle);
             }
+            else{ //costo x millar
+              //Se calculan los valores minimos y máximos del trámite
+              $costoMinimo = $min * $actual_uma;
+              $costoMin = $this->redondeo($costoMinimo);
 
-            $detalle []= array(
-              'tramite_id' => $tramite_id,
-              'importe_concepto' => $costo_final,
-            );
-            return json_encode($detalle);
+              $costoMaximo = $max * $actual_uma;
+              $costoMax = $this->redondeo($costoMaximo);
 
+              if( $valor_catastral > $valor_operacion){
+                $operacion = $valor_catastral;
+              }else{
+                $operacion = $valor_operacion;
+              }
+
+              $precio = ($operacion * $valor) / 1000;
+
+              $precioRedondeo = $this->redondeo($precio);
+
+              if ($precioRedondeo < $costoMin ){
+                $costo_final = $costoMin;
+              }elseif ($precioRedondeo > $costoMax) {
+                $costo_final = $costoMax;
+              }else{
+                $costo_final = $precioRedondeo;
+              }
+
+              $detalle []= array(
+                'tramite_id' => $tramite_id,
+                'costo_final' => $costo_final,
+              );
+              return json_encode($detalle);
+            }
           }
         }catch(\Exception $e){
           Log::info('Error - costo Trámite: '.$e->getMessage());
@@ -591,14 +821,14 @@ class TramitesController extends Controller
       ])->post( $url . '/v1/respuestabanco', [
           'transactionToken' => $request->transactionToken,
       ]);
-      
+
       $json = $response->json();
       if( $json['data'] ){
         return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>$json] );
       } else {
         return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>[] ]);
       }
-      
+
     }
 
     public function respuestaPagoBBVA(Request $request){
@@ -615,10 +845,10 @@ class TramitesController extends Controller
           'mp_signature' => $request->get('mp_signature'),
           'n_autoriz' => $request->get('n_autoriz'),
       ]);
-      
+
       $json = $response->json();
 
-      
+
       if( $json['data'] ){
         return layout_view("tramites.respuestaPagoBancomer",  [ "respuestabanco" =>$json] );
       } else {

@@ -22,7 +22,7 @@
 		<!--begin::Global Theme Styles(used by all pages)-->
 		<link href="{{ assets("plugins/global/plugins.bundle.css") }}" rel="stylesheet" type="text/css" />
 		{{-- <link href="plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" /> --}}
-		<link href="{{ assets("css/app.css") }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset("css/app.css") }}" rel="stylesheet" type="text/css" />
 		<!--end::Global Theme Styles-->
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
@@ -61,7 +61,7 @@
 			<!--end::Logo-->
 			<!--begin::Toolbar-->
 			<div class="d-flex align-items-center">
-				
+
 				<button class="btn p-0 burger-icon burger-icon-left ml-4" id="kt_header_mobile_toggle">
 					<span></span>
 				</button>
@@ -318,7 +318,7 @@
 				<!--end::Top-->
 				<!--begin::Wrapper-->
 				<div class="d-flex flex-row flex-row-fluid wrapper " id="kt_wrapper">
-					
+
 					<!--begin::Header-->
 					<div id="kt_header" class="col-lg-1 col-xl-2 flex-column header-fixed bg-white @if($empty_layout === true) d-none @else d-lg-flex @endif h-100 px-0 pt-0">
 						<div id="close-header">
@@ -1541,7 +1541,7 @@
 							options.url = APP_URL + options.url;
 					}
 				});
-			</script>	
+			</script>
 			<!--end::Global Theme Bundle-->
 			<!--begin::Page Vendors(used by this page)-->
 			{{-- <script src="plugins/custom/fullcalendar/fullcalendar.bundle.js"></script> --}}
@@ -1564,7 +1564,7 @@
 			<script src="{{ assets("js/popper.min.js") }}"></script>
 			<script src="{{ assets("js/jquery.dataTables.min.js") }}"></script>
 			<script src="{{ assets("js/dataTables.bootstrap4.min.js") }}"></script>
-			
+
 			<script src="{{ assets("js/bundle.js") }}"></script>
 		</body>
 	<!--end::Body-->
