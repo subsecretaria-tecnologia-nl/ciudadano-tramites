@@ -201,9 +201,16 @@ class TramitesController extends Controller
 
                 if (!empty($lotes)){
                   $costoxlote = $primer_costo * $lotes;
+                  $costoMinimo = $min * $actual_uma;
+                  $costoMin = $this->redondeo($costoMinimo);
 
-                  if($costoxlote < $primer_costo){
-                    $costo_final = $primer_costo;
+                  $costoMaximo = $max * $actual_uma;
+                  $costoMax = $this->redondeo($costoMaximo);
+
+                  if($costoxlote < $costoMinimo){
+                    $costo_final = $costoMinimo;
+                  }elseif($costoxlote > $costoMax){
+                    $costo_final = $costoMax;
                   }else{
                     $costo_final = $costoxlote;
                   }
@@ -219,12 +226,19 @@ class TramitesController extends Controller
                 }
                 $primer_costo = $this->redondeo($costo_real);
                 if (!empty($hojas)){
-                  $costoxhojas = $primer_costo * $hojas;
+                  $costoxhoja = $primer_costo * $hojas;
 
-                  if($costoxhojas < $primer_costo){
-                    $costo_final = $primer_costo;
+                  $costoMinimo = $min * $actual_uma;
+                  $costoMin = $this->redondeo($costoMinimo);
+
+                  $costoMaximo = $max * $actual_uma;
+                  $costoMax = $this->redondeo($costoMaximo);
+                  if($costoxhoja < $costoMinimo){
+                    $costo_final = $costoMinimo;
+                  }elseif($costoxhoja > $costoMax){
+                    $costo_final = $costoMax;
                   }else{
-                    $costo_final = $costoxhojas;
+                    $costo_final = $costoxhoja;
                   }
                 }else{
                   $costo_final = $primer_costo;
@@ -292,9 +306,16 @@ class TramitesController extends Controller
 
                 if (!empty($lotes)){
                   $costoxlote = $primer_costo * $lotes;
+                  $costoMinimo = $min * $actual_uma;
+                  $costoMin = $this->redondeo($costoMinimo);
 
-                  if($costoxlote < $primer_costo){
-                    $costo_final = $primer_costo;
+                  $costoMaximo = $max * $actual_uma;
+                  $costoMax = $this->redondeo($costoMaximo);
+
+                  if($costoxlote < $costoMinimo){
+                    $costo_final = $costoMinimo;
+                  }elseif($costoxlote > $costoMax){
+                    $costo_final = $costoMax;
                   }else{
                     $costo_final = $costoxlote;
                   }
@@ -313,8 +334,15 @@ class TramitesController extends Controller
                 if (!empty($hojas)){
                   $costoxhoja = $primer_costo * $hojas;
 
-                  if($costoxhoja < $primer_costo){
-                    $costo_final = $primer_costo;
+                  $costoMinimo = $min * $actual_uma;
+                  $costoMin = $this->redondeo($costoMinimo);
+
+                  $costoMaximo = $max * $actual_uma;
+                  $costoMax = $this->redondeo($costoMaximo);
+                  if($costoxhoja < $costoMinimo){
+                    $costo_final = $costoMinimo;
+                  }elseif($costoxhoja > $costoMax){
+                    $costo_final = $costoMax;
                   }else{
                     $costo_final = $costoxhoja;
                   }
@@ -425,9 +453,16 @@ class TramitesController extends Controller
 
                 if (!empty($lotes)){
                   $costoxlote = $primer_costo * $lotes;
+                  $costoMinimo = $min * $actual_uma;
+                  $costoMin = $this->redondeo($costoMinimo);
 
-                  if($costoxlote < $primer_costo){
-                    $costo_final = $primer_costo;
+                  $costoMaximo = $max * $actual_uma;
+                  $costoMax = $this->redondeo($costoMaximo);
+
+                  if($costoxlote < $costoMinimo){
+                    $costo_final = $costoMinimo;
+                  }elseif($costoxlote > $costoMax){
+                    $costo_final = $costoMax;
                   }else{
                     $costo_final = $costoxlote;
                   }
@@ -466,9 +501,16 @@ class TramitesController extends Controller
 
                 if (!empty($lotes)){
                   $costoxlote = $primer_costo * $lotes;
+                  $costoMinimo = $min * $actual_uma;
+                  $costoMin = $this->redondeo($costoMinimo);
 
-                  if($costoxlote < $primer_costo){
-                    $costo_final = $primer_costo;
+                  $costoMaximo = $max * $actual_uma;
+                  $costoMax = $this->redondeo($costoMaximo);
+
+                  if($costoxlote < $costoMinimo){
+                    $costo_final = $costoMinimo;
+                  }elseif($costoxlote > $costoMax){
+                    $costo_final = $costoMax;
                   }else{
                     $costo_final = $costoxlote;
                   }
@@ -495,8 +537,15 @@ class TramitesController extends Controller
                 if (!empty($hojas)){
                   $costoxhoja = $primer_costo * $hojas;
 
-                  if($costoxhoja < $primer_costo){
-                    $costo_final = $primer_costo;
+                  $costoMinimo = $min * $actual_uma;
+                  $costoMin = $this->redondeo($costoMinimo);
+
+                  $costoMaximo = $max * $actual_uma;
+                  $costoMax = $this->redondeo($costoMaximo);
+                  if($costoxhoja < $costoMinimo){
+                    $costo_final = $costoMinimo;
+                  }elseif($costoxhoja > $costoMax){
+                    $costo_final = $costoMax;
                   }else{
                     $costo_final = $costoxhoja;
                   }
@@ -576,9 +625,16 @@ class TramitesController extends Controller
 
               if (!empty($lotes)){
                 $costoxlote = $primer_costo * $lotes;
+                $costoMinimo = $min * $actual_uma;
+                $costoMin = $this->redondeo($costoMinimo);
 
-                if($costoxlote < $primer_costo){
-                  $costo_final = $primer_costo;
+                $costoMaximo = $max * $actual_uma;
+                $costoMax = $this->redondeo($costoMaximo);
+
+                if($costoxlote < $costoMinimo){
+                  $costo_final = $costoMinimo;
+                }elseif($costoxlote > $costoMax){
+                  $costo_final = $costoMax;
                 }else{
                   $costo_final = $costoxlote;
                 }
@@ -602,12 +658,19 @@ class TramitesController extends Controller
               $primer_costo = $this->redondeo($costo_real);
 
               if (!empty($hojas)){
-                $costoxlote = $primer_costo * $hojas;
+                $costoxhoja = $primer_costo * $hojas;
 
-                if($costoxlote < $primer_costo){
-                  $costo_final = $primer_costo;
+                $costoMinimo = $min * $actual_uma;
+                $costoMin = $this->redondeo($costoMinimo);
+
+                $costoMaximo = $max * $actual_uma;
+                $costoMax = $this->redondeo($costoMaximo);
+                if($costoxhoja < $costoMinimo){
+                  $costo_final = $costoMinimo;
+                }elseif($costoxhoja > $costoMax){
+                  $costo_final = $costoMax;
                 }else{
-                  $costo_final = $costoxlote;
+                  $costo_final = $costoxhoja;
                 }
               }else{
                 $costo_final = $primer_costo;
@@ -642,9 +705,16 @@ class TramitesController extends Controller
 
               if (!empty($lotes)){
                 $costoxlote = $primer_costo * $lotes;
+                $costoMinimo = $min * $actual_uma;
+                $costoMin = $this->redondeo($costoMinimo);
 
-                if($costoxlote < $primer_costo){
-                  $costo_final = $primer_costo;
+                $costoMaximo = $max * $actual_uma;
+                $costoMax = $this->redondeo($costoMaximo);
+
+                if($costoxlote < $costoMinimo){
+                  $costo_final = $costoMinimo;
+                }elseif($costoxlote > $costoMax){
+                  $costo_final = $costoMax;
                 }else{
                   $costo_final = $costoxlote;
                 }
@@ -669,12 +739,19 @@ class TramitesController extends Controller
               $primer_costo = $this->redondeo($costo_real);
 
               if (!empty($hojas)){
-                $costoxlote = $primer_costo * $hojas;
+                $costoxhoja = $primer_costo * $hojas;
 
-                if($costoxlote < $primer_costo){
-                  $costo_final = $primer_costo;
+                $costoMinimo = $min * $actual_uma;
+                $costoMin = $this->redondeo($costoMinimo);
+
+                $costoMaximo = $max * $actual_uma;
+                $costoMax = $this->redondeo($costoMaximo);
+                if($costoxhoja < $costoMinimo){
+                  $costo_final = $costoMinimo;
+                }elseif($costoxhoja > $costoMax){
+                  $costo_final = $costoMax;
                 }else{
-                  $costo_final = $costoxlote;
+                  $costo_final = $costoxhoja;
                 }
               }else{
                 $costo_final = $primer_costo;
@@ -708,7 +785,7 @@ class TramitesController extends Controller
               if ($precioRedondeo < $costoMin ){
                 $costo_final = $costoMin;
               }elseif ($precioRedondeo > $costoMax) {
-                $costo_final = $costoMax;
+                  $costo_final = $costoMax;
               }else{
                 $costo_final = $precioRedondeo;
               }
