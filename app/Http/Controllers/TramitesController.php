@@ -238,7 +238,7 @@ class TramitesController extends Controller
                   }elseif($costoxhoja > $costoMax){
                     $costo_final = $costoMax;
                   }else{
-                    $costo_final = $costoxhoja;
+                    $costo_final = $this->redondeo($costoxhoja);
                   }
                 }else{
                   $costo_final = $primer_costo;
@@ -344,9 +344,10 @@ class TramitesController extends Controller
                   }elseif($costoxhoja > $costoMax){
                     $costo_final = $costoMax;
                   }else{
-                    $costo_final = $costoxhoja;
+                    $costo_final = $this->redondeo($costoxhoja);
                   }
                 }else{
+
                   $costo_final = $primer_costo;
                 }
               }
@@ -512,7 +513,7 @@ class TramitesController extends Controller
                   }elseif($costoxlote > $costoMax){
                     $costo_final = $costoMax;
                   }else{
-                    $costo_final = $costoxlote;
+                    $costo_final = $this->redondeo($costoxlote);
                   }
                 }else{
                   $costo_final = $primer_costo;
@@ -547,7 +548,7 @@ class TramitesController extends Controller
                   }elseif($costoxhoja > $costoMax){
                     $costo_final = $costoMax;
                   }else{
-                    $costo_final = $costoxhoja;
+                    $costo_final = $this->redondeo($costoxhoja);
                   }
                 }else{
                   $costo_final = $primer_costo;
@@ -636,7 +637,7 @@ class TramitesController extends Controller
                 }elseif($costoxlote > $costoMax){
                   $costo_final = $costoMax;
                 }else{
-                  $costo_final = $costoxlote;
+                  $costo_final = $this->redondeo($costoxlote);
                 }
               }else{
                 $costo_final = $primer_costo;
@@ -670,7 +671,7 @@ class TramitesController extends Controller
                 }elseif($costoxhoja > $costoMax){
                   $costo_final = $costoMax;
                 }else{
-                  $costo_final = $costoxhoja;
+                  $costo_final = $this->redondeo($costoxhoja);
                 }
               }else{
                 $costo_final = $primer_costo;
@@ -716,7 +717,7 @@ class TramitesController extends Controller
                 }elseif($costoxlote > $costoMax){
                   $costo_final = $costoMax;
                 }else{
-                  $costo_final = $costoxlote;
+                  $costo_final = $this->redondeo($costoxlote);
                 }
               }else{
                 $costo_final = $primer_costo;
@@ -751,7 +752,7 @@ class TramitesController extends Controller
                 }elseif($costoxhoja > $costoMax){
                   $costo_final = $costoMax;
                 }else{
-                  $costo_final = $costoxhoja;
+                  $costo_final = $this->redondeo($costoxhoja);
                 }
               }else{
                 $costo_final = $primer_costo;
