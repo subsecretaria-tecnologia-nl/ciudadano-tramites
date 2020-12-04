@@ -190,7 +190,7 @@ class SolicitudesController extends Controller
           'campo_id' => $c->campo_id,
           'agrupacion_id' => $c->agrupacion_id,
           'orden'=> $c->orden,
-          'descripcion' => $desc,
+          'nombre_agrupacion' => $desc,
         );
 
 
