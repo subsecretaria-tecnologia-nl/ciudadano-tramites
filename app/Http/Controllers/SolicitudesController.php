@@ -18,6 +18,7 @@ use App\Repositories\PortalcampoRepositoryEloquent;
 use App\Repositories\EgobiernopartidasRepositoryEloquent;
 //use App\Repositories\PortalreglaoperativaRepositoryEloquent;
 use App\Repositories\PortalcostotramitesRepositoryEloquent;
+use App\Repositories\PortalcamposagrupacionesRepositoryEloquent;
 
 class SolicitudesController extends Controller
 {
@@ -32,6 +33,7 @@ class SolicitudesController extends Controller
 // agregar catalogos
   protected $catalogo_campos;
   protected $catalogo_type;
+  protected $group;
 
   public function __construct(
     PortalsolicitudescatalogoRepositoryEloquent $solicitudes,
@@ -40,7 +42,8 @@ class SolicitudesController extends Controller
     PortalcampotypeRepositoryEloquent $tipocampo,
     PortalcampoRepositoryEloquent $campo,
     EgobiernopartidasRepositoryEloquent $partidas,
-    PortalcostotramitesRepositoryEloquent $costo
+    PortalcostotramitesRepositoryEloquent $costo,
+    PortalcamposagrupacionesRepositoryEloquent $group
     )
     {
       // $this->middleware('auth');
@@ -57,6 +60,8 @@ class SolicitudesController extends Controller
       $this->partidas = $partidas;
 
       $this->costo = $costo;
+
+      $this->group = $group;
 
       // creamos los catalogos iniciales
 
@@ -171,13 +176,24 @@ class SolicitudesController extends Controller
 
       foreach ($campos as $c) {
 
+        $grupo = $this->group->findWhere(['id' => $c->agrupacion_id]);
+
+        foreach ($grupo as $g) {
+          $desc = $g->descripcion;
+        }
+
         $campos_data []=array(
           'relationship' => $c->id,
           'tipo' => $this->catalogo_type[$c->tipo_id],
           'nombre' => $this->catalogo_campos[$c->campo_id],
           'caracteristicas' => $c->caracteristicas,
           'campo_id' => $c->campo_id,
+          'agrupacion_id' => $c->agrupacion_id,
+          'orden'=> $c->orden,
+          'descripcion' => $desc,
         );
+
+
       }
 
       //dd($campos_data);
