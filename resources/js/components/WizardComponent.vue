@@ -58,7 +58,7 @@
 
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"  
-                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount"></campos-tramite-component>
+                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles"></campos-tramite-component>
                                             </div>
                                             <!--end: Wizard Step 1-->
                                             <!--begin: Wizard Step 2-->
@@ -125,7 +125,8 @@
                 registrado: false,
                 formularioValido: false,
                 solicitantesValido: false,
-                comprobarEstadoFormularioCount:0
+                comprobarEstadoFormularioCount:0,
+                files:[]
             }
         },
   
@@ -137,6 +138,10 @@
               }
               this.formularioValido = formularioValido;
               this.$forceUpdate()
+            },
+
+            updatingFiles( files ){
+              this.files = files;
             },
 
             updateSolicitante(solicitantesValido){ 
@@ -200,6 +205,7 @@
 
             async agregar( type){
 
+
                 let listaSolicitantes = [];
                 let tramite = {};
                 let datosFormulario = {};
@@ -242,18 +248,36 @@
                   partidas: tramite.partidas,
                   detalle: tramite.detalle
                 }
-
+/*
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
 
                 let data = {
                   clave: tramite.id_seguimiento,
                   catalogo_id: tramite.id_tramite,
                   solicitantes: listaSolicitantes,
                   info:informacion,
-                  user_id:this.idUsuario
+                  user_id:this.idUsuario,
+                  file: await toBase64(this.files[0].valor) 
+                }*/
+
+                let formData = new FormData();
+
+                if( this.files && this.files.length > 0 ){
+                  formData.append('file',this.files[0].valor );
                 }
-                data = JSON.stringify(data);
-                console.log(data)
-                console.log( JSON.parse(data) )
+                formData.append('user_id', this.idUsuario );
+                formData.append('info', JSON.stringify(informacion) );
+                formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
+                formData.append('clave', tramite.id_seguimiento );
+                formData.append('catalogo_id', tramite.id_tramite );
+
+                //data = JSON.stringify(data);
+
                 if( type == "finalizar" ){
                   this.finalizando = true;
                 } else {
@@ -262,12 +286,12 @@
 
                 let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register";
                 try {
-                  let response = await axios.post(url, data, {
+                  let response = await axios.post(url, formData, {
                     headers:{
-                        "Content-type":"application/json"
+            'Content-Type': 'application/json',
                       },
                   });
-                  console.log(response.data);
+                 
                   let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
                   $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
                   Command: toastr.success("Listo!", response.data.Message);
