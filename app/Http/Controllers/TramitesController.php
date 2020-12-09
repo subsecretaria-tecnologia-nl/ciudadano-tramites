@@ -15,6 +15,7 @@ use App\Repositories\PortalcamporelationshipRepositoryEloquent;
 
 use App\Repositories\EgobiernotiposerviciosRepositoryEloquent;
 use App\Repositories\EgobiernopartidasRepositoryEloquent;
+use App\Repositories\PortalcamposagrupacionesRepositoryEloquent;
 
 use App\Repositories\PortalcostotramitesRepositoryEloquent;
 use App\Repositories\PortalsubsidiotramitesRepositoryEloquent;
@@ -31,6 +32,7 @@ class TramitesController extends Controller
     protected $subsidiotramites;
     protected $uma;
     protected $partidas;
+    protected $group;
 
     public function __construct(
       TramitedetalleRepositoryEloquent $tramites,
@@ -40,7 +42,8 @@ class TramitesController extends Controller
       PortalcostotramitesRepositoryEloquent $costotramites,
       PortalsubsidiotramitesRepositoryEloquent $subsidiotramites,
       PortalumaRepositoryEloquent $uma,
-      EgobiernopartidasRepositoryEloquent $partidas
+      EgobiernopartidasRepositoryEloquent $partidas,
+      PortalcamposagrupacionesRepositoryEloquent $group
       )
       {
         // $this->middleware('auth');
@@ -52,6 +55,7 @@ class TramitesController extends Controller
         $this->subsidiotramites = $subsidiotramites;
         $this->uma = $uma;
         $this->partidas = $partidas;
+        $this->group = $group;
       }
 
     public function index ($type) {

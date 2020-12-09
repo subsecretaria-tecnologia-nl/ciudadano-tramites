@@ -180,6 +180,7 @@ class SolicitudesController extends Controller
 
         foreach ($grupo as $g) {
           $desc = $g->descripcion;
+          $cat = $g->id_categoria;
         }
 
         $campos_data []=array(
@@ -191,6 +192,7 @@ class SolicitudesController extends Controller
           'agrupacion_id' => $c->agrupacion_id,
           'orden'=> $c->orden,
           'nombre_agrupacion' => $desc,
+          'categoria' => $cat,
         );
 
 
