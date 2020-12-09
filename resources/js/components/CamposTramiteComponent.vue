@@ -63,16 +63,38 @@
 								  		</small>
 									
 								</div>
+								<div v-else-if="campo.tipo === 'file'"  class="form-group fv-plugins-icon-container">
+									<label>{{ campo.nombre }}</label>
+									<input  
+										id="expCatastral"
+									 	:name="[[campo.campo_id]]" 
+									 	class="form-control form-control-solid form-control-lg" 
+										ref="fileInput"
+										type="file"
+										accept=".xlsx,.xls"
+										@change="fileSaved()"
+									>
+									</input>
+									<a href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+
+									 	<small  class="form-text text-muted" v-if="campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
+								  			<span v-for="mensaje in campo.mensajes">
+								  				{{ mensaje.mensajeStr }}
+								  			</span>
+								  		</small>
+									
+								</div>
  							</div>
  						</div>
  		
-
-
 
  					</div>
  				</div>
 			</form>
 		</div>
+				<code> 
+					{{campos}}
+				</code>
     </div>
 </template>
 
@@ -82,7 +104,22 @@
         props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount'],
         data() {
             return {
-                campos: [],
+                campos: [
+					{
+					"relationship":131,
+					"tipo":"file",
+					"nombre":"Excel",
+					"caracteristicas":"{\"required\":\"false\"}",
+					"campo_id":'expCatastral',
+					"mensajes":[
+						{
+							"tipo":"required",
+							"mensajeStr":"El campo Excel es requerido"
+						}
+					],
+					"valido":false
+				}
+			   ],
                 mostrar:false,
                 errors: {},
                 showMensajes:false
@@ -190,10 +227,85 @@
 		    	}
 		    	this.campos[indice].valido = curpValido && requeridoValido;
 	        },
+			fileSaved(){
+
+				var file = document.getElementById('expCatastral')
+				if (file != null ) {
+					var  selectedFile =file.files[0];
+					if(selectedFile){
+						var fileReader = new FileReader();
+						fileReader.readAsBinaryString(selectedFile);
+						fileReader.onload = function(e) {
+							var data =  e.target.result;
+							var workbook = XLSX.read(data, {type: "binary"});
+							workbook.SheetNames.forEach(sheetName => {
+									var rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+									var json_object = JSON.stringify(rowObject);
+									console.log(json_object);
+
+									//cuando el usuario añada los expedientes bajo una unica columna de expediente catastral 
+									if (Object.keys(rowObject[0]) == 'Expediente Catastral' || Object.keys(rowObject[0]) == 'Exp Catastral' || Object.keys(rowObject[0]) == 'E Catrastral')  {
+										for (let i = 0; i < rowObject.length; i++) {
+											var key = Object.keys(rowObject[0]);
+											var value = rowObject[i][key];
+											if ( (/^([0-9]{3,3})(-)?([0-9]{3,3})(-)?([0-9]{3,3})$/).test(value) == false ) {
+												alert('el documento excel no cuenta con el formato requerido error: "FF0213120"');
+												break;
+											}
+
+										}
+									//formato en el quue se separa municipio / region / manzaba / lote	
+									}else if(Object.keys(rowObject[0] == 'Municipio') || Object.keys(rowObject[1] == 'municipio')){
+
+										var municipio = Object.keys(rowObject[0])[0];
+										var region = Object.keys(rowObject[0])[1];
+										var manzana = Object.keys(rowObject[0])[2];
+										var lote = Object.keys(rowObject[0])[3];
+
+										for (let i = 0; i < rowObject.length; i++) {
+											var valueMunicipio = rowObject[i][municipio];
+												(valueMunicipio.toString().length === 1 ) ? valueMunicipio= '00' + valueMunicipio : valueMunicipio;
+												(valueMunicipio.toString().length === 2 ) ? valueMunicipio= '0' + valueMunicipio : valueMunicipio;
+											var valueRegion = rowObject[i][region];
+												(valueRegion.toString().length === 1 ) ? valueRegion= '00' + valueRegion : valueRegion;	
+												(valueRegion.toString().length === 2 ) ? valueRegion= '0' + valueRegion : valueRegion;
+											var valueManzana = rowObject[i][manzana];
+												(valueManzana.toString().length === 1 ) ? valueManzana= '00' + valueManzana : valueManzana;	
+												(valueManzana.toString().length === 2 ) ? valueManzana= '0' + valueManzana : valueManzana;
+											var valueLote = rowObject[i][lote];
+												(valueLote.toString().length === 1 ) ? valueLote= '00' + valueLote : valueLote;	
+												(valueLote.toString().length === 2 ) ? valueLote= '0' + valueLote : valueLote;
+											
+											if ( /^([0-9]){1,3}$/.test(valueMunicipio) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191" ')
+												break;
+											}
+											if ( /^([0-9]){1,3}$/.test(valueRegion) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												break;
+											}
+											if ( /^([0-9]){1,3}$/.test(valueManzana) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												break;
+											}
+											if ( /^([0-9]){1,3}$/.test(valueLote) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												break;
+											}
+											
+										}
+									}
+							})
+						}.bind(this);
+				
+					
+				}
+			}
 
 
+			}
+	
+     	}	
+	}
 
-		}
-
-    }
 </script>
