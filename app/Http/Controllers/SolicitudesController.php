@@ -316,4 +316,20 @@ class SolicitudesController extends Controller
 
   }
 
+  public function allCategories (){
+    try{
+      $cats = $this->cat_tramite->get();
+
+      return json_encode($cats);
+
+    }catch(\Exception $e){
+      Log::info('Error allCategories '.$e->getMessage());
+      return response()->json(
+        [
+          "Code" => "400",
+          "Message" => "Error al listar categorias",
+        ]
+      );
+    }
+  }
 }

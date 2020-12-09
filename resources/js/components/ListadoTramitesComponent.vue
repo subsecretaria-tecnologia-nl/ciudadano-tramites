@@ -55,7 +55,7 @@
                     </v-col>
                 </v-row>
             </v-container>
-            <div class="w-100" v-if="!loading">     
+            <div class="w-100" v-if="!loading">
                 <tramite-component v-for="(tramite, index) in tramitesPaginados" :tramite="tramite" v-bind:key="index"></tramite-component>
                 <div class="card card-custom">
                     <div class="card-body py-7">
@@ -69,7 +69,7 @@
                                     <i class="ki ki-bold-arrow-back icon-xs"></i>
                                 </a>
                                 <a class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1" v-for="(r) in pages"
-                                v-bind:class="[ currentPage === r ? 'active' : '']" v-on:click="goto(r)"> 
+                                v-bind:class="[ currentPage === r ? 'active' : '']" v-on:click="goto(r)">
                                    {{ r }}
                                 </a>
                                 <a  class="btn btn-icon btn-sm btn-light-primary mr-2 my-1" v-if="currentPage !== (pages.length)"  v-on:click="goto(currentPage + 1)">
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-    export default {    
+    export default {
 
         data() {
             return {
@@ -105,10 +105,12 @@
             }
         },
         created() {
+          console.log( process.env )
             localStorage.removeItem('datosFormulario');
             localStorage.removeItem('listaSolicitantes');
             localStorage.removeItem('tramite');
             this.obtenerTramites();
+          console.log("fn created")
         },
 
         methods: {
@@ -157,7 +159,7 @@
                 this.totalTramites = this.tramitesPaginados.length;
             },
 
-            goto( page ){ 
+            goto( page ){
                 this.pagination( page );
                 this.currentPage = page;
             },
