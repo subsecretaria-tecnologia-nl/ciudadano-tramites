@@ -183,21 +183,33 @@ class SolicitudesController extends Controller
           $cat = $g->id_categoria;
         }
 
-        $campos_data []=array(
-          'relationship' => $c->id,
-          'tipo' => $this->catalogo_type[$c->tipo_id],
-          'nombre' => $this->catalogo_campos[$c->campo_id],
-          'caracteristicas' => $c->caracteristicas,
-          'campo_id' => $c->campo_id,
-          'agrupacion_id' => $c->agrupacion_id,
-          'orden'=> $c->orden,
-          'nombre_agrupacion' => $desc,
-          'categoria' => $cat,
-        );
+          $campos_data []=array(
+            'relationship' => $c->id,
+            'tipo' => $this->catalogo_type[$c->tipo_id],
+            'nombre' => $this->catalogo_campos[$c->campo_id],
+            'caracteristicas' => $c->caracteristicas,
+            'campo_id' => $c->campo_id,
+            'agrupacion_id' => $c->agrupacion_id,
+            'orden'=> $c->orden,
+            'nombre_agrupacion' => $desc,
+          );
 
 
       }
+      $data = array();
 
+      if ($id_tramite == 516 || $tramite_id == 399) {
+
+        $data [] = array(
+          "campos_data" => $campos_data,
+          "consulta_api" => "/getcostoImpuesto"
+        );
+      }else{
+        $data [] = array(
+          "campos_data" => $campos_data,
+          "consulta_api" => "/getcostoTramite"
+        );
+      }
       //dd($campos_data);
 
     }catch(\Exception $e){
@@ -205,7 +217,7 @@ class SolicitudesController extends Controller
     }
 
 
-    return json_encode($campos_data);
+    return json_encode($data);
   }
 
   /**
