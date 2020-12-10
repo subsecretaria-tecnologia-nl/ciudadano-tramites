@@ -222,7 +222,7 @@ class SolicitudesController extends Controller
     try{
       $campos = $this->relationship->findWhere( ['tramite_id' => $id_tramite] );
       //$campos = $this->relationship->where('tramite_id', 100)->get();
-      
+
       foreach ($campos as $c) {
 
         $grupo = $this->group->findWhere(['id' => $c->agrupacion_id]);
@@ -246,7 +246,7 @@ class SolicitudesController extends Controller
       }
       $data = array();
 
-      if ($id_tramite === 516 ) {
+      if ($id_tramite == 516 ) {
 
         $data [] = array(
           "campos_data" => $campos_data,
