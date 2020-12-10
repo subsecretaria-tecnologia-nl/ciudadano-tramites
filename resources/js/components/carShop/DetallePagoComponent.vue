@@ -53,7 +53,7 @@
         computed:{
             calcularTotal(){
                 var total = 0;
-                this.tramites.forEach(tramite => total = total + tramite.importe_tramite );
+                this.tramites.forEach(tramite => total = total + parseFloat(tramite.importe_tramite) );
                 return total;
             }
         },

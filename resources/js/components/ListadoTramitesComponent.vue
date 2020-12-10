@@ -1,5 +1,5 @@
 <template>
-    <div class="content d-flex flex-column flex-column-fluid">
+    <div class="content d-flex flex-column flex-column-fluid" data-app>
         <div class="subheader py-2 py-lg-4 subheader-transparent" id="kt_subheader">
             <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
                 <!--begin::Details-->
@@ -12,8 +12,8 @@
                     <!--end::Separator-->
                     <!--begin::Search Form-->
                     <div class="d-flex align-items-center" id="kt_subheader_search">
-                        <span class="text-dark-50 font-weight-bold" id="kt_subheader_total">{{ tramitesFiltrados.length }} Total</span>
-                        <form class="ml-5">
+                        <span class="text-dark-50 font-weight-bold" id="kt_subheader_total">{{ totalTramites }} Total</span>
+                        <div class="ml-8">
                             <div class="input-group input-group-sm input-group-solid" style="max-width: 175px">
                                 <input type="text" class="form-control" id="kt_subheader_search_form" placeholder="Search..." v-on:keyup="search()" v-model="strBusqueda">
                                 <div class="input-group-append">
@@ -33,11 +33,68 @@
                                     </span>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
+
                     <!--end::Search Form-->
                 </div>
                 <!--end::Details-->
+
+                <div class="d-flex align-items-center">
+                    <!--begin::Button-->
+                    <!--end::Button-->
+                    <!--begin::Dropdown-->
+                    <div class="dropdown dropdown-inline ml-2" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
+                        <a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="filtrar por categoria">
+                            <span class="svg-icon svg-icon-success svg-icon-2x">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-filter" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right" >
+                            <!--begin::Naviigation-->
+                            <ul class="navi">
+                                <li class="navi-item"  v-for="categoria in categorias" :value="categoria.id" >
+                                    <a  class="navi-link" v-on:click="addFiltroCategoria(categoria.id)">
+                                        <span class="navi-text">
+                                            <input type="checkbox" class="form-check-input" :id="categoria.id">
+                                            {{ categoria.descripcion }} 
+                                        </span>
+                                        <span class="navi-label">
+                                            <span class="label label-light-danger label-rounded font-weight-bold">
+                                                        {{calcularTotalTramites( categoria.id ) }}
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="navi-separator mb-3 opacity-70"></li>
+                                <li class="navi-item"  >
+                                    <a  class="navi-link" v-on:click="addFiltroCategoria(0)">
+                                        <span class="navi-text">
+                                            <input type="checkbox" class="form-check-input" id="0">
+                                            Sin categoría
+                                        </span>
+                                        <span class="navi-label">
+                                            <span class="label label-light-danger label-rounded font-weight-bold">
+                                                {{calcularTotalTramites( 0 ) }}
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="navi-item">
+                                    <a type="button" class="btn btn-primary btn-block">
+                                        <span class="navi-text">Aplicar</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!--end::Naviigation-->
+                        </div>
+                    </div>
+                    <!--end::Dropdown-->
+                </div>
+
             </div>
         </div>
         <div class="d-flex flex-column-fluid">
@@ -56,10 +113,28 @@
                 </v-row>
             </v-container>
             <div class="w-100" v-if="!loading">
-                <tramite-component v-for="(tramite, index) in tramitesPaginados" :tramite="tramite" v-bind:key="index"></tramite-component>
+                <div v-for="categoria in categoriasGroup">
+                    <fieldset >
+                        <legend class=" text-primary text-dark">
+                            {{ categoria.nombre_categoria }}
+                        </legend>
+                        <hr>
+                        <div class="col-lg-12">
+                            <tramite-component v-for="(tramite, index) in categoria.tramites" :tramite="tramite" v-bind:key="index"></tramite-component>
+                        </div>
+                    </fieldset>
+                </div>
+                <div v-if="totalTramites == 0">
+                    <div class="card" style="width: 100%;">
+                          <div class="card-body text-center">
+                            <h5 class="card-title" >Sin resultados  </h5>
+                          </div>
+                    </div>                    
+                </div>
+                    <!--
+                
                 <div class="card card-custom">
                     <div class="card-body py-7">
-                        <!--begin::Pagination-->
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="d-flex flex-wrap mr-3" >
                                 <a  class="btn btn-icon btn-sm btn-light-primary mr-2 my-1" v-if="currentPage !== 1"  v-on:click="goto(1)">
@@ -87,9 +162,8 @@
                                 </select>
                             </div>
                         </div>
-                        <!--end:: Pagination-->
                     </div>
-                </div>
+                </div>-->
 
             </div>
         </div>
@@ -97,45 +171,145 @@
 </template>
 
 <script>
-    export default {
+
+export default {
 
         data() {
             return {
-                tramites: [], loading:true, porPage : 10, pages:[0], currentPage :1, strBusqueda:"", totalTramites:0,tramitesFiltrados:[]
+                tramites: [], loading:true, porPage : 10, pages:[0], currentPage :1, strBusqueda:"", tramitesFiltrados:[],
+                categoriaSelectId:null,categorias:[], categoriasGroup:[], filstrosCategoria:[]
             }
         },
         created() {
-          console.log( process.env )
             localStorage.removeItem('datosFormulario');
             localStorage.removeItem('listaSolicitantes');
             localStorage.removeItem('tramite');
             this.obtenerTramites();
-          console.log("fn created")
+            
+        },
+
+        computed:{
+            totalTramites(){
+                var total = 0;
+                this.categoriasGroup.forEach(categoria => total = total + categoria.tramites.length);
+                return total;
+            }
         },
 
         methods: {
 
+            calcularTotalTramites( categoriaId )  {
+                var total = 0;
+                let totalPorCategoria = this.tramites.filter( tramite => {
+                        if( tramite.category && tramite.category.length > 0){
+                            return tramite.category[0].categorias_id == categoriaId;
+                        } else if( categoriaId == 0 ) {
+                            return tramite.category == 0 ;
+                        }   
+
+                    });
+                
+                    
+                return totalPorCategoria.length;
+                
+            },
+
+            async obtenerCategorias(){
+                let url = process.env.APP_URL + "/getCategories";
+                try {
+                    let response = await axios.get(url);
+                    this.categorias = response.data;
+                    
+                } catch (error) {
+                    console.log(error);
+                }
+            },
 
             async obtenerTramites(){
                 let url = process.env.APP_URL + "/allTramites";
                 try {
                     let response = await axios.get(url);
                     this.tramites = response.data;
+                    
+                    this.agruparCategorias( this.tramites  );
+                    this.obtenerCategorias();
+/*
                     this.tramitesFiltrados = this.tramites;
+                    
                     let pagesTotal = Math.ceil( this.tramitesFiltrados.length / this.porPage);
                     let pages = [];
 
                     for (var i = 0; i < pagesTotal; i++) {
                         pages.push( i + 1 );
                     }
-                    this.pages = pages;
+                    this.pages = pages;*/
                 } catch (error) {
                     console.log(error);
                 }
 
-                this.pagination(1);
+                //this.pagination(1);
                 this.loading = false;
             },
+
+            agruparCategorias(  tramites ){
+                    this.categoriasGroup = tramites.map( categoria => {  return {
+                            categoria_id:categoria.category && categoria.category.length > 0 ? categoria.category[0].categorias_id : categoria.category  , 
+                            nombre_categoria: categoria.category && categoria.category.length > 0 ? categoria.category[0].nombre_categoria: "Sin categoria",
+                            tramites:[]
+                        } 
+                    }).filter( this.onlyUnique );
+                    this.categoriasGroup = this.categoriasGroup.map( categoria => {
+                        categoria.tramites = tramites.filter(  tramite => {
+                            if( tramite.category && tramite.category.length > 0){
+                                return tramite.category[0].categorias_id  == categoria.categoria_id 
+                            } else {
+                                return categoria.categoria_id  == 0;
+                            }
+                        });
+                        return categoria;
+                    });
+            },
+
+            onlyUnique(value, index, self) { 
+                return self.findIndex (dato => dato.categoria_id == value.categoria_id) === index;
+            },
+
+            onlyUniqueFiltes(value, index, self) { 
+                return self.findIndex (dato => dato == value) === index;
+            },
+
+
+            search(){
+                let tramites = this.tramites.filter( tramite => tramite.tramite.toLocaleLowerCase().includes(this.strBusqueda.toLocaleLowerCase()) ) ;
+                if(this.filstrosCategoria.length > 0){
+                    tramites = tramites.filter( tramite => {
+                        if( tramite.category && tramite.category.length > 0){
+                            return this.filstrosCategoria.includes( tramite.category[0].categorias_id )
+                        } else {
+                            return this.filstrosCategoria.includes( 0 );
+                        }   
+
+                    })
+                }
+                this.agruparCategorias( tramites  );
+            },
+
+            addFiltroCategoria(  ){
+               
+                this.filstrosCategoria = [];
+                this.categorias.forEach( categoria =>{
+                    if( $("#" + categoria.id).prop('checked') ){
+                        this.filstrosCategoria.push( categoria.id );
+                    } 
+                    if( $("#0").prop('checked') ){
+                        this.filstrosCategoria.push( 0 );
+                    }
+                })
+                this.filstrosCategoria = this.filstrosCategoria.filter( this.onlyUniqueFiltes );
+                this.search();
+            }
+
+            /*
 
             calcularPage(){
                 let pages = [];
@@ -155,6 +329,7 @@
                 let indiceFinal =   ( (page - 1 ) * porPageInt  )  + porPageInt;
 
                 this.tramitesFiltrados = this.tramites.filter( tramite => tramite.tramite.toLocaleLowerCase().includes(this.strBusqueda.toLocaleLowerCase()) ) ;
+              
                 this.tramitesPaginados = this.tramitesFiltrados.slice( indiceInicial,  indiceFinal );
                 this.totalTramites = this.tramitesPaginados.length;
             },
@@ -168,7 +343,7 @@
                 this.calcularPage()
                 this.currentPage = 1;
                 this.pagination(1);
-            }
+            }*/
 
         }
 
