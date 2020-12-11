@@ -50,14 +50,17 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		Route::get('/getCampos', 'SolicitudesController@getCampos')->name("getCampos");
 		Route::post('/crearSolicitud', 'TramitesController@crearSolicitud');
 
+		Route::get('/getCategories', 'SolicitudesController@allCategories')->name("allCategories");
+
 		Route::post('/getcostoTramite', 'TramitesController@getcostoTramite')->name("costo-tramite");
+		Route::post('/getcostoImpuesto', 'CalculoimpuestosController@index')->name("costo-impuesto");
 
 		Route::get('/detalle-tramite/{idTramite}', "TramitesController@detalle")->name("tramite.detalle");
 		Route::get('/cart/', "TramitesController@carshop")->name("tramite.cart");
 
 		Route::get('/respuestaPago', "TramitesController@respuestaPago")->name("respuestaPago");
 
-	}); 
+	});
 
 	Route::post('/respuestaPagoBBVA', "TramitesController@respuestaPagoBBVA")->name("respuestaPagoBBVA");
 });

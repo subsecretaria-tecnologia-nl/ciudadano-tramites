@@ -20,6 +20,9 @@ use App\Repositories\EgobiernopartidasRepositoryEloquent;
 use App\Repositories\PortalcostotramitesRepositoryEloquent;
 use App\Repositories\PortalcamposagrupacionesRepositoryEloquent;
 
+use App\Repositories\PortaltramitecategoriaRepositoryEloquent;
+use App\Repositories\PortaltramitecategoriarelacionRepositoryEloquent;
+
 class SolicitudesController extends Controller
 {
   protected $solicitudes;
@@ -29,6 +32,8 @@ class SolicitudesController extends Controller
   protected $campo;
   protected $partidas;
   protected $costo;
+  protected $cat_tramite;
+  protected $relcat;
 
 // agregar catalogos
   protected $catalogo_campos;
@@ -43,7 +48,9 @@ class SolicitudesController extends Controller
     PortalcampoRepositoryEloquent $campo,
     EgobiernopartidasRepositoryEloquent $partidas,
     PortalcostotramitesRepositoryEloquent $costo,
-    PortalcamposagrupacionesRepositoryEloquent $group
+    PortalcamposagrupacionesRepositoryEloquent $group,
+    PortaltramitecategoriaRepositoryEloquent $cat_tramite,
+    PortaltramitecategoriarelacionRepositoryEloquent $relcat
     )
     {
       // $this->middleware('auth');
@@ -62,6 +69,10 @@ class SolicitudesController extends Controller
       $this->costo = $costo;
 
       $this->group = $group;
+
+      $this->cat_tramite = $cat_tramite;
+
+      $this->relcat = $relcat;
 
       // creamos los catalogos iniciales
 
@@ -142,15 +153,53 @@ class SolicitudesController extends Controller
 
     foreach($servicios as $s)
     {
+      $category = $this->relcat->findWhere(['tramite_id'=> $s->Tipo_Code] );
+
       $tmts []=array(
           'id_tramite'=> $s->Tipo_Code,
           'tramite' => $s->Tipo_Descripcion,
           'partidas' => $this->getPartidasTramites($s->Tipo_Code), // aqui mando los datos de la partida
+          'category' => $this->getCategoryTramite($s->Tipo_Code),
         );
     }
 
     return json_encode($tmts);
 
+  }
+
+  function getCategoryTramite($id){
+    $data = array();
+    try{
+
+      $info = $this->relcat->findWhere( ["tramite_id" =>  $id] );
+
+      if($info->count() > 0){
+        foreach($info as $i)
+        {
+          $cat_data = $this->cat_tramite->findWhere(["id" => $i->categorias_id]);
+          foreach ($cat_data as $cats) {
+            $name = $cats->descripcion;
+          }
+          $data []= array(
+            "categorias_id"  => $i->categorias_id,
+            "nombre_categoria" => $name
+          );
+        }
+      }else{
+        $data = 0;
+      }
+
+    }catch(\Exception $e){
+      Log::info('Error getCategoryTramite '.$e->getMessage());
+      return response()->json(
+        [
+          "Code" => "400",
+          "Message" => "Error al getCategoryTramite",
+        ]
+      );
+    }
+
+    return $data;
   }
 
   /*
@@ -182,28 +231,46 @@ class SolicitudesController extends Controller
           $desc = $g->descripcion;
         }
 
-        $campos_data []=array(
-          'relationship' => $c->id,
-          'tipo' => $this->catalogo_type[$c->tipo_id],
-          'nombre' => $this->catalogo_campos[$c->campo_id],
-          'caracteristicas' => $c->caracteristicas,
-          'campo_id' => $c->campo_id,
-          'agrupacion_id' => $c->agrupacion_id,
-          'orden'=> $c->orden,
-          'nombre_agrupacion' => $desc,
-        );
+          $campos_data []=array(
+            'relationship' => $c->id,
+            'tipo' => $this->catalogo_type[$c->tipo_id],
+            'nombre' => $this->catalogo_campos[$c->campo_id],
+            'caracteristicas' => $c->caracteristicas,
+            'campo_id' => $c->campo_id,
+            'agrupacion_id' => $c->agrupacion_id,
+            'orden'=> $c->orden,
+            'nombre_agrupacion' => $desc,
+          );
 
 
       }
+      $data = array();
 
-      //dd($campos_data);
+      if ($id_tramite == 516 ) {
+
+        $data [] = array(
+          "campos_data" => $campos_data,
+          "consulta_api" => "/getcostoImpuesto"
+        );
+      }elseif($id_tramite == 399){
+        $data [] = array(
+          "campos_data" => $campos_data,
+          "consulta_api" => "/getcostoImpuesto"
+        );
+      }else{
+        $data [] = array(
+          "campos_data" => $campos_data,
+          "consulta_api" => "/getcostoTramite"
+        );
+      }
+
 
     }catch(\Exception $e){
       Log::info('Error Solicitud - getCampos '.$e->getMessage());
     }
 
 
-    return json_encode($campos_data);
+    return json_encode($data);
   }
 
   /**
@@ -249,4 +316,20 @@ class SolicitudesController extends Controller
 
   }
 
+  public function allCategories (){
+    try{
+      $cats = $this->cat_tramite->get();
+
+      return json_encode($cats);
+
+    }catch(\Exception $e){
+      Log::info('Error allCategories '.$e->getMessage());
+      return response()->json(
+        [
+          "Code" => "400",
+          "Message" => "Error al listar categorias",
+        ]
+      );
+    }
+  }
 }
