@@ -237,8 +237,8 @@
                 			data.hoja = info.campos["Hoja"] 
                 		}
 
-                		if( info.campos["Lotes"] ){
-                			data.lote = info.campos["Lotes"] 
+                		if( info.campos["Lote"] ){
+                			data.lote = info.campos["Lote"] 
                 		}
                		
                 		let url = process.env.APP_URL + "/getcostoTramite";
