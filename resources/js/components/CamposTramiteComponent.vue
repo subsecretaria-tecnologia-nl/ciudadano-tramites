@@ -312,16 +312,17 @@
 		    			this.campos[indiceCampo].mensajes.push( mensaje );
 		    		}
 		    	}
-		    	this.campos[indice].valido = curpValido && requeridoValido;
-	        },
+				this.campos[indiceCampo].valido = curpValido && requeridoValido;	
+			},
 			fileSaved(){
 
 				var file = document.getElementById('file')
 				if (file != null ) {
-					var  selectedFile =file.files[0];
-					if(selectedFile){
+					  file =file.files[0];
+					  console.log('file..' + file);
+					if(file){
 						var fileReader = new FileReader();
-						fileReader.readAsBinaryString(selectedFile);
+						fileReader.readAsBinaryString(file);
 						fileReader.onload = function(e) {
 							var data =  e.target.result;
 							var workbook = XLSX.read(data, {type: "binary"});
@@ -348,7 +349,7 @@
 								
 								//cuando el usuario añada los expedientes bajo una unica columna de expediente catastral 
 								if (tipoValidacion == 1 ) {
-
+									
 									var expName =  Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf(trueExp)]
 									for (let i = 0; i < rowObject.length; i++) {
 											// var key = Object.keys(rowObject[0]);
@@ -358,7 +359,8 @@
 												break;
 											}
 									}
-									this.files.push( {valor:this.file, nombre:this.file});
+									console.log('file : ' + file);
+									this.files.push( {valor:file, nombre:file});
 									this.$emit('updatingFiles', this.files);
 									
 								}else if(tipoValidacion == 2){
@@ -402,8 +404,8 @@
 												break;
 											}
 										}
-									
-									this.files.push( {valor:this.file, nombre:this.file});
+									console.log('file validacion 2: ' + file);
+									this.files.push( {valor:file, nombre:file});
 		    						this.$emit('updatingFiles', this.files);		
 								}
 							})
