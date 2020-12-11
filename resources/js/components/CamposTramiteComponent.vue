@@ -106,8 +106,8 @@
 													    <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
 													  </div>
 													  <div class="custom-file">
-													    <input type="file" id="file" name="file" class="custom-file-input"   @change="cambioModelo" aria-describedby="inputGroupFileAddon01">
-														<!-- <input  
+													    <!-- <input type="file" id="file" name="file" class="custom-file-input"   @change="cambioModelo" aria-describedby="inputGroupFileAddon01"> -->
+														<input  
 															id="file"
 															:name="[[campo.campo_id]]" 
 															class="form-control form-control-solid form-control-lg" 
@@ -116,8 +116,7 @@
 															accept=".xlsx,.xls"
 															@change="fileSaved()"
 														>
-														</input> -->
-														<a href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+														</input>
 													    <label class="custom-file-label" for="file">
 													    	<span v-if="file">{{file.name }}</span>
 													    	<span v-else-if="!file">Seleccione archivo</span>
@@ -125,6 +124,7 @@
 													    </label>
 													  </div>
 													</div>
+														<a href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
 
 			 								</div>
