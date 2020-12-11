@@ -10,7 +10,7 @@
                         <!--begin::User-->
                         <div class="mr-3">
                             <!--begin::Name-->
-                            <a v-bind:href="'detalle-tramite/'+ tramite.id_tramite" class="d-flex text-dark over-primary font-size-h5 font-weight-bold mr-3 flex-column">
+                            <a v-on:click="goTo(tramite)" class="d-flex text-dark over-primary font-size-h5 font-weight-bold mr-3 flex-column">
                                 <strong class="text-uppercase">{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.clave }}</span>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.created_at }}</span>
