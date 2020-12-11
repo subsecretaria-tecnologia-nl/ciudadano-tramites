@@ -248,22 +248,6 @@
                   partidas: tramite.partidas,
                   detalle: tramite.detalle
                 }
-/*
-const toBase64 = file => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
-
-                let data = {
-                  clave: tramite.id_seguimiento,
-                  catalogo_id: tramite.id_tramite,
-                  solicitantes: listaSolicitantes,
-                  info:informacion,
-                  user_id:this.idUsuario,
-                  file: await toBase64(this.files[0].valor) 
-                }*/
 
                 let formData = new FormData();
 
