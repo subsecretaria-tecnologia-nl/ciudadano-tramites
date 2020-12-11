@@ -153,7 +153,8 @@
                 errors: {},
                 showMensajes:false,
                 files:[], file:null,
-                tipoPersona:'pf'
+                tipoPersona:'pf',
+                consulta_api:''
             }
         },
   
@@ -164,6 +165,7 @@
                 	let datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
                 	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite){
 		                this.campos = datosFormulario.campos;
+		                this.consulta_api = datosFormulario.consulta_api;
 						this.agruparCampos();
 						this.showMensajes = true;
 						this.mostrar = true;
@@ -201,7 +203,8 @@
                 	let datosFormulario = {
                 		tramite: this.tramite,
                 		campos: this.campos,
-                		tipoPersona:this.tipoPersona
+                		tipoPersona:this.tipoPersona,
+                		consulta_api: this.consulta_api
                 	}
                 	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
                 }
@@ -231,8 +234,8 @@
 		    	let url = process.env.APP_URL + "/getCampos";
 		    	try {
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
-
-					this.campos = response.data;
+				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
+					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 					this.agruparCampos();
 
 

@@ -254,7 +254,7 @@ export default {
             agruparCategorias(  tramites ){
                     this.categoriasGroup = tramites.map( categoria => {  return {
                             categoria_id:categoria.category && categoria.category.length > 0 ? categoria.category[0].categorias_id : categoria.category  , 
-                            nombre_categoria: categoria.category && categoria.category.length > 0 ? categoria.category[0].nombre_categoria: "Sin categoria",
+                            nombre_categoria: categoria.category && categoria.category.length > 0 ? categoria.category[0].nombre_categoria: "Sin categoría",
                             tramites:[]
                         } 
                     }).filter( this.onlyUnique );
