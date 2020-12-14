@@ -84,6 +84,20 @@
 </template>
 
 <script>
+    const CAMPO_LOTE            = "Lote";
+    const CAMPO_HOJA            = "Hoja";
+    const CAMPO_SUBSIDIO        = "Subsidio";
+    const CAMPO_VALOR_CATASTRAL = "Valor catastral";
+    const CAMPO_VALOR_OPERACION = "Valor de operacion";
+
+    //CAMPOS CALCULO IMPUESTO
+    const CAMPO_GANANCIA_OBTENIDA                               = "GANANCIA OBTENIDA";
+    const CAMPO_MONTO_DE_OPERACIÓN                              = "MONTO DE OPERACIÓN (reportado en el aviso de enajenación)";
+    const CAMPO_MULTA_POR_CORRECCION_FISCAL                     = "MULTA POR CORRECCION FISCAL";
+    const CAMPO_FECHA_DE_ESCRITURA_O_MINUTA                     = "FECHA DE ESCRITURA O MINUTA";
+    const CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR  = "PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR";
+
+    
     export default {
         mounted() {
             this.obtenerInformacionDelTramite();
@@ -117,78 +131,71 @@
                 $( "#collapseOne" ).toggle('slow');
             },
 
+            getCampoByName( nameCampo ){
+                return this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase()  === nameCampo.toLowerCase() );
+            }, 
 
+            getParamsCalculoCosto( consulta_api , params){
+                let paramsCosto = {};
+                if( consulta_api == "/getcostoImpuesto" ){
+                    // CAMPOS CALCULO IMPUESTO
+                    let campoMonto              = this.getCampoByName(CAMPO_MONTO_DE_OPERACIÓN);
+                    let campoMulta              = this.getCampoByName(CAMPO_MULTA_POR_CORRECCION_FISCAL);
+                    let campoFechaMinuta        = this.getCampoByName(CAMPO_FECHA_DE_ESCRITURA_O_MINUTA);
+                    let campoPagoProvisional    = this.getCampoByName(CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR);
+                    let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
+
+                    paramsCosto.fecha_escritura = campoFechaMinuta.valor;
+                    paramsCosto.monto_operacion = campoMonto.valor;
+                    paramsCosto.ganancia_obtenida = campoGananciaObtenida.valor;    
+                    paramsCosto.pago_provisional_lisr = campoPagoProvisional.valor;
+                    if( campoMulta ){
+                        paramsCosto.multa_correccion_fiscal = campoMulta.valor;
+                    }
+                } else {
+                    let campoLote           = this.getCampoByName(CAMPO_LOTE);
+                    let campoHoja           = this.getCampoByName(CAMPO_HOJA);
+                    let campoSubsidio       = this.getCampoByName(CAMPO_SUBSIDIO);
+                    let campoCatastral      = this.getCampoByName(CAMPO_VALOR_CATASTRAL);
+                    let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
+
+                    if( campoCatastral ){
+                        paramsCosto.valor_catastral = campoCatastral.valor;
+                    }
+
+                    if(campoSubsidio){
+                        paramsCosto.subsidio = campoSubsidio.valor;//62
+                    }
+
+                    if(campoValorOperacion ){
+                        paramsCosto.valor_operacion = campoValorOperacion.valor;
+                    }
+
+                    if( campoHoja ){
+                        paramsCosto.hoja = campoHoja.valor; 
+                    }
+
+                    if( campoLote ){
+                        paramsCosto.lote = campoLote.valor
+                    }                  
+                }
+
+                return Object.assign(params, paramsCosto);
+            },
 
             async obtenerCosto(){
-                let campoCatastral = this.datosFormulario.campos.find( campo => campo.nombre === "Valor catastral");
-                let campoValorOperacion = this.datosFormulario.campos.find( campo => campo.nombre === "Valor de operacion");
-                let campoSubsidio = this.datosFormulario.campos.find( campo => campo.nombre === "Subsidio");
-                let campoHoja = this.datosFormulario.campos.find( campo => campo.nombre === "Hoja");
-                let campoLote = this.datosFormulario.campos.find( campo => campo.nombre === "Lote");
-
-                //calculo impuesto
-                let campoGananciaObtenida = this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase() === "ganancia obtenida");
-                let campoFechaMinuta = this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase()  === "fecha de escritura o minuta");
-                let campoPagoProvisional = this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase()  === "pago provisional conforme al articulo 126 lisr");
-                let campoMulta= this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase() === "multa por correccion fiscal");
-                let campoMonto = this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase()  === "monto de operación (reportado en el aviso de enajenación)");
-
-             
                 let consulta_api =  this.datosFormulario.consulta_api;
-                let url = "";
-
-                if( consulta_api ){
-                    url = process.env.APP_URL + consulta_api;
-                } else {
-                    url = process.env.APP_URL + "/getcostoTramite";
-                }
+                let url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
 
                 let data = {  
                     id_seguimiento: this.tramite.id_seguimiento,
                     tramite_id: this.tramite.id_tramite
                 }
-
-                if( campoCatastral ){
-                    data.valor_catastral = campoCatastral.valor;
-                }
-
-                if(campoSubsidio){
-                    data.subsidio = campoSubsidio.valor;//62
-                }
-
-                if(campoValorOperacion ){
-                    data.valor_operacion = campoValorOperacion.valor;
-                }
-
-                if( campoHoja ){
-                    data.hoja = campoHoja.valor; 
-                }
-
-                if( campoLote ){
-                    data.lote = campoLote.valor
-                }
-
-
-                if( consulta_api == "/getcostoImpuesto" ){
-
-                    if( campoGananciaObtenida && campoFechaMinuta && campoPagoProvisional  && campoMonto  ){
-                        data.fecha_escritura = campoFechaMinuta.valor;
-                        data.monto_operacion = campoMonto.valor;
-                        data.ganancia_obtenida = campoGananciaObtenida.valor;    
-                        data.pago_provisional_lisr = campoPagoProvisional.valor;
-                        if( campoMulta ){
-                            data.multa_correccion_fiscal = campoMulta.valor;
-                        }
-                        
-                    } else {
-
-                    }
-                }
-
+                
+                data = this.getParamsCalculoCosto(consulta_api, data);
                 
                 try {
                     let response = await axios.post(url, data);
-                    console.log( response );
                     let detalleTramite = response.data;
                     if( consulta_api == "/getcostoImpuesto" ){
                         this.tramite.detalle =  detalleTramite;
