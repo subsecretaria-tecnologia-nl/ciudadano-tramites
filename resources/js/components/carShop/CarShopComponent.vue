@@ -152,6 +152,7 @@
                     let response = await axios.get(url);
                     let notary_offices = response.data.notary_offices;
                     let tramites =  response.data.tramites ;
+
                     this.construirJSONTramites( tramites );
                     
                 } catch (error) {
@@ -170,6 +171,7 @@
             	let listadoTramites = [];
             	let requestCostos = [];
             	let contadorSolicitantes = 0;
+
 			    tramites.forEach(  tramiteInarray => {
 										 
 					tramiteInarray.solicitudes.forEach(  soliciante => {
@@ -186,13 +188,7 @@
 						let info = JSON.parse(soliciante.info);
 						let solicianteInfo = info.solicitante;
 
-						tramitesJson.detalle = [];
 
-						tramitesJson.detalle[0] = { 
-							concepto : info.partidas ? info.partidas[0].descripcion : "Descripcion opcional",
-							partida: info.partidas ? info.partidas[0].id_partida : 654656546,
-							importe_concepto:0						
-						}
 
 
 						tramitesJson.datos_solicitante = {
@@ -212,14 +208,12 @@
 					    }
 
 					    tramitesJson.datos_factura = tramitesJson.datos_solicitante;
-
+/*
 						let data = {  
-		                    //valor_catastral: info.campos["Valor catastral"] || 0,
 		                    id_seguimiento: soliciante.clave,
 		                    tramite_id: tramiteInarray.tramite_id,
-		                    //valor_operacion: info["Valor de operacion"] || 0,
-		                    //oficio:62
                 		}
+
 
                 		if( info.campos["Valor catastral"] ){
                 			data.valor_catastral = info.campos["Valor catastral"];
@@ -244,8 +238,41 @@
                 		let url = process.env.APP_URL + "/getcostoTramite";
                 		requestCostos.push(axios.post(url,   data,{headers:{
                 			contadorSolicitantes:contadorSolicitantes
-                		}}));
+                		}}));*/
+
+                		tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['H (Importe total)'] : info.costo_final ;
+						
+						tramitesJson.detalle = [];
+
+						tramitesJson.detalle[0] = { 
+							concepto : info.partidas ? info.partidas[0].descripcion : "",//ponere nombre tramite
+							partida: info.partidas ? info.partidas[0].id_partida : null,
+							importe_concepto:tramitesJson.importe_tramite					
+						}
+
+						let descuentosAplicados = [];
+
+						if(info.detalle && info.detalle.descuentos && Array.isArray(info.detalle.descuentos )  && info.detalle.descuentos.length > 0  ){
+
+							let losdescuentos = info.detalle.descuentos.filter( descuento => descuento.concepto_descuento != "No aplica" );		
+
+							if( losdescuentos && losdescuentos.length > 0 ){
+								info.detalle.descuentos.forEach( descuento => {
+									let descuentoAplicado =  {
+						              concepto_descuento: descuento.concepto_descuento,
+						              importe_descuento: descuento.importe_subsidio,
+						              partida_descuento: descuento.partida_descuento
+						            }
+						            descuentosAplicados.push( descuentoAplicado )
+								});
+								tramitesJson.detalle[0].descuentos = descuentosAplicados;								
+							}
+
+						}
+
 						listadoTramites.push( tramitesJson );
+
+
 						contadorSolicitantes=contadorSolicitantes+1;
 
 					});
@@ -263,7 +290,7 @@
 	            }
 	            this.pages = pages;
 	            this.pagination(1);
-
+	            /*
 			    axios.all(requestCostos).then(axios.spread((...responses) => {
 					responses.forEach( respuesta => {
 						let indiceTramite = respuesta.config.headers.contadorSolicitantes;
@@ -303,11 +330,11 @@
 				})).catch(errors => {
 				  console.log( errors )
 				}).finally( () =>{
-					console.log("tramittes lista");
-					console.log(JSON.parse(JSON.stringify(listadoTramites)) )
 					this.obteniendoTramites = false;
 					this.costosObtenidos = true;
-				});
+				});*/
+				this.obteniendoTramites = false;
+					this.costosObtenidos = true;
             },
 
             iniciarTramite(){

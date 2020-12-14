@@ -83,11 +83,6 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li class="navi-item">
-                                    <a type="button" class="btn btn-primary btn-block">
-                                        <span class="navi-text">Aplicar</span>
-                                    </a>
-                                </li>
                             </ul>
                             <!--end::Naviigation-->
                         </div>
