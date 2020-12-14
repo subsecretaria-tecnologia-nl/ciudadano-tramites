@@ -106,7 +106,17 @@
 													    <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
 													  </div>
 													  <div class="custom-file">
-													    <input type="file" id="file" name="file" class="custom-file-input"   @change="cambioModelo" aria-describedby="inputGroupFileAddon01">
+													    <!-- <input type="file" id="file" name="file" class="custom-file-input"   @change="cambioModelo" aria-describedby="inputGroupFileAddon01"> -->
+														<input  
+															id="file"
+															:name="[[campo.campo_id]]" 
+															class="form-control form-control-solid form-control-lg" 
+															ref="fileInput"
+															type="file"
+															accept=".xlsx,.xls"
+															@change="fileSaved()"
+														>
+														</input>
 													    <label class="custom-file-label" for="file">
 													    	<span v-if="file">{{file.name }}</span>
 													    	<span v-else-if="!file">Seleccione archivo</span>
@@ -114,6 +124,7 @@
 													    </label>
 													  </div>
 													</div>
+														<a href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
 
 			 								</div>
@@ -123,8 +134,6 @@
 							</v-expansion-panels>
  						</div>
  		
-
-
 
  					</div>
  				</div>
@@ -303,12 +312,113 @@
 		    			this.campos[indiceCampo].mensajes.push( mensaje );
 		    		}
 		    	}
-		    	this.campos[indiceCampo].valido = curpValido && requeridoValido;
-	        }
+				this.campos[indiceCampo].valido = curpValido && requeridoValido;	
+			},
+			fileSaved(){
+
+				var file = document.getElementById('file')
+				if (file != null ) {
+					  file =file.files[0];
+					  console.log('file..' + file);
+					if(file){
+						var fileReader = new FileReader();
+						fileReader.readAsBinaryString(file);
+						fileReader.onload = function(e) {
+							var data =  e.target.result;
+							var workbook = XLSX.read(data, {type: "binary"});
+							workbook.SheetNames.forEach(sheetName => {
+								var rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+								var json_object = JSON.stringify(rowObject);		
+								var opcionesExp = ['Expediente Catastral' , 'Exp Catastral', 'E Catastral'];
+								var trueExp;
+								var tipoValidacion ;
+
+								for (let k = 0; k < opcionesExp.length; k++) {
+									if (Object.keys(rowObject[0]).indexOf(opcionesExp[k]) != -1) {
+										console.log(Object.keys(rowObject[0]).indexOf(opcionesExp[k]));
+										var index = Object.keys(rowObject[0]).indexOf(opcionesExp[k]);
+										trueExp = opcionesExp[k];
+										break;
+									}
+									
+								}
+
+								var index = Object.keys(rowObject[0]).indexOf(trueExp);
+								index != -1 ? tipoValidacion  = '1' : tipoValidacion = '2';
+								console.log('tipo de validacion: ' +tipoValidacion);
+								
+								//cuando el usuario añada los expedientes bajo una unica columna de expediente catastral 
+								if (tipoValidacion == 1 ) {
+									
+									var expName =  Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf(trueExp)]
+									for (let i = 0; i < rowObject.length; i++) {
+											// var key = Object.keys(rowObject[0]);
+											var value = rowObject[i][expName];
+											if ( (/^([0-9]{3,3})(-)?([0-9]{3,3})(-)?([0-9]{3,3})$/).test(value) == false ) {
+												alert('el documento excel no cuenta con el formato requerido error: "FF0213120"');
+												break;
+											}
+									}
+									console.log('file : ' + file);
+									this.files.push( {valor:file, nombre:file});
+									this.$emit('updatingFiles', this.files);
+									
+								}else if(tipoValidacion == 2){
+
+										var municipio = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Municipio')];
+											municipio == undefined ? 'municipio' : municipio;
+
+										var region = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Region')];
+											region == undefined ? region = 'region' : region;
+
+										var manzana = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Manzana')];
+											manzana == undefined ? manzana = 'manzana' : manzana;
+
+										var lote = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Lote')];
+											lote == undefined ? lote = 'lote' : lote;
+
+										for (let i = 0; i < rowObject.length; i++) {
+											var valueMunicipio = rowObject[i][municipio];
+												valueMunicipio = valueMunicipio.toString().padStart(3, '0');
+											var valueRegion = rowObject[i][region];
+												valueRegion = valueRegion.toString().padStart(3, '0');
+											var valueManzana = rowObject[i][manzana];
+												valueManzana = valueManzana.toString().padStart(3, '0');
+											var valueLote = rowObject[i][lote];
+												valueLote = valueLote.toString().padStart(3, '0');
+											
+											if ( /^([0-9]){1,3}$/.test(valueMunicipio) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191" ')
+												break;
+											}
+											if ( /^([0-9]){1,3}$/.test(valueRegion) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												break;
+											}
+											if ( /^([0-9]){1,3}$/.test(valueManzana) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												break;
+											}
+											if ( /^([0-9]){1,3}$/.test(valueLote) == false) {
+												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												break;
+											}
+										}
+									console.log('file validacion 2: ' + file);
+									this.files.push( {valor:file, nombre:file});
+		    						this.$emit('updatingFiles', this.files);		
+								}
+							})
+						}.bind(this);
+				
+					
+				}
+			}
 
 
+			}
+	
+     	}	
+	}
 
-		}
-
-    }
 </script>

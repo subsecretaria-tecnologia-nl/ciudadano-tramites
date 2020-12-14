@@ -28,6 +28,9 @@
 		<!--end::Layout Themes-->
 		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 		<script src="{{ assets("js/jquery.min.js") }}"></script>
+		<!-- <script lang="javascript" src="dist/xlsx.full.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+
 
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ assets("/images/favicon/apple-touch-icon.png") }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ assets("/images/favicon/favicon-32x32.png") }}">
