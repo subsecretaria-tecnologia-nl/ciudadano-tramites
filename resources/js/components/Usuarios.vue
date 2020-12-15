@@ -1,5 +1,5 @@
 <template>
-    <div data-app>
+    <div data-app class="col-lg-8" style="margin-bottom: 30px;">
         <div v-if="usuarios.length == 0">
             <div class="alert alert-warning d-flex justify-content-center mt-10 ml-25 mr-25">
                 NO SE ENCONTRO NINGUN USUARIO
@@ -24,9 +24,9 @@
 
             <!-- lista de usuarios -->
             <div class="row ">            
-                <div class="col-md-3" v-for="usuario in filteredHelper" :key="usuario.id"> 
-                    <div class="card" style="height: 300px;;width: 300px;">
-                            <div class="card-body" >
+                <div class="col-md-4" v-for="usuario in filteredHelper" :key="usuario.id"> 
+                    <div class="card " style="height: 300px;width: 280px;">
+                            <div class="card-body"  style="position:relative">
                                 <div class="text-center">
                                     <a type="button" ><img src="images/avatar6.png" class="mt-8" style="max-width: 70px;border-radius: 50%" ></img></a>
                                 </div>
@@ -38,7 +38,7 @@
                                     <span class="form-text text-muted">{{usuario.email}} </span>
                                 </div>
                             </div>
-                                <div class="text-center pt-10" >
+                                <div class="text-center" style="bottom:25px; position:absolute; padding-left: inherit;">
                                     <a :href="'mailto:'+ usuario.email " class="p-3 m-2" type="button" style="background-color: #d7e4f4;border-radius: 50%" ><i style="color: #347ab6" class="fas flaticon-multimedia"></i></a>
                                     <a class="p-3 m-2" type="button" style="background-color: #d2dae0;border-radius: 50%" ><i style="color: #25457e" class="fas fas fa-phone-alt"></i></a>
                                     <a class="p-3 m-2" type="button" style="background-color: #ddd5ea;border-radius: 50%" ><i style="color: #3f2174" class="fas flaticon2-arrow"></i></a>
@@ -88,7 +88,7 @@ export default {
             
             items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
 
-            pageSizes: [12, 20, 32],
+            pageSizes: [12, 15, 21],
             notary : this.$attrs.notary,
 
         }
