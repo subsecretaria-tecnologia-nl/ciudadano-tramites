@@ -399,7 +399,7 @@ class TramitesController extends Controller
                   'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
-                dd($detalle);
+                //dd($detalle);
                 return json_encode($detalle);
 
               }elseif($costo_final > $sub_costoMax){
