@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div class="mb-3 shadow-sm p-3 bg-white rounded">  
         <div class="pt-4">
             <h5 class="mb-3">Total:</h5>
@@ -75,7 +75,7 @@
 
                 let dataToSave = {
                     ids_tramites,
-                    status:2
+                    status:45
                 }
 
 
@@ -107,7 +107,7 @@
                     } ).then(responseTransaccion => {
 
                         let dataMotor = {
-                            "status":2,
+                            //"status":2,// stattus 5?
                             "id_transaccion": idTRansaccion,
                             "id_transaccion_motor": responseTransaccion.data.response.folio,
                             "json_envio": JSON.stringify(data),
