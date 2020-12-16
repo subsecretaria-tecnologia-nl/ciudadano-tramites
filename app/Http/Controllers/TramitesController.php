@@ -950,7 +950,7 @@ class TramitesController extends Controller
       ]);
 
       $json = $response->json();
-
+      $json['codigoCambioEstatus'] = $this->cambiarEstatusTransaccion( $json );
 
       if( $json['data'] ){
         return layout_view("tramites.respuestaPagoBancomer",  [ "respuestabanco" =>$json] );

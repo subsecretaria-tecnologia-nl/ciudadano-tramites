@@ -90,8 +90,25 @@
   
         methods: {
 
+            cambiarStatusTransaccion(status){
+                let data ={
+                    id_transaccion_motor:this.folio,
+                    status
+                }
+                let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-update-status-tramite";
+                axios.post(url, data, {
+                     headers:{
+                        "Content-type":"application/json"
+                    }
+                } ).then(response => {
+                    console.log("cambiando estatus")
+                    console.log(response)
+                });
+            },
 
             obtenerReciboPagoVentanilla: function () {
+                $("#idNetPay").hide();
+                $("#idBancomer").hide();
                 this.obteniendoRecibo = true;
                 let url = process.env.PAYMENTS_HOSTNAME +  "/v1/databank";  
                 $.ajax({
@@ -103,7 +120,7 @@
                         "Content-type":"application/json"
                     }
                 }).done((response) => {
-                    console.log(  response )
+                    this.cambiarStatusTransaccion( 60 );
                     if(response.response.datos.recibo.pdf ) {
                         divContenedorSecundario.append('<div id="pdfContenido"><iframe id="frame" src="http://egobierno.nl.gob.mx/egob/formatoRepositorio.php?Folio=258310" width="100%" height="600"></iframe></div>')
                     } else {
@@ -132,21 +149,13 @@
                     },
                 } )
                 .then(response => {
+                    this.cambiarStatusTransaccion( 70 );
+
                     this.urlNetPay = response.data.response.url_response;
                     this.JWT= response.data.response.datos.jwt;
-
-                    
                     setTimeout(function(){ 
                         $("#formulariosNetPay").submit();
                     }, 3000);
-                    /*
-                    $.ajax({
-                      type: "POST",
-                      url: response.data.response.url_response,
-                      data: response.data.response.datos,
-                    }).then( ( response) => {
-                        console.log( response )
-                    });*/
                 }).catch((error)=> {
                     console.log(error)
                 }).finally(() => {
@@ -171,6 +180,7 @@
                 .then(response => {
                     this.urlBancomer = response.data.response.url_response;
                     this.datos = response.data.response.datos;
+                    this.cambiarStatusTransaccion( 70 );
    
                     setTimeout(function(){ 
                         this.obteniendoPagoBancomer = false;
