@@ -28,9 +28,6 @@
 		<!--end::Layout Themes-->
 		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 		<script src="{{ assets("js/jquery.min.js") }}"></script>
-		<!-- <script lang="javascript" src="dist/xlsx.full.min.js"></script> -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
-
 
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ assets("/images/favicon/apple-touch-icon.png") }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ assets("/images/favicon/favicon-32x32.png") }}">
@@ -39,7 +36,7 @@
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ assets("/images/favicon/favicon-16x16.png") }}">
 		<link rel="manifest" href="{{ assets("/images/favicon/site.webmanifest") }}">
 		<link rel="mask-icon" href="{{ assets("/images/favicon/safari-pinned-tab.svg") }}" color="#088cbc">
-		<link rel="shortcut icon" href="{{ assets("/images/favicon/favicon.ico") }}">
+		{{-- <link rel="shortcut icon" href="{{ assets("/images/favicon/favicon.ico") }}"> --}}
 		<meta name="apple-mobile-web-app-title" content="Estado de Nuevo Le&oacute;n">
 		<meta name="application-name" content="Estado de Nuevo Le&oacute;n">
 		<meta name="msapplication-TileColor" content="#088cbc">
@@ -269,11 +266,11 @@
 											</div>
 											<!--end::Header-->
 											<!--begin::Content-->
-											<div class="tab-pane active show p-8" id="topbar_notifications_notifications" role="tabpanel">
+											<div class="tab-pane active show p-0" id="topbar_notifications_notifications" role="tabpanel">
 												<!--begin::Scroll-->
 												<div class="scroll mr-n7 w-100" data-scroll="true" data-height="300" data-mobile-height="200">
-													@foreach($notifications["items"] as $notification)
-														<div class="d-flex align-items-center mb-6 border-bottom pb-4">
+													@foreach($notifications["items"] as $key => $notification)
+														<div class="d-flex align-items-center mb-6 border-bottom pb-4 px-4 {!! $key == 0 ? 'pt-4' : '' !!}">
 															@if(!empty($notification["icon"]))
 																<!--begin::Symbol-->
 																<div class="symbol symbol-40 symbol-light-primary mr-5">
@@ -294,9 +291,10 @@
 																<!--end::Symbol-->
 															@endif
 															<!--begin::Text-->
-															<div class="d-flex flex-column font-weight-bold">
+															<div class="d-flex flex-column font-weight-bold w-100">
 																<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
-																<span class="text-muted">{!! $notification["content"] ?? "" !!}</span>
+																<span class="text-muted">{!! $notification["description"] ?? "" !!}</span>
+																<span class="badge badge-secondary ml-auto mt-2">{{ $notification["type"] }}</span>
 															</div>
 															<!--end::Text-->
 														</div>
