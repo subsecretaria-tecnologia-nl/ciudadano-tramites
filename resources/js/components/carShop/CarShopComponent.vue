@@ -170,7 +170,6 @@
             async construirJSONTramites( tramites ){
             	let listadoTramites = [];
             	let requestCostos = [];
-            	let contadorSolicitantes = 0;
 
 			    tramites.forEach(  tramiteInarray => {
 										 
@@ -187,9 +186,6 @@
 						tramitesJson.importe_tramite = '';
 						let info = JSON.parse(soliciante.info);
 						let solicianteInfo = info.solicitante;
-
-
-
 
 						tramitesJson.datos_solicitante = {
 					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante || "",
@@ -208,44 +204,14 @@
 					    }
 
 					    tramitesJson.datos_factura = tramitesJson.datos_solicitante;
-/*
-						let data = {  
-		                    id_seguimiento: soliciante.clave,
-		                    tramite_id: tramiteInarray.tramite_id,
-                		}
 
-
-                		if( info.campos["Valor catastral"] ){
-                			data.valor_catastral = info.campos["Valor catastral"];
-                		}
-
-                		if(info.campos["Subsidio"]){
-                			data.subsidio = info.campos["Subsidio"]//62
-                		}
-
-                		if(info.campos["Valor de operacion"]){
- 							data.valor_operacion = info.campos["Valor de operacion"]
-                		}
-
-                		if( info.campos["Hoja"] ){
-                			data.hoja = info.campos["Hoja"] 
-                		}
-
-                		if( info.campos["Lote"] ){
-                			data.lote = info.campos["Lote"] 
-                		}
-               		
-                		let url = process.env.APP_URL + "/getcostoTramite";
-                		requestCostos.push(axios.post(url,   data,{headers:{
-                			contadorSolicitantes:contadorSolicitantes
-                		}}));*/
 
                 		tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['H (Importe total)'] : info.costo_final ;
 						
 						tramitesJson.detalle = [];
 
 						tramitesJson.detalle[0] = { 
-							concepto : info.partidas ? info.partidas[0].descripcion : "",//ponere nombre tramite
+							concepto : info.partidas ? info.partidas[0].descripcion : tramitesJson.nombre,//ponere nombre tramite
 							partida: info.partidas ? info.partidas[0].id_partida : null,
 							importe_concepto:tramitesJson.importe_tramite					
 						}
@@ -272,9 +238,6 @@
 
 						listadoTramites.push( tramitesJson );
 
-
-						contadorSolicitantes=contadorSolicitantes+1;
-
 					});
 
 			    });
@@ -290,51 +253,8 @@
 	            }
 	            this.pages = pages;
 	            this.pagination(1);
-	            /*
-			    axios.all(requestCostos).then(axios.spread((...responses) => {
-					responses.forEach( respuesta => {
-						let indiceTramite = respuesta.config.headers.contadorSolicitantes;
-						listadoTramites[indiceTramite].importe_tramite = respuesta.data ? respuesta.data[0].costo_final : 0;
-
-						if(respuesta.data &&  respuesta.data[0].importe_total ){
-							listadoTramites[indiceTramite].detalle[0].importe_concepto = respuesta.data[0].importe_total;	
-						} else if(respuesta.data &&  respuesta.data[0].costo_final ){
-							listadoTramites[indiceTramite].detalle[0].importe_concepto = respuesta.data[0].costo_final;
-						}
-						
-						
-
-
-						let descuentosAplicados = [];
-
-						if(respuesta.data[0].descuentos && Array.isArray(respuesta.data[0].descuentos )  && respuesta.data[0].descuentos.length > 0  ){
-
-							let losdescuentos = respuesta.data[0].descuentos.find( descuento => !!descuento.importe_subsidio );		
-
-							if( losdescuentos && losdescuentos.length > 0 ){
-								respuesta.data[0].descuentos.forEach( descuento => {
-									let descuentoAplicado =  {
-						              concepto_descuento: descuento.concepto_descuento,
-						              importe_descuento: descuento.importe_subsidio,
-						              partida_descuento: descuento.partida_descuento
-						            }
-						            descuentosAplicados.push( descuentoAplicado )
-								});
-								listadoTramites[indiceTramite].detalle[0].descuentos = descuentosAplicados;								
-							}
-
-						}
-						
-						
-					});
-				})).catch(errors => {
-				  console.log( errors )
-				}).finally( () =>{
-					this.obteniendoTramites = false;
-					this.costosObtenidos = true;
-				});*/
 				this.obteniendoTramites = false;
-					this.costosObtenidos = true;
+				this.costosObtenidos = true;
             },
 
             iniciarTramite(){

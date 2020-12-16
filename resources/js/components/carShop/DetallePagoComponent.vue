@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div class="mb-3 shadow-sm p-3 bg-white rounded">  
         <div class="pt-4">
             <h5 class="mb-3">Total:</h5>
@@ -29,10 +29,10 @@
                     <span class="sr-only">Loading...</span>
                 </div>
             </button>
-
+<!--
             <button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" v-on:click="cancelarPago()" v-if="mostrarCancelarPago">
                 Cancelar
-            </button>
+            </button> -->
         </div>
     </div>
 </template>
@@ -75,7 +75,7 @@
 
                 let dataToSave = {
                     ids_tramites,
-                    status:2
+                    status:45
                 }
 
 
@@ -92,7 +92,7 @@
                         "referencia": "",
                         "url_retorno": "url",
                         "importe_transaccion":  this.calcularTotal, //"4687",
-                        "id_transaccion": '500000' + idTRansaccion ,//uuid.v4(),//"BMU8605134I82915082020",
+                        "id_transaccion":  (50000000 +  parseInt(idTRansaccion)) + '',//uuid.v4(),//"BMU8605134I82915082020",rellenar con 0
                         "entidad": 2,
                         "url_confirma_pago": "url",
                         "es_referencia": "1",
@@ -107,7 +107,7 @@
                     } ).then(responseTransaccion => {
 
                         let dataMotor = {
-                            "status":2,
+                            "status":5,// stattus 5?
                             "id_transaccion": idTRansaccion,
                             "id_transaccion_motor": responseTransaccion.data.response.folio,
                             "json_envio": JSON.stringify(data),
@@ -121,7 +121,7 @@
 
                     }).catch(error=> {
                         let dataMotor = {
-                            "status":3,
+                            "status":5,
                             "id_transaccion": null,
                             "id_transaccion_motor":null,
                             json_envio: JSON.stringify(data),

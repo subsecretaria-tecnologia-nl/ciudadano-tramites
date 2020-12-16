@@ -903,14 +903,35 @@ class TramitesController extends Controller
       ])->post( $url . '/v1/respuestabanco', [
           'transactionToken' => $request->transactionToken,
       ]);
-
       $json = $response->json();
+      $json['codigoCambioEstatus'] = $this->cambiarEstatusTransaccion( $json );
+      
       if( $json['data'] ){
         return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>$json] );
       } else {
         return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>[] ]);
       }
 
+    }
+
+    private function cambiarEstatusTransaccion( $json ){
+      if( isset( $json['response'] )  && isset($json['response']["datos"]) && isset($json['response']["datos"]["estatus"])  ){
+        $id_transaccion_motor = $json['response']['datos']['id_transaccion_motor'];
+        $urlTesoreria = getenv("TESORERIA_HOSTNAME");
+
+        $estatus = $json['response']['datos']['estatus'];
+        $statusChange = '0';
+        if($estatus != 1){
+          $statusChange = "15";
+        }
+        $responseCambioEstatus = Http::post( $urlTesoreria . '/solicitudes-update-status-tramite', [
+            'id_transaccion_motor' => $id_transaccion_motor,
+            'status' => $statusChange
+        ]);
+        return $responseCambioEstatus->json() != null && $responseCambioEstatus->json()["Code"] != null ? $responseCambioEstatus->json()["Code"] : false;
+      } else {
+        return false;
+      }
     }
 
     public function respuestaPagoBBVA(Request $request){
@@ -929,7 +950,7 @@ class TramitesController extends Controller
       ]);
 
       $json = $response->json();
-
+      $json['codigoCambioEstatus'] = $this->cambiarEstatusTransaccion( $json );
 
       if( $json['data'] ){
         return layout_view("tramites.respuestaPagoBancomer",  [ "respuestabanco" =>$json] );
