@@ -294,7 +294,7 @@
 															<div class="d-flex flex-column font-weight-bold w-100">
 																<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
 																<span class="text-muted">{!! $notification["description"] ?? "" !!}</span>
-																<span class="badge badge-secondary ml-auto mt-2">{{ $notification["type"] }}</span>
+																<span class="badge badge-secondary ml-auto mt-2">{!! $notification["type"] ?? "" !!}</span>
 															</div>
 															<!--end::Text-->
 														</div>
