@@ -214,7 +214,7 @@ class CalculoimpuestosController extends Controller
 
       //id declaracion normal
       $normal     = $request->folio_anterior;
-      $normal                   =  (integer)2000022493;//es es el numero de folio de la declaracion normal del tramite
+      //$normal                   =  (integer)2000022493;//es es el numero de folio de la declaracion normal del tramite
 
       if($normal == 0)
       {
