@@ -19,11 +19,20 @@ class Controller extends BaseController
     	->get();
     	\Config::set('layout.args.notifications.total', $this->notifications->count());
     	$notifications = [];
+        $notificacion_count = 0;
+        $aviso_count = 0;
     	foreach($this->notifications->toArray() as $notification){
-    		$notification['type'] = $notification['type_id'] == 1 ? 'notificacion' : 'aviso interno';
+            if($notification['type_id'] == 1)
+                $notificacion_count++;
+            else
+                $aviso_count++;
+
+    		$notification['type'] = $notification['type_id'] == 1 ? 'notificacion' : 'aviso';
     		array_push($notifications, $notification);
     	}
 
-    	\Config::set('layout.args.notifications.items', $notifications);
+        \Config::set('layout.args.notifications.items', $notifications);
+        \Config::set('layout.args.notifications.notificacion_count', $notificacion_count);
+    	\Config::set('layout.args.notifications.aviso_count', $aviso_count);
     }
 }
