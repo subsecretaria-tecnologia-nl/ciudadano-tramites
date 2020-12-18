@@ -45,7 +45,7 @@ class CalculoimpuestosController extends Controller
     	EgobiernodiasferiadosRepositoryEloquent $diasferiados
     )
     {
-
+      parent::__construct();
     	$this->inpc 		= $inpc;
     	$this->porcentaje 	= $porcentaje;
     	$this->diasferiados	= $diasferiados;

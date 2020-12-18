@@ -1,6 +1,3 @@
-<?php
-	$user = session()->get("user");
-?>
 <!DOCTYPE html>
 
 <html lang="en">
