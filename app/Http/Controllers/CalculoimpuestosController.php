@@ -17,6 +17,11 @@ use App\Repositories\EgobiernoinpcRepositoryEloquent;
 use App\Repositories\EgobiernoporcentajesRepositoryEloquent;
 use App\Repositories\EgobiernodiasferiadosRepositoryEloquent;
 
+
+// modificacion para calculo de la complementaria
+use App\Repositories\PortalsolicitudestramiteRepositoryEloquent;
+use App\Repositories\PortalsolicitudesticketRepositoryEloquent;
+
 class CalculoimpuestosController extends Controller
 {
     //
@@ -33,22 +38,34 @@ class CalculoimpuestosController extends Controller
     protected $f;
     protected $g;
     protected $h;
+    protected $j;
+    protected $l = 0;
+    protected $k = 0;
     protected $fecha_escritura;
     protected $factor_actualizacion;
     protected $inpc_vencimiento;
     protected $inpc_reciente;
+    protected $solicitudes_tramite; // es el repo para buscar si el contribuyente tiene normales pagadas
+    protected $solicitudes_ticket;  // es el repo para buscar los datos de la normal
 
 
     public function __construct(
     	EgobiernoinpcRepositoryEloquent $inpc,
     	EgobiernoporcentajesRepositoryEloquent $porcentaje,
-    	EgobiernodiasferiadosRepositoryEloquent $diasferiados
+      EgobiernodiasferiadosRepositoryEloquent $diasferiados,
+      PortalsolicitudestramiteRepositoryEloquent $solicitudes_tramite,
+    	PortalsolicitudesticketRepositoryEloquent $solicitudes_ticket
     )
     {
 
-    	$this->inpc 		= $inpc;
-    	$this->porcentaje 	= $porcentaje;
-    	$this->diasferiados	= $diasferiados;
+    	$this->inpc 		            = $inpc;
+    	$this->porcentaje 	        = $porcentaje;
+      $this->diasferiados         = $diasferiados;
+    	
+
+      $this->solicitudes_tramite	= $solicitudes_tramite;
+      $this->solicitudes_ticket   = $solicitudes_ticket;
+
 
     	// obtener los dias inhabiles del año en curso
     	$this->inhabiles	= $this->getInhabiles(date('Y'));
@@ -70,6 +87,9 @@ class CalculoimpuestosController extends Controller
 
 
     }
+
+
+
 
     public function index(Request $request)
     {
@@ -137,6 +157,171 @@ class CalculoimpuestosController extends Controller
 
 
     	return json_encode($results);
+
+    }
+    /**
+     *
+     * checkNormal obtener el folio de la declaracion normal
+     * 
+     * @param $rfc 
+     *
+     *
+     * @return un array con la lista de declaraciones donde coincide el RFC
+     *  
+    */
+    public function checkNormal(Request $request)
+    {
+      
+      // primero busco todas las declaraciones que corresponden a 5 %
+      $normal = $this->solicitudes_tramite->findWhere(["id_transaccion_motor" => $request->folio]);
+
+      if($normal->count() == 1)
+      {
+        $results = $normal->id;
+      }else{
+        $results = 0;
+      }
+
+      return $results;
+
+    }
+
+
+    /**
+     *
+     * Complementaria calculo
+     * 
+     * este metodo regresa el calculo de una declaracion complementaria
+     *
+     *  
+    */
+    public function complementaria() // Request $request
+    {
+
+      // mostrar la forma para ejemplo del calculo de declaracion normal
+      // $fecha_escritura       = '2020-11-1'; // sin ceros iniciales ej 2020-9-1 para primero de sept de 2020
+      // $monto_operacion       = 1500000;
+      // $ganancia_obtenida       = 850000; // puede ser mayor o igual al monto de operacion
+      // $pago_provisional_lisr   = 40000;
+      // $multa_correccion_fiscal = 0;
+
+      //Recibir valores front
+      $fecha_escritura          =  "2020-11-2"; //$request->fecha_escritura;
+      $monto_operacion          =  300; //$request->monto_operacion;
+      $ganancia_obtenida        =  400; //$request->ganancia_obtenida; // puede ser mayor o igual al monto de operacion
+      $pago_provisional_lisr    =  123;//$request->pago_provisional_lisr;
+      $multa_correccion_fiscal  =  0; //$request->multa_correccion_fiscal;
+
+      //id declaracion normal
+      $normal                   =  (integer)2000022493;//es es el numero de folio de la declaracion normal del tramite
+
+      if($normal == 0)
+      {
+        // este es un error el folio de la declaracion normal no existe
+      }else{
+        // buscamos el registro de la declaracion normal
+        $info = $this->solicitudes_tramite->findWhere( ["id_transaccion_motor" => $normal] )->first();
+
+        if($info->count() > 0)
+        {
+          // aqui tengo que obtener el monto de la declaracion anterior
+          $s_ticket = $this->solicitudes_ticket->findWhere( ["id_transaccion" => $info->id] )->first();
+
+          $info = json_decode($s_ticket->info);
+
+          $datos_normal = $info->detalle;
+
+          $salidas = $datos_normal->Salidas;
+
+          foreach($salidas as $s => $v)
+          {
+            if(strcmp($s,"H (Importe total)") == 0)
+            {
+              $importe = $v;
+            }
+          }
+
+        }else{
+          // regresar un error la declaracion normal no existe
+        }
+      }
+
+      $this->a          = $ganancia_obtenida;
+      $this->c          = $pago_provisional_lisr;
+      $this->g          = $multa_correccion_fiscal;
+      $this->fecha_escritura    = $fecha_escritura;
+
+
+      $this->fecha_vencimiento  = $this->getVencimiento();
+      $this->inpc_periodo       = $this->getInpc($this->fecha_escritura); // getInpcperiodo en caso de que sea la fecha acumulada del año vigente
+      $this->fecha_actual       = date("Y-m-d");
+      $this->inpc_reciente      = $this->getInpc($this->fecha_actual);
+
+      $this->factor_actualizacion = $this->getFA();
+
+      $this->porcentaje_recargos  = $this->getPorcentajeregargos();
+
+      $this->calculo();
+
+
+      if($this->h < $importe)
+      {
+        $this->k = $importe - $this->h;
+      }else{
+        $this->l = $this->h - $importe;
+      }
+
+      
+
+      $results = array(
+        "Entradas" => array(
+            "fecha_escritura" => $this->fecha_escritura,
+            "monto_operacion" => $monto_operacion,
+            "ganancia_obtenida" => $ganancia_obtenida,
+            "pago provisional conforme al art 127 LISR" => $pago_provisional_lisr,
+            "multa por correccion fiscal (g)" => $this->g,
+          ),
+        "Salidas" => array(
+          "Fecha Actual"        => $this->fecha_actual,
+          "Fecha vencimiento"     => $this->fecha_vencimiento,
+          "Factor de Actualizacion"   => $this->factor_actualizacion,
+          "INPC Periodo reciente"   => $this->inpc_reciente,
+          "INPC Periodo"        => $this->inpc_periodo,
+          "Porcentaje de recargos"  => $this->porcentaje_recargos,
+          "A*(Ganancia Obtenida)" => $this->a,
+          "B (Monto obtenido conforme al art 127 LISR)" => $this->b,
+          "C*(Pago provisional conforme al art 126 LISR)" => $this->c,
+          "D (Impuesto correspondiente a la entidad federativa)" => $this->d,
+          "E (Parte actualizada del impuesto)" => $this->e,
+          "F (Recargos)" => $this->f,
+          "G*(Multa corrección fiscal)" => $this->g,
+          "H (Importe total)" => $this->redondeo($this->h),
+          ),
+        "Complementaria"  => array(
+          "I Folio de la declaracion inmediata anterior"  => $normal,
+          "J Monto pagado en la declaracion inmediata anterior" => $importe,
+          "K Pago en exceso"  => $this->k,
+          "L Cantidad a cargo" => $this->l,
+        )
+
+      );
+
+
+      return json_encode($results);
+
+    }
+    /**
+     *
+     * Calculo en ceros
+     *
+     * Este metodo debe de guardar 
+     *
+     *
+     *
+    */
+
+    public function calculoencero(Request $request)
+    {
 
     }
 
