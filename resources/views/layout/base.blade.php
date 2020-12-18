@@ -282,7 +282,7 @@
 																<p>No se encuentran notificaciones <br> en este momento</p>
 															</div>
 														@endif
-														@foreach($notifications["items"] as $key => $notification)
+														@foreach($notifications["items"]["notificacion"] as $key => $notification)
 															@if($notification["type"] == 'notificacion')
 																<div class="d-flex align-items-center mb-6 border-bottom pb-4 px-4 {!! $key == 0 ? 'pt-4' : '' !!}">
 																	@if(!empty($notification["icon"]))
@@ -306,7 +306,7 @@
 																	@endif
 																	<!--begin::Text-->
 																	<div class="d-flex flex-column font-weight-bold w-100">
-																		<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
+																		<a href="detalle/{!! $notification["solicitud_id"] ?? "#" !!}" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
 																		<span class="text-muted">{!! $notification["description"] ?? "" !!}</span>
 																		<span class="badge badge-secondary ml-auto mt-2">{!! $notification["type"] ?? "" !!}</span>
 																	</div>
@@ -325,7 +325,7 @@
 																<p>No se encuentran avisos <br> en este momento</p>
 															</div>
 														@endif
-														@foreach($notifications["items"] as $key => $notification)
+														@foreach($notifications["items"]["aviso"] as $key => $notification)
 															@if($notification["type"] == 'aviso')
 																<div class="d-flex align-items-center mb-6 border-bottom pb-4 px-4 {!! $key == 0 ? 'pt-4' : '' !!}">
 																	@if(!empty($notification["icon"]))
@@ -349,7 +349,7 @@
 																	@endif
 																	<!--begin::Text-->
 																	<div class="d-flex flex-column font-weight-bold w-100">
-																		<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
+																		<span class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</span>
 																		<span class="text-muted">{!! $notification["description"] ?? "" !!}</span>
 																		<span class="badge badge-secondary ml-auto mt-2">{!! $notification["type"] ?? "" !!}</span>
 																	</div>

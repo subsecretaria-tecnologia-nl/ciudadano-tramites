@@ -28,7 +28,9 @@ class Controller extends BaseController
                 $aviso_count++;
 
     		$notification['type'] = $notification['type_id'] == 1 ? 'notificacion' : 'aviso';
-    		array_push($notifications, $notification);
+            if(!isset($notifications[$notification['type']]))
+                $notifications[$notification['type']] = [];
+    		array_push($notifications[$notification['type']], $notification);
     	}
 
         \Config::set('layout.args.notifications.items', $notifications);
