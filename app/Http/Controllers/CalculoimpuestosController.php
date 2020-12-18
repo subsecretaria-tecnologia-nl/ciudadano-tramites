@@ -61,7 +61,7 @@ class CalculoimpuestosController extends Controller
     	$this->inpc 		            = $inpc;
     	$this->porcentaje 	        = $porcentaje;
       $this->diasferiados         = $diasferiados;
-    	
+
 
       $this->solicitudes_tramite	= $solicitudes_tramite;
       $this->solicitudes_ticket   = $solicitudes_ticket;
@@ -162,16 +162,16 @@ class CalculoimpuestosController extends Controller
     /**
      *
      * checkNormal obtener el folio de la declaracion normal
-     * 
-     * @param $rfc 
+     *
+     * @param $rfc
      *
      *
      * @return un array con la lista de declaraciones donde coincide el RFC
-     *  
+     *
     */
     public function checkNormal(Request $request)
     {
-      
+
       // primero busco todas las declaraciones que corresponden a 5 %
       $normal = $this->solicitudes_tramite->findWhere(["id_transaccion_motor" => $request->folio]);
 
@@ -190,12 +190,12 @@ class CalculoimpuestosController extends Controller
     /**
      *
      * Complementaria calculo
-     * 
+     *
      * este metodo regresa el calculo de una declaracion complementaria
      *
-     *  
+     *
     */
-    public function complementaria() // Request $request
+    public function complementaria(Request $request) // Request $request
     {
 
       // mostrar la forma para ejemplo del calculo de declaracion normal
@@ -206,13 +206,14 @@ class CalculoimpuestosController extends Controller
       // $multa_correccion_fiscal = 0;
 
       //Recibir valores front
-      $fecha_escritura          =  "2020-11-2"; //$request->fecha_escritura;
-      $monto_operacion          =  300; //$request->monto_operacion;
-      $ganancia_obtenida        =  400; //$request->ganancia_obtenida; // puede ser mayor o igual al monto de operacion
-      $pago_provisional_lisr    =  123;//$request->pago_provisional_lisr;
-      $multa_correccion_fiscal  =  0; //$request->multa_correccion_fiscal;
+      $fecha_escritura          =  $request->fecha_escritura;
+      $monto_operacion          =  $request->monto_operacion;
+      $ganancia_obtenida        =  $request->ganancia_obtenida; // puede ser mayor o igual al monto de operacion
+      $pago_provisional_lisr    =  $request->pago_provisional_lisr;
+      $multa_correccion_fiscal  =  $request->multa_correccion_fiscal;
 
       //id declaracion normal
+      $normal     = $request->folio_anterior;
       $normal                   =  (integer)2000022493;//es es el numero de folio de la declaracion normal del tramite
 
       if($normal == 0)
@@ -276,7 +277,7 @@ class CalculoimpuestosController extends Controller
         $this->l = $this->h - $importe;
       }
 
-      
+
 
       $results = array(
         "Entradas" => array(
@@ -319,7 +320,7 @@ class CalculoimpuestosController extends Controller
      *
      * Calculo en ceros
      *
-     * Este metodo debe de guardar 
+     * Este metodo debe de guardar
      *
      *
      *
