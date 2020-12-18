@@ -46,6 +46,7 @@ class TramitesController extends Controller
       PortalcamposagrupacionesRepositoryEloquent $group
       )
       {
+        parent::__construct();
         // $this->middleware('auth');
         $this->tramites = $tramites;
         $this->solicitudes = $solicitudes;

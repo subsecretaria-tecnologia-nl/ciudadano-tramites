@@ -29,7 +29,8 @@ if(!function_exists("layout_view")){
 		$layoutArgs = [
 			"viewPath" => $viewPath,
 			"args" => $args,
-			"currentPath" => "/$uri"
+			"currentPath" => "/$uri",
+			"user" => session()->get("user")
 		];
 		$layoutArgs = array_merge($layoutArgs, $globalArgs);
 		return view($templatePath, $layoutArgs);

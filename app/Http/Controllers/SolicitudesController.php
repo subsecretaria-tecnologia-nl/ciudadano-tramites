@@ -53,6 +53,7 @@ class SolicitudesController extends Controller
     PortaltramitecategoriarelacionRepositoryEloquent $relcat
     )
     {
+      parent::__construct();
       // $this->middleware('auth');
       $this->solicitudes = $solicitudes;
 
