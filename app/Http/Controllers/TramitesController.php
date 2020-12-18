@@ -46,6 +46,7 @@ class TramitesController extends Controller
       PortalcamposagrupacionesRepositoryEloquent $group
       )
       {
+        parent::__construct();
         // $this->middleware('auth');
         $this->tramites = $tramites;
         $this->solicitudes = $solicitudes;
@@ -152,6 +153,7 @@ class TramitesController extends Controller
         $tipo = $data->tipo;
         $costoX = $data->costo;
         $costo_fijo = $data->costo_fijo;
+        $tipo_costo_fijo = $data->tipo_costo_fijo;
         $min = $data->minimo;
         $max = $data->maximo;
         $valor = $data->valor;
@@ -190,71 +192,12 @@ class TramitesController extends Controller
             $descuentos = array();
             //Se hace el calculo del costo normal en base a sus cuotas establecidas
             if ($tipo == "F"){
-              if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
-
-                if(!empty($costo_fijo)){
-                  $costo_final = $costo_fijo;
-                }else{
-                  $costo_real = $actual_uma * $min;
-                  $costo_final = $this->redondeo($costo_real);
-                }
+              if($tipo_costo_fijo == "P"){ // costo fijo en pesos
+                $costo_final = $costo_fijo;
               }
-              elseif ($costoX == "L") { //costo x lote
-                $costo_real = $actual_uma * $valor;
-                $primer_costo = $this->redondeo($costo_real);
-
-                if (!empty($lotes)){
-                  $costoxlote = $primer_costo * $lotes;
-                  $costoMinimo = $min * $actual_uma;
-                  $costoMin = $this->redondeo($costoMinimo);
-
-                  $costoMaximo = $max * $actual_uma;
-                  $costoMax = $this->redondeo($costoMaximo);
-
-                  if($costoxlote < $costoMinimo){
-                    $costo_final = $costoMinimo;
-                  }elseif($costoxlote > $costoMax){
-                    $costo_final = $costoMax;
-                  }else{
-                    $costo_final = $costoxlote;
-                  }
-                }else{
-                  $costo_final = $primer_costo;
-                }
-              }
-              elseif($costoX == "H"){
-                if(!empty($valor)){
-                  $costo_real = $actual_uma;
-                }else{
-                  $costo_real = $actual_uma * $valor;
-                }
-                $primer_costo = $this->redondeo($costo_real);
-                if (!empty($hojas)){
-                  $costoxhoja = $primer_costo * $hojas;
-
-                  $costoMinimo = $min * $actual_uma;
-                  $costoMin = $this->redondeo($costoMinimo);
-
-                  $costoMaximo = $max * $actual_uma;
-                  $costoMax = $this->redondeo($costoMaximo);
-                  if($costoxhoja < $costoMinimo){
-                    $costo_final = $costoMinimo;
-                  }elseif($costoxhoja > $costoMax){
-                    $costo_final = $costoMax;
-                  }else{
-                    $costo_final = $this->redondeo($costoxhoja);
-                  }
-                }else{
-                  $costo_final = $primer_costo;
-                }
-              }
-              else{ // costo fijo
-                if(!empty($costo_fijo)){
-                  $costo_final = $costo_fijo;
-                }else{
-                  $costo_real = $actual_uma * $min;
-                  $costo_final = $this->redondeo($costo_real);
-                }
+              else{ //C Para cuando el costo fijo es calculado en cuotas
+                $costo_real = $actual_uma * $costo_fijo;
+                $costo_final = $this->redondeo($costo_real);
               }
 
               //Se hace la validacion si aplica o no el subsidio para costos fijos
@@ -381,6 +324,7 @@ class TramitesController extends Controller
                   $costo_final = $precioRedondeo;
                 }
               }
+
               //Se hace la validacion si aplica o no el subsidio para costos variables
               if ($costo_final < $sub_costoMin){
                 $costo_total = $costo_final;
@@ -399,7 +343,7 @@ class TramitesController extends Controller
                   'costo_final' => $costo_final,
                   'descuentos' => $descuentos,
                 );
-                dd($detalle);
+                //dd($detalle);
                 return json_encode($detalle);
 
               }elseif($costo_final > $sub_costoMax){
@@ -430,6 +374,10 @@ class TramitesController extends Controller
 
                 return json_encode($detalle);
               }
+              $detalle []= array(
+                'tramite_id' => $tramite_id,
+                'costo_final' => $costo_final,
+              );
               return json_encode($detalle);
 
             }
@@ -440,64 +388,19 @@ class TramitesController extends Controller
               'concepto_descuento' => 'El numero de oficio no coincide con el trámite',
             );
             if ($tipo == "F"){
-              if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
-                $costo_real = $actual_uma * $min;
-
+              if($tipo_costo_fijo == "P"){ // costo fijo en pesos
+                $costo_final = $costo_fijo;
+              }else{ //C Para cuando el costo fijo es calculado en cuotas
+                $costo_real = $actual_uma * $costo_fijo;
                 $costo_final = $this->redondeo($costo_real);
-
-                $detalle []= array(
-                  'tramite_id' => $tramite_id,
-                  'costo_final' => $costo_final,
-                  'descuentos' => $descuentos,
-                );
-                return json_encode($detalle);
               }
-              elseif ($costoX == "L") { //costo x lote
-                $costo_real = $actual_uma * $valor;
-                $primer_costo = $this->redondeo($costo_real);
+              $detalle []= array(
+                'tramite_id' => $tramite_id,
+                'costo_final' => $costo_final,
+                'descuentos' => $descuentos,
+              );
 
-                if (!empty($lotes)){
-                  $costoxlote = $primer_costo * $lotes;
-                  $costoMinimo = $min * $actual_uma;
-                  $costoMin = $this->redondeo($costoMinimo);
-
-                  $costoMaximo = $max * $actual_uma;
-                  $costoMax = $this->redondeo($costoMaximo);
-
-                  if($costoxlote < $costoMinimo){
-                    $costo_final = $costoMinimo;
-                  }elseif($costoxlote > $costoMax){
-                    $costo_final = $costoMax;
-                  }else{
-                    $costo_final = $costoxlote;
-                  }
-                }else{
-                  $costo_final = $primer_costo;
-                }
-
-                $detalle []= array(
-                  'tramite_id' => $tramite_id,
-                  'costo_final' => $costo_final,
-                  'descuentos' => $descuentos,
-                );
-
-                return json_encode($detalle);
-              }
-              else{ // costo fijo
-                if(!empty($costo_fijo)){
-                  $costo_final = $costo_fijo;
-                }else{
-                  $costo_real = $actual_uma * $min;
-                  $costo_final = $this->redondeo($costo_real);
-                }
-
-                $detalle []= array(
-                  'tramite_id' => $tramite_id,
-                  'costo_final' => $costo_final,
-                  'descuentos' => $descuentos,
-                );
-                return json_encode($detalle);
-              }
+              return json_encode($detalle);
             }
             elseif ($tipo == "V") {
               if($costoX == "L") { //costo x lote
@@ -609,99 +512,18 @@ class TramitesController extends Controller
         try{
 
           if ($tipo == "F"){
-            if($costoX == "N"){ //N para cuando no aplica en un pago Fijo
-
-              if(!empty($costo_fijo)){
-                $costo_final = $costo_fijo;
-              }else{
-                $costo_real = $actual_uma * $min;
-                $costo_final = $this->redondeo($costo_real);
-              }
-
-              $detalle []= array(
-                'tramite_id' => $tramite_id,
-                'costo_final' => $costo_final,
-              );
-              return json_encode($detalle);
+            if($tipo_costo_fijo == "P"){ // costo fijo en pesos
+              $costo_final = $costo_fijo;
+            }else{ //C Para cuando el costo fijo es calculado en cuotas
+              $costo_real = $actual_uma * $costo_fijo;
+              $costo_final = $this->redondeo($costo_real);
             }
-            elseif ($costoX == "L") { //costo x lote
-              $costo_real = $actual_uma * $valor;
-              $primer_costo = $this->redondeo($costo_real);
+            $detalle []= array(
+              'tramite_id' => $tramite_id,
+              'costo_final' => $costo_final,
+            );
 
-              if (!empty($lotes)){
-                $costoxlote = $primer_costo * $lotes;
-                $costoMinimo = $min * $actual_uma;
-                $costoMin = $this->redondeo($costoMinimo);
-
-                $costoMaximo = $max * $actual_uma;
-                $costoMax = $this->redondeo($costoMaximo);
-
-                if($costoxlote < $costoMinimo){
-                  $costo_final = $costoMinimo;
-                }elseif($costoxlote > $costoMax){
-                  $costo_final = $costoMax;
-                }else{
-                  $costo_final = $this->redondeo($costoxlote);
-                }
-              }else{
-                $costo_final = $primer_costo;
-              }
-
-              $detalle []= array(
-                'tramite_id' => $tramite_id,
-                'costo_final' => $costo_final,
-              );
-
-              return json_encode($detalle);
-            }
-            elseif ($costoX == "H") { // costo x hojas
-              if(!empty($valor)){
-                $costo_real = $actual_uma;
-              }else{
-                $costo_real = $actual_uma * $valor;
-              }
-              $primer_costo = $this->redondeo($costo_real);
-
-              if (!empty($hojas)){
-                $costoxhoja = $primer_costo * $hojas;
-
-                $costoMinimo = $min * $actual_uma;
-                $costoMin = $this->redondeo($costoMinimo);
-
-                $costoMaximo = $max * $actual_uma;
-                $costoMax = $this->redondeo($costoMaximo);
-                if($costoxhoja < $costoMinimo){
-                  $costo_final = $costoMinimo;
-                }elseif($costoxhoja > $costoMax){
-                  $costo_final = $costoMax;
-                }else{
-                  $costo_final = $this->redondeo($costoxhoja);
-                }
-              }else{
-                $costo_final = $primer_costo;
-              }
-
-              $detalle []= array(
-                'tramite_id' => $tramite_id,
-                'costo_final' => $costo_final,
-              );
-
-              return json_encode($detalle);
-            }
-            else{
-              if(!empty($costo_fijo)){
-                $costo_final = $costo_fijo;
-              }else{
-                $costo_real = $actual_uma * $min;
-                $costo_final = $this->redondeo($costo_real);
-              }
-
-              $detalle []= array(
-                'tramite_id' => $tramite_id,
-                'costo_final' => $costo_final,
-              );
-              return json_encode($detalle);
-            }
+            return json_encode($detalle);
 
           }elseif ($tipo == "V") {
             if($costoX == "L") { //costo x lote

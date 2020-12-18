@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class changePassword extends Controller
-{
+class ChangePassword extends Controller {
     public function index () {
 		set_layout_arg([
 			"subtitle" => "cambiar contraseña",

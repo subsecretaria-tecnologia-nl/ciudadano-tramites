@@ -1,6 +1,3 @@
-<?php
-	$user = session()->get("user");
-?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -28,9 +25,6 @@
 		<!--end::Layout Themes-->
 		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 		<script src="{{ assets("js/jquery.min.js") }}"></script>
-		<!-- <script lang="javascript" src="dist/xlsx.full.min.js"></script> -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
-
 
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ assets("/images/favicon/apple-touch-icon.png") }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ assets("/images/favicon/favicon-32x32.png") }}">
@@ -39,7 +33,7 @@
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ assets("/images/favicon/favicon-16x16.png") }}">
 		<link rel="manifest" href="{{ assets("/images/favicon/site.webmanifest") }}">
 		<link rel="mask-icon" href="{{ assets("/images/favicon/safari-pinned-tab.svg") }}" color="#088cbc">
-		<link rel="shortcut icon" href="{{ assets("/images/favicon/favicon.ico") }}">
+		{{-- <link rel="shortcut icon" href="{{ assets("/images/favicon/favicon.ico") }}"> --}}
 		<meta name="apple-mobile-web-app-title" content="Estado de Nuevo Le&oacute;n">
 		<meta name="application-name" content="Estado de Nuevo Le&oacute;n">
 		<meta name="msapplication-TileColor" content="#088cbc">
@@ -259,50 +253,113 @@
 									<div class="dropdown-menu p-0 m-0 mt-3 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
 										<form>
 											<!--begin::Header-->
-											<div class="d-flex flex-column py-12 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url(media/misc/bg-1.jpg)">
+											<div class="d-flex flex-column pt-12 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url(media/misc/bg-1.jpg)">
 												<!--begin::Title-->
 												<h4 class="d-flex flex-center rounded-top">
 													<span class="text-white">Notificaciones</span>
 													<span class="btn btn-text btn-success btn-sm font-weight-bold btn-font-md ml-2">{{ $notifications["total"] - $notifications["read"] }} nuevas</span>
 												</h4>
 												<!--end::Title-->
+												<!--begin::Tabs-->
+												<ul class="nav nav-bold nav-tabs nav-tabs-line nav-tabs-line-3x nav-tabs-line-transparent-white nav-tabs-line-active-border-success mt-3 px-8" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link text-white active show" data-toggle="tab" href="#topbar_notifications_notifications">Notificaciones</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link text-white" data-toggle="tab" href="#topbar_notifications_events">Avisos</a>
+													</li>
+												</ul>
+												<!--end::Tabs-->
 											</div>
 											<!--end::Header-->
 											<!--begin::Content-->
-											<div class="tab-pane active show p-8" id="topbar_notifications_notifications" role="tabpanel">
-												<!--begin::Scroll-->
-												<div class="scroll mr-n7 w-100" data-scroll="true" data-height="300" data-mobile-height="200">
-													@foreach($notifications["items"] as $notification)
-														<div class="d-flex align-items-center mb-6 border-bottom pb-4">
-															@if(!empty($notification["icon"]))
-																<!--begin::Symbol-->
-																<div class="symbol symbol-40 symbol-light-primary mr-5">
-																	<span class="symbol-label">
-																		<span class="svg-icon svg-icon-lg svg-icon-primary">
-																			<!--begin::Svg Icon | path:media/svg/icons/Home/Library.svg-->
-																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																					<rect x="0" y="0" width="24" height="24" />
-																					<path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
-																					<rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-																				</g>
-																			</svg>
-																			<!--end::Svg Icon-->
-																		</span>
-																	</span>
-																</div>
-																<!--end::Symbol-->
-															@endif
-															<!--begin::Text-->
-															<div class="d-flex flex-column font-weight-bold">
-																<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
-																<span class="text-muted">{!! $notification["content"] ?? "" !!}</span>
+											<div class="tab-content">
+												<div class="tab-pane active show p-0" id="topbar_notifications_notifications" role="tabpanel">
+													<!--begin::Scroll-->
+													<div class="scroll mr-n7 w-100" data-scroll="true" data-height="300" data-mobile-height="200">
+														@if($notifications["notificacion_count"] == 0)
+															<div class="d-flex flex-column font-weight-bold w-100 h-100 align-items-center justify-content-center text-center">
+																<p>No se encuentran notificaciones <br> en este momento</p>
 															</div>
-															<!--end::Text-->
-														</div>
-													@endforeach
+														@endif
+														@foreach($notifications["items"]["notificacion"] as $key => $notification)
+															@if($notification["type"] == 'notificacion')
+																<div class="d-flex align-items-center mb-6 border-bottom pb-4 px-4 {!! $key == 0 ? 'pt-4' : '' !!}">
+																	@if(!empty($notification["icon"]))
+																		<!--begin::Symbol-->
+																		<div class="symbol symbol-40 symbol-light-primary mr-5">
+																			<span class="symbol-label">
+																				<span class="svg-icon svg-icon-lg svg-icon-primary">
+																					<!--begin::Svg Icon | path:media/svg/icons/Home/Library.svg-->
+																					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																							<rect x="0" y="0" width="24" height="24" />
+																							<path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+																							<rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+																						</g>
+																					</svg>
+																					<!--end::Svg Icon-->
+																				</span>
+																			</span>
+																		</div>
+																		<!--end::Symbol-->
+																	@endif
+																	<!--begin::Text-->
+																	<div class="d-flex flex-column font-weight-bold w-100">
+																		<a href="detalle/{!! $notification["solicitud_id"] ?? "#" !!}" class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</a>
+																		<span class="text-muted">{!! $notification["description"] ?? "" !!}</span>
+																		<span class="badge badge-secondary ml-auto mt-2">{!! $notification["type"] ?? "" !!}</span>
+																	</div>
+																	<!--end::Text-->
+																</div>
+															@endif
+														@endforeach
+													</div>
+													<!--end::Scroll-->
 												</div>
-												<!--end::Scroll-->
+												<div class="tab-pane p-0" id="topbar_notifications_events" role="tabpanel">
+													<!--begin::Scroll-->
+													<div class="scroll mr-n7 w-100" data-scroll="true" data-height="300" data-mobile-height="200">
+														@if($notifications["aviso_count"] == 0)
+															<div class="d-flex flex-column font-weight-bold w-100 h-100 align-items-center justify-content-center text-center">
+																<p>No se encuentran avisos <br> en este momento</p>
+															</div>
+														@endif
+														@foreach($notifications["items"]["aviso"] as $key => $notification)
+															@if($notification["type"] == 'aviso')
+																<div class="d-flex align-items-center mb-6 border-bottom pb-4 px-4 {!! $key == 0 ? 'pt-4' : '' !!}">
+																	@if(!empty($notification["icon"]))
+																		<!--begin::Symbol-->
+																		<div class="symbol symbol-40 symbol-light-primary mr-5">
+																			<span class="symbol-label">
+																				<span class="svg-icon svg-icon-lg svg-icon-primary">
+																					<!--begin::Svg Icon | path:media/svg/icons/Home/Library.svg-->
+																					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																							<rect x="0" y="0" width="24" height="24" />
+																							<path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+																							<rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
+																						</g>
+																					</svg>
+																					<!--end::Svg Icon-->
+																				</span>
+																			</span>
+																		</div>
+																		<!--end::Symbol-->
+																	@endif
+																	<!--begin::Text-->
+																	<div class="d-flex flex-column font-weight-bold w-100">
+																		<span class="text-dark text-hover-primary mb-1 font-size-lg">{!! $notification["title"] ?? "" !!}</span>
+																		<span class="text-muted">{!! $notification["description"] ?? "" !!}</span>
+																		<span class="badge badge-secondary ml-auto mt-2">{!! $notification["type"] ?? "" !!}</span>
+																	</div>
+																	<!--end::Text-->
+																</div>
+															@endif
+														@endforeach
+													</div>
+													<!--end::Scroll-->
+												</div>
 											</div>
 											<!--end::Content-->
 										</form>

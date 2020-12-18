@@ -46,6 +46,7 @@ mix.copyDirectory('resources/js/pages', 'public/js/pages');
 mix.copyDirectory('resources/js/plugins', 'public/plugins');
 mix.copy('resources/js/scripts.bundle.min.js', 'public/js/scripts.bundle.min.js');
 mix.copy('resources/js/scripts.bundle.js', 'public/js/scripts.bundle.js');
+mix.copy('resources/media/misc/bg-1.jpg', 'public/media/misc/bg-1.jpg');
 
 mix.copy('resources/js/jquery.min.js', 'public/js/jquery.min.js');
 mix.copy('resources/js/popper.min.js', 'public/js/popper.min.js');
