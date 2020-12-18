@@ -242,7 +242,12 @@ class CalculoimpuestosController extends Controller
           }
 
         }else{
-          // regresar un error la declaracion normal no existe
+          $results = array (
+            "Code" => 400,
+            "Error" => "No se encontró la declaración normal"
+          );
+
+          return json_encode($results);
         }
       }
 
