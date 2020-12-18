@@ -46,7 +46,7 @@
 												</div>
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
-			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || campo.tipo == 'file'? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
 												<div class="form-group fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
 											  		<label>{{ campo.nombre }}</label>
@@ -108,16 +108,16 @@
 													  <div class="custom-file">
 													    <!-- <input type="file" id="file" name="file" class="custom-file-input"   @change="cambioModelo" aria-describedby="inputGroupFileAddon01"> -->
 														<input  
-															id="file"
+															:id="[[campo.campo_id]]"
 															:name="[[campo.campo_id]]" 
 															class="form-control form-control-solid form-control-lg" 
 															ref="fileInput"
 															type="file"
 															accept=".xlsx,.xls"
-															@change="fileSaved()"
+															@change="fileSaved(campo.campo_id)"
 														>
 														</input>
-													    <label class="custom-file-label" for="file">
+													    <label class="custom-file-label" :for="[[campo.campo_id]]">
 													    	<span v-if="file">{{file.name }}</span>
 													    	<span v-else-if="!file">Seleccione archivo</span>
 
@@ -191,14 +191,33 @@
 		    cambioModelo(){
         		let camposAvalidar = [];
 		    	this.agrupaciones.forEach( agrupacion => camposAvalidar = camposAvalidar.concat( agrupacion.campos ) );
+
+
+
+/*
 		    	var fileInput = document.getElementById('file');
 		    	if( fileInput ){
 		    		this.file = fileInput.files[0];
 		    		this.files.push( {valor:this.file, nombre:this.file});
 		    		this.$emit('updatingFiles', this.files);
-		    	}
+		    	}*/
 		    	let formvALID = this.validarFormulario(camposAvalidar);
 
+		    	let archivos = this.campos.filter( campo => campo.tipo == 'file' );
+		    	if( archivos.length > 0){
+		    		this.files = [];
+		    		archivos.forEach( file =>{
+		    			var fileInput = document.getElementById(file.campo_id);
+		    			
+		    			if( fileInput ){
+		    				this.file = fileInput.files[0];
+		    				this.files.push( {valor:this.file, nombre:file.nombre});
+		    				this.$emit('updatingFiles', this.files);
+		    			}
+
+		    		});
+		    	}
+		    	console.log( JSON.parse( JSON.stringify( this.files ) ) );
 		    	if( formvALID ){
                 	let datosFormulario = {
                 		tramite: this.tramite,
@@ -316,7 +335,7 @@
 			},
 			fileSaved(){
 
-				var file = document.getElementById('file')
+				var file = document.getElementById(campo.campo_id);
 				if (file != null ) {
 					  file =file.files[0];
 					  console.log('file..' + file);

@@ -251,7 +251,11 @@
                 let formData = new FormData();
 
                 if( this.files && this.files.length > 0 ){
-                  formData.append('file',this.files[0].valor );
+                  let losArchivos = [];
+                  this.files.forEach( (file, index) => {
+                      formData.append('file['+  index +']', this.files[index].valor);
+                      formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                  });
                 }
                 formData.append('user_id', this.idUsuario );
                 formData.append('info', JSON.stringify(informacion) );
