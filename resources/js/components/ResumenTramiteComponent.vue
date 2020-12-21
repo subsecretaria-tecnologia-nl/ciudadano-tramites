@@ -7,7 +7,7 @@
                     <div >
                         <strong> {{ tramite.tramite }}</strong>
                     </div>
-                    <div v-if="this.tramite.detalle && this.tramite.detalle.Salidas" class="btn btn-link" v-on:click="toggleTabla()" >
+                    <div v-if="tramite.detalle && tramite.detalle.Salidas" class="btn btn-link" v-on:click="toggleTabla()" >
                         <small>Ver detalle </small> <i class="fa fa-angle-down"></i>
                     </div>
                 </div>
@@ -16,19 +16,19 @@
                         <div class="row">
                             <div class="col-lg-12 col-sm-12 ml-auto" >
                                 <table class="table table-clear" >
-                                    <tbody v-if="this.tramite.detalle && this.tramite.detalle.Salidas"  id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion" style="display: none;">
-                                        <tr v-for="(salida, key) in this.tramite.detalle.Salidas" >
-                                            <td class="left" style="width: 70%"  v-if="key != 'H (Importe total)'">
+                                    <tbody v-if="tramite.detalle && tramite.detalle.Salidas"  id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion" style="display: none;">
+                                        <tr v-for="(salida, key) in tramite.detalle.Salidas" >
+                                            <td class="left" style="width: 70%"  v-if="key != 'H (Importe total)' ">
                                                 <strong>{{ key }}</strong>
                                             </td>
-                                            <td class="right" v-if="key != 'H (Importe total)'">
+                                            <td class="right" v-if="key != 'H (Importe total)'" >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto">  {{ salida }} </span>
 
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody  v-if="this.tramite.detalle && this.tramite.detalle.Salidas">
+                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal'">
                                         <tr>
                                             <td class="left" style="width: 70%">
                                                 <strong>H (Importe total)</strong>
@@ -52,12 +52,25 @@
                                             </td>
                                         </tr>
                                     </tbody>
+                                    <tbody v-else-if="tramite.detalle && tramite.detalle.Complementaria && tipoTramite =='complementaria'">
+                                        <tr >
+                                            <td class="left">
+                                                <strong>L Cantidad a cargo</strong>
+                                            </td>
+                                            <td class="right">
+                                                    <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
+                                                    <span v-if="!obteniendoCosto"> 
+                                                        {{ this.tramite.detalle.Complementaria['L Cantidad a cargo'] }}
+                                                    </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                                         
-                    <div class="table-responsive-sm" v-if="listaSolicitantes.length > 0">
+                    <div class="table-responsive-sm" v-if="listaSolicitantes.length > 0 && tipoTramite == 'normal'">
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -99,7 +112,11 @@
 
     
     export default {
+
+        props: ['datosComplementaria','tipoTramite'],
         mounted() {
+            console.log( this.datosComplementaria );
+            console.log( this.tipoTramite )
             this.obtenerInformacionDelTramite();
             this.obtenerCosto();
         },
@@ -137,56 +154,64 @@
 
             getParamsCalculoCosto( consulta_api , params){
                 let paramsCosto = {};
-                if( consulta_api == "/getcostoImpuesto" ){
-                    // CAMPOS CALCULO IMPUESTO
-                    let campoMonto              = this.getCampoByName(CAMPO_MONTO_DE_OPERACIÓN);
-                    let campoMulta              = this.getCampoByName(CAMPO_MULTA_POR_CORRECCION_FISCAL);
-                    let campoFechaMinuta        = this.getCampoByName(CAMPO_FECHA_DE_ESCRITURA_O_MINUTA);
-                    let campoPagoProvisional    = this.getCampoByName(CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR);
-                    let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
+                if(this.tipoTramite =='normal'  ){
+                    if( consulta_api == "/getcostoImpuesto" ){
+                        // CAMPOS CALCULO IMPUESTO
+                        let campoMonto              = this.getCampoByName(CAMPO_MONTO_DE_OPERACIÓN);
+                        let campoMulta              = this.getCampoByName(CAMPO_MULTA_POR_CORRECCION_FISCAL);
+                        let campoFechaMinuta        = this.getCampoByName(CAMPO_FECHA_DE_ESCRITURA_O_MINUTA);
+                        let campoPagoProvisional    = this.getCampoByName(CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR);
+                        let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
 
-                    paramsCosto.fecha_escritura = campoFechaMinuta.valor;
-                    paramsCosto.monto_operacion = campoMonto.valor;
-                    paramsCosto.ganancia_obtenida = campoGananciaObtenida.valor;    
-                    paramsCosto.pago_provisional_lisr = campoPagoProvisional.valor;
-                    if( campoMulta ){
-                        paramsCosto.multa_correccion_fiscal = campoMulta.valor;
+                        paramsCosto.fecha_escritura = campoFechaMinuta.valor;
+                        paramsCosto.monto_operacion = campoMonto.valor;
+                        paramsCosto.ganancia_obtenida = campoGananciaObtenida.valor;    
+                        paramsCosto.pago_provisional_lisr = campoPagoProvisional.valor;
+                        if( campoMulta ){
+                            paramsCosto.multa_correccion_fiscal = campoMulta.valor;
+                        }
+                    } else {
+                        let campoLote           = this.getCampoByName(CAMPO_LOTE);
+                        let campoHoja           = this.getCampoByName(CAMPO_HOJA);
+                        let campoSubsidio       = this.getCampoByName(CAMPO_SUBSIDIO);
+                        let campoCatastral      = this.getCampoByName(CAMPO_VALOR_CATASTRAL);
+                        let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
+
+                        if( campoCatastral ){
+                            paramsCosto.valor_catastral = campoCatastral.valor;
+                        }
+
+                        if(campoSubsidio){
+                            paramsCosto.subsidio = campoSubsidio.valor;//62
+                        }
+
+                        if(campoValorOperacion ){
+                            paramsCosto.valor_operacion = campoValorOperacion.valor;
+                        }
+
+                        if( campoHoja ){
+                            paramsCosto.hoja = campoHoja.valor; 
+                        }
+
+                        if( campoLote ){
+                            paramsCosto.lote = campoLote.valor
+                        }                  
                     }
                 } else {
-                    let campoLote           = this.getCampoByName(CAMPO_LOTE);
-                    let campoHoja           = this.getCampoByName(CAMPO_HOJA);
-                    let campoSubsidio       = this.getCampoByName(CAMPO_SUBSIDIO);
-                    let campoCatastral      = this.getCampoByName(CAMPO_VALOR_CATASTRAL);
-                    let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
-
-                    if( campoCatastral ){
-                        paramsCosto.valor_catastral = campoCatastral.valor;
-                    }
-
-                    if(campoSubsidio){
-                        paramsCosto.subsidio = campoSubsidio.valor;//62
-                    }
-
-                    if(campoValorOperacion ){
-                        paramsCosto.valor_operacion = campoValorOperacion.valor;
-                    }
-
-                    if( campoHoja ){
-                        paramsCosto.hoja = campoHoja.valor; 
-                    }
-
-                    if( campoLote ){
-                        paramsCosto.lote = campoLote.valor
-                    }                  
+                    return this.datosComplementaria;
                 }
 
                 return Object.assign(params, paramsCosto);
             },
 
             async obtenerCosto(){
+                let url = "";
                 let consulta_api =  this.datosFormulario.consulta_api;
-                let url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
-
+                if( this.tipoTramite =='normal' ){
+                    url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
+                } else {
+                    url = process.env.APP_URL + "/getComplementaria"; 
+                }
                 let data = {  
                     id_seguimiento: this.tramite.id_seguimiento,
                     tramite_id: this.tramite.id_tramite
@@ -197,10 +222,12 @@
                 try {
                     let response = await axios.post(url, data);
                     let detalleTramite = response.data;
-                    if( consulta_api == "/getcostoImpuesto" ){
+                    console.log( detalleTramite )
+                    if( consulta_api == "/getcostoImpuesto" || this.tipoTramite =='complementaria'  ){
                         this.tramite.detalle =  detalleTramite;
                     } else {
                         this.tramite.detalle =  detalleTramite[0];
+                
                     }
 
                     const parsed = JSON.stringify(this.tramite);
