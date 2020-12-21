@@ -192,15 +192,6 @@
         		let camposAvalidar = [];
 		    	this.agrupaciones.forEach( agrupacion => camposAvalidar = camposAvalidar.concat( agrupacion.campos ) );
 
-
-
-/*
-		    	var fileInput = document.getElementById('file');
-		    	if( fileInput ){
-		    		this.file = fileInput.files[0];
-		    		this.files.push( {valor:this.file, nombre:this.file});
-		    		this.$emit('updatingFiles', this.files);
-		    	}*/
 		    	let formvALID = this.validarFormulario(camposAvalidar);
 
 		    	let archivos = this.campos.filter( campo => campo.tipo == 'file' );
@@ -217,7 +208,6 @@
 
 		    		});
 		    	}
-		    	console.log( JSON.parse( JSON.stringify( this.files ) ) );
 		    	if( formvALID ){
                 	let datosFormulario = {
                 		tramite: this.tramite,
@@ -333,9 +323,9 @@
 		    	}
 				this.campos[indiceCampo].valido = curpValido && requeridoValido;	
 			},
-			fileSaved(){
+			fileSaved(campo_id){
 
-				var file = document.getElementById(campo.campo_id);
+				var file = document.getElementById(campo_id);
 				if (file != null ) {
 					  file =file.files[0];
 					  console.log('file..' + file);

@@ -53,7 +53,10 @@ Vue.component('item-solictud-carshop-component', () => import ( /* webpackChunkN
 Vue.component("detalle-pago-component", () => import ( /* webpackChunkName: "js/components/detalle-pago-component" */ './components/carShop/DetallePagoComponent.vue'));
 Vue.component("usuarios-component", () => import ( /* webpackChunkName: "js/components/usuarios-component" */ './components/Usuarios.vue'));
 Vue.component("listado-tramites", () => import ( /* webpackChunkName: "js/components/listado-tramites" */ './components/listadoTramites.vue' ))
-Vue.component("pagination-component", () => import ( /* webpackChunkName: "js/components/pagination-component" */ './components/paginationComponent.vue' ))
+Vue.component("pagination-component", () => import ( /* webpackChunkName: "js/components/pagination-component" */ './components/paginationComponent.vue' ));
+
+Vue.component("radio-option-component", () => import ( /* webpackChunkName: "js/components/generales/radio-option-component" */ './components/generales/radioOptionComponent.vue' ));
+Vue.component("formulario-complementaria-component" , () => import ( /* webpackChunkName: "js/components/formulario-complementaria-component" */ './components/FormularioComplementariaComponent.vue' ));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
