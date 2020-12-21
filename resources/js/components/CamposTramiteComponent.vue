@@ -126,6 +126,36 @@
 													</div>
 														<a href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
+												<div   class="form-group fv-plugins-icon-container">
+													<label>{{ campos.nombre }}</label>
+													<table class="table">
+														<thead>
+															<tr>
+																<th v-for="(registro , key)  in campos[0].registros[0]"  >
+																		{{key}}
+																</th>
+																<th>
+																		seleccionar
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr  v-for="(registro, key) in campos[0].registros"  :key="registro.nombre" >
+																<td >
+																		{{registro.nombre}}	
+																</td>	
+																<td >
+																		{{registro.id}}	
+																</td>	
+																<td >
+																		<input type="checkbox" @change="check($event)" class="text-center" style="padding-left: 40%" v-model="selectedId">
+																</td>
+															</tr>
+														</tbody>
+													</table>
+													
+												</div>
+
 
 			 								</div>
 										</div>
@@ -148,13 +178,31 @@
         props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount'],
         data() {
             return {
+				selectedId: [],
                 campos: [], agrupaciones:[],
                 mostrar:false,
                 errors: {},
                 showMensajes:false,
                 files:[], file:null,
                 tipoPersona:'pf',
-                consulta_api:''
+				consulta_api:'',
+				campos:[
+					{
+						"relationship":229,
+						"tipo":"selecction",
+						"nombre":"Vendedores",
+						"registros" : [
+							{nombre:"jaime", id:1223  },
+							{nombre:"dexter", id:1224  },
+							{nombre:"thania", id:1225  }
+						],
+						"caracteristicas":"{\"required\":\"false\"}",
+						"campo_id":79,
+						"agrupacion_id":8,
+						"orden":2,
+						"nombre_agrupacion":"Expediente"
+					}
+				],
             }
         },
   
@@ -235,7 +283,7 @@
 		    	try {
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
-					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
+					// this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 					this.agruparCampos();
 
 
@@ -416,8 +464,11 @@
 			}
 
 
+			},
+			check: function (e ) {
+				console.log(this.selectedId);
 			}
-	
+
      	}	
 	}
 
