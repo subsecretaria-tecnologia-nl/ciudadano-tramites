@@ -20,7 +20,7 @@
                                 </div>
                                 <!--end::Wizard Step 1 Nav-->
                                 <!--begin::Wizard Step 2 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo(2)" v-if="tipoTramite == 'normal'">
+                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo(2)" >
                                     <div class="wizard-wrapper">
                                         <div class="wizard-number">2</div>
                                         <div class="wizard-label">
@@ -178,21 +178,21 @@
                 Command: toastr.warning("Aviso!", "Campos requeridos");
                 return false;
               }
-              if(this.tipoTramite == 'normal'){
+              //if(this.tipoTramite == 'normal'){
                 $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
                 $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
 
                 $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
                 $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
                 this.currentStep = this.currentStep + 1;
-              } else {
+              /*} else {
                 $("#tab" + (this.currentStep + 2)).attr("data-wizard-state", "current");
                 $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
 
                 $("#step" + (this.currentStep + 2)).attr("data-wizard-state", "current");
                 $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
                 this.currentStep = this.currentStep + 2;
-              }
+              }*/
 
 
 
@@ -203,17 +203,17 @@
                 if(idStep == 2){
                   this.comprobarEstadoFormularioCount++;
                 }
-                if(this.tipoTramite == 'normal'){
+                //if(this.tipoTramite == 'normal'){
                   if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
                     Command: toastr.warning("Aviso!", "Datos requeridos");
                     return false;
                   }
-                } else {
+                /*} else {
                   if( idStep === 3 && ( !this.formularioValido)){
                     Command: toastr.warning("Aviso!", "Datos requeridos");
                     return false;
                   }
-                }
+                }*/
 
 
                 if( idStep === 2 &&  !this.formularioValido){

@@ -5,15 +5,19 @@
                 <div>
                     <h5> {{ solicitud.nombre }} </h5>
                     <p class="mb-3 text-muted text-uppercase small">
-                        <span v-if="solicitud.datos_solicitante.razon_social">
+                        <span v-if="solicitud.datos_solicitante && solicitud.datos_solicitante.razon_social">
                             Razón Social: {{ solicitud.datos_solicitante.razon_social }}
                         </span>
-                        <span v-if="!solicitud.datos_solicitante.razon_social">
+                        <span v-if="solicitud.datos_solicitante && !solicitud.datos_solicitante.razon_social">
                             Nombre : {{ solicitud.datos_solicitante.nombre }} {{ solicitud.datos_solicitante.apellido_paterno  }} {{ solicitud.datos_solicitante.apellido_materno }}
                         </span>
                     </p>
                     <p class="mb-3 text-muted text-uppercase small">
-                        RFC: {{ solicitud.datos_solicitante.rfc }}
+                        RFC: 
+
+                        <span v-if="solicitud.datos_solicitante && solicitud.datos_solicitante.rfc">
+                            {{ solicitud.datos_solicitante.rfc }}
+                        </span>
                     </p>
                 </div>
             </div>

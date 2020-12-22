@@ -185,29 +185,37 @@
 						tramitesJson.auxiliar_3 = "";
 						tramitesJson.importe_tramite = '';
 						let info = JSON.parse(soliciante.info);
-						let solicianteInfo = info.solicitante;
 
-						tramitesJson.datos_solicitante = {
-					        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante || "",
-					        "apellido_paterno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apPat || "",
-					        "apellido_materno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apMat || "",
-					        "razon_social": solicianteInfo.tipoPersona == "pm" ? solicianteInfo.razonSocial : "",
-					        "rfc": solicianteInfo.rfc,
-					        "curp": solicianteInfo.curp || "",
-					        "email": solicianteInfo.email|| "",
-					        "calle": solicianteInfo.calle|| "",
-					        "colonia":solicianteInfo.colonia|| "",
-					        "numexterior": solicianteInfo.numexterior|| "",
-					        "numinterior": solicianteInfo.numinterior|| "",
-					        "municipio": solicianteInfo.municipio|| "",
-					        "codigopostal": solicianteInfo.codigopostal|| "",
-					    }
-
-					    tramitesJson.datos_factura = tramitesJson.datos_solicitante;
-
-
-                		tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['H (Importe total)'] : info.costo_final ;
+						if(info.solicitante){
+							let solicianteInfo = info.solicitante;
+							tramitesJson.datos_solicitante = {
+						        "nombre": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.nombreSolicitante || "",
+						        "apellido_paterno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apPat || "",
+						        "apellido_materno": solicianteInfo.tipoPersona == "pm" ? "" : solicianteInfo.apMat || "",
+						        "razon_social": solicianteInfo.tipoPersona == "pm" ? solicianteInfo.razonSocial : "",
+						        "rfc": solicianteInfo.rfc,
+						        "curp": solicianteInfo.curp || "",
+						        "email": solicianteInfo.email|| "",
+						        "calle": solicianteInfo.calle|| "",
+						        "colonia":solicianteInfo.colonia|| "",
+						        "numexterior": solicianteInfo.numexterior|| "",
+						        "numinterior": solicianteInfo.numinterior|| "",
+						        "municipio": solicianteInfo.municipio|| "",
+						        "codigopostal": solicianteInfo.codigopostal|| "",
+						    }
 						
+					    	tramitesJson.datos_factura = tramitesJson.datos_solicitante;
+						}
+						//console.log("###info####")
+						console.log( JSON.parse( JSON.stringify(info) ) )
+						if( info.camposComplementaria && info.detalle && info.detalle.Complementaria){
+							tramitesJson.importe_tramite = info.detalle.Complementaria['L Cantidad a cargo'] ;
+							console.log("asdasdasdsad")
+							console.log(tramitesJson.importe_tramite)
+						} else {
+							
+                			tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['H (Importe total)'] : info.costo_final ;
+						}
 						tramitesJson.detalle = [];
 
 						tramitesJson.detalle[0] = { 
