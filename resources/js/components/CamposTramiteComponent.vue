@@ -103,27 +103,42 @@
 												<div v-else-if="campo.tipo == 'file'" class=" fv-plugins-icon-container">
 													<div class="input-group">
 													  <div class="input-group-prepend">
-													    <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
+													  <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
 													  </div>
-													  <div class="custom-file">
-														<input  
-															:id="[[campo.campo_id]]"
-															:name="[[campo.campo_id]]" 
-															class="custom-file-input"  style="background-color: #e5f2f5 !important"
-															ref="fileInput"
-															type="file"
-															accept=".xlsx,.xls"
-															@change="fileSaved(campo.campo_id)"
-														>
-														</input>
-													    <label class="custom-file-label" :for="[[campo.campo_id]]">
-													    	<span v-if="file">{{file.name }}</span>
-													    	<span v-else-if="!file">Seleccione archivo</span>
+														<div class="custom-file"  v-if="campo.nombre == '*Expediente'">
+															<input  
+																:id="[[campo.campo_id]]"
+																:name="[[campo.campo_id]]" 
+																class="custom-file-input"  style="background-color: #e5f2f5 !important"
+																ref="fileInput"
+																type="file"
+																accept=".xlsx,.xls"
+																@change="fileSaved(campo.campo_id)"
+															>
+															</input>
+															<label class="custom-file-label" :for="[[campo.campo_id]]">
+																<span v-if="file">{{file.name }}</span>
+																<span v-else-if="!file">Seleccione archivo</span>
 
-													    </label>
-													  </div>
+															</label>
+													  	</div>
+														<div class="custom-file" v-if="campo.nombre != '*Expediente'">
+															<input  
+																:id="[[campo.campo_id]]"
+																:name="[[campo.campo_id]]" 
+																class="custom-file-input"  style="background-color: #e5f2f5 !important"
+																ref="fileInput"
+																type="file"
+															>
+															</input>
+															<label class="custom-file-label" :for="[[campo.campo_id]]">
+																<span v-if="file">{{file.name }}</span>
+																<span v-else-if="!file">Seleccione archivo</span>
+
+															</label>
+														</div>
 													</div>
-														<a v-if="campo.campo_id=82" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+													<a v-if="campo.nombre == '*Expediente'" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
 
 			 								</div>
@@ -132,7 +147,6 @@
 							    </v-expansion-panel>
 							</v-expansion-panels>
  						</div>
- 		
  					</div>
  				</div>
 			</form>
