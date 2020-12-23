@@ -12,7 +12,7 @@
                                         <div class="wizard-number">1</div>
                                         <div class="wizard-label">
                                             <div class="wizard-title">Datos</div>
-                                            <div class="wizard-desc"> 
+                                            <div class="wizard-desc">
                                                 Información sobre el trámite
                                             </div>
                                         </div>
@@ -60,8 +60,8 @@
                                                 <radio-option-component :default="tipoTramite" @valueRadio="cambioRadio"></radio-option-component>
                                               </div>
                                               <div v-if="tipoTramite == 'normal'" >
-                                                <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"  
-                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles"></campos-tramite-component>                                                  
+                                                <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
+                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles"></campos-tramite-component>
                                               </div>
                                               <div v-else-if="tipoTramite == 'complementaria'">
                                                   <formulario-complementaria-component @updatingScore="updateScore" @sendData="setDatosComplementaria"></formulario-complementaria-component>
@@ -82,13 +82,20 @@
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
                                                 </div>
                                                 <div >
+                                                  <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-on:click="agregar('guardaContinuaDespues')" :disabled="enviando">
+                                                      Guardar y Continuar después                                                                         
+                                                      <div id="spinner-guardaContinuaDespues" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
+                                                          <span class="sr-only">Loading...</span>
+                                                      </div>
+                                                    </button>
                                                     <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar('guardaContinua')" :disabled="enviando">
                                                       Guardar y Continuar                                                                          <div id="spinner-guardaFina" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
                                                       </div>
                                                     </button>
                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar('finalizar')" :disabled="finalizando">
-                                                      Finalizar 
+                                                      Finalizar
                                                       <div id="spinner-finalizar" class="spinner-border spinner-border-sm float-right" role="status" v-if="finalizando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
                                                       </div>
@@ -96,6 +103,7 @@
                                                     <button type="button" id="btnWizard" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
                                                         Next
                                                     </button>
+                                                  </div>
                                                 </div>
                                             </div>
                                             <!--end: Wizard Actions-->
@@ -113,7 +121,7 @@
 
 <script>
     import { uuid } from 'vue-uuid';
-  
+
     export default {
         props: ['tramite','idUsuario'],
         mounted() {
@@ -122,7 +130,7 @@
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
         },
-  
+
         data() {
             return {
                 currentStep: 1,
@@ -137,7 +145,7 @@
                 datosComplementaria:[]
             }
         },
-  
+
         methods: {
             updateScore(formularioValido) {
               $("#btnWizard").attr("disabled", true);
@@ -156,7 +164,7 @@
               this.files = files;
             },
 
-            updateSolicitante(solicitantesValido){ 
+            updateSolicitante(solicitantesValido){
               $("#btnWizard").attr("disabled", true);
               this.solicitantesValido = solicitantesValido;
               if( solicitantesValido ){
@@ -228,11 +236,52 @@
                 $("#tab" + idStep).attr("data-wizard-state", "current");
                 $("#step" + idStep).attr("data-wizard-state", "current");
                 this.currentStep = idStep;
-            }, 
+            },
+
+            buildFormData(informacion, listaSolicitantes, tramite){
+              let formData = new FormData();
+              if( this.files && this.files.length > 0 ){
+                this.files.forEach( (file, index) => {
+                    formData.append('file['+  index +']', this.files[index].valor);
+                    formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                });
+              }
+              formData.append('user_id', this.idUsuario );
+              formData.append('info', JSON.stringify(informacion) );
+              formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
+              formData.append('clave', tramite.id_seguimiento );
+              formData.append('catalogo_id', tramite.id_tramite );
+              return formData;
+            },
+
+            getStorage(key, goTab){
+                if (localStorage.getItem(key)) {
+                  try {
+                    return JSON.parse(localStorage.getItem(key));
+                  } catch(e) {
+                    localStorage.removeItem(key);
+                    if(  goTab ){
+                      goTo(goTab);
+                      return false;
+                    }
+                    
+                  }
+                }
+            },
+
+            obtenerDatosTabs(){
+                let listaSolicitantes = this.getStorage( 'listaSolicitantes', 2 );
+                let tramite = this.getStorage( 'tramite' );
+                let datosFormulario = this.getStorage( 'datosFormulario', 1);
+
+                return [listaSolicitantes, tramite, datosFormulario];
+            },
 
             async agregar( type){
+              console.log( JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) ) )
 
 
+/*
                 let listaSolicitantes = [];
                 let tramite = {};
                 let datosFormulario = {};
@@ -264,13 +313,15 @@
                     goTo(1);
                   }
                 }
+                */
+                /*
                 let informacion = {
                   costo_final:tramite.detalle.costo_final,
                   partidas: tramite.partidas,
                   detalle: tramite.detalle
                 }
-                console.log( this.datosComplementaria )
-                 let camposObj = {};
+
+                let camposObj = {};
                 if( this.tipoTramite == 'normal' ){
                   datosFormulario.campos.forEach( campo =>  {
                     camposObj[campo.campo_id] = campo.valor;
@@ -279,25 +330,8 @@
                 } else {
                   informacion.camposComplementaria = this.datosComplementaria;
                 }
-                
 
-      
-                let formData = new FormData();
-
-                if( this.files && this.files.length > 0 ){
-                  let losArchivos = [];
-                  this.files.forEach( (file, index) => {
-                      formData.append('file['+  index +']', this.files[index].valor);
-                      formData.append('descripcion['+  index +']',  this.files[index].nombre );
-                  });
-                }
-                formData.append('user_id', this.idUsuario );
-                formData.append('info', JSON.stringify(informacion) );
-                formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
-                formData.append('clave', tramite.id_seguimiento );
-                formData.append('catalogo_id', tramite.id_tramite );
-
-                //data = JSON.stringify(data);
+                let formData = this.buildFormData( informacion, listaSolicitantes, tramite );
 
                 if( type == "finalizar" ){
                   this.finalizando = true;
@@ -309,10 +343,10 @@
                 try {
                   let response = await axios.post(url, formData, {
                     headers:{
-            'Content-Type': 'application/json',
-                      },
+                        'Content-Type': 'application/json',
+                    },
                   });
-                 
+
                   let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
                   $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
                   Command: toastr.success("Listo!", response.data.Message);
@@ -324,7 +358,7 @@
                     localStorage.removeItem('datosFormulario');
                     delete this.tramite.detalle;
                     const parsed = JSON.stringify(this.tramite);
-                    localStorage.setItem('tramite', parsed); 
+                    localStorage.setItem('tramite', parsed);
                     this.goTo(1);
                   }
                 } catch (error) {
@@ -333,8 +367,9 @@
 
                 }
                 this.enviando = false;
-                this.finalizando = false;
+                this.finalizando = false;*/
             },
+
             cambioRadio(valor){
               this.tipoTramite = valor;
             }
