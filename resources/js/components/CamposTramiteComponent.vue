@@ -10,7 +10,7 @@
 				<div class="panel panel-default" >
  					<div class="panel-heading">
  						<div class="row">
-							<v-expansion-panels>
+							<v-expansion-panels accordion multiple hover style="z-index: inherit" v-model="panel">
 							    <v-expansion-panel v-for="(agrupacion, i) in agrupaciones" :key="i">
 							      	<v-expansion-panel-header >
 							        	{{ agrupacion.nombre_agrupacion }}
@@ -23,7 +23,7 @@
 										<div class="row">
 											<div  v-if="agrupacion.tipo === 'agrupacion'" class="col-lg-12">
 												<div class="col-md-12 col-lg-12">
-												    <div class="text-center">
+												    <div >
 														    <div class="custom-control custom-radio custom-control-inline">
 														      	<input type="radio" value="pf"  name="radioInline" class="custom-control-input" id="defaultInline2" v-model="tipoPersona" key="tipoPersona">
 														      	<!--<input  name="tipoPersona"  >-->
@@ -48,9 +48,9 @@
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
 			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
-												<div class="form-group fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
+												<div class=" fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
 											  		<label>{{ campo.nombre }}</label>
-											  		<input type="text" class="form-control form-control-solid form-control-lg"  
+											  		<input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important"  
 											  			:placeholder="[[campo.nombre]]" :id="[[campo.campo_id]]"
 											  			v-model="campo.valor"  @keyup="cambioModelo"  @focus="cambioModelo"/>
 													<small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
@@ -61,10 +61,10 @@
 											  	</div>
 
 											
-												<div class="form-group fv-plugins-icon-container"  v-else-if="campo.tipo === 'select'">
+												<div class=" fv-plugins-icon-container"  v-else-if="campo.tipo === 'select'">
 												  		<label>{{ campo.nombre }}</label>
-												  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]"
-												  			class="form-control form-control-solid form-control-lg"
+												  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]" 
+												  			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
 												  			v-model="campo.valor" @change="cambioModelo" >
 												  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 												  			:value="[[Object.keys(opcion)[0] ]]">
@@ -78,20 +78,20 @@
 												  		</small>
 												</div>
 												<div v-else-if="campo.tipo === 'option'">
-													<div class="form-group" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
-														<input type="radio" class=" form-control-solid"   
+													<div class="" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
+														<input type="radio" class=" "    
 															:id="[[campo.campo_id]]"
 														 	:name="[[campo.campo_id]]"
 														 	:value="[[Object.keys(opcion)[0] ]]" v-model="campo.valor" @change="cambioModelo" >
 														 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
 													</div>
 												</div>
-												<div v-else-if="campo.tipo === 'textbox'"  class="form-group fv-plugins-icon-container">
+												<div v-else-if="campo.tipo === 'textbox'"  class=" fv-plugins-icon-container">
 													<label>{{ campo.nombre }}</label>
-													<textarea 
+													<textarea  
 														:id="[[campo.campo_id]]"
 													 	:name="[[campo.campo_id]]" 
-													 	class="form-control form-control-solid form-control-lg" v-model="campo.valor"
+													 	class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" v-model="campo.valor"
 													 	@change="cambioModelo" ></textarea>
 													 	<small  class="form-text text-muted" v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
 												  			<span v-for="mensaje in campo.mensajes">
@@ -100,17 +100,16 @@
 												  		</small>
 													
 												</div>
-												<div v-else-if="campo.tipo == 'file'" class="form-group fv-plugins-icon-container">
+												<div v-else-if="campo.tipo == 'file'" class=" fv-plugins-icon-container">
 													<div class="input-group">
 													  <div class="input-group-prepend">
 													    <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
 													  </div>
 													  <div class="custom-file">
-													    <!-- <input type="file" id="file" name="file" class="custom-file-input"   @change="cambioModelo" aria-describedby="inputGroupFileAddon01"> -->
 														<input  
 															id="file"
 															:name="[[campo.campo_id]]" 
-															class="form-control form-control-solid form-control-lg" 
+															class="custom-file-input"  style="background-color: #e5f2f5 !important"
 															ref="fileInput"
 															type="file"
 															accept=".xlsx,.xls"
@@ -124,7 +123,7 @@
 													    </label>
 													  </div>
 													</div>
-														<a href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+														<a v-if="campo.campo_id=82" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
 
 			 								</div>
@@ -134,7 +133,6 @@
 							</v-expansion-panels>
  						</div>
  		
-
  					</div>
  				</div>
 			</form>
@@ -154,7 +152,8 @@
                 showMensajes:false,
                 files:[], file:null,
                 tipoPersona:'pf',
-                consulta_api:''
+                consulta_api:'',
+				panel : [0,1,2,3,4],
             }
         },
   
@@ -183,7 +182,7 @@
               	}
 	        } else {
 	        	this.obtenerCampos();
-	        }
+			}
         },
 
         methods: {
