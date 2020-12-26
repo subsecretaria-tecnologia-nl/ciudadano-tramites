@@ -83,7 +83,7 @@
                                                 </div>
                                                 <div >
                                                   <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-on:click="agregar('guardaContinuaDespues')" :disabled="enviando">
+                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-on:click="saveTemp()" :disabled="enviando">
                                                       Guardar y Continuar después                                                                         
                                                       <div id="spinner-guardaContinuaDespues" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
@@ -186,24 +186,13 @@
                 Command: toastr.warning("Aviso!", "Campos requeridos");
                 return false;
               }
-              //if(this.tipoTramite == 'normal'){
-                $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-                $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
 
-                $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-                $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
-                this.currentStep = this.currentStep + 1;
-              /*} else {
-                $("#tab" + (this.currentStep + 2)).attr("data-wizard-state", "current");
-                $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
+              $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
+              $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
 
-                $("#step" + (this.currentStep + 2)).attr("data-wizard-state", "current");
-                $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
-                this.currentStep = this.currentStep + 2;
-              }*/
-
-
-
+              $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
+              $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
+              this.currentStep = this.currentStep + 1;
             },
 
             goTo( idStep ){
@@ -211,18 +200,11 @@
                 if(idStep == 2){
                   this.comprobarEstadoFormularioCount++;
                 }
-                //if(this.tipoTramite == 'normal'){
-                  if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
-                    Command: toastr.warning("Aviso!", "Datos requeridos");
-                    return false;
-                  }
-                /*} else {
-                  if( idStep === 3 && ( !this.formularioValido)){
-                    Command: toastr.warning("Aviso!", "Datos requeridos");
-                    return false;
-                  }
-                }*/
 
+                if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
+                  Command: toastr.warning("Aviso!", "Datos requeridos");
+                  return false;
+                }
 
                 if( idStep === 2 &&  !this.formularioValido){
                   Command: toastr.warning("Aviso!", "Campos requeridos");
@@ -278,49 +260,17 @@
             },
 
             async agregar( type){
-              console.log( JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) ) )
+                let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
+                let listaSolicitantes = datosTabs[0];
+                let tramite = datosTabs[1];
+                let datosFormulario = datosTabs[2];
 
-
-/*
-                let listaSolicitantes = [];
-                let tramite = {};
-                let datosFormulario = {};
-
-
-
-                if (localStorage.getItem('listaSolicitantes')) {
-                  try {
-                    listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
-                  } catch(e) {
-                    localStorage.removeItem('listaSolicitantes');
-                    goTo(2);
-                  }
-                }
-
-                if (localStorage.getItem('tramite')) {
-                  try {
-                    tramite = JSON.parse(localStorage.getItem('tramite'));
-                  } catch(e) {
-                    localStorage.removeItem('tramite');
-                  }
-                }
-
-                if (localStorage.getItem('datosFormulario')) {
-                  try {
-                    datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
-                  } catch(e) {
-                    localStorage.removeItem('datosFormulario');
-                    goTo(1);
-                  }
-                }
-                */
-                /*
                 let informacion = {
                   costo_final:tramite.detalle.costo_final,
                   partidas: tramite.partidas,
                   detalle: tramite.detalle
                 }
-
+                
                 let camposObj = {};
                 if( this.tipoTramite == 'normal' ){
                   datosFormulario.campos.forEach( campo =>  {
@@ -330,6 +280,8 @@
                 } else {
                   informacion.camposComplementaria = this.datosComplementaria;
                 }
+
+                
 
                 let formData = this.buildFormData( informacion, listaSolicitantes, tramite );
 
@@ -367,12 +319,67 @@
 
                 }
                 this.enviando = false;
-                this.finalizando = false;*/
+                this.finalizando = false;
             },
 
             cambioRadio(valor){
               this.tipoTramite = valor;
+            },
+
+            async saveTemp(){
+              let guardandoTemporarmente = true;
+              let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
+
+                let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
+                let listaSolicitantes = datosTabs[0];
+                let tramite = datosTabs[1];
+                let datosFormulario = datosTabs[2];
+
+                let informacion = {
+                  costo_final: tramite &&  tramite.detalle ? tramite.detalle.costo_final: null,
+                  partidas: tramite.partidas,
+                  detalle: tramite.detalle
+                }
+                
+                let camposObj = {};
+                if( this.tipoTramite == 'normal' ){
+                  datosFormulario.campos.forEach( campo =>  {
+                    camposObj[campo.campo_id] = campo.valor;
+                  });
+                  informacion.campos=camposObj;
+                } else {
+                  informacion.camposComplementaria = this.datosComplementaria;
+                }
+
+                
+
+                let formData = this.buildFormData( informacion, listaSolicitantes, tramite );
+
+                try {
+                  let response = await axios.post(url, formData, {
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                  });
+
+                  
+                  
+                  Command: toastr.success("Listo!", response.data.Message);
+                  
+                  
+//                  redirect("/nuevo-tramite");
+
+                } catch (error) {
+                  console.log(error);
+                  Command: toastr.warning("Error!", "No fue posible registrar intente de nuevo");
+
+                }
+                this.enviando = false;
+                this.finalizando = false;
+
+              
             }
+
         }
     }
 </script>

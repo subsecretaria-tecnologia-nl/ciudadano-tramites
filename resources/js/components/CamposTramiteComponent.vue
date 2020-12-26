@@ -107,23 +107,23 @@
 													  </div>
 													  <div class="custom-file">
 														<input  
-															:id="[[campo.campo_id]]"
-															:name="[[campo.campo_id]]" 
+															:id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]"
+															:name="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]" 
 															class="custom-file-input"  style="background-color: #e5f2f5 !important"
 															ref="fileInput"
 															type="file"
 															accept=".xlsx,.xls"
-															@change="fileSaved(campo.campo_id)"
+															@change="fileSaved(campo.campo_id + '-' + campo.nombre.replace('*', ''))"
 														>
 														</input>
-													    <label class="custom-file-label" :for="[[campo.campo_id]]">
-													    	<span v-if="file">{{file.name }}</span>
-													    	<span v-else-if="!file">Seleccione archivo</span>
+													    <label class="custom-file-label" :for="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]">
+													    	<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> Seleccione archivo</span>
+													    	
 
 													    </label>
 													  </div>
 													</div>
-														<a v-if="campo.campo_id=82" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+														<a v-if="campo.campo_id==82" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
 
 			 								</div>
@@ -191,31 +191,44 @@
         		let camposAvalidar = [];
 		    	this.agrupaciones.forEach( agrupacion => camposAvalidar = camposAvalidar.concat( agrupacion.campos ) );
 
-		    	let formvALID = this.validarFormulario(camposAvalidar);
+		    	
 
 		    	let archivos = this.campos.filter( campo => campo.tipo == 'file' );
+
 		    	if( archivos.length > 0){
 		    		this.files = [];
 		    		archivos.forEach( file =>{
-		    			var fileInput = document.getElementById(file.campo_id);
 		    			
-		    			if( fileInput ){
+		    			var fileInput = document.getElementById(file.campo_id + '-' + file.nombre.replace('*', ''));
+		    			
+		    			
+		    			if( fileInput && fileInput.files.length > 0){
+		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name )
 		    				this.file = fileInput.files[0];
 		    				this.files.push( {valor:this.file, nombre:file.nombre});
 		    				this.$emit('updatingFiles', this.files);
+		    			} else {
+		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  'Seleccione archivo' );
 		    			}
 
 		    		});
 		    	}
-		    	if( formvALID ){
-                	let datosFormulario = {
-                		tramite: this.tramite,
-                		campos: this.campos,
-                		tipoPersona:this.tipoPersona,
-                		consulta_api: this.consulta_api
-                	}
-                	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
-                }
+		    	
+		    	console.log("los file")
+				console.log( JSON.parse( JSON.stringify( this.files ) ) );
+
+				console.log("los campos")
+				console.log( JSON.parse( JSON.stringify( camposAvalidar ) ) );
+		    	let formvALID = this.validarFormulario(camposAvalidar);
+            	let datosFormulario = {
+            		tramite: this.tramite,
+            		campos: this.campos,
+            		tipoPersona:this.tipoPersona,
+            		consulta_api: this.consulta_api,
+            		formularioValido:formvALID
+            	}
+            	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
+              
         	},
 
 
@@ -229,8 +242,8 @@
 
         		let camposValidados = this.campos.filter( campo => !!camposAvalidar.find( campoAvalidar => { 
         			return campoAvalidar.campo_id == campo.campo_id && campoAvalidar.agrupacion_id == campo.agrupacion_id
-        		}));
-
+        		}));    				
+		    			
                 camposValidados.forEach( (campo, indice) => {
                 	formularioValido = formularioValido && campo.valido;
                 });
@@ -244,6 +257,8 @@
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
+
+					console.log(  JSON.stringify( this.campos )  )
 					this.agruparCampos();
 
 
@@ -307,11 +322,11 @@
 		    	} 
 		    	if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
 		    		
-		    		if( campo.tipo == 'file' ){
-						requeridoValido =  !!this.file;
-		    		} else {
+		    		//if( campo.tipo == 'file' ){
+						requeridoValido =  !!this.files.find( file => file.nombre == campo.nombre );
+		    		//} else {
 						requeridoValido =  !!campo.valor;
-		    		}
+		    		//}
 		    		if( !requeridoValido ){
 		    			let mensaje = { 
 		    				tipo:'required',
@@ -320,11 +335,28 @@
 		    			this.campos[indiceCampo].mensajes.push( mensaje );
 		    		}
 		    	}
+		    	//los archivos se validan aparte
+		    	
+		    	if( campo.tipo == 'file' ){
+					requeridoValido =  !!this.files.find( file => file.nombre == campo.nombre );
+
+					if( !requeridoValido ){
+		    			let mensaje = { 
+		    				tipo:'required',
+		    				mensajeStr: "El arvhivo " + campo.nombre + " es requerido"
+		    			}
+		    			this.campos[indiceCampo].mensajes.push( mensaje );
+		    		}
+
+		    	} 
+		    	console.log( JSON.parse( JSON.stringify(  this.campos  ) ) );
 				this.campos[indiceCampo].valido = curpValido && requeridoValido;	
 			},
+
 			fileSaved(campo_id){
 
 				var file = document.getElementById(campo_id);
+				
 				if (file != null ) {
 					  file =file.files[0];
 					  console.log('file..' + file);
@@ -368,8 +400,8 @@
 											}
 									}
 									console.log('file : ' + file);
-									this.files.push( {valor:file, nombre:file});
-									this.$emit('updatingFiles', this.files);
+									//this.files.push( {valor:file, nombre:file});
+									//this.$emit('updatingFiles', this.files);
 									
 								}else if(tipoValidacion == 2){
 
@@ -413,16 +445,16 @@
 											}
 										}
 									console.log('file validacion 2: ' + file);
-									this.files.push( {valor:file, nombre:file});
-		    						this.$emit('updatingFiles', this.files);		
+									//this.files.push( {valor:file, nombre:file});
+		    						//this.$emit('updatingFiles', this.files);		
 								}
 							})
 						}.bind(this);
 				
 					
+					}
 				}
-			}
-
+				this.cambioModelo();
 
 			}
 	
