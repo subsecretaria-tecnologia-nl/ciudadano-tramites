@@ -138,9 +138,8 @@
 															</label>
 														</div>
 													</div>
-													<a v-if="campo.nombre == '*Expediente'" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+													<a v-if="/^{*}|Expediente$/.test(campo.nombre) == true" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
-
 			 								</div>
 										</div>
 							      	</v-expansion-panel-content>
