@@ -222,7 +222,7 @@
                 try {
                     let response = await axios.post(url, data);
                     let detalleTramite = response.data;
-                    console.log( detalleTramite )
+
                     if( consulta_api == "/getcostoImpuesto" || this.tipoTramite =='complementaria'  ){
                         this.tramite.detalle =  detalleTramite;
                     } else {
