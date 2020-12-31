@@ -1,12 +1,5 @@
 @import "./_variables.scss";
 @import "./mixins";
-*,
-body {
-    font-family: 'Montserrat', sans-serif;
-    a {
-        color: $font-link !important;
-    }
-}
 
 @media only screen and (max-width: 770px) {
     .card {

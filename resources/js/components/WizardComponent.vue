@@ -20,7 +20,7 @@
                                 </div>
                                 <!--end::Wizard Step 1 Nav-->
                                 <!--begin::Wizard Step 2 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo(2)">
+                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo(2)" >
                                     <div class="wizard-wrapper">
                                         <div class="wizard-number">2</div>
                                         <div class="wizard-label">
@@ -52,13 +52,20 @@
                         <div class="card card-custom card-shadowless rounded-top-0">
                             <div class="card-body p-0">
                                 <div class="row justify-content-center py-8 px-8 py-lg-15 px-lg-10">
-                                    <div class="col-xl-12 col-xxl-7">
+                                    <div class="col-xl-12 col-xxl-12">
                                         <!--begin: Wizard Form-->
                                             <!--begin: Wizard Step 1 Campos tramite-->
-
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
+                                              <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'">
+                                                <radio-option-component :default="tipoTramite" @valueRadio="cambioRadio"></radio-option-component>
+                                              </div>
+                                              <div v-if="tipoTramite == 'normal'" >
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"  
-                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles"></campos-tramite-component>
+                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles"></campos-tramite-component>                                                  
+                                              </div>
+                                              <div v-else-if="tipoTramite == 'complementaria'">
+                                                  <formulario-complementaria-component @updatingScore="updateScore" @sendData="setDatosComplementaria"></formulario-complementaria-component>
+                                              </div>
                                             </div>
                                             <!--end: Wizard Step 1-->
                                             <!--begin: Wizard Step 2-->
@@ -68,7 +75,7 @@
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
-                                                <resumen-tramite-component v-if="currentStep == 3"></resumen-tramite-component>
+                                                <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria"></resumen-tramite-component>
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                 <div class="mr-2">
@@ -125,7 +132,9 @@
                 formularioValido: false,
                 solicitantesValido: false,
                 comprobarEstadoFormularioCount:0,
-                files:[]
+                files:[],
+                tipoTramite:'normal',
+                datosComplementaria:[]
             }
         },
   
@@ -137,6 +146,10 @@
               }
               this.formularioValido = formularioValido;
               this.$forceUpdate()
+            },
+
+            setDatosComplementaria(datos){
+              this.datosComplementaria = datos;
             },
 
             updatingFiles( files ){
@@ -165,14 +178,23 @@
                 Command: toastr.warning("Aviso!", "Campos requeridos");
                 return false;
               }
+              //if(this.tipoTramite == 'normal'){
+                $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
+                $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
+
+                $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
+                $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
+                this.currentStep = this.currentStep + 1;
+              /*} else {
+                $("#tab" + (this.currentStep + 2)).attr("data-wizard-state", "current");
+                $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
+
+                $("#step" + (this.currentStep + 2)).attr("data-wizard-state", "current");
+                $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
+                this.currentStep = this.currentStep + 2;
+              }*/
 
 
-              $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-              $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
-
-              $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-              $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
-              this.currentStep = this.currentStep + 1;
 
             },
 
@@ -181,11 +203,17 @@
                 if(idStep == 2){
                   this.comprobarEstadoFormularioCount++;
                 }
-                
-                if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
-                  Command: toastr.warning("Aviso!", "Datos requeridos");
-                  return false;
-                }
+                //if(this.tipoTramite == 'normal'){
+                  if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
+                    Command: toastr.warning("Aviso!", "Datos requeridos");
+                    return false;
+                  }
+                /*} else {
+                  if( idStep === 3 && ( !this.formularioValido)){
+                    Command: toastr.warning("Aviso!", "Datos requeridos");
+                    return false;
+                  }
+                }*/
 
 
                 if( idStep === 2 &&  !this.formularioValido){
@@ -236,22 +264,32 @@
                     goTo(1);
                   }
                 }
-                let camposObj = {};
-                datosFormulario.campos.forEach( campo =>  {
-                  camposObj[campo.campo_id] = campo.valor;
-                });
-      
                 let informacion = {
-                  campos:camposObj,
                   costo_final:tramite.detalle.costo_final,
                   partidas: tramite.partidas,
                   detalle: tramite.detalle
                 }
+                console.log( this.datosComplementaria )
+                 let camposObj = {};
+                if( this.tipoTramite == 'normal' ){
+                  datosFormulario.campos.forEach( campo =>  {
+                    camposObj[campo.campo_id] = campo.valor;
+                  });
+                  informacion.campos=camposObj;
+                } else {
+                  informacion.camposComplementaria = this.datosComplementaria;
+                }
+                
 
+      
                 let formData = new FormData();
 
                 if( this.files && this.files.length > 0 ){
-                  formData.append('file',this.files[0].valor );
+                  let losArchivos = [];
+                  this.files.forEach( (file, index) => {
+                      formData.append('file['+  index +']', this.files[index].valor);
+                      formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                  });
                 }
                 formData.append('user_id', this.idUsuario );
                 formData.append('info', JSON.stringify(informacion) );
@@ -296,6 +334,9 @@
                 }
                 this.enviando = false;
                 this.finalizando = false;
+            },
+            cambioRadio(valor){
+              this.tipoTramite = valor;
             }
         }
     }

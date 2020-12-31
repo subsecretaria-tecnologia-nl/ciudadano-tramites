@@ -10,7 +10,7 @@
 				<div class="panel panel-default" >
  					<div class="panel-heading">
  						<div class="row">
-							<v-expansion-panels>
+							<v-expansion-panels accordion multiple hover style="z-index: inherit" v-model="panel">
 							    <v-expansion-panel v-for="(agrupacion, i) in agrupaciones" :key="i">
 							      	<v-expansion-panel-header >
 							        	{{ agrupacion.nombre_agrupacion }}
@@ -23,7 +23,7 @@
 										<div class="row">
 											<div  v-if="agrupacion.tipo === 'agrupacion'" class="col-lg-12">
 												<div class="col-md-12 col-lg-12">
-												    <div class="text-center">
+												    <div >
 														    <div class="custom-control custom-radio custom-control-inline">
 														      	<input type="radio" value="pf"  name="radioInline" class="custom-control-input" id="defaultInline2" v-model="tipoPersona" key="tipoPersona">
 														      	<!--<input  name="tipoPersona"  >-->
@@ -46,11 +46,11 @@
 												</div>
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
-			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || campo.tipo == 'file'? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
-												<div class="form-group fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
+												<div class=" fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
 											  		<label>{{ campo.nombre }}</label>
-											  		<input type="text" class="form-control form-control-solid form-control-lg"  
+											  		<input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important"  
 											  			:placeholder="[[campo.nombre]]" :id="[[campo.campo_id]]"
 											  			v-model="campo.valor"  @keyup="cambioModelo"  @focus="cambioModelo"/>
 													<small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
@@ -61,10 +61,10 @@
 											  	</div>
 
 											
-												<div class="form-group fv-plugins-icon-container"  v-else-if="campo.tipo === 'select'">
+												<div class=" fv-plugins-icon-container"  v-else-if="campo.tipo === 'select'">
 												  		<label>{{ campo.nombre }}</label>
-												  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]"
-												  			class="form-control form-control-solid form-control-lg"
+												  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]" 
+												  			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
 												  			v-model="campo.valor" @change="cambioModelo" >
 												  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 												  			:value="[[Object.keys(opcion)[0] ]]">
@@ -78,20 +78,20 @@
 												  		</small>
 												</div>
 												<div v-else-if="campo.tipo === 'option'">
-													<div class="form-group" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
-														<input type="radio" class=" form-control-solid"   
+													<div class="" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
+														<input type="radio" class=" "    
 															:id="[[campo.campo_id]]"
 														 	:name="[[campo.campo_id]]"
 														 	:value="[[Object.keys(opcion)[0] ]]" v-model="campo.valor" @change="cambioModelo" >
 														 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
 													</div>
 												</div>
-												<div v-else-if="campo.tipo === 'textbox'"  class="form-group fv-plugins-icon-container">
+												<div v-else-if="campo.tipo === 'textbox'"  class=" fv-plugins-icon-container">
 													<label>{{ campo.nombre }}</label>
-													<textarea 
+													<textarea  
 														:id="[[campo.campo_id]]"
 													 	:name="[[campo.campo_id]]" 
-													 	class="form-control form-control-solid form-control-lg" v-model="campo.valor"
+													 	class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" v-model="campo.valor"
 													 	@change="cambioModelo" ></textarea>
 													 	<small  class="form-text text-muted" v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
 												  			<span v-for="mensaje in campo.mensajes">
@@ -100,38 +100,40 @@
 												  		</small>
 													
 												</div>
-												<div v-else-if="campo.tipo == 'file'" class="form-group fv-plugins-icon-container">
+												<div v-else-if="campo.tipo == 'file'" class=" fv-plugins-icon-container">
 													<div class="input-group">
 													  <div class="input-group-prepend">
 													    <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
 													  </div>
 													  <div class="custom-file">
-													    <!-- <input type="file" id="file" name="file" class="custom-file-input"   @change="cambioModelo" aria-describedby="inputGroupFileAddon01"> -->
 														<input  
-															id="file"
+															:id="[[campo.campo_id]]"
 															:name="[[campo.campo_id]]" 
-															class="form-control form-control-solid form-control-lg" 
+															class="custom-file-input"  style="background-color: #e5f2f5 !important"
 															ref="fileInput"
 															type="file"
 															accept=".xlsx,.xls"
-															@change="fileSaved()"
+															@change="fileSaved(campo.campo_id)"
 														>
 														</input>
-													    <label class="custom-file-label" for="file">
+													    <label class="custom-file-label" :for="[[campo.campo_id]]">
 													    	<span v-if="file">{{file.name }}</span>
 													    	<span v-else-if="!file">Seleccione archivo</span>
 
 													    </label>
 													  </div>
 													</div>
-														<a href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+														<a v-if="campo.campo_id=82" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
 												<div   class="form-group fv-plugins-icon-container">
+													<div class="progress">
+														<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
 													<label>{{ campos.nombre }}</label>
 													<table class="table">
 														<thead>
 															<tr>
-																<th v-for="(registro , key)  in campos[0].registros[0]"  >
+																<th  v-for="(registro, key) in campos[0].registros[0]" :key="registro" >
 																		{{key}}
 																</th>
 																<th>
@@ -148,7 +150,10 @@
 																		{{registro.id}}	
 																</td>	
 																<td >
-																		<input type="checkbox" @change="check($event)" class="text-center" style="padding-left: 40%" v-model="selectedId">
+																	<input class="form-control" type="text" min="0" max="100">
+																</td>
+																<td >
+																		<input type="checkbox" @change="check($event)" :id="registro.id" :value="registro.id" class="text-center" style="margin-left: 40%" v-model="selectedId">
 																</td>
 															</tr>
 														</tbody>
@@ -156,6 +161,7 @@
 													
 												</div>
 
+												<code> {{campos}} </code>
 
 			 								</div>
 										</div>
@@ -164,7 +170,6 @@
 							</v-expansion-panels>
  						</div>
  		
-
  					</div>
  				</div>
 			</form>
@@ -203,6 +208,7 @@
 						"nombre_agrupacion":"Expediente"
 					}
 				],
+				panel : [0,1,2,3,4],
             }
         },
   
@@ -231,7 +237,7 @@
               	}
 	        } else {
 	        	this.obtenerCampos();
-	        }
+			}
         },
 
         methods: {
@@ -239,14 +245,23 @@
 		    cambioModelo(){
         		let camposAvalidar = [];
 		    	this.agrupaciones.forEach( agrupacion => camposAvalidar = camposAvalidar.concat( agrupacion.campos ) );
-		    	var fileInput = document.getElementById('file');
-		    	if( fileInput ){
-		    		this.file = fileInput.files[0];
-		    		this.files.push( {valor:this.file, nombre:this.file});
-		    		this.$emit('updatingFiles', this.files);
-		    	}
+
 		    	let formvALID = this.validarFormulario(camposAvalidar);
 
+		    	let archivos = this.campos.filter( campo => campo.tipo == 'file' );
+		    	if( archivos.length > 0){
+		    		this.files = [];
+		    		archivos.forEach( file =>{
+		    			var fileInput = document.getElementById(file.campo_id);
+		    			
+		    			if( fileInput ){
+		    				this.file = fileInput.files[0];
+		    				this.files.push( {valor:this.file, nombre:file.nombre});
+		    				this.$emit('updatingFiles', this.files);
+		    			}
+
+		    		});
+		    	}
 		    	if( formvALID ){
                 	let datosFormulario = {
                 		tramite: this.tramite,
@@ -283,7 +298,7 @@
 		    	try {
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
-					// this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
+					//this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 					this.agruparCampos();
 
 
@@ -362,9 +377,9 @@
 		    	}
 				this.campos[indiceCampo].valido = curpValido && requeridoValido;	
 			},
-			fileSaved(){
+			fileSaved(campo_id){
 
-				var file = document.getElementById('file')
+				var file = document.getElementById(campo_id);
 				if (file != null ) {
 					  file =file.files[0];
 					  console.log('file..' + file);

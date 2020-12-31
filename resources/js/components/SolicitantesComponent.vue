@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div v-if="listaSolicitantes.length > 0 && !agregarMas" class="row">
-            <div v-for="(sol, index) in listaSolicitantes" class="col-lg-12" style="border-bottom-width: 0.5px; border-bottom-color: rgba(156,156,156,0.5); border-bottom-style: solid; padding-bottom: 9px; margin-top: 5px;">
+            <div v-for="(sol, index) in listaSolicitantes" class="col-lg-12" style="padding-bottom: 9px; margin-top: 5px;">
                 <h6 class="font-weight-bolder mb-3">{{ sol.rfc }}</h6>
                 <div class="text-dark-50 line-height-lg">
                     <div class="float-lg-left">
@@ -39,41 +39,41 @@
             </div>
                 <div class="row" id="divPF" v-if="solicitante.tipoPersona == 'pf'">
                     <div class="col-xl-12">
-                        <div class="form-group">
+                        <div class="">
                             <label>RFC</label>
-                            <input type="text" placeholder="RFC " id="rfc" class="form-control form-control-solid form-control-lg"   v-model="solicitante.rfc">
+                            <input type="text" placeholder="RFC " id="rfc" class="form-control  form-control-lg "  style="background-color: #e5f2f5 !important"  v-model="solicitante.rfc">
                         </div>
                     </div>
                     <div class="col-xl-12">
-                        <div class="form-group">
+                        <div class="">
                             <label>Nombre</label>
-                            <input type="text" placeholder="Nombre " id="nombreSolicitante" class="form-control form-control-solid form-control-lg" v-model="solicitante.nombreSolicitante">
+                            <input type="text" placeholder="Nombre " id="nombreSolicitante" class="form-control form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.nombreSolicitante">
                         </div>
                     </div>
                     <div class="col-xl-6">
-                        <div class="form-group">
+                        <div class="">
                             <label>Apellido Paterno</label>
-                            <input type="text" placeholder="Apellido Paterno " id="apPatSolicitante" class="form-control form-control-solid form-control-lg" v-model="solicitante.apPat">
+                            <input type="text" placeholder="Apellido Paterno " id="apPatSolicitante" class="form-control form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.apPat">
                         </div>
                     </div>
                     <div class="col-xl-6">
-                        <div class="form-group">
+                        <div class="">
                             <label>Apellido Materno</label>
-                            <input type="text" placeholder="Apellido Materno " id="apMatSolicitante" class="form-control form-control-solid form-control-lg" v-model="solicitante.apMat">
+                            <input type="text" placeholder="Apellido Materno " id="apMatSolicitante" class="form-control  form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.apMat">
                         </div>
                     </div>
                 </div>
                 <div class="row" id="divPM" v-else-if="solicitante.tipoPersona == 'pm'">
                     <div class="col-xl-12">
-                        <div class="form-group">
+                        <div class="">
                             <label>RFC</label>
-                            <input type="text" placeholder="RFC " id="rfc" class="form-control form-control-solid form-control-lg" v-model="solicitante.rfc">
+                            <input type="text" placeholder="RFC " id="rfc" class="form-control  form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.rfc">
                         </div>
                     </div>
                     <div class="col-xl-12">
-                        <div class="form-group">
+                        <div class="">
                             <label>Razón Social</label>
-                            <input type="text" placeholder="Razón Social " id="razonSocial" class="form-control form-control-solid form-control-lg" v-model="solicitante.razonSocial">
+                            <input type="text" placeholder="Razón Social " id="razonSocial" class="form-control  form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.razonSocial">
                         </div>
                     </div>
                 </div>
