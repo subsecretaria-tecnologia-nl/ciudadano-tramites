@@ -51,6 +51,7 @@
 
 <script>
     export default {
+        props: ['infoGuardada'],
         data() {
             return {
                 datos:{
@@ -58,9 +59,11 @@
                 }
             }
         },
-        props: [],
         mounted() {
-            
+        },
+
+        created() {
+           this.datos = this.infoGuardada && this.infoGuardada.camposComplementaria ? this.infoGuardada.camposComplementaria : this.datos;
         },
 
         methods:{
