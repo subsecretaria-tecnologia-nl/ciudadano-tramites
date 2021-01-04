@@ -127,7 +127,7 @@
 												</div>
 												<div   class="form-group fv-plugins-icon-container">
 													<div class="progress">
-														<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+														<div class="progress-bar " role="progressbar" :style=" 'width: ' + progress + '%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 													</div>
 													<label>{{ campos.nombre }}</label>
 													<table class="table">
@@ -143,17 +143,17 @@
 														</thead>
 														<tbody>
 															<tr  v-for="(registro, key) in campos[0].registros"  :key="registro.nombre" >
-																<td >
+																<td>
 																		{{registro.nombre}}	
 																</td>	
-																<td >
+																<td>
 																		{{registro.id}}	
 																</td>	
-																<td >
-																	<input class="form-control" type="text" min="0" max="100">
+																<td>
+																	<input  :id="registro.id" class="form-control campo" type="number" min="0" max="100" @focusout="check()" >
 																</td>
-																<td >
-																		<input type="checkbox" @change="check($event)" :id="registro.id" :value="registro.id" class="text-center" style="margin-left: 40%" v-model="selectedId">
+																<td>
+																		<input type="checkbox" @change="check($event)"  :value="registro.id" class="text-center pl-4 checkbox"  v-model="selectedId">
 																</td>
 															</tr>
 														</tbody>
@@ -161,7 +161,7 @@
 													
 												</div>
 
-												<code> {{campos}} </code>
+												<!-- <code> {{campos}} </code> -->
 
 			 								</div>
 										</div>
@@ -183,6 +183,7 @@
         props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount'],
         data() {
             return {
+				progress: '',
 				selectedId: [],
                 campos: [], agrupaciones:[],
                 mostrar:false,
@@ -481,7 +482,18 @@
 
 			},
 			check: function (e ) {
+			let total = 0;
+                self = this;
+ 					Array.from(document.getElementsByClassName('checkbox')).forEach(function(row,index){
+                        if(document.getElementsByClassName('checkbox')[index].checked)
+                            total += parseInt(document.getElementsByClassName('campo')[index].value)>=0 ? parseInt(document.getElementsByClassName('campo')[index].value ):0;
+                        if(total > 100)
+                            throw alert("el porcentaje total no puede ser mayor de 100");
+                        self.progress = total;
+					});
+					
 				console.log(this.selectedId);
+				console.log('...' +  this.progress);
 			}
 
      	}	
