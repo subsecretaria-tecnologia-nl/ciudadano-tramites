@@ -86,10 +86,10 @@
 														 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
 													</div>
 												</div>
-												<div v-else-if="campo.tipo === 'textbox'"  class=" fv-plugins-icon-container">
+												<div v-else-if="campo.tipo === 'textbox' && (!campo.condition || campo.condition.view(agrupaciones))"  class=" fv-plugins-icon-container">
 													<label>{{ campo.nombre }}</label>
 													<textarea  
-														:id="[[campo.campo_id]]"
+														:id="[[campo.idElemento ? campo.idElemento : campo.campo_id]]"
 													 	:name="[[campo.campo_id]]" 
 													 	class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" v-model="campo.valor"
 													 	@change="cambioModelo" ></textarea>
@@ -143,7 +143,7 @@
 <script>
     export default {
 
-        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount'],
+        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada'],
         data() {
             return {
                 campos: [], agrupaciones:[],
@@ -154,6 +154,7 @@
                 tipoPersona:'pf',
                 consulta_api:'',
 				panel : [0,1,2,3,4],
+				motivoDeclaracion0:''
             }
         },
   
@@ -213,19 +214,15 @@
 
 		    		});
 		    	}
-		    	
-		    	console.log("los file")
-				console.log( JSON.parse( JSON.stringify( this.files ) ) );
 
-				console.log("los campos")
-				console.log( JSON.parse( JSON.stringify( camposAvalidar ) ) );
 		    	let formvALID = this.validarFormulario(camposAvalidar);
             	let datosFormulario = {
             		tramite: this.tramite,
             		campos: this.campos,
             		tipoPersona:this.tipoPersona,
             		consulta_api: this.consulta_api,
-            		formularioValido:formvALID
+            		formularioValido:formvALID,
+            		motivoDeclaracion0:this.motivoDeclaracion0
             	}
             	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
               
@@ -235,7 +232,7 @@
 
         	validarFormulario( camposAvalidar ){
         		let formularioValido = true;
-        		camposAvalidar.forEach( (campo) =>{
+        		camposAvalidar.forEach( (campo, indice) =>{
 					const campoOBJ = JSON.parse(JSON.stringify(campo));
 					this.isValido(campoOBJ);
         		});
@@ -245,8 +242,18 @@
         		}));    				
 		    			
                 camposValidados.forEach( (campo, indice) => {
-                	formularioValido = formularioValido && campo.valido;
+		    		formularioValido = formularioValido && campo.valido;
                 });
+
+                let campoMotivo = camposAvalidar.find( campo => {
+					return campo.nombre == "Motivo"
+				});
+
+				if( campoMotivo && $("#campo_motivo_declaracion_0").is(':visible') ){
+					formularioValido = formularioValido && !!campoMotivo.valor;
+					this.motivoDeclaracion0 = campoMotivo.valor;
+				}
+
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
 		    },
@@ -258,7 +265,14 @@
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 
-					console.log(  JSON.stringify( this.campos )  )
+					if( this.infoGuardada && this.infoGuardada.campos ){
+						this.tipoPersona = this.infoGuardada.tipoPersona;
+						this.campos.forEach( (campo) =>{	
+							campo.valor = this.infoGuardada.campos[ campo.campo_id ];
+							console.log( this.infoGuardada.campos[ campo.campo_id ] )
+						});
+					}
+					//console.log(  JSON.stringify( this.campos )  )
 					this.agruparCampos();
 
 
@@ -270,13 +284,63 @@
 		    },
 
 
+
 		    agruparCampos(){
-		    		let agrupaciones = this.campos.map( campo => {  return {agrupacion_id:campo.agrupacion_id, nombre_agrupacion: campo.nombre_agrupacion, campos:[] } }).filter( this.onlyUnique );
+		    		let agrupaciones = this.campos.map( (campo, index) => {  
+console.log("agrupaciones index=====================>")
+		    			console.log( index )
+		    			return {
+			    			agrupacion_id:campo.agrupacion_id, 
+			    			nombre_agrupacion: campo.nombre_agrupacion, 
+			    			campos:[],
+			    			orden_agrupacion: campo.orden_agrupacion 
+		    			} 
+		    		}).filter( this.onlyUnique );
 				  	agrupaciones = agrupaciones.map( agrupacion => {
 				  		agrupacion.campos = this.campos.filter(  campo => campo.agrupacion_id == agrupacion.agrupacion_id );
 				  		agrupacion.campos.sort(function(a,b) { return parseFloat(a.orden) - parseFloat(b.orden) } );
 				  		return agrupacion;
 				  	});
+
+				  	console.log( JSON.parse( JSON.stringify(  agrupaciones ) ) );
+				  	let agrupacionDatosImpuesto = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
+				  	let nombreCampoMotivo = 'Motivo';
+				  	if( agrupacionDatosImpuesto ){
+
+				  		let campo = {
+				  			idElemento:'campo_motivo_declaracion_0',
+							agrupacion_id: agrupacionDatosImpuesto.agrupacion_id,
+							//campo_id: 19
+							caracteristicas: '{"required":"true"}',
+							nombre: nombreCampoMotivo,
+							nombre_agrupacion: agrupacionDatosImpuesto.nombre_agrupacion,
+							orden: agrupacionDatosImpuesto.campos[ agrupacionDatosImpuesto.campos.length - 1 ].orden + 1,
+							//relationship: 245
+							tipo: "textbox",
+							condition:{
+								view: function(agrupaciones){
+									//console.log("cumple condicion");
+									let agrupacionDatosImpuesto = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
+									//Obtenemos campos diferentes a Motivo
+									let campos = agrupacionDatosImpuesto.campos.filter( campo => {
+										return campo.nombre != nombreCampoMotivo
+									});
+
+									let isDelacaracion0 = true;
+									campos.forEach( campo => {
+										isDelacaracion0 = isDelacaracion0 && parseFloat(campo.valor ) == 0;
+									});
+				  					//console.log( isDelacaracion0 );
+									return isDelacaracion0;
+								}
+							}			  			
+				  		}
+
+				  		agrupacionDatosImpuesto.campos.push( campo )
+
+				  						  		
+				  	}
+
 				  	this.datosPersonales = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Datos Personales' );
 					this.razonSocial = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Razón Social' );
 
@@ -284,8 +348,9 @@
 				  		agrupaciones = agrupaciones.filter( agrupacion => agrupacion.nombre_agrupacion != 'Datos Personales' && agrupacion.nombre_agrupacion != 'Razón Social'  );
 				  		agrupaciones.unshift( {nombre_agrupacion:'Tipo Persona',  tipo: 'agrupacion', grupos: { 'pf': this.datosPersonales, 'pm': this.razonSocial } } );
 				  	}
-				  	console.log( agrupaciones )
-				  	this.agrupaciones = agrupaciones;
+
+				  	this.agrupaciones = agrupaciones.sort(function(a,b) { return parseFloat(a.orden_agrupacion) - parseFloat(b.orden_agrupacion) } );
+				  	//this.agrupaciones = agrupaciones;
 
 		    },
 
@@ -302,55 +367,58 @@
 		    	var caracteristicasStr = campo.caracteristicas;
 
 		    	let indiceCampo = this.campos.findIndex( campoInARRAY => campoInARRAY.campo_id == campo.campo_id && campoInARRAY.agrupacion_id == campo.agrupacion_id );
-		    	this.campos[indiceCampo].mensajes = [];
-		    	try {
-		    		caracteristicas  = JSON.parse(  caracteristicasStr + '' );
-		    	}catch(err){
-		    		console.log(err);
-		    	}
 
-		    	if( caracteristicas.expreg){
-		    		var re = new RegExp(caracteristicas.expreg, "i");
-		    		curpValido =  re.test(campo.valor) ;
-		    		if(  !curpValido ){
-		    			let mensaje = { 
-		    				tipo:'regex',
-		    				mensajeStr: "El campo " + campo.nombre + " no es válido"
-		    			}
-		    			this.campos[indiceCampo].mensajes.push( mensaje );
-		    		}
-		    	} 
-		    	if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
-		    		
-		    		//if( campo.tipo == 'file' ){
+		    	if(indiceCampo >= 0){
+			    	this.campos[indiceCampo].mensajes = [];
+			    	try {
+			    		caracteristicas  = JSON.parse(  caracteristicasStr + '' );
+			    	}catch(err){
+			    		console.log(err);
+			    	}
+
+			    	if( caracteristicas.expreg){
+			    		var re = new RegExp(caracteristicas.expreg, "i");
+			    		curpValido =  re.test(campo.valor) ;
+			    		if(  !curpValido ){
+			    			let mensaje = { 
+			    				tipo:'regex',
+			    				mensajeStr: "El campo " + campo.nombre + " no es válido"
+			    			}
+			    			this.campos[indiceCampo].mensajes.push( mensaje );
+			    		}
+			    	} 
+			    	if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
+			    		
+			    		//if( campo.tipo == 'file' ){
+							//requeridoValido =  !!this.files.find( file => file.nombre == campo.nombre );
+			    		//} else {
+							requeridoValido =  !!campo.valor;
+			    		//}
+			    		if( !requeridoValido ){
+			    			let mensaje = { 
+			    				tipo:'required',
+			    				mensajeStr: "El campo " + campo.nombre + " es requerido"
+			    			}
+			    			this.campos[indiceCampo].mensajes.push( mensaje );
+			    		}
+			    	}
+			    	//los archivos se validan aparte
+			    	
+			    	if( campo.tipo == 'file' ){
 						requeridoValido =  !!this.files.find( file => file.nombre == campo.nombre );
-		    		//} else {
-						requeridoValido =  !!campo.valor;
-		    		//}
-		    		if( !requeridoValido ){
-		    			let mensaje = { 
-		    				tipo:'required',
-		    				mensajeStr: "El campo " + campo.nombre + " es requerido"
-		    			}
-		    			this.campos[indiceCampo].mensajes.push( mensaje );
-		    		}
-		    	}
-		    	//los archivos se validan aparte
-		    	
-		    	if( campo.tipo == 'file' ){
-					requeridoValido =  !!this.files.find( file => file.nombre == campo.nombre );
 
-					if( !requeridoValido ){
-		    			let mensaje = { 
-		    				tipo:'required',
-		    				mensajeStr: "El arvhivo " + campo.nombre + " es requerido"
-		    			}
-		    			this.campos[indiceCampo].mensajes.push( mensaje );
-		    		}
+						if( !requeridoValido ){
+			    			let mensaje = { 
+			    				tipo:'required',
+			    				mensajeStr: "El arvhivo " + campo.nombre + " es requerido"
+			    			}
+			    			this.campos[indiceCampo].mensajes.push( mensaje );
+			    		}
 
-		    	} 
-		    	console.log( JSON.parse( JSON.stringify(  this.campos  ) ) );
-				this.campos[indiceCampo].valido = curpValido && requeridoValido;	
+			    	} 
+			    	//console.log( JSON.parse( JSON.stringify(  this.campos  ) ) );
+					this.campos[indiceCampo].valido = curpValido && requeridoValido;	
+				}
 			},
 
 			fileSaved(campo_id){
