@@ -177,7 +177,7 @@
 						let tramitesJson = {};
 						tramitesJson.nombre = tramiteInarray.tramite;
 						tramitesJson.id_seguimiento = tramiteInarray.tramite_id;
-						tramitesJson.id_tipo_servicio = 397;//tramiteInarray.tramite_id;//397;//
+						tramitesJson.id_tipo_servicio = tramiteInarray.tramite_id;//397;//
 						tramitesJson.idSolicitante = soliciante.id; 
 						tramitesJson.id_tramite = soliciante.id;//soliciante.clave;
 						tramitesJson.auxiliar_1 = "";
@@ -206,8 +206,7 @@
 						
 					    	tramitesJson.datos_factura = tramitesJson.datos_solicitante;
 						}
-						//console.log("###info####")
-						console.log( JSON.parse( JSON.stringify(info) ) )
+
 						if( info.camposComplementaria && info.detalle && info.detalle.Complementaria){
 							tramitesJson.importe_tramite = info.detalle.Complementaria['L Cantidad a cargo'] ;
 							console.log("asdasdasdsad")
