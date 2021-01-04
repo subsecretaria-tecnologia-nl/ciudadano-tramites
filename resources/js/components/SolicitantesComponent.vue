@@ -97,8 +97,14 @@
 
 <script>
     export default {
-        props: ['tramite'],
+        props: ['tramite', 'solicitantesGuardados'],
         mounted() {
+            console.log( this.solicitantesGuardados )
+            let solicitantesGuardados = this.solicitantesGuardados.filter( Boolean );
+            if( solicitantesGuardados && solicitantesGuardados.length > 0){
+                this.listaSolicitantes = solicitantesGuardados;
+                this.guardarInStorage();
+            }
             if (localStorage.getItem('listaSolicitantes')) {
               try {
                 this.listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
@@ -106,6 +112,7 @@
                 localStorage.removeItem('listaSolicitantes');
               }
             }
+            
             this.$emit('updatingSolicitante', this.listaSolicitantes.length > 0);
         },
 
@@ -121,6 +128,7 @@
   
         methods: {
             agregar: function (event) {
+                this.solicitante.id=0;
                 if( this.solicitante.tipoPersona == 'pf' ){
                     if(!!this.solicitante.rfc && !!this.solicitante.nombreSolicitante && !!this.solicitante.apPat){
                         this.listaSolicitantes.push( this.solicitante );
