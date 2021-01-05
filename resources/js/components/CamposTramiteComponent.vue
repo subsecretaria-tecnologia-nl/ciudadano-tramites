@@ -105,43 +105,44 @@
 												  		</small>
 													
 												</div>
-												<div v-else-if="campo.tipo == 'file'" class=" fv-plugins-icon-container">
+												<div v-else-if="campo.tipo == 'file' && JSON.parse(campo.caracteristicas).tipo != 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
 													<div class="input-group">
-													  	<div class="input-group-prepend">
-													  		<span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
-
-													  	</div>
-														<div class="custom-file"  v-if="campo.nombre == '*Expediente'">
+													  <div class="input-group-prepend">
+													  <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
+													  </div>
+														<div class="custom-file">
 															<input  
-																:id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]"
-																:name="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]" 
+																:id="[[campo.campo_id]]"
+																:name="[[campo.campo_id]]" 
+																class="custom-file-input"  style="background-color: #e5f2f5 !important"
+																ref="fileInput"
+																type="file" @change="cambioModelo"/>
+															<label class="custom-file-label" :for="[[campo.campo_id]]">
+																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> 	{{ campo.attach || 'Seleccione archivo' }}
+																</span>
+															</label>
+														</div>
+													</div>
+												</div>
+												<div v-else-if="JSON.parse(campo.caracteristicas).tipo == 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
+													<div class="input-group">
+													  <div class="input-group-prepend">
+													  <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
+													  </div>	
+														<div class="custom-file">
+															<input  
+																:id="[[campo.campo_id]]"
+																:name="[[campo.campo_id]]" 
 																class="custom-file-input"  style="background-color: #e5f2f5 !important"
 																ref="fileInput"
 																type="file"
 																accept=".xlsx,.xls"
-																@change="fileSaved(campo.campo_id + '-' + campo.nombre.replace('*', ''))"
-															/>
-															<label class="custom-file-label" :for="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]">
+																@change="fileSaved(campo.campo_id)"/>
+															<label class="custom-file-label" :for="[[campo.campo_id]]">
 																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> 	{{ campo.attach || 'Seleccione archivo' }}
 																</span>
-
 															</label>
 													  	</div>
-														<div class="custom-file" v-if="campo.nombre != '*Expediente'">
-															<input  
-																:id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]"
-																:name="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]" 
-																class="custom-file-input"  style="background-color: #e5f2f5 !important"
-																ref="fileInput"
-																type="file"
-															/>
-															<label class="custom-file-label" :for="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]">
-																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'">
-																  {{ campo.attach || 'Seleccione archivo' }}
-																</span>
-
-															</label>
-														</div>
 													</div>
 													<a v-if="/^{*}|Expediente$/.test(campo.nombre) == true" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
@@ -237,7 +238,7 @@
 		    	if( archivos.length > 0){
 		    		//this.files = [];
 		    		archivos.forEach( file =>{
-		    			var fileInput = document.getElementById(file.campo_id + '-' + file.nombre.replace('*', ''));
+		    			var fileInput = document.getElementById(file.campo_id /*+ '-' + file.nombre.replace('*', '')*/);
 		    			if( fileInput && fileInput.files.length > 0  ){
 		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name );
 		    				this.file = fileInput.files[0];
@@ -346,7 +347,7 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 						console.log( JSON.parse( JSON.stringify( this.files) ) )
 						this.$emit('updatingFiles', this.files);
 
-						var fileInput = document.getElementById(headers.campo_id + '-' + headers.campo_nombre.replace('*', ''));
+						var fileInput = document.getElementById(headers.campo_id /*+ '-' + headers.campo_nombre.replace('*', '')*/);
 	  					fileInput.files.push(fileNew);
 
 					})
@@ -494,10 +495,14 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 				}
 			},
 
-			fileSaved(campo_id){
+			fileValido(){
+				return this.cambioModelo();
+			},
 
+			fileSaved(campo_id){
+console.log("SADSAD")
 				var file = document.getElementById(campo_id);
-				
+				console.log(file)
 				if (file != null ) {
 					  file =file.files[0];
 					  console.log('file..' + file);
@@ -536,7 +541,7 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 											// var key = Object.keys(rowObject[0]);
 											var value = rowObject[i][expName];
 											if ( (/^([0-9]{3,3})(-)?([0-9]{3,3})(-)?([0-9]{3,3})$/).test(value) == false ) {
-												alert('el documento excel no cuenta con el formato requerido error: "FF0213120"');
+												alert('el documento excel no cuenta con el formato requerido error: "el formato de expediente completo es invalido"');
 												break;
 											}
 									}
@@ -569,19 +574,19 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 												valueLote = valueLote.toString().padStart(3, '0');
 											
 											if ( /^([0-9]){1,3}$/.test(valueMunicipio) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191" ')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto" ')
 												break;
 											}
 											if ( /^([0-9]){1,3}$/.test(valueRegion) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
 												break;
 											}
 											if ( /^([0-9]){1,3}$/.test(valueManzana) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
 												break;
 											}
 											if ( /^([0-9]){1,3}$/.test(valueLote) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
 												break;
 											}
 										}
