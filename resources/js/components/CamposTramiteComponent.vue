@@ -100,12 +100,34 @@
 												  		</small>
 													
 												</div>
-												<div v-else-if="campo.tipo == 'file'" class=" fv-plugins-icon-container">
+												<div v-else-if="campo.tipo == 'file' && JSON.parse(campo.caracteristicas).tipo != 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
 													<div class="input-group">
 													  <div class="input-group-prepend">
 													  <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
 													  </div>
-														<div class="custom-file"  v-if="campo.nombre == '*Expediente'">
+														<div class="custom-file">
+															<input  
+																:id="[[campo.campo_id]]"
+																:name="[[campo.campo_id]]" 
+																class="custom-file-input"  style="background-color: #e5f2f5 !important"
+																ref="fileInput"
+																type="file"
+															>
+															</input>
+															<label class="custom-file-label" :for="[[campo.campo_id]]">
+																<span v-if="file">{{file.name }}</span>
+																<span v-else-if="!file">Seleccione archivo</span>
+
+															</label>
+														</div>
+													</div>
+												</div>
+												<div v-else-if="JSON.parse(campo.caracteristicas).tipo == 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
+													<div class="input-group">
+													  <div class="input-group-prepend">
+													  <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
+													  </div>	
+														<div class="custom-file">
 															<input  
 																:id="[[campo.campo_id]]"
 																:name="[[campo.campo_id]]" 
@@ -122,21 +144,6 @@
 
 															</label>
 													  	</div>
-														<div class="custom-file" v-if="campo.nombre != '*Expediente'">
-															<input  
-																:id="[[campo.campo_id]]"
-																:name="[[campo.campo_id]]" 
-																class="custom-file-input"  style="background-color: #e5f2f5 !important"
-																ref="fileInput"
-																type="file"
-															>
-															</input>
-															<label class="custom-file-label" :for="[[campo.campo_id]]">
-																<span v-if="file">{{file.name }}</span>
-																<span v-else-if="!file">Seleccione archivo</span>
-
-															</label>
-														</div>
 													</div>
 													<a v-if="/^{*}|Expediente$/.test(campo.nombre) == true" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
@@ -376,7 +383,7 @@
 											// var key = Object.keys(rowObject[0]);
 											var value = rowObject[i][expName];
 											if ( (/^([0-9]{3,3})(-)?([0-9]{3,3})(-)?([0-9]{3,3})$/).test(value) == false ) {
-												alert('el documento excel no cuenta con el formato requerido error: "FF0213120"');
+												alert('el documento excel no cuenta con el formato requerido error: "el formato de expediente completo es invalido"');
 												break;
 											}
 									}
@@ -409,19 +416,19 @@
 												valueLote = valueLote.toString().padStart(3, '0');
 											
 											if ( /^([0-9]){1,3}$/.test(valueMunicipio) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191" ')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto" ')
 												break;
 											}
 											if ( /^([0-9]){1,3}$/.test(valueRegion) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
 												break;
 											}
 											if ( /^([0-9]){1,3}$/.test(valueManzana) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
 												break;
 											}
 											if ( /^([0-9]){1,3}$/.test(valueLote) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "DD13913191"')
+												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
 												break;
 											}
 										}
