@@ -57,7 +57,10 @@
                                             <!--begin: Wizard Step 1 Campos tramite-->
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
                                               <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles' && camposGuardadosObtenidos">
-                                                <radio-option-component :default="tipoTramite" @valueRadio="cambioRadio"></radio-option-component>
+                                                <radio-option-component 
+                                                  :default="tipoTramite" 
+                                                  @valueRadio="cambioRadio"
+                                                  :disabledDefault='tipoTramiteDisabled'></radio-option-component>
                                               </div>
                                               <div v-if="tipoTramite == 'normal' && camposGuardadosObtenidos" >
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
@@ -67,9 +70,6 @@
                                                   <formulario-complementaria-component @updatingScore="updateScore" 
                                                   @sendData="setDatosComplementaria" :infoGuardada="infoGuardada">
                                                   </formulario-complementaria-component>
-                                                  <pre>
-                                                    {{infoGuardada | json}}
-                                                  </pre>
                                               </div>
                                             </div>
                                             <!--end: Wizard Step 1-->
@@ -130,15 +130,15 @@
     export default {
         props: ['tramite','idUsuario'],
         mounted() {
-            let clave = "e20c4116-7062-455d-b398-375201ee10f3";
-            //let clave = false;
+            //let clave = "015c1ea7-6967-4209-a708-1ac71dd29e95";
+            let clave = false;
             this.tramite.id_seguimiento = clave ? clave : uuid.v4(); // si la clave ya existe usarla
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
 
-            //this.camposGuardadosObtenidos = true;
-            this.obtenerCamposTemporales();
+            this.camposGuardadosObtenidos = true;
+            //this.obtenerCamposTemporales();
         },
 
         data() {
@@ -155,7 +155,8 @@
                 datosComplementaria:[],
                 infoGuardada:{}, camposGuardadosObtenidos: false,
                 infoGuardadaFull:{}, 
-                solicitantesGuardados:[]
+                solicitantesGuardados:[],
+                tipoTramiteDisabled:''
             }
         },
 
@@ -170,6 +171,7 @@
             },
 
             setDatosComplementaria(datos){
+              console.log( JSON.parse( JSON.stringify( datos ) ) );
               this.datosComplementaria = datos;
             },
 
@@ -243,15 +245,15 @@
               }
               formData.append('user_id', this.idUsuario );
               formData.append('info', JSON.stringify(informacion) );
-              formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
+              if( listaSolicitantes && listaSolicitantes.length > 0 ){
+                formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
+              }
               formData.append('clave', tramite.id_seguimiento );
               formData.append('catalogo_id', tramite.id_tramite );
               if(  this.infoGuardadaFull && this.infoGuardadaFull.id  ){
                 formData.append('id', this.infoGuardadaFull.id );
-                formData.append('status', 80 );
+                //formData.append('status', 80 );
               }
-
-              //formData.append('ids', JSON.stringify( listaSolicitantes.map( solicitante => {return { id:solicitante.id }} ) ) );
               return formData;
             },
 
@@ -274,38 +276,11 @@
                 let listaSolicitantes = this.getStorage( 'listaSolicitantes', 2 );
                 let tramite = this.getStorage( 'tramite' );
                 let datosFormulario = this.getStorage( 'datosFormulario', 1);
-
                 return [listaSolicitantes, tramite, datosFormulario];
             },
 
             async agregar( type){
-                let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
-                let listaSolicitantes = datosTabs[0];
-                let tramite = datosTabs[1];
-                let datosFormulario = datosTabs[2];
-
-
-                let informacion = {
-                  costo_final:tramite.detalle.costo_final,
-                  partidas: tramite.partidas,
-                  detalle: tramite.detalle,
-                  tipoPersona:datosFormulario.tipoPersona,
-                  mottivoDeclaracion0: datosFormulario.motivoDeclaracion0
-                }
-                
-                let camposObj = {};
-                if( this.tipoTramite == 'normal' ){
-                  datosFormulario.campos.forEach( campo =>  {
-                    camposObj[campo.campo_id] = campo.valor;
-                  });
-                  informacion.campos=camposObj;
-                } else {
-                  informacion.camposComplementaria = this.datosComplementaria;
-                }
-
-                
-
-                let formData = this.buildFormData( informacion, listaSolicitantes, tramite );
+                let formData = this.getFormData();
 
                 if( type == "finalizar" ){
                   this.finalizando = true;
@@ -348,41 +323,45 @@
               this.tipoTramite = valor;
             },
 
-            async saveTemp(){
-              console.log("los campos2re")
-              console.log( JSON.parse( JSON.stringify( this.infoGuardadaFull ) ) );
-              console.log( this.infoGuardadaFull.id )
-              
-              let guardandoTemporarmente = true;
-              let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
-
-                let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
-                let listaSolicitantes = datosTabs[0];
-                let tramite = datosTabs[1];
-                let datosFormulario = datosTabs[2];
-
+            getInformacion(tramite, datosFormulario){
                 let informacion = {
                   costo_final: tramite &&  tramite.detalle ? tramite.detalle.costo_final: null,
                   partidas: tramite.partidas,
-                  detalle: tramite.detalle,
-                  mottivoDeclaracion0: datosFormulario.motivoDeclaracion0
-                  
+                  detalle: tramite.detalle
                 }
-                
+                if( datosFormulario && datosFormulario.mottivoDeclaracion0 ){
+                  informacion.mottivoDeclaracion0 = datosFormulario.motivoDeclaracion0
+                }
                 let camposObj = {};
                 if( this.tipoTramite == 'normal' ){
                   datosFormulario.campos.forEach( campo =>  {
-                    camposObj[campo.campo_id] = campo.valor;
+                    if( campo.valido ){
+                      camposObj[campo.campo_id] = campo.valor;
+                    }
                   });
                   informacion.campos=camposObj;
                   informacion.tipoPersona=datosFormulario.tipoPersona
                 } else {
                   informacion.camposComplementaria = this.datosComplementaria;
                 }
+                return informacion;
+            },
 
-                
+            getFormData(){
+              let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
+              let listaSolicitantes = datosTabs[0];
+              let tramite = datosTabs[1];
+              let datosFormulario = datosTabs[2];
+              let informacion = this.getInformacion( tramite, datosFormulario );
+              return this.buildFormData( informacion, listaSolicitantes, tramite );
+            },
 
-                let formData = this.buildFormData( informacion, listaSolicitantes, tramite );
+
+
+            async saveTemp(){              
+              let guardandoTemporarmente = true;
+              let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
+              let formData = this.getFormData();
 
                 try {
                   let response = await axios.post(url, formData, {
@@ -390,13 +369,10 @@
                         'Content-Type': 'application/json',
                     },
                   });
-
-                  
                   
                   Command: toastr.success("Listo!", response.data.Message);
                   
-                  
-//                  redirect("/nuevo-tramite");
+                  //redirect("/nuevo-tramite");
 
                 } catch (error) {
                   console.log(error);
@@ -419,18 +395,23 @@
 
                 this.infoGuardada =  JSON.parse( response.data[0].info );
 
+                if( response.data[0].archivos.length > 0 ){
+                  this.infoGuardada.archivosGuardados = response.data[0].archivos;
+                }
+                console.log( JSON.parse( JSON.stringify( response.data[0]  ) ) )
+
                 this.tipoTramite = this.infoGuardada.campos ? 'normal' : 'complementaria';
+                this.tipoTramiteDisabled = !this.infoGuardada.campos ? 'normal' : 'complementaria';
                 this.camposGuardadosObtenidos = true;
 
-                console.log( "###############################" );
-                console.log( JSON.parse( JSON.stringify( response.data ) ) );
                 this.solicitantesGuardados = response.data.map( solicitante => {
                   let solicitanteNuevo = JSON.parse(solicitante.info).solicitante;
-                  solicitanteNuevo.id = solicitante.id; 
+                  if( solicitanteNuevo ){
+                    solicitanteNuevo.id = solicitante.id;
+                  } 
                   return solicitanteNuevo;
                 });
-                            console.log( "#################solicitantes##############" );
-                console.log( JSON.parse( JSON.stringify(this.solicitantesGuardados ) ) );    
+  
               } catch (error) {
                   console.log(error);
               }   

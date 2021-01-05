@@ -23,6 +23,7 @@
 		<!--end::Global Theme Styles-->
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
+		<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 		{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 		<script src="{{ assets("js/jquery.min.js") }}"></script>
 

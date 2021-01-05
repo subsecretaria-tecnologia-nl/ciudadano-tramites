@@ -45,8 +45,7 @@
                 </div>
             </div>
         </form>
-
-    </div> 
+     </div> 
 </template>
 
 <script>
@@ -63,11 +62,18 @@
         },
 
         created() {
+            console.log( JSON.parse( JSON.stringify( this.infoGuardada ) ) );
            this.datos = this.infoGuardada && this.infoGuardada.camposComplementaria ? this.infoGuardada.camposComplementaria : this.datos;
+           if(this.infoGuardada && this.infoGuardada.camposComplementaria){
+                this.cambioModelo();
+           }
         },
 
         methods:{
             cambioModelo(){
+
+
+
                 let formularioValido = true;
                 let claves = Object.keys(this.datos); 
                 console.log( claves )

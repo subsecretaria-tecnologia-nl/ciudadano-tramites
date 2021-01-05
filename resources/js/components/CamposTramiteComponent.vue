@@ -47,6 +47,11 @@
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
 			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || campo.tipo == 'file'? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+<!--
+<input-component :campo="campo" :showMensajes="showMensajes" :estadoFormulario="comprobarEstadoFormularioCount" v-if="campo.tipo === 'input'"></input-component>
+
+-->
+
 
 												<div class=" fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
 											  		<label>{{ campo.nombre }}</label>
@@ -102,45 +107,80 @@
 												</div>
 												<div v-else-if="campo.tipo == 'file'" class=" fv-plugins-icon-container">
 													<div class="input-group">
-													  <div class="input-group-prepend">
-													    <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
-													  </div>
-													  <div class="custom-file">
-														<input  
-															:id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]"
-															:name="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]" 
-															class="custom-file-input"  style="background-color: #e5f2f5 !important"
-															ref="fileInput"
-															type="file"
-															accept=".xlsx,.xls"
-															@change="fileSaved(campo.campo_id + '-' + campo.nombre.replace('*', ''))"
-														>
-														</input>
-													    <label class="custom-file-label" :for="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]">
-													    	<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> Seleccione archivo</span>
-													    	
+													  	<div class="input-group-prepend">
+													  		<span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
 
-													    </label>
-													  </div>
+													  	</div>
+														<div class="custom-file"  v-if="campo.nombre == '*Expediente'">
+															<input  
+																:id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]"
+																:name="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]" 
+																class="custom-file-input"  style="background-color: #e5f2f5 !important"
+																ref="fileInput"
+																type="file"
+																accept=".xlsx,.xls"
+																@change="fileSaved(campo.campo_id + '-' + campo.nombre.replace('*', ''))"
+															/>
+															<label class="custom-file-label" :for="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]">
+																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> 	{{ campo.attach || 'Seleccione archivo' }}
+																</span>
+
+															</label>
+													  	</div>
+														<div class="custom-file" v-if="campo.nombre != '*Expediente'">
+															<input  
+																:id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]"
+																:name="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]" 
+																class="custom-file-input"  style="background-color: #e5f2f5 !important"
+																ref="fileInput"
+																type="file"
+															/>
+															<label class="custom-file-label" :for="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]">
+																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'">
+																  {{ campo.attach || 'Seleccione archivo' }}
+																</span>
+
+															</label>
+														</div>
 													</div>
-														<a v-if="campo.campo_id==82" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
+													<a v-if="/^{*}|Expediente$/.test(campo.nombre) == true" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
-
 			 								</div>
 										</div>
 							      	</v-expansion-panel-content>
 							    </v-expansion-panel>
 							</v-expansion-panels>
  						</div>
- 		
  					</div>
  				</div>
 			</form>
 		</div>
     </div>
+
 </template>
 
 <script>
+	const getFile = (url, nombreArchivo, campo) => {
+	  return new Promise((resolve, reject) => {
+	    axios({
+	      	method: "get",
+	      	url,
+	      	responseType: "ArrayBuffer",
+	      	headers: {
+				'nombreArchivo': nombreArchivo,
+				campo_id: campo.campo_id,
+				campo_nombre:campo.nombre
+			}
+	    })
+	      .then(data => {
+	        resolve(data);
+	      })
+	      .catch(error => {
+	        reject(error.toString());
+	      });
+	  });
+	}
+
     export default {
 
         props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada'],
@@ -159,7 +199,6 @@
         },
   
         created() {
-
 			if (localStorage.getItem('datosFormulario')) {
               	try {
                 	let datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
@@ -182,6 +221,7 @@
                 	this.obtenerCampos();
               	}
 	        } else {
+	        	//localStorage.removeItem('datosFormulario');
 	        	this.obtenerCampos();
 			}
         },
@@ -192,29 +232,28 @@
         		let camposAvalidar = [];
 		    	this.agrupaciones.forEach( agrupacion => camposAvalidar = camposAvalidar.concat( agrupacion.campos ) );
 
-		    	
-
 		    	let archivos = this.campos.filter( campo => campo.tipo == 'file' );
 
 		    	if( archivos.length > 0){
-		    		this.files = [];
+		    		//this.files = [];
 		    		archivos.forEach( file =>{
-		    			
 		    			var fileInput = document.getElementById(file.campo_id + '-' + file.nombre.replace('*', ''));
-		    			
-		    			
-		    			if( fileInput && fileInput.files.length > 0){
-		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name )
+		    			if( fileInput && fileInput.files.length > 0  ){
+		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name );
 		    				this.file = fileInput.files[0];
 		    				this.files.push( {valor:this.file, nombre:file.nombre});
 		    				this.$emit('updatingFiles', this.files);
+		    			} else if( file.archivoGuardado ){
+		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text( this.files[0].valor.name );
+		    			
 		    			} else {
 		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  'Seleccione archivo' );
 		    			}
 
 		    		});
-		    	}
+		    	} 
 
+console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 		    	let formvALID = this.validarFormulario(camposAvalidar);
             	let datosFormulario = {
             		tramite: this.tramite,
@@ -260,6 +299,8 @@
 
 		    async obtenerCampos(){
 		    	let url = process.env.APP_URL + "/getCampos";
+				let promises = [];
+		    	let linksArchivos = [];
 		    	try {
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
@@ -269,16 +310,54 @@
 						this.tipoPersona = this.infoGuardada.tipoPersona;
 						this.campos.forEach( (campo) =>{	
 							campo.valor = this.infoGuardada.campos[ campo.campo_id ];
-							console.log( this.infoGuardada.campos[ campo.campo_id ] )
+							if( campo.tipo == 'file' ){
+								let infoArchivoGuardado = this.infoGuardada.archivosGuardados.find( archivo => archivo.mensaje == campo.nombre );
+								campo.archivoGuardado = true;
+								let urlFile = process.env.TESORERIA_HOSTNAME + '/download/' + infoArchivoGuardado.attach;
+								promises.push(getFile( urlFile, infoArchivoGuardado.attach, campo ));
+							}
+							
 						});
+
+
 					}
 					//console.log(  JSON.stringify( this.campos )  )
-					this.agruparCampos();
+					//this.cambioModelo();
+					//this.agruparCampos();
 
 
 				} catch (error) {
 				  	console.log(error);
 				}
+  
+
+		       Promise.all(promises).then(( respuestas ) => {
+					respuestas.forEach( (res) => {
+						const blob = new Blob([res.data], { type: res.headers['content-type'] });
+						var fileNew = new File([blob], res.config.headers.nombreArchivo , {
+							type: res.headers['content-type'], 
+							lastModified: Date.now()
+						});
+
+						
+						let headers = res.config.headers;
+						this.files.push( {valor:fileNew, nombre: headers.campo_nombre});
+						console.log( "lista de los arvhivos" )
+						console.log( JSON.parse( JSON.stringify( this.files) ) )
+						this.$emit('updatingFiles', this.files);
+
+						var fileInput = document.getElementById(headers.campo_id + '-' + headers.campo_nombre.replace('*', ''));
+	  					fileInput.files.push(fileNew);
+
+					})
+		       	}).catch(errors => {
+				  // react on errors.
+				}).finally(() => {
+				    
+					this.agruparCampos();
+					let segg= this;
+					setTimeout(function(){ segg.cambioModelo(); }, 1000);
+				});
 				this.mostrar = true;
 				
 		    },
@@ -287,8 +366,6 @@
 
 		    agruparCampos(){
 		    		let agrupaciones = this.campos.map( (campo, index) => {  
-console.log("agrupaciones index=====================>")
-		    			console.log( index )
 		    			return {
 			    			agrupacion_id:campo.agrupacion_id, 
 			    			nombre_agrupacion: campo.nombre_agrupacion, 
@@ -302,7 +379,6 @@ console.log("agrupaciones index=====================>")
 				  		return agrupacion;
 				  	});
 
-				  	console.log( JSON.parse( JSON.stringify(  agrupaciones ) ) );
 				  	let agrupacionDatosImpuesto = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
 				  	let nombreCampoMotivo = 'Motivo';
 				  	if( agrupacionDatosImpuesto ){
@@ -319,7 +395,6 @@ console.log("agrupaciones index=====================>")
 							tipo: "textbox",
 							condition:{
 								view: function(agrupaciones){
-									//console.log("cumple condicion");
 									let agrupacionDatosImpuesto = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
 									//Obtenemos campos diferentes a Motivo
 									let campos = agrupacionDatosImpuesto.campos.filter( campo => {
@@ -330,7 +405,6 @@ console.log("agrupaciones index=====================>")
 									campos.forEach( campo => {
 										isDelacaracion0 = isDelacaracion0 && parseFloat(campo.valor ) == 0;
 									});
-				  					//console.log( isDelacaracion0 );
 									return isDelacaracion0;
 								}
 							}			  			
@@ -416,7 +490,6 @@ console.log("agrupaciones index=====================>")
 			    		}
 
 			    	} 
-			    	//console.log( JSON.parse( JSON.stringify(  this.campos  ) ) );
 					this.campos[indiceCampo].valido = curpValido && requeridoValido;	
 				}
 			},
