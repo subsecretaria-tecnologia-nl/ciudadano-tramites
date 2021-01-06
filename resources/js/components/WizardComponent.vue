@@ -108,7 +108,7 @@
     export default {
         props: ['tramite','idUsuario'],
         mounted() {
-            //let clave = "015c1ea7-6967-4209-a708-1ac71dd29e95";
+            //let clave = "ff9bfabf-531b-4458-8930-1a0d5475df88";
             let clave = false;
             this.tramite.id_seguimiento = clave ? clave : uuid.v4(); // si la clave ya existe usarla
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())

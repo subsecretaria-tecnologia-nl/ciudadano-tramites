@@ -254,7 +254,6 @@
 		    		});
 		    	} 
 
-console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 		    	let formvALID = this.validarFormulario(camposAvalidar);
             	let datosFormulario = {
             		tramite: this.tramite,
@@ -319,32 +318,19 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 							}
 							
 						});
-
-
 					}
-					//console.log(  JSON.stringify( this.campos )  )
-					//this.cambioModelo();
-					//this.agruparCampos();
-
-
 				} catch (error) {
 				  	console.log(error);
 				}
-  
-
-		       Promise.all(promises).then(( respuestas ) => {
+		       	Promise.all(promises).then(( respuestas ) => {
 					respuestas.forEach( (res) => {
 						const blob = new Blob([res.data], { type: res.headers['content-type'] });
 						var fileNew = new File([blob], res.config.headers.nombreArchivo , {
 							type: res.headers['content-type'], 
 							lastModified: Date.now()
 						});
-
-						
 						let headers = res.config.headers;
 						this.files.push( {valor:fileNew, nombre: headers.campo_nombre});
-						console.log( "lista de los arvhivos" )
-						console.log( JSON.parse( JSON.stringify( this.files) ) )
 						this.$emit('updatingFiles', this.files);
 
 						var fileInput = document.getElementById(headers.campo_id /*+ '-' + headers.campo_nombre.replace('*', '')*/);
@@ -354,7 +340,7 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 		       	}).catch(errors => {
 				  // react on errors.
 				}).finally(() => {
-				    
+					console.log("no hay archivos")
 					this.agruparCampos();
 					let segg= this;
 					setTimeout(function(){ segg.cambioModelo(); }, 1000);
@@ -362,8 +348,6 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 				this.mostrar = true;
 				
 		    },
-
-
 
 		    agruparCampos(){
 		    		let agrupaciones = this.campos.map( (campo, index) => {  
@@ -425,7 +409,6 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 				  	}
 
 				  	this.agrupaciones = agrupaciones.sort(function(a,b) { return parseFloat(a.orden_agrupacion) - parseFloat(b.orden_agrupacion) } );
-				  	//this.agrupaciones = agrupaciones;
 
 		    },
 
@@ -500,7 +483,6 @@ console.log( JSON.parse(JSON.stringify( camposAvalidar ) ) )
 			},
 
 			fileSaved(campo_id){
-console.log("SADSAD")
 				var file = document.getElementById(campo_id);
 				console.log(file)
 				if (file != null ) {
