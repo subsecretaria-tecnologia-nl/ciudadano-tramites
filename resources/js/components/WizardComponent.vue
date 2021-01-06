@@ -137,8 +137,13 @@
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
 
-            this.camposGuardadosObtenidos = true;
-            //this.obtenerCamposTemporales();
+            
+            if( clave ){
+               this.obtenerCamposTemporales(); 
+            } else {
+              this.camposGuardadosObtenidos = true;
+            }
+            //
         },
 
         data() {
@@ -171,7 +176,6 @@
             },
 
             setDatosComplementaria(datos){
-              console.log( JSON.parse( JSON.stringify( datos ) ) );
               this.datosComplementaria = datos;
             },
 
@@ -398,8 +402,6 @@
                 if( response.data[0].archivos.length > 0 ){
                   this.infoGuardada.archivosGuardados = response.data[0].archivos;
                 }
-                console.log( JSON.parse( JSON.stringify( response.data[0]  ) ) )
-
                 this.tipoTramite = this.infoGuardada.campos ? 'normal' : 'complementaria';
                 this.tipoTramiteDisabled = !this.infoGuardada.campos ? 'normal' : 'complementaria';
                 this.camposGuardadosObtenidos = true;
