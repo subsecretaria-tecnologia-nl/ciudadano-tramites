@@ -110,9 +110,12 @@
                             "status":5,// stattus 5?
                             "id_transaccion": idTRansaccion,
                             "id_transaccion_motor": responseTransaccion.data.response.folio,
-                            "json_envio": JSON.stringify(data),
-                            json_recibo:JSON.stringify(responseTransaccion.data)
+                            //"json_envio": JSON.stringify(data),
+                            //json_recibo:JSON.stringify(responseTransaccion.data)
+                            json_envio: data,
+                            json_recibo:responseTransaccion.data
                         }
+
                         this.guardarTransaccionMotor( dataMotor );
 
                         this.mostrarCancelarPago = true;
@@ -124,8 +127,8 @@
                             "status":5,
                             "id_transaccion": null,
                             "id_transaccion_motor":null,
-                            json_envio: JSON.stringify(data),
-                            json_recibo:JSON.stringify(error.response)
+                            json_envio: data,
+                            json_recibo:error.response
                         }
                         this.guardarTransaccionMotor( dataMotor );
                         //this.mostrarMetodos = false;
