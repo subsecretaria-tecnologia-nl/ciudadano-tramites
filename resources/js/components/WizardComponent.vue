@@ -6,45 +6,23 @@
                         <!--begin: Wizard Nav-->
                         <div class="wizard-nav">
                             <div class="wizard-steps">
-                                <!--begin::Wizard Step 1 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="current" id="tab1" v-on:click="goTo(1)">
+                                <!--begin::Wizard StepS Nav-->
+                                <div v-for="(step, i) in steps" class="wizard-step" data-wizard-type="step" :data-wizard-state="step.state" :id="step.id" v-on:click="goTo(step.clickGotTo)">
                                     <div class="wizard-wrapper">
-                                        <div class="wizard-number">1</div>
+                                        <div class="wizard-number">
+                                          {{ step.wizardNumber}}
+                                        </div>
                                         <div class="wizard-label">
-                                            <div class="wizard-title">Datos</div>
+                                            <div class="wizard-title">
+                                              {{ step.wizardTitle}}
+                                            </div>
                                             <div class="wizard-desc">
-                                                Información sobre el trámite
+                                                {{ step.wizardDesc}}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!--end::Wizard Step 1 Nav-->
-                                <!--begin::Wizard Step 2 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo(2)" >
-                                    <div class="wizard-wrapper">
-                                        <div class="wizard-number">2</div>
-                                        <div class="wizard-label">
-                                            <div class="wizard-title">Solicitantes</div>
-                                            <div class="wizard-desc">
-                                                Solicitantes del trámite
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end::Wizard Step 2 Nav-->
-                                <!--begin::Wizard Step 3 Nav-->
-                                <div class="wizard-step mr-auto" data-wizard-type="step" data-wizard-state="pending" id="tab3" v-on:click="goTo(3)" >
-                                    <div class="wizard-wrapper">
-                                        <div class="wizard-number">3</div>
-                                        <div class="wizard-label">
-                                            <div class="wizard-title">Finalizar</div>
-                                            <div class="wizard-desc">
-                                                Revisar y completar
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end::Wizard Step 3 Nav-->
+                                </div>                                
+                                <!--end::Wizard StepS Nav-->
                             </div>
                         </div>
                         <!--end: Wizard Nav-->
@@ -137,7 +115,6 @@
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
 
-            
             if( clave ){
                this.obtenerCamposTemporales(); 
             } else {
@@ -161,7 +138,29 @@
                 infoGuardada:{}, camposGuardadosObtenidos: false,
                 infoGuardadaFull:{}, 
                 solicitantesGuardados:[],
-                tipoTramiteDisabled:''
+                tipoTramiteDisabled:'',
+                steps:[{  
+                  id:"tab1",
+                  state:'current',
+                  clickGotTo:1,
+                  wizardNumber:1,
+                  wizardTitle:'Datos d',
+                  wizardDesc:'Información sobre el trámite',
+                },{  
+                  id:"tab2",
+                  state:'pending',
+                  clickGotTo:2,
+                  wizardNumber:2,
+                  wizardTitle:'Solicitantes d',
+                  wizardDesc:'Solicitantes del trámite',
+                },{  
+                  id:"tab3",
+                  state:'pending',
+                  clickGotTo:3,
+                  wizardNumber:3,
+                  wizardTitle:'Finalizar d',
+                  wizardDesc:'Revisar y completar',
+                }]
             }
         },
 
@@ -184,18 +183,14 @@
             },
 
             updateSolicitante(solicitantesValido){
-              $("#btnWizard").attr("disabled", true);
               this.solicitantesValido = solicitantesValido;
-              if( solicitantesValido ){
-                $("#btnWizard").attr("disabled", false);
-              }
+              $("#btnWizard").attr("disabled", !solicitantesValido);
             },
 
             next: function (event) {
               if( (this.currentStep + 1) === 2 ){
                   this.comprobarEstadoFormularioCount++;
               }
-
               if( (this.currentStep + 1) === 3 && (!this.solicitantesValido || !this.formularioValido)){
                 Command: toastr.warning("Aviso!", "Datos requeridos");
                 return false;
@@ -366,27 +361,22 @@
               let guardandoTemporarmente = true;
               let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
               let formData = this.getFormData();
+              try {
+                let response = await axios.post(url, formData, {
+                  headers:{
+                      'Content-Type': 'application/json',
+                  },
+                });
+                Command: toastr.success("Listo!", response.data.Message);
+                redirect("/nuevo-tramite");
 
-                try {
-                  let response = await axios.post(url, formData, {
-                    headers:{
-                        'Content-Type': 'application/json',
-                    },
-                  });
-                  
-                  Command: toastr.success("Listo!", response.data.Message);
-                  
-                  //redirect("/nuevo-tramite");
+              } catch (error) {
+                console.log(error);
+                Command: toastr.warning("Error!", "No fue posible registrar intente de nuevo");
 
-                } catch (error) {
-                  console.log(error);
-                  Command: toastr.warning("Error!", "No fue posible registrar intente de nuevo");
-
-                }
-                this.enviando = false;
-                this.finalizando = false;
-
-              
+              }
+              this.enviando = false;
+              this.finalizando = false;
             },
 
             async obtenerCamposTemporales(){
