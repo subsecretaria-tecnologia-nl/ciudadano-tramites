@@ -228,7 +228,7 @@
 						if(info.detalle && info.detalle.descuentos && Array.isArray(info.detalle.descuentos )  && info.detalle.descuentos.length > 0  ){
 
 							let losdescuentos = info.detalle.descuentos.filter( descuento => descuento.concepto_descuento != "No aplica" );		
-
+							losdescuentos = info.detalle.descuentos.filter( descuento => descuento.concepto_descuento != "El numero de oficio no coincide con el trámite" );		
 							if( losdescuentos && losdescuentos.length > 0 ){
 								info.detalle.descuentos.forEach( descuento => {
 									let descuentoAplicado =  {
