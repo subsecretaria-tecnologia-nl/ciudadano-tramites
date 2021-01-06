@@ -728,7 +728,7 @@ class CalculoimpuestosController extends Controller
   			//$count = 0;
   			foreach($this->porcentajes_values as $p => $data)
   			{
-  				if($p <= $i && $p => $f)
+  				if($p <= $i && $p >= $f)
   				{
   					$total += $data["vencido"];
   				}

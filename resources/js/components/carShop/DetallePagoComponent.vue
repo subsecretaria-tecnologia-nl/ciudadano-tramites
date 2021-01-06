@@ -93,7 +93,7 @@
                         "url_retorno": "url",
                         "importe_transaccion":  this.calcularTotal, //"4687",
                         "id_transaccion":  (50000000 +  parseInt(idTRansaccion)) + '',//uuid.v4(),//"BMU8605134I82915082020",rellenar con 0
-                        "entidad": 2,
+                        "entidad": 9,
                         "url_confirma_pago": "url",
                         "es_referencia": "1",
                         "tramite": tramitesAEnviar
@@ -110,9 +110,12 @@
                             "status":5,// stattus 5?
                             "id_transaccion": idTRansaccion,
                             "id_transaccion_motor": responseTransaccion.data.response.folio,
-                            "json_envio": JSON.stringify(data),
-                            json_recibo:JSON.stringify(responseTransaccion.data)
+                            //"json_envio": JSON.stringify(data),
+                            //json_recibo:JSON.stringify(responseTransaccion.data)
+                            json_envio: data,
+                            json_recibo:responseTransaccion.data
                         }
+
                         this.guardarTransaccionMotor( dataMotor );
 
                         this.mostrarCancelarPago = true;
@@ -124,8 +127,8 @@
                             "status":5,
                             "id_transaccion": null,
                             "id_transaccion_motor":null,
-                            json_envio: JSON.stringify(data),
-                            json_recibo:JSON.stringify(error.response)
+                            json_envio: data,
+                            json_recibo:error.response
                         }
                         this.guardarTransaccionMotor( dataMotor );
                         //this.mostrarMetodos = false;

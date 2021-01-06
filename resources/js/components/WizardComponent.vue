@@ -6,45 +6,23 @@
                         <!--begin: Wizard Nav-->
                         <div class="wizard-nav">
                             <div class="wizard-steps">
-                                <!--begin::Wizard Step 1 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="current" id="tab1" v-on:click="goTo(1)">
+                                <!--begin::Wizard StepS Nav-->
+                                <div v-for="(step, i) in steps" class="wizard-step" data-wizard-type="step" :data-wizard-state="step.state" :id="step.id" v-on:click="goTo(step.clickGotTo)">
                                     <div class="wizard-wrapper">
-                                        <div class="wizard-number">1</div>
-                                        <div class="wizard-label">
-                                            <div class="wizard-title">Datos</div>
-                                            <div class="wizard-desc"> 
-                                                Información sobre el trámite
-                                            </div>
+                                        <div class="wizard-number">
+                                          {{ step.wizardNumber}}
                                         </div>
-                                    </div>
-                                </div>
-                                <!--end::Wizard Step 1 Nav-->
-                                <!--begin::Wizard Step 2 Nav-->
-                                <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending" id="tab2" v-on:click="goTo(2)" >
-                                    <div class="wizard-wrapper">
-                                        <div class="wizard-number">2</div>
                                         <div class="wizard-label">
-                                            <div class="wizard-title">Solicitantes</div>
+                                            <div class="wizard-title">
+                                              {{ step.wizardTitle}}
+                                            </div>
                                             <div class="wizard-desc">
-                                                Solicitantes del trámite
+                                                {{ step.wizardDesc}}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!--end::Wizard Step 2 Nav-->
-                                <!--begin::Wizard Step 3 Nav-->
-                                <div class="wizard-step mr-auto" data-wizard-type="step" data-wizard-state="pending" id="tab3" v-on:click="goTo(3)" >
-                                    <div class="wizard-wrapper">
-                                        <div class="wizard-number">3</div>
-                                        <div class="wizard-label">
-                                            <div class="wizard-title">Finalizar</div>
-                                            <div class="wizard-desc">
-                                                Revisar y completar
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end::Wizard Step 3 Nav-->
+                                </div>                                
+                                <!--end::Wizard StepS Nav-->
                             </div>
                         </div>
                         <!--end: Wizard Nav-->
@@ -56,21 +34,26 @@
                                         <!--begin: Wizard Form-->
                                             <!--begin: Wizard Step 1 Campos tramite-->
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
-                                              <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'">
-                                                <radio-option-component :default="tipoTramite" @valueRadio="cambioRadio"></radio-option-component>
+                                              <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles' && camposGuardadosObtenidos">
+                                                <radio-option-component 
+                                                  :default="tipoTramite" 
+                                                  @valueRadio="cambioRadio"
+                                                  :disabledDefault='tipoTramiteDisabled'></radio-option-component>
                                               </div>
-                                              <div v-if="tipoTramite == 'normal'" >
-                                                <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"  
-                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles"></campos-tramite-component>                                                  
+                                              <div v-if="tipoTramite == 'normal' && camposGuardadosObtenidos" >
+                                                <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
+                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada"></campos-tramite-component>
                                               </div>
-                                              <div v-else-if="tipoTramite == 'complementaria'">
-                                                  <formulario-complementaria-component @updatingScore="updateScore" @sendData="setDatosComplementaria"></formulario-complementaria-component>
+                                              <div v-else-if="tipoTramite == 'complementaria' && camposGuardadosObtenidos">
+                                                  <formulario-complementaria-component @updatingScore="updateScore" 
+                                                  @sendData="setDatosComplementaria" :infoGuardada="infoGuardada">
+                                                  </formulario-complementaria-component>
                                               </div>
                                             </div>
                                             <!--end: Wizard Step 1-->
                                             <!--begin: Wizard Step 2-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step2" >
-                                              <solicitantes-component v-if="currentStep == 2" @updatingSolicitante="updateSolicitante" ></solicitantes-component>
+                                              <solicitantes-component v-if="currentStep == 2 && camposGuardadosObtenidos" @updatingSolicitante="updateSolicitante" :solicitantesGuardados="solicitantesGuardados"></solicitantes-component>
                                             </div>
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
@@ -82,13 +65,20 @@
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
                                                 </div>
                                                 <div >
+                                                  <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-on:click="saveTemp()" :disabled="enviando" v-if="currentStep != 3">
+                                                      Guardar y Continuar después                                                                         
+                                                      <div id="spinner-guardaContinuaDespues" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
+                                                          <span class="sr-only">Loading...</span>
+                                                      </div>
+                                                    </button>
                                                     <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar('guardaContinua')" :disabled="enviando">
                                                       Guardar y Continuar                                                                          <div id="spinner-guardaFina" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
                                                       </div>
                                                     </button>
                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar('finalizar')" :disabled="finalizando">
-                                                      Finalizar 
+                                                      Finalizar
                                                       <div id="spinner-finalizar" class="spinner-border spinner-border-sm float-right" role="status" v-if="finalizando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
                                                       </div>
@@ -96,6 +86,7 @@
                                                     <button type="button" id="btnWizard" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
                                                         Next
                                                     </button>
+                                                  </div>
                                                 </div>
                                             </div>
                                             <!--end: Wizard Actions-->
@@ -113,16 +104,25 @@
 
 <script>
     import { uuid } from 'vue-uuid';
-  
+
     export default {
         props: ['tramite','idUsuario'],
         mounted() {
-            this.tramite.id_seguimiento =  uuid.v4();
+            //let clave = "ff9bfabf-531b-4458-8930-1a0d5475df88";
+            let clave = false;
+            this.tramite.id_seguimiento = clave ? clave : uuid.v4(); // si la clave ya existe usarla
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
+
+            if( clave ){
+               this.obtenerCamposTemporales(); 
+            } else {
+              this.camposGuardadosObtenidos = true;
+            }
+            //
         },
-  
+
         data() {
             return {
                 currentStep: 1,
@@ -134,10 +134,36 @@
                 comprobarEstadoFormularioCount:0,
                 files:[],
                 tipoTramite:'normal',
-                datosComplementaria:[]
+                datosComplementaria:[],
+                infoGuardada:{}, camposGuardadosObtenidos: false,
+                infoGuardadaFull:{}, 
+                solicitantesGuardados:[],
+                tipoTramiteDisabled:'',
+                steps:[{  
+                  id:"tab1",
+                  state:'current',
+                  clickGotTo:1,
+                  wizardNumber:1,
+                  wizardTitle:'Datos d',
+                  wizardDesc:'Información sobre el trámite',
+                },{  
+                  id:"tab2",
+                  state:'pending',
+                  clickGotTo:2,
+                  wizardNumber:2,
+                  wizardTitle:'Solicitantes d',
+                  wizardDesc:'Solicitantes del trámite',
+                },{  
+                  id:"tab3",
+                  state:'pending',
+                  clickGotTo:3,
+                  wizardNumber:3,
+                  wizardTitle:'Finalizar d',
+                  wizardDesc:'Revisar y completar',
+                }]
             }
         },
-  
+
         methods: {
             updateScore(formularioValido) {
               $("#btnWizard").attr("disabled", true);
@@ -156,19 +182,15 @@
               this.files = files;
             },
 
-            updateSolicitante(solicitantesValido){ 
-              $("#btnWizard").attr("disabled", true);
+            updateSolicitante(solicitantesValido){
               this.solicitantesValido = solicitantesValido;
-              if( solicitantesValido ){
-                $("#btnWizard").attr("disabled", false);
-              }
+              $("#btnWizard").attr("disabled", !solicitantesValido);
             },
 
             next: function (event) {
               if( (this.currentStep + 1) === 2 ){
                   this.comprobarEstadoFormularioCount++;
               }
-
               if( (this.currentStep + 1) === 3 && (!this.solicitantesValido || !this.formularioValido)){
                 Command: toastr.warning("Aviso!", "Datos requeridos");
                 return false;
@@ -178,24 +200,13 @@
                 Command: toastr.warning("Aviso!", "Campos requeridos");
                 return false;
               }
-              //if(this.tipoTramite == 'normal'){
-                $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-                $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
 
-                $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
-                $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
-                this.currentStep = this.currentStep + 1;
-              /*} else {
-                $("#tab" + (this.currentStep + 2)).attr("data-wizard-state", "current");
-                $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
+              $("#tab" + (this.currentStep + 1)).attr("data-wizard-state", "current");
+              $("#tab" +  parseInt( this.currentStep )).attr("data-wizard-state", "");
 
-                $("#step" + (this.currentStep + 2)).attr("data-wizard-state", "current");
-                $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
-                this.currentStep = this.currentStep + 2;
-              }*/
-
-
-
+              $("#step" + (this.currentStep + 1)).attr("data-wizard-state", "current");
+              $("#step" + parseInt( this.currentStep) ).attr("data-wizard-state", "");
+              this.currentStep = this.currentStep + 1;
             },
 
             goTo( idStep ){
@@ -203,18 +214,11 @@
                 if(idStep == 2){
                   this.comprobarEstadoFormularioCount++;
                 }
-                //if(this.tipoTramite == 'normal'){
-                  if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
-                    Command: toastr.warning("Aviso!", "Datos requeridos");
-                    return false;
-                  }
-                /*} else {
-                  if( idStep === 3 && ( !this.formularioValido)){
-                    Command: toastr.warning("Aviso!", "Datos requeridos");
-                    return false;
-                  }
-                }*/
 
+                if( idStep === 3 && (!this.solicitantesValido || !this.formularioValido)){
+                  Command: toastr.warning("Aviso!", "Datos requeridos");
+                  return false;
+                }
 
                 if( idStep === 2 &&  !this.formularioValido){
                   Command: toastr.warning("Aviso!", "Campos requeridos");
@@ -228,76 +232,54 @@
                 $("#tab" + idStep).attr("data-wizard-state", "current");
                 $("#step" + idStep).attr("data-wizard-state", "current");
                 this.currentStep = idStep;
-            }, 
+            },
+
+            buildFormData(informacion, listaSolicitantes, tramite){
+              let formData = new FormData();
+              if( this.files && this.files.length > 0 ){
+                this.files.forEach( (file, index) => {
+                    formData.append('file['+  index +']', this.files[index].valor);
+                    formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                });
+              }
+              formData.append('user_id', this.idUsuario );
+              formData.append('info', JSON.stringify(informacion) );
+              if( listaSolicitantes && listaSolicitantes.length > 0 ){
+                formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
+              }
+              formData.append('clave', tramite.id_seguimiento );
+              formData.append('catalogo_id', tramite.id_tramite );
+              if(  this.infoGuardadaFull && this.infoGuardadaFull.id  ){
+                formData.append('id', this.infoGuardadaFull.id );
+                //formData.append('status', 80 );
+              }
+              return formData;
+            },
+
+            getStorage(key, goTab){
+                if (localStorage.getItem(key)) {
+                  try {
+                    return JSON.parse(localStorage.getItem(key));
+                  } catch(e) {
+                    localStorage.removeItem(key);
+                    if(  goTab ){
+                      goTo(goTab);
+                      return false;
+                    }
+                    
+                  }
+                }
+            },
+
+            obtenerDatosTabs(){
+                let listaSolicitantes = this.getStorage( 'listaSolicitantes', 2 );
+                let tramite = this.getStorage( 'tramite' );
+                let datosFormulario = this.getStorage( 'datosFormulario', 1);
+                return [listaSolicitantes, tramite, datosFormulario];
+            },
 
             async agregar( type){
-
-
-                let listaSolicitantes = [];
-                let tramite = {};
-                let datosFormulario = {};
-
-
-
-                if (localStorage.getItem('listaSolicitantes')) {
-                  try {
-                    listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
-                  } catch(e) {
-                    localStorage.removeItem('listaSolicitantes');
-                    goTo(2);
-                  }
-                }
-
-                if (localStorage.getItem('tramite')) {
-                  try {
-                    tramite = JSON.parse(localStorage.getItem('tramite'));
-                  } catch(e) {
-                    localStorage.removeItem('tramite');
-                  }
-                }
-
-                if (localStorage.getItem('datosFormulario')) {
-                  try {
-                    datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
-                  } catch(e) {
-                    localStorage.removeItem('datosFormulario');
-                    goTo(1);
-                  }
-                }
-                let informacion = {
-                  costo_final:tramite.detalle.costo_final,
-                  partidas: tramite.partidas,
-                  detalle: tramite.detalle
-                }
-                console.log( this.datosComplementaria )
-                 let camposObj = {};
-                if( this.tipoTramite == 'normal' ){
-                  datosFormulario.campos.forEach( campo =>  {
-                    camposObj[campo.campo_id] = campo.valor;
-                  });
-                  informacion.campos=camposObj;
-                } else {
-                  informacion.camposComplementaria = this.datosComplementaria;
-                }
-                
-
-      
-                let formData = new FormData();
-
-                if( this.files && this.files.length > 0 ){
-                  let losArchivos = [];
-                  this.files.forEach( (file, index) => {
-                      formData.append('file['+  index +']', this.files[index].valor);
-                      formData.append('descripcion['+  index +']',  this.files[index].nombre );
-                  });
-                }
-                formData.append('user_id', this.idUsuario );
-                formData.append('info', JSON.stringify(informacion) );
-                formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
-                formData.append('clave', tramite.id_seguimiento );
-                formData.append('catalogo_id', tramite.id_tramite );
-
-                //data = JSON.stringify(data);
+                let formData = this.getFormData();
 
                 if( type == "finalizar" ){
                   this.finalizando = true;
@@ -309,10 +291,10 @@
                 try {
                   let response = await axios.post(url, formData, {
                     headers:{
-            'Content-Type': 'application/json',
-                      },
+                        'Content-Type': 'application/json',
+                    },
                   });
-                 
+
                   let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
                   $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
                   Command: toastr.success("Listo!", response.data.Message);
@@ -324,7 +306,7 @@
                     localStorage.removeItem('datosFormulario');
                     delete this.tramite.detalle;
                     const parsed = JSON.stringify(this.tramite);
-                    localStorage.setItem('tramite', parsed); 
+                    localStorage.setItem('tramite', parsed);
                     this.goTo(1);
                   }
                 } catch (error) {
@@ -335,9 +317,98 @@
                 this.enviando = false;
                 this.finalizando = false;
             },
+
             cambioRadio(valor){
               this.tipoTramite = valor;
-            }
+            },
+
+            getInformacion(tramite, datosFormulario){
+                let informacion = {
+                  costo_final: tramite &&  tramite.detalle ? tramite.detalle.costo_final: null,
+                  partidas: tramite.partidas,
+                  detalle: tramite.detalle
+                }
+                if( datosFormulario && datosFormulario.mottivoDeclaracion0 ){
+                  informacion.mottivoDeclaracion0 = datosFormulario.motivoDeclaracion0
+                }
+                let camposObj = {};
+                if( this.tipoTramite == 'normal' ){
+                  datosFormulario.campos.forEach( campo =>  {
+                    if( campo.valido ){
+                      camposObj[campo.campo_id] = campo.valor;
+                    }
+                  });
+                  informacion.campos=camposObj;
+                  informacion.tipoPersona=datosFormulario.tipoPersona
+                } else {
+                  informacion.camposComplementaria = this.datosComplementaria;
+                }
+                return informacion;
+            },
+
+            getFormData(){
+              let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
+              let listaSolicitantes = datosTabs[0];
+              let tramite = datosTabs[1];
+              let datosFormulario = datosTabs[2];
+              let informacion = this.getInformacion( tramite, datosFormulario );
+              return this.buildFormData( informacion, listaSolicitantes, tramite );
+            },
+
+
+
+            async saveTemp(){              
+              let guardandoTemporarmente = true;
+              let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
+              let formData = this.getFormData();
+              try {
+                let response = await axios.post(url, formData, {
+                  headers:{
+                      'Content-Type': 'application/json',
+                  },
+                });
+                Command: toastr.success("Listo!", response.data.Message);
+                redirect("/nuevo-tramite");
+
+              } catch (error) {
+                console.log(error);
+                Command: toastr.warning("Error!", "No fue posible registrar intente de nuevo");
+
+              }
+              this.enviando = false;
+              this.finalizando = false;
+            },
+
+            async obtenerCamposTemporales(){
+
+              let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-get-tramite/" + this.tramite.id_seguimiento;
+              try {
+                let response = await axios.get(url);
+
+                this.infoGuardadaFull = response.data[0];
+
+                this.infoGuardada =  JSON.parse( response.data[0].info );
+
+                if( response.data[0].archivos.length > 0 ){
+                  this.infoGuardada.archivosGuardados = response.data[0].archivos;
+                }
+                this.tipoTramite = this.infoGuardada.campos ? 'normal' : 'complementaria';
+                this.tipoTramiteDisabled = !this.infoGuardada.campos ? 'normal' : 'complementaria';
+                this.camposGuardadosObtenidos = true;
+
+                this.solicitantesGuardados = response.data.map( solicitante => {
+                  let solicitanteNuevo = JSON.parse(solicitante.info).solicitante;
+                  if( solicitanteNuevo ){
+                    solicitanteNuevo.id = solicitante.id;
+                  } 
+                  return solicitanteNuevo;
+                });
+  
+              } catch (error) {
+                  console.log(error);
+              }   
+            },
+
         }
     }
 </script>
