@@ -66,11 +66,12 @@
 											  	</div>
 
 											
-												<div class=" fv-plugins-icon-container"  v-else-if="campo.tipo === 'select'">
+												<div class="fv-plugins-icon-container"  v-else-if="campo.tipo === 'select' || campo.tipo == 'multiple'">
 												  		<label>{{ campo.nombre }}</label>
 												  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]" 
 												  			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
-												  			v-model="campo.valor" @change="cambioModelo" >
+												  			v-model="campo.valor" @change="cambioModelo" 
+												  			 :multiple="campo.tipo == 'multiple'">
 												  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 												  			:value="[[Object.keys(opcion)[0] ]]">
 												  				{{ opcion[ Object.keys(opcion)[0] ] }}
@@ -91,6 +92,16 @@
 														 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
 													</div>
 												</div>
+												<div v-else-if="campo.tipo === 'checkbox'">
+													<div class="">
+														<input type="checkbox"    
+															:id="[[campo.campo_id]]"
+														 	:name="[[campo.campo_id]]"
+														 	v-model="campo.valor" @change="cambioModelo" >
+														 	<label> {{ campo.nombre }}</label>
+													</div>
+												</div>
+												
 												<div v-else-if="campo.tipo === 'textbox' && (!campo.condition || campo.condition.view(agrupaciones))"  class=" fv-plugins-icon-container">
 													<label>{{ campo.nombre }}</label>
 													<textarea  
