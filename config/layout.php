@@ -45,28 +45,40 @@ return [
 			"options" => null
 		],
 		[
+			"name" => "Borradores",
+			"icon" => "fas fa-file",
+			"path" => "tramites",
+			"options" => ["borradores", 80]
+		],
+		[
 			"name" => "Pendiente de pago",
 			"icon" => "fas fa-money-bill",
 			"path" => "tramites",
-			"options" => ["pending-payment"]
+			"options" => ["pendiente-de-pago", 99]
+		],
+		[
+			"name" => "Pendiente de pago por referencia",
+			"icon" => "fas fa-file-invoice",
+			"path" => "tramites",
+			"options" => ["pendiente-de-pago-por-referencia", 5]
 		],
 		[
 			"name" => "En espera de atención",
 			"icon" => "fas fa-clock",
 			"path" => "tramites",
-			"options" => ["hold"]
+			"options" => ["en-espera-de-atencion", 3]
 		],
 		[
 			"name" => "En curso",
 			"icon" => "fas fa-play-circle",
 			"path" => "tramites",
-			"options" => ["open"]
+			"options" => ["en-curso", 1]
 		],
 		[
-			"name" => "Cerrado",
+			"name" => "Finalizado",
 			"icon" => "fas fa-check-circle",
 			"path" => "tramites",
-			"options" => ["close"]
+			"options" => ["finalizado", 2]
 		]
 	]
 ];
