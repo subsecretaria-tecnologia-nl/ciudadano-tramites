@@ -77,7 +77,7 @@
                                                 </div>
                                                 <div >
                                                   <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-on:click="saveTemp()" :disabled="enviando" v-if="currentStep != 3">
+                                                    <button type="button" class="btn btn-default font-weight-bolder text-uppercase px-9 py-4"  v-on:click="saveTemp()" :disabled="enviando" v-if="currentStep != 3">
                                                       Guardar y Continuar después                                                                         
                                                       <div id="spinner-guardaContinuaDespues" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
