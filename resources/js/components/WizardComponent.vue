@@ -364,16 +364,48 @@
               let listaSolicitantes = datosTabs[0];
               let tramite = datosTabs[1];
               let datosFormulario = datosTabs[2];
+
+              
+
+              datosFormulario.campos = this.formatearCampos(datosFormulario.campos);
+              console.log( JSON.parse( JSON.stringify(datosFormulario)));
               let informacion = this.getInformacion( tramite, datosFormulario );
+
+
               return this.buildFormData( informacion, listaSolicitantes, tramite );
             },
 
+            formatearCampos(campos){
+              console.log( JSON.parse( JSON.stringify( campos ) ) )
+              let camposFormateados = campos.map(campo =>{
+                let caracteristicas = this.getCaracteristicas(campo);
+                if(caracteristicas.formato == 'moneda'){
+                  campo.valor = this.formatoNumero( campo.valor );
+                }
+                return campo;
+              })
+              return camposFormateados;
+            },
+            getCaracteristicas(campo){
+              let caracteristicas = {};
+              try {
+                caracteristicas = JSON.parse(campo.caracteristicas + '');
+              }catch(err){
+                console.log(err);
+              }
+              return caracteristicas;
+            },
+            formatoNumero(numberStr){
+                let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+                return valor;
+            },
 
+            async saveTemp(){
 
-            async saveTemp(){              
               let guardandoTemporarmente = true;
               let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
               let formData = this.getFormData();
+                 
               try {
                 let response = await axios.post(url, formData, {
                   headers:{
@@ -381,7 +413,7 @@
                   },
                 });
                 Command: toastr.success("Listo!", response.data.Message);
-                //redirect("/nuevo-tramite");
+                redirect("/nuevo-tramite");
 
               } catch (error) {
                 console.log(error);

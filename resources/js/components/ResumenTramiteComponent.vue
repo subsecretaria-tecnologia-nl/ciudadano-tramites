@@ -210,7 +210,8 @@
             },
 
             formatoNumero(numberStr){
-                return Number(numberStr+"".replace(/[^0-9.-]+/g,""));
+                let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+                return valor;
             },
 
             async obtenerCosto(){

@@ -40,7 +40,6 @@
           let caracteristicas = {};
           try {
             caracteristicas = JSON.parse(this.campo.caracteristicas + '');
-            console.log( JSON.parse( JSON.stringify( caracteristicas ) ) )
           }catch(err){
             console.log(err);
           }
@@ -56,8 +55,6 @@
             
           try {
             caracteristicas = this.getCaracteristicas();
-            //caracteristicas = JSON.parse(this.campo.caracteristicas + '');
-            console.log( JSON.parse( JSON.stringify( caracteristicas ) ) )
           }catch(err){
             console.log(err);
           }
