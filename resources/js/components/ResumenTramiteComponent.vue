@@ -181,8 +181,13 @@
                             paramsCosto.valor_catastral = campoCatastral.valor;
                         }
 
-                        if(campoSubsidio){
-                            paramsCosto.subsidio = campoSubsidio.valor;//62
+                        if(campoSubsidio){                            
+                            if( campoSubsidio.tipo == 'select'  ){
+                                paramsCosto.subsidio = campoSubsidio.valor[0][0];//62  
+                            } else {
+                                paramsCosto.subsidio = campoSubsidio.valor;//62    
+                            }
+                            
                         }
 
                         if(campoValorOperacion ){
@@ -222,7 +227,7 @@
                 try {
                     let response = await axios.post(url, data);
                     let detalleTramite = response.data;
-                    console.log( detalleTramite )
+
                     if( consulta_api == "/getcostoImpuesto" || this.tipoTramite =='complementaria'  ){
                         this.tramite.detalle =  detalleTramite;
                     } else {

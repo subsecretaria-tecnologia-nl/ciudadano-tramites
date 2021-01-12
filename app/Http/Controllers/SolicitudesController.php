@@ -230,6 +230,7 @@ class SolicitudesController extends Controller
 
         foreach ($grupo as $g) {
           $desc = $g->descripcion;
+          $orden_group = $g->orden;
         }
 
           $campos_data []=array(
@@ -239,6 +240,7 @@ class SolicitudesController extends Controller
             'caracteristicas' => $c->caracteristicas,
             'campo_id' => $c->campo_id,
             'agrupacion_id' => $c->agrupacion_id,
+            'orden_agrupacion' => $orden_group,
             'orden'=> $c->orden,
             'nombre_agrupacion' => $desc,
           );

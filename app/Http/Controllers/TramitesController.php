@@ -59,9 +59,9 @@ class TramitesController extends Controller
         $this->group = $group;
       }
 
-    public function index ($type) {
+    public function index ($type, $id) {
     	set_layout_arg(["subtitle" => "Trámites: {$type}","fluid_container"=> true]);
-    	return layout_view("tramites.index", [ "type" => $type ]);
+    	return layout_view("tramites.index", [ "type" => $type, "id" => $id ]);
     }
 
     public function new () {
@@ -574,7 +574,7 @@ class TramitesController extends Controller
                 $costoMaximo = $max * $actual_uma;
                 $costoMax = $this->redondeo($costoMaximo);
                 if($costoxhoja < $costoMinimo){
-                  $costo_final = $costoMinimo;
+                  $costo_final = $costoMin;
                 }elseif($costoxhoja > $costoMax){
                   $costo_final = $costoMax;
                 }else{
@@ -727,7 +727,7 @@ class TramitesController extends Controller
       ]);
       $json = $response->json();
       $json['codigoCambioEstatus'] = $this->cambiarEstatusTransaccion( $json );
-      
+
       if( $json['data'] ){
         return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>$json] );
       } else {

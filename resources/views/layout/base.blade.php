@@ -652,9 +652,9 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
+					{{-- <a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
 						<div class="navi-link">
-							{{-- <div class="symbol symbol-40 bg-light mr-3">
+							<div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
 									<span class="svg-icon svg-icon-md svg-icon-warning">
 										<!--begin::Svg Icon | path:media/svg/icons/Shopping/Chart-bar1.svg-->
@@ -670,18 +670,18 @@
 										<!--end::Svg Icon-->
 									</span>
 								</div>
-							</div> --}}
+							</div>
 							<div class="navi-text">
 								<div class="text-uppercase font-weight-bold"><strong>Trámites Pendientes</strong></div>
 								<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 							</div>
 						</div>
-					</a>
+					</a> --}}
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
+					{{-- <a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
 						<div class="navi-link">
-							{{-- <div class="symbol symbol-40 bg-light mr-3">
+							<div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
 									<span class="svg-icon svg-icon-md svg-icon-danger">
 										<!--begin::Svg Icon | path:media/svg/icons/Files/Selected-file.svg-->
@@ -695,18 +695,18 @@
 										<!--end::Svg Icon-->
 									</span>
 								</div>
-							</div> --}}
+							</div>
 							<div class="navi-text">
 								<div class="text-uppercase font-weight-bold"><strong>Trámites en Curso</strong></div>
 								<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 							</div>
 						</div>
-					</a>
+					</a> --}}
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
+					{{-- <a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
 						<div class="navi-link">
-							{{-- <div class="symbol symbol-40 bg-light mr-3">
+							<div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
 									<span class="svg-icon svg-icon-md svg-icon-primary">
 										<!--begin::Svg Icon | path:media/svg/icons/Communication/Mail-opened.svg-->
@@ -720,13 +720,13 @@
 										<!--end::Svg Icon-->
 									</span>
 								</div>
-							</div> --}}
+							</div>
 							<div class="navi-text">
 								<div class="text-uppercase font-weight-bold"><strong>Trámites Finalizados</strong></div>
 								<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 							</div>
 						</div>
-					</a>
+					</a> --}}
 					<!--end:Item-->
 				</div>
 				<!--end::Nav-->
@@ -909,9 +909,9 @@
 					</a>
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
+					{{-- <a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
 						<div class="navi-link">
-							{{-- <div class="symbol symbol-40 bg-light mr-3">
+							<div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
 									<span class="svg-icon svg-icon-md svg-icon-warning">
 										<!--begin::Svg Icon | path:media/svg/icons/Shopping/Chart-bar1.svg-->
@@ -927,18 +927,18 @@
 										<!--end::Svg Icon-->
 									</span>
 								</div>
-							</div> --}}
+							</div>
 							<div class="navi-text">
 								<div class="text-uppercase font-weight-bold"><strong>Trámites Pendientes</strong></div>
 								<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 							</div>
 						</div>
-					</a>
+					</a> --}}
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
+					{{-- <a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
 						<div class="navi-link">
-							{{-- <div class="symbol symbol-40 bg-light mr-3">
+							<div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
 									<span class="svg-icon svg-icon-md svg-icon-danger">
 										<!--begin::Svg Icon | path:media/svg/icons/Files/Selected-file.svg-->
@@ -952,18 +952,18 @@
 										<!--end::Svg Icon-->
 									</span>
 								</div>
-							</div> --}}
+							</div>
 							<div class="navi-text">
 								<div class="text-uppercase font-weight-bold"><strong>Trámites en Curso</strong></div>
 								<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 							</div>
 						</div>
-					</a>
+					</a> --}}
 					<!--end:Item-->
 					<!--begin::Item-->
-					<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
+					{{-- <a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
 						<div class="navi-link">
-							{{-- <div class="symbol symbol-40 bg-light mr-3">
+							<div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">
 									<span class="svg-icon svg-icon-md svg-icon-primary">
 										<!--begin::Svg Icon | path:media/svg/icons/Communication/Mail-opened.svg-->
@@ -977,13 +977,13 @@
 										<!--end::Svg Icon-->
 									</span>
 								</div>
-							</div> --}}
+							</div>
 							<div class="navi-text">
 								<div class="text-uppercase font-weight-bold"><strong>Trámites Finalizados</strong></div>
 								<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 							</div>
 						</div>
-					</a>
+					</a> --}}
 					<!--end:Item-->
 				</div>
 				<!--end::Nav-->
@@ -1166,9 +1166,9 @@
 						</a>
 						<!--end:Item-->
 						<!--begin::Item-->
-						<a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
+						{{-- <a href="{{ url()->route("tramites", ["pendientes"]) }}" class="navi-item">
 							<div class="navi-link">
-								{{-- <div class="symbol symbol-40 bg-light mr-3">
+								<div class="symbol symbol-40 bg-light mr-3">
 									<div class="symbol-label">
 										<span class="svg-icon svg-icon-md svg-icon-warning">
 											<!--begin::Svg Icon | path:media/svg/icons/Shopping/Chart-bar1.svg-->
@@ -1184,18 +1184,18 @@
 											<!--end::Svg Icon-->
 										</span>
 									</div>
-								</div> --}}
+								</div>
 								<div class="navi-text">
 									<div class="text-uppercase font-weight-bold"><strong>Trámites Pendientes</strong></div>
 									<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 								</div>
 							</div>
-						</a>
+						</a> --}}
 						<!--end:Item-->
 						<!--begin::Item-->
-						<a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
+						{{-- <a href="{{ url()->route("tramites", ["curso"]) }}" class="navi-item">
 							<div class="navi-link">
-								{{-- <div class="symbol symbol-40 bg-light mr-3">
+								<div class="symbol symbol-40 bg-light mr-3">
 									<div class="symbol-label">
 										<span class="svg-icon svg-icon-md svg-icon-danger">
 											<!--begin::Svg Icon | path:media/svg/icons/Files/Selected-file.svg-->
@@ -1209,18 +1209,18 @@
 											<!--end::Svg Icon-->
 										</span>
 									</div>
-								</div> --}}
+								</div>
 								<div class="navi-text">
 									<div class="text-uppercase font-weight-bold"><strong>Trámites en Curso</strong></div>
 									<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 								</div>
 							</div>
-						</a>
+						</a> --}}
 						<!--end:Item-->
 						<!--begin::Item-->
-						<a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
+						{{-- <a href="{{ url()->route("tramites", ["finalizados"]) }}" class="navi-item">
 							<div class="navi-link">
-								{{-- <div class="symbol symbol-40 bg-light mr-3">
+								<div class="symbol symbol-40 bg-light mr-3">
 									<div class="symbol-label">
 										<span class="svg-icon svg-icon-md svg-icon-primary">
 											<!--begin::Svg Icon | path:media/svg/icons/Communication/Mail-opened.svg-->
@@ -1234,13 +1234,13 @@
 											<!--end::Svg Icon-->
 										</span>
 									</div>
-								</div> --}}
+								</div>
 								<div class="navi-text">
 									<div class="text-uppercase font-weight-bold"><strong>Trámites Finalizados</strong></div>
 									<div class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
 								</div>
 							</div>
-						</a>
+						</a> --}}
 						<!--end:Item-->
 					</div>
 					<!--end::Nav-->

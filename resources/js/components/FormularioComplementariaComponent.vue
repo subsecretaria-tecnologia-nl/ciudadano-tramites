@@ -45,12 +45,12 @@
                 </div>
             </div>
         </form>
-
-    </div> 
+     </div> 
 </template>
 
 <script>
     export default {
+        props: ['infoGuardada'],
         data() {
             return {
                 datos:{
@@ -58,23 +58,26 @@
                 }
             }
         },
-        props: [],
         mounted() {
-            
+        },
+
+        created() {
+           this.datos = this.infoGuardada && this.infoGuardada.camposComplementaria ? this.infoGuardada.camposComplementaria : this.datos;
+           if(this.infoGuardada && this.infoGuardada.camposComplementaria){
+                this.cambioModelo();
+           }
         },
 
         methods:{
             cambioModelo(){
                 let formularioValido = true;
                 let claves = Object.keys(this.datos); 
-                console.log( claves )
                 for(let i=0; i< claves.length; i++){
                   let clave = claves[i];
                   formularioValido =  formularioValido && !!this.datos[clave] && this.datos[clave].length > 0
                 }
 
                 this.$emit('updatingScore', formularioValido);
-                
                 this.$emit('sendData', this.datos);
                 
             }

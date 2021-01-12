@@ -32,10 +32,10 @@
                 </div>
                 <p class="mb-0">
                     <span>
-                        <strong v-if="solicitud.importe_tramite"> 
+                        <strong v-if="!isNaN(solicitud.importe_tramite)"> 
                             $<span v-html="solicitud.importe_tramite"> </span>
                         </strong>
-                        <strong v-if="!solicitud.importe_tramite"> 
+                        <strong v-if="isNaN(solicitud.importe_tramite)"> 
                             <div class="spinner-border spinner-border-sm float-right" role="status" >
                                 <span class="sr-only">Loading...</span> 
                             </div>
