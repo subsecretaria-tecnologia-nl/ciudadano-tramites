@@ -15,33 +15,32 @@
 							      	<v-expansion-panel-header >
 							        	{{ agrupacion.nombre_agrupacion }}
 							        	 <template v-slot:actions >
-								        	<v-icon right class="fa fa-angle-down"> 
-								        	</v-icon>
+								        	<v-icon right class="fa fa-angle-down" />
 								    	</template>
 							      	</v-expansion-panel-header>
 							      	<v-expansion-panel-content>
 										<div class="row">
-											<div  v-if="agrupacion.tipo === 'agrupacion'" class="col-lg-12">
+											<div v-if="agrupacion.tipo === 'agrupacion'" class="col-lg-12">
 												<div class="col-md-12 col-lg-12">
 												    <div >
-														    <div class="custom-control custom-radio custom-control-inline">
-														      	<input type="radio" value="pf"  name="radioInline" class="custom-control-input" id="defaultInline2" v-model="tipoPersona" key="tipoPersona">
-														      	<!--<input  name="tipoPersona"  >-->
-														      	<label class="custom-control-label" for="defaultInline2">
-														      		Persona fisica	
-														      	</label>
-														    </div>
+													    <div class="custom-control custom-radio custom-control-inline">
+													      	<input type="radio" value="pf"  name="radioInline" class="custom-control-input" id="defaultInline2" v-model="tipoPersona" key="tipoPersona">
+													      	<!--<input  name="tipoPersona"  >-->
+													      	<label class="custom-control-label" for="defaultInline2">
+													      		Persona fisica	
+													      	</label>
+													    </div>
 
-														    <!-- Default inline 3-->
-														    <div class="custom-control custom-radio custom-control-inline">
-														      	<input type="radio" value="pm" name="radioInline" class="custom-control-input" id="defaultInline3" v-model="tipoPersona" key="tipoPersona">
+													    <!-- Default inline 3-->
+													    <div class="custom-control custom-radio custom-control-inline">
+													      	<input type="radio" value="pm" name="radioInline" class="custom-control-input" id="defaultInline3" v-model="tipoPersona" key="tipoPersona">
 
-														      	<label class="custom-control-label" for="defaultInline3">
-														      		Persona Moral	
-														      	</label>
-														    </div>
+													      	<label class="custom-control-label" for="defaultInline3">
+													      		Persona Moral	
+													      	</label>
+													    </div>
 
-														    <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div>
+													    <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div>
 													</div>
 												</div>
 											</div>

@@ -14,7 +14,7 @@
                                 <strong class="text-uppercase">{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.clave }}</span>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.created_at }}</span>
-                                <span class="mt-3" v-if="tramite.info">{{ tramite.info.solicitante ? tramite.info.solicitante.rfc : "" }} - {{ tramite.info.solicitante && tramite.info.solicitante.tipoPersona == "pm" ? tramite.info.solicitante.razonSocial : "tramite.info.solicitante.toString()" }}</span>
+                                <span class="mt-3" v-if="tramite.info">{{ tramite.info.solicitante ? tramite.info.solicitante.rfc : "" }} - {{ tramite.info.solicitante && tramite.info.solicitante.tipoPersona == "pm" ? tramite.info.solicitante.razonSocial : `${tramite.info.solicitante.nombreSolicitante} ${tramite.info.solicitante.apPat} ${tramite.info.solicitante.apMat}` }}</span>
                             </a>
                             <!--end::Name-->
                         </div>

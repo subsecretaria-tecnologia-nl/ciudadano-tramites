@@ -86,7 +86,7 @@
                     let statusses = {"hold" : 3, "open" : 1, "pending-payment" : 99, "close" : 2};
 
                     // let estatus = this.type == "pendientes" ? 1 : (this.type == "finalizados" ? 2 : (this.type == "por-pagar" ? 99 : 1))
-                    let estatus = statusses[this.type];
+                    let estatus = this.type;
                     let response = await axios.post(url, { estatus });
                     this.tramites = response.data;
                     // this.tramitesFiltrados = this.tramites;
