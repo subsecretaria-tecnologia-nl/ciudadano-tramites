@@ -40,9 +40,20 @@
                                                   @valueRadio="cambioRadio"
                                                   :disabledDefault='tipoTramiteDisabled'></radio-option-component>
                                               </div>
+                                              <div v-if="tipoTramite == 'normal' && tramite.tramite == '5% de Enajenación de Inmuebles'" class="row">
+                                                <div class="col-md-12 col-lg-12">
+                                                  <input type="checkbox"    
+                                                    id="declarareeN0"
+                                                    name="declarareeN0"
+                                                    v-model="declararEn0"  >
+                                                    <label> Declarar en 0</label>
+                                                </div>
+                                              </div>
                                               <div v-if="tipoTramite == 'normal' && camposGuardadosObtenidos" >
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
-                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada"></campos-tramite-component>
+                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada" :declararEn0="declararEn0">
+                                                  
+                                                </campos-tramite-component>
                                               </div>
                                               <div v-else-if="tipoTramite == 'complementaria' && camposGuardadosObtenidos">
                                                   <formulario-complementaria-component @updatingScore="updateScore" 
@@ -108,7 +119,7 @@
     export default {
         props: ['tramite','idUsuario'],
         mounted() {
-            //let clave = "ff9bfabf-531b-4458-8930-1a0d5475df88";
+            //let clave = "5b449a85-fe0c-4e0d-940a-f2b918a85634";
             let clave = false;
             this.tramite.id_seguimiento = clave ? clave : uuid.v4(); // si la clave ya existe usarla
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
@@ -160,7 +171,8 @@
                   wizardNumber:3,
                   wizardTitle:'Finalizar d',
                   wizardDesc:'Revisar y completar',
-                }]
+                }],
+                declararEn0:false
             }
         },
 
@@ -339,7 +351,8 @@
                     }
                   });
                   informacion.campos=camposObj;
-                  informacion.tipoPersona=datosFormulario.tipoPersona
+                  informacion.tipoPersona=datosFormulario.tipoPersona,
+                  informacion.declararEn0 = this.declararEn0
                 } else {
                   informacion.camposComplementaria = this.datosComplementaria;
                 }
@@ -368,7 +381,7 @@
                   },
                 });
                 Command: toastr.success("Listo!", response.data.Message);
-                redirect("/nuevo-tramite");
+                //redirect("/nuevo-tramite");
 
               } catch (error) {
                 console.log(error);
@@ -394,6 +407,10 @@
                 }
                 this.tipoTramite = this.infoGuardada.campos ? 'normal' : 'complementaria';
                 this.tipoTramiteDisabled = !this.infoGuardada.campos ? 'normal' : 'complementaria';
+
+                if( this.tipoTramite == 'normal' ){
+                  this.declararEn0 = this.infoGuardada && this.infoGuardada.declararEn0 ? this.infoGuardada.declararEn0 : false;
+                }
                 this.camposGuardadosObtenidos = true;
 
                 this.solicitantesGuardados = response.data.map( solicitante => {

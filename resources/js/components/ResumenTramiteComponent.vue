@@ -164,11 +164,11 @@
                         let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
 
                         paramsCosto.fecha_escritura = campoFechaMinuta.valor;
-                        paramsCosto.monto_operacion = campoMonto.valor;
-                        paramsCosto.ganancia_obtenida = campoGananciaObtenida.valor;    
-                        paramsCosto.pago_provisional_lisr = campoPagoProvisional.valor;
+                        paramsCosto.monto_operacion = this.formatoNumero(campoMonto.valor);
+                        paramsCosto.ganancia_obtenida = this.formatoNumero(campoGananciaObtenida.valor);    
+                        paramsCosto.pago_provisional_lisr = this.formatoNumero(campoPagoProvisional.valor);
                         if( campoMulta ){
-                            paramsCosto.multa_correccion_fiscal = campoMulta.valor;
+                            paramsCosto.multa_correccion_fiscal = this.formatoNumero(campoMulta.valor);
                         }
                     } else {
                         let campoLote           = this.getCampoByName(CAMPO_LOTE);
@@ -178,7 +178,7 @@
                         let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
 
                         if( campoCatastral ){
-                            paramsCosto.valor_catastral = campoCatastral.valor;
+                            paramsCosto.valor_catastral = this.formatoNumero(campoCatastral.valor);
                         }
 
                         if(campoSubsidio){                            
@@ -191,7 +191,7 @@
                         }
 
                         if(campoValorOperacion ){
-                            paramsCosto.valor_operacion = campoValorOperacion.valor;
+                            paramsCosto.valor_operacion = this.formatoNumero(campoValorOperacion.valor);
                         }
 
                         if( campoHoja ){
@@ -207,6 +207,10 @@
                 }
 
                 return Object.assign(params, paramsCosto);
+            },
+
+            formatoNumero(numberStr){
+                return Number(numberStr+"".replace(/[^0-9.-]+/g,""));
             },
 
             async obtenerCosto(){
