@@ -59,7 +59,7 @@ Vue.component("radio-option-component", () => import ( /* webpackChunkName: "js/
 Vue.component("formulario-complementaria-component" , () => import ( /* webpackChunkName: "js/components/formulario-complementaria-component" */ './components/FormularioComplementariaComponent.vue' ));
 
 
-Vue.component("input-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/input-component" */ './components/tiposElementos/InputComponent.vue' ));
+//Vue.component("input-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/input-component" */ './components/tiposElementos/InputComponent.vue' ));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

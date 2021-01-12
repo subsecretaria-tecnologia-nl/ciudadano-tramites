@@ -11,103 +11,39 @@
                           <div class="card-body">
                                 <h5 class="card-title">
                                     <div style="padding-left: 1%">
-                                        <span class="titulo">Trámites Pendientes</span>
+                                        <span class="titulo">Borradores</span>
                                     </div>
                                 </h5>
                                 <div class="table-responsive">
                                     <table class="table table-borderless">
                                         <tbody>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003 
+                                            @foreach ($draft as $item)
+                                                @php
+                                                    $infoDraf = json_decode($item->info);
+                                                @endphp
+                                                <tr>
+                                                    <td class="mobile-id" style="vertical-align: middle">
+                                                        <div class="text-center">
+                                                            <span class="identificador">
+                                                                {{$item->id}}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="nombre-tramite">
+                                                            {{$item->titulo}}
                                                         </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Certificado de libertad de gravamen
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003   
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite" style="padding-right: 10%">
-                                                        M-5 Constitucion/modificacion de sociedad microindustrial
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003   
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Disolucion de copropiedad y aplicacion de bienes 
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003   
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003   
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
+                                                        <div class="nombre">
+                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoDraf->solicitante) ? ($infoDraf->solicitante->tipoPersona == 'pf' ? "- {$infoDraf->solicitante->nombreSolicitante} {$infoDraf->solicitante->apPat} {$infoDraf->solicitante->apMat}" : $infoDraf->solicitante->razonSocial) : "" }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-vermas ">VER MÁS</button>
+                                    <a href="{{ url()->route("tramites", [ "borradores", "80" ]) }}" type="button" class="btn btn-vermas">VER MÁS</a>
                                 </div>
                           </div>
                     </div>
@@ -117,103 +53,39 @@
                           <div class="card-body">
                                 <h5 class="card-title">
                                     <div style="padding-left: 1%">
-                                        <span class="titulo">Trámites en Curso</span>
+                                        <span class="titulo">Pendientes de Pago</span>
                                     </div>
                                 </h5>
                                 <div class="table-responsive">
                                     <table class="table table-borderless">
                                         <tbody>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420004   
+                                            @foreach ($pendingPayment as $item)
+                                                @php
+                                                    $infoPP = json_decode($item->info);
+                                                @endphp
+                                                <tr>
+                                                    <td class="mobile-id" style="vertical-align: middle">
+                                                        <div class="text-center">
+                                                            <span class="identificador">
+                                                                {{$item->id}}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="nombre-tramite">
+                                                            {{$item->titulo}}
                                                         </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Certificado de libertad de gravamen
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite" style="padding-right: 10%">
-                                                        M-5 Constitucion/modificacion de sociedad microindustrial
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Disolucion de copropiedad y aplicacion de bienes 
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id"style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
+                                                        <div class="nombre">
+                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoPP->solicitante) ? ($infoPP->solicitante->tipoPersona == 'pf' ? "- {$infoPP->solicitante->nombreSolicitante} {$infoPP->solicitante->apPat} {$infoPP->solicitante->apMat}" : $infoPP->solicitante->razonSocial) : "" }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-vermas ">VER MÁS</button>
+                                    <a href="{{ url()->route("tramites", [ "pendientes-de-pago", "99" ]) }}" type="button" class="btn btn-vermas">VER MÁS</a>
                                 </div>
                           </div>
                     </div>
@@ -223,103 +95,39 @@
                           <div class="card-body">
                                 <h5 class="card-title">
                                     <div style="padding-left: 1%">
-                                        <span class="titulo">Trámites Finalizados</span>
+                                        <span class="titulo">En Espera de Atención</span>
                                     </div>
                                 </h5>
                                 <div class="table-responsive">
                                     <table class="table table-borderless">
                                         <tbody>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003
+                                            @foreach ($waiting as $item)
+                                                @php
+                                                    $infoWait = json_decode($item->info);
+                                                @endphp
+                                                <tr>
+                                                    <td class="mobile-id" style="vertical-align: middle">
+                                                        <div class="text-center">
+                                                            <span class="identificador">
+                                                                {{$item->id}}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="nombre-tramite">
+                                                            {{$item->titulo}}
                                                         </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Certificado de libertad de gravamen
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite" style="padding-right: 10%">
-                                                        M-5 Constitucion/modificacion de sociedad microindustrial
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Disolucion de copropiedad y aplicacion de bienes 
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003   
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
+                                                        <div class="nombre">
+                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoWait->solicitante) ? ($infoWait->solicitante->tipoPersona == 'pf' ? "- {$infoWait->solicitante->nombreSolicitante} {$infoWait->solicitante->apPat} {$infoWait->solicitante->apMat}" : $infoWait->solicitante->razonSocial) : "" }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-vermas ">VER MÁS</button>
+                                    <a href="{{ url()->route("tramites", [ "en-espera-de-atención", "3" ]) }}" type="button" class="btn btn-vermas">VER MÁS</a>
                                 </div>
                           </div>
                     </div>
@@ -329,103 +137,39 @@
                           <div class="card-body">
                                 <h5 class="card-title">
                                     <div style="padding-left: 1%">
-                                        <span class="titulo">Trámites por Pagar</span>
+                                        <span class="titulo">En Curso</span>
                                     </div>
                                 </h5>
                                 <div class="table-responsive">
                                     <table class="table table-borderless">
                                         <tbody>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
+                                            @foreach ($progress as $item)
+                                                @php
+                                                    $infoProgress = json_decode($item->info);
+                                                @endphp
+                                                <tr>
+                                                    <td class="mobile-id" style="vertical-align: middle">
+                                                        <div class="text-center">
+                                                            <span class="identificador">
+                                                                {{$item->id}}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="nombre-tramite">
+                                                            {{$item->titulo}}
                                                         </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Certificado de libertad de gravamen
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite" style="padding-right: 10%">
-                                                        M-5 Constitucion/modificacion de sociedad microindustrial
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003  
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Disolucion de copropiedad y aplicacion de bienes 
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="mobile-id" style="vertical-align: middle">
-                                                    <div class="text-center">
-                                                        <span class="identificador">
-                                                            1420003
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td colspan="3">
-                                                    <span class="nombre-tramite">
-                                                        Promesa Compra venta
-                                                    </span>
-                                                    <div class="nombre">
-                                                        jaime castillo
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
+                                                        <div class="nombre">
+                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoProgress->solicitante) ? ($infoProgress->solicitante->tipoPersona == 'pf' ? "- {$infoProgress->solicitante->nombreSolicitante} {$infoProgress->solicitante->apPat} {$infoProgress->solicitante->apMat}" : $infoProgress->solicitante->razonSocial) : "" }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-vermas ">VER MÁS</button>
+                                    <a href="{{ url()->route("tramites", [ "en-curso", "1" ]) }}" type="button" class="btn btn-vermas">VER MÁS</a>
                                 </div>
                           </div>
                     </div>

@@ -44,7 +44,7 @@ if(!function_exists("to_object")){
 }
 
 if(!function_exists("curlSendRequest")){
-	function curlSendRequest ($method, $endpoint, $data, $headers = [], $timeout = null) {
+	function curlSendRequest ($method, $endpoint, $data = [], $headers = [], $timeout = null) {
 		if(!$timeout) $timeout = env("WS_TIMEOUT");
 		$req = curl_init();
 		// $data = json_encode($data);

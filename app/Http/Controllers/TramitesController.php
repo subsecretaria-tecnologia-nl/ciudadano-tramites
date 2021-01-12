@@ -59,9 +59,9 @@ class TramitesController extends Controller
         $this->group = $group;
       }
 
-    public function index ($type) {
+    public function index ($type, $id) {
     	set_layout_arg(["subtitle" => "Trámites: {$type}","fluid_container"=> true]);
-    	return layout_view("tramites.index", [ "type" => $type ]);
+    	return layout_view("tramites.index", [ "type" => $type, "id" => $id ]);
     }
 
     public function new () {

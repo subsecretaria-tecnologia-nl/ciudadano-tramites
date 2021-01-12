@@ -19,14 +19,16 @@ Route::get("/", function(){
 	return redirect()->route("dashboard");
 });
 
+
 Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
+	Route::get("/formato-declaracion/{id}", "FormatoDeclaracionController@index");
 	Route::get("/email/template", "EmailController@index");
 	Route::middleware(["validate_session", "validate_rol"])->group(function(){
 		Route::get('/', function () {
 			return redirect()->route("dashboard");
 		})->name("home");
 		Route::get('/dashboard', "DashboardController@index")->name("dashboard");
-		Route::get('/tramites/{type}', "TramitesController@index")->name("tramites");
+		Route::get('/tramites/{type}/{id}', "TramitesController@index")->name("tramites");
 		Route::get('/detalle/{id}', "TramitesDetailsController@index")->name("tramites.details");
 		Route::get('/nuevo-tramite', "TramitesController@new")->name("tramite.nuevo");
 		Route::get('/perfil',  "AcountInfoController@index")->name("perfil");
