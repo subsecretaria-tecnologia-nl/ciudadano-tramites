@@ -117,16 +117,16 @@
     import { uuid } from 'vue-uuid';
 
     export default {
-        props: ['tramite','idUsuario'],
+        props: ['tramite','idUsuario', 'clave'],
         mounted() {
             //let clave = "5b449a85-fe0c-4e0d-940a-f2b918a85634";
-            let clave = false;
-            this.tramite.id_seguimiento = clave ? clave : uuid.v4(); // si la clave ya existe usarla
+            //let clave = false;
+            this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4(); // si la clave ya existe usarla
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
 
-            if( clave ){
+            if( this.clave ){
                this.obtenerCamposTemporales(); 
             } else {
               this.camposGuardadosObtenidos = true;

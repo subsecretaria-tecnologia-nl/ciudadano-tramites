@@ -54,7 +54,6 @@
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm">
 												</input-component>	
-
 												<select-component
 													v-else-if="campo.tipo === 'select' || campo.tipo === 'multiple'" 
 													:campo="campo" 
@@ -62,7 +61,6 @@
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm">
 												</select-component>
-
 												<option-component 
 													v-else-if="campo.tipo === 'option'"
 													:campo="campo" 
@@ -70,7 +68,6 @@
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm">
 												</option-component>
-
 												<textbox-component
 													v-else-if="campo.tipo === 'textbox' && (!campo.condition || campo.condition.view(agrupaciones))"
 													:campo="campo" 
@@ -85,27 +82,14 @@
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm">
 												</checkbox-component>
+												<file-component
+													v-else-if="campo.tipo == 'file' && JSON.parse(campo.caracteristicas).tipo != 'expediente_validacion_excel'"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"
+												></file-component>
 
-												<div v-else-if="campo.tipo == 'file' && JSON.parse(campo.caracteristicas).tipo != 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
-													<div class="input-group">
-													  <div class="input-group-prepend">
-													  <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
-													  </div>
-														<div class="custom-file">
-															<input  
-																:id="[[campo.campo_id]]"
-																:name="[[campo.campo_id]]" 
-																class="custom-file-input"  style="background-color: #e5f2f5 !important"
-																ref="fileInput"
-																type="file" @change="cambioModelo"
-																/>
-															<label class="custom-file-label" :for="[[campo.campo_id]]">
-																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> 	{{ campo.attach || 'Seleccione archivo' }}
-																</span>
-															</label>
-														</div>
-													</div>
-												</div>
 												<div v-else-if="JSON.parse(campo.caracteristicas).tipo == 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
 													<div class="input-group">
 													  <div class="input-group-prepend">
@@ -216,13 +200,17 @@
 
         methods: {
         	setDeclararEn0(){
-        		console.log("se valor declaracion")
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
         		if(agrupacionDatosImpuesto){
 				    if(this.declararEn0){
 						agrupacionDatosImpuesto.campos.map( campo =>{
+							if(campo.nombre == 'Motivo'){
+								campo.valor = "";
+							} else {
+								campo.valor = 0;							
+								campo.valido = true;
+							}
 							$("#" + campo.campo_id).attr("disabled", true);
-							campo.valor = 0;
 							campo.mensajes = [];
 							$("#" + campo.campo_id).trigger("change");
 							return campo;
@@ -241,41 +229,23 @@
 				}
         	},
         	updateForm(campo){
-        		console.log( JSON.parse( JSON.stringify( this.campos ) ) );
         		if(campo.tipo == 'file' && campo.valido){
         			var fileInput = document.getElementById(campo.campo_id);
         			let file = fileInput.files[0];
-        			this.files.push( {valor:file, nombre:file.nombre});
+
+        			let nuevoFile = {valor:file, nombre:campo.nombre, id:campo.campo_id, nombrreFile:file.name};
+        			let indexArchivoEnLista = this.files.findIndex( file => file.id == campo.campo_id );
+        			if(indexArchivoEnLista>=0){
+        				this.files[indexArchivoEnLista] = nuevoFile;
+        			} else {
+        				this.files.push( nuevoFile);
+        			}
 		    		this.$emit('updatingFiles', this.files);
         		}
         		this.cambioModelo();
         	},
 		    cambioModelo(){
-        		let camposAvalidar = [];
-		    	this.agrupaciones.forEach( agrupacion => camposAvalidar = camposAvalidar.concat( agrupacion.campos ) );
-
-		    	let archivos = this.campos.filter( campo => campo.tipo == 'file' );
-
-		    	if( archivos.length > 0){
-		    		//this.files = [];
-		    		archivos.forEach( file =>{
-		    			var fileInput = document.getElementById(file.campo_id /*+ '-' + file.nombre.replace('*', '')*/);
-		    			if( fileInput && fileInput.files.length > 0  ){
-		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name );
-		    				this.file = fileInput.files[0];
-		    				this.files.push( {valor:this.file, nombre:file.nombre});
-		    				this.$emit('updatingFiles', this.files);
-		    			} else if( file.archivoGuardado ){
-		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text( this.files[0].valor.name );
-		    			
-		    			} else {
-		    				$("#"+ file.campo_id + '-' + file.nombre.replace('*', '') + '-namefile' ).text(  'Seleccione archivo' );
-		    			}
-
-		    		});
-		    	} 
-
-		    	let formvALID = this.validarFormulario(camposAvalidar);
+		    	let formvALID = this.validarFormulario();
             	let datosFormulario = {
             		tramite: this.tramite,
             		campos: this.campos,
@@ -285,31 +255,31 @@
             		motivoDeclaracion0:this.motivoDeclaracion0
             	}
             	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
-              
         	},
 
-
-
-        	validarFormulario( camposAvalidar ){
+        	validarFormulario(  ){
         		let formularioValido = true;
 
-        		let camposValidados = this.campos.filter( campo => !!camposAvalidar.find( campoAvalidar => { 
-        			return campoAvalidar.campo_id == campo.campo_id && campoAvalidar.agrupacion_id == campo.agrupacion_id
-        		}));    				
-		    			
-                camposValidados.forEach( (campo, indice) => {
-		    		formularioValido = formularioValido && campo.valido;
+        		let camposValidables = [];
+        		this.agrupaciones.forEach( agrupacion =>{
+        			camposValidables = camposValidables.concat( agrupacion.campos );
+        			return agrupacion;
+        		});
+                camposValidables.forEach( (campo, indice) => {
+                	/*if(campo.tipo == 'file'){
+                		formularioValido = formularioValido && true;
+                	} else*/	if( campo.nombre == 'Motivo'  ){
+                		if(this.declararEn0){
+							formularioValido = formularioValido && !!campo.valido;
+							this.motivoDeclaracion0 = campo.valor;
+                		} 
+					} else {
+                		formularioValido = formularioValido && !!campo.valido;
+                	}
+		    		
                 });
-
-                let campoMotivo = camposAvalidar.find( campo => {
-					return campo.nombre == "Motivo"
-				});
-
-				if( campoMotivo && $("#campo_motivo_declaracion_0").is(':visible') ){
-					formularioValido = formularioValido && !!campoMotivo.valor;
-					this.motivoDeclaracion0 = campoMotivo.valor;
-				}
-
+                console.log(JSON.parse(JSON.stringify(camposValidables)))
+				console.log(formularioValido);
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
 		    },
@@ -325,6 +295,7 @@
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
 						this.tipoPersona = this.infoGuardada.tipoPersona;
+						this.motivoDeclaracion0 = this.infoGuardada.motivoDeclaracion0;
 						this.campos.forEach( (campo) =>{	
 							campo.valor = this.infoGuardada.campos[ campo.campo_id ];
 							if( campo.tipo == 'file' && this.infoGuardada.archivosGuardados){
@@ -388,12 +359,11 @@
 				  		let campo = {
 				  			idElemento:'campo_motivo_declaracion_0',
 							agrupacion_id: agrupacionDatosImpuesto.agrupacion_id,
-							//campo_id: 19
 							caracteristicas: '{"required":"true"}',
 							nombre: nombreCampoMotivo,
+							valor: this.motivoDeclaracion0 ? this.motivoDeclaracion0 : '',
 							nombre_agrupacion: agrupacionDatosImpuesto.nombre_agrupacion,
 							orden: agrupacionDatosImpuesto.campos[ agrupacionDatosImpuesto.campos.length - 1 ].orden + 1,
-							//relationship: 245
 							tipo: "textbox",
 							condition:{
 								view: function(agrupaciones){
@@ -435,10 +405,10 @@
 		    onlyUnique(value, index, self) { 
 			    return self.findIndex (dato => dato.agrupacion_id == value.agrupacion_id) === index;
 			},
-
+/*
 			fileSaved(campo_id){
 				var file = document.getElementById(campo_id);
-				console.log(file)
+
 				if (file != null ) {
 					  file =file.files[0];
 					  console.log('file..' + file);
@@ -525,10 +495,7 @@
 												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
 												break;
 											}
-										}
-									console.log('file validacion 2: ' + file);
-									//this.files.push( {valor:file, nombre:file});
-		    						//this.$emit('updatingFiles', this.files);		
+										}	
 								}
 							})
 						}.bind(this);
@@ -538,7 +505,7 @@
 				}
 				this.cambioModelo();
 
-			}
+			}*/
 	
      	}	
 	}
