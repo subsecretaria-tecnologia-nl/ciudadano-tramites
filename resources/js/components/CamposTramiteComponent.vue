@@ -46,75 +46,46 @@
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
 			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || campo.tipo == 'file'? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
-<!--
-<input-component :campo="campo" :showMensajes="showMensajes" :estadoFormulario="comprobarEstadoFormularioCount" v-if="campo.tipo === 'input'"></input-component>
 
--->
+												<input-component
+													v-if="campo.tipo === 'input'" 
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm">
+												</input-component>	
 
+												<select-component
+													v-else-if="campo.tipo === 'select' || campo.tipo === 'multiple'" 
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm">
+												</select-component>
 
-												<div class=" fv-plugins-icon-container"  v-if="campo.tipo === 'input'">
-											  		<label>{{ campo.nombre }}</label>
-											  		<input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important"  
-											  			:placeholder="[[campo.nombre]]" :id="[[campo.campo_id]]"
-											  			v-model="campo.valor"  @keyup="cambioModelo"  @focus="cambioModelo"/>
-													<small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
-											  			<span v-for="mensaje in campo.mensajes" class="form-text text-danger">
-											  				{{ mensaje.mensajeStr }}
-											  			</span>
-											  		</small>
-											  	</div>
+												<option-component 
+													v-else-if="campo.tipo === 'option'"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm">
+												</option-component>
 
-											
-												<div class="fv-plugins-icon-container"  v-else-if="campo.tipo === 'select' || campo.tipo == 'multiple'">
-												  		<label>{{ campo.nombre }}</label>
-												  		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]" 
-												  			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
-												  			v-model="campo.valor" @change="cambioModelo" 
-												  			 :multiple="campo.tipo == 'multiple'">
-												  			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
-												  			:value="[[Object.keys(opcion)[0] ]]">
-												  				{{ opcion[ Object.keys(opcion)[0] ] }}
-												  			</option>
-												  		</select>
-												  		<small  class="form-text text-muted" v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
-												  			<span v-for="mensaje in campo.mensajes">
-												  				{{ mensaje.mensajeStr }}
-												  			</span>
-												  		</small>
-												</div>
-												<div v-else-if="campo.tipo === 'option'">
-													<div class="" v-for="opcion in JSON.parse(campo.caracteristicas).opciones">
-														<input type="radio" class=" "    
-															:id="[[campo.campo_id]]"
-														 	:name="[[campo.campo_id]]"
-														 	:value="[[Object.keys(opcion)[0] ]]" v-model="campo.valor" @change="cambioModelo" >
-														 	<label> {{ opcion[Object.keys(opcion)[0]] }}</label>
-													</div>
-												</div>
-												<div v-else-if="campo.tipo === 'checkbox'">
-													<div class="">
-														<input type="checkbox"    
-															:id="[[campo.campo_id]]"
-														 	:name="[[campo.campo_id]]"
-														 	v-model="campo.valor" @change="cambioModelo" >
-														 	<label> {{ campo.nombre }}</label>
-													</div>
-												</div>
-												
-												<div v-else-if="campo.tipo === 'textbox' && (!campo.condition || campo.condition.view(agrupaciones))"  class=" fv-plugins-icon-container">
-													<label>{{ campo.nombre }}</label>
-													<textarea  
-														:id="[[campo.idElemento ? campo.idElemento : campo.campo_id]]"
-													 	:name="[[campo.campo_id]]" 
-													 	class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" v-model="campo.valor"
-													 	@change="cambioModelo" ></textarea>
-													 	<small  class="form-text text-muted" v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || comprobarEstadoFormularioCount > 0)">
-												  			<span v-for="mensaje in campo.mensajes">
-												  				{{ mensaje.mensajeStr }}
-												  			</span>
-												  		</small>
-													
-												</div>
+												<textbox-component
+													v-else-if="campo.tipo === 'textbox' && (!campo.condition || campo.condition.view(agrupaciones))"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm">
+												</textbox-component>
+												<checkbox-component 
+													v-else-if="campo.tipo === 'checkbox'"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm">
+												</checkbox-component>
+
 												<div v-else-if="campo.tipo == 'file' && JSON.parse(campo.caracteristicas).tipo != 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
 													<div class="input-group">
 													  <div class="input-group-prepend">
@@ -126,7 +97,8 @@
 																:name="[[campo.campo_id]]" 
 																class="custom-file-input"  style="background-color: #e5f2f5 !important"
 																ref="fileInput"
-																type="file" @change="cambioModelo"/>
+																type="file" @change="cambioModelo"
+																/>
 															<label class="custom-file-label" :for="[[campo.campo_id]]">
 																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> 	{{ campo.attach || 'Seleccione archivo' }}
 																</span>
@@ -194,7 +166,7 @@
 
     export default {
 
-        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada'],
+        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0'],
         data() {
             return {
                 campos: [], agrupaciones:[],
@@ -205,10 +177,14 @@
                 tipoPersona:'pf',
                 consulta_api:'',
 				panel : [0,1,2,3,4],
-				motivoDeclaracion0:''
+				motivoDeclaracion0:'',
             }
         },
-  
+		watch: { 
+		  	declararEn0: function(newVal, oldVal) { // watch it
+		      	this.setDeclararEn0();
+			}
+		},
         created() {
 			if (localStorage.getItem('datosFormulario')) {
               	try {
@@ -235,10 +211,45 @@
 	        	//localStorage.removeItem('datosFormulario');
 	        	this.obtenerCampos();
 			}
+			
         },
 
         methods: {
-
+        	setDeclararEn0(){
+        		console.log("se valor declaracion")
+        		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
+        		if(agrupacionDatosImpuesto){
+				    if(this.declararEn0){
+						agrupacionDatosImpuesto.campos.map( campo =>{
+							$("#" + campo.campo_id).attr("disabled", true);
+							campo.valor = 0;
+							campo.mensajes = [];
+							$("#" + campo.campo_id).trigger("change");
+							return campo;
+						});
+						this.$forceUpdate();
+				    } else {
+						
+						agrupacionDatosImpuesto.campos.map( campo =>{
+							campo.valor = '';
+							$("#" + campo.campo_id).removeAttr("disabled")
+							$("#" + campo.campo_id).trigger("change");
+							return campo;
+						});
+						this.$forceUpdate();      	
+				    }
+				}
+        	},
+        	updateForm(campo){
+        		console.log( JSON.parse( JSON.stringify( this.campos ) ) );
+        		if(campo.tipo == 'file' && campo.valido){
+        			var fileInput = document.getElementById(campo.campo_id);
+        			let file = fileInput.files[0];
+        			this.files.push( {valor:file, nombre:file.nombre});
+		    		this.$emit('updatingFiles', this.files);
+        		}
+        		this.cambioModelo();
+        	},
 		    cambioModelo(){
         		let camposAvalidar = [];
 		    	this.agrupaciones.forEach( agrupacion => camposAvalidar = camposAvalidar.concat( agrupacion.campos ) );
@@ -281,10 +292,6 @@
 
         	validarFormulario( camposAvalidar ){
         		let formularioValido = true;
-        		camposAvalidar.forEach( (campo, indice) =>{
-					const campoOBJ = JSON.parse(JSON.stringify(campo));
-					this.isValido(campoOBJ);
-        		});
 
         		let camposValidados = this.campos.filter( campo => !!camposAvalidar.find( campoAvalidar => { 
         			return campoAvalidar.campo_id == campo.campo_id && campoAvalidar.agrupacion_id == campo.agrupacion_id
@@ -320,7 +327,7 @@
 						this.tipoPersona = this.infoGuardada.tipoPersona;
 						this.campos.forEach( (campo) =>{	
 							campo.valor = this.infoGuardada.campos[ campo.campo_id ];
-							if( campo.tipo == 'file' ){
+							if( campo.tipo == 'file' && this.infoGuardada.archivosGuardados){
 								let infoArchivoGuardado = this.infoGuardada.archivosGuardados.find( archivo => archivo.mensaje == campo.nombre );
 								campo.archivoGuardado = true;
 								let urlFile = process.env.TESORERIA_HOSTNAME + '/download/' + infoArchivoGuardado.attach;
@@ -419,77 +426,14 @@
 				  	}
 
 				  	this.agrupaciones = agrupaciones.sort(function(a,b) { return parseFloat(a.orden_agrupacion) - parseFloat(b.orden_agrupacion) } );
+				  	
+				  	let segg= this;
+					setTimeout(function(){ segg.setDeclararEn0(); }, 1000);
 
 		    },
 
 		    onlyUnique(value, index, self) { 
 			    return self.findIndex (dato => dato.agrupacion_id == value.agrupacion_id) === index;
-			},
-
-
-        	isValido(campo){
-
-		    	let curpValido = true;
-		    	let requeridoValido = true;
-				let caracteristicas = {};
-		    	var caracteristicasStr = campo.caracteristicas;
-
-		    	let indiceCampo = this.campos.findIndex( campoInARRAY => campoInARRAY.campo_id == campo.campo_id && campoInARRAY.agrupacion_id == campo.agrupacion_id );
-
-		    	if(indiceCampo >= 0){
-			    	this.campos[indiceCampo].mensajes = [];
-			    	try {
-			    		caracteristicas  = JSON.parse(  caracteristicasStr + '' );
-			    	}catch(err){
-			    		console.log(err);
-			    	}
-
-			    	if( caracteristicas.expreg){
-			    		var re = new RegExp(caracteristicas.expreg, "i");
-			    		curpValido =  re.test(campo.valor) ;
-			    		if(  !curpValido ){
-			    			let mensaje = { 
-			    				tipo:'regex',
-			    				mensajeStr: "El campo " + campo.nombre + " no es válido"
-			    			}
-			    			this.campos[indiceCampo].mensajes.push( mensaje );
-			    		}
-			    	} 
-			    	if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
-			    		
-			    		//if( campo.tipo == 'file' ){
-							//requeridoValido =  !!this.files.find( file => file.nombre == campo.nombre );
-			    		//} else {
-							requeridoValido =  !!campo.valor;
-			    		//}
-			    		if( !requeridoValido ){
-			    			let mensaje = { 
-			    				tipo:'required',
-			    				mensajeStr: "El campo " + campo.nombre + " es requerido"
-			    			}
-			    			this.campos[indiceCampo].mensajes.push( mensaje );
-			    		}
-			    	}
-			    	//los archivos se validan aparte
-			    	
-			    	if( campo.tipo == 'file' ){
-						requeridoValido =  !!this.files.find( file => file.nombre == campo.nombre );
-
-						if( !requeridoValido ){
-			    			let mensaje = { 
-			    				tipo:'required',
-			    				mensajeStr: "El arvhivo " + campo.nombre + " es requerido"
-			    			}
-			    			this.campos[indiceCampo].mensajes.push( mensaje );
-			    		}
-
-			    	} 
-					this.campos[indiceCampo].valido = curpValido && requeridoValido;	
-				}
-			},
-
-			fileValido(){
-				return this.cambioModelo();
 			},
 
 			fileSaved(campo_id){
