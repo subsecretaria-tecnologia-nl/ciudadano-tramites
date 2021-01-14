@@ -258,6 +258,7 @@ class SolicitudesController extends Controller
         }
       }
 
+
       $data = array();
 
       if ($id_tramite == 516 ) {
@@ -274,6 +275,16 @@ class SolicitudesController extends Controller
           "tipo_costo" => $tipo_costo
         );
       }else{
+        $data_costo = $this->costo->where('tramite_id', $id_tramite)->where('status', 1)->get();
+
+        foreach ($data_costo as $d) {
+          $tipo_costo = $c->variable;
+
+          if($tipo_costo == null){
+            $tipo_costo = 0;
+          }
+        }
+
         $data [] = array(
           "campos_data" => $campos_data,
           "consulta_api" => "/getcostoTramite",
