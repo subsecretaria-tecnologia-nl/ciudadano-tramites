@@ -119,9 +119,7 @@
     export default {
         props: ['tramite','idUsuario', 'clave'],
         mounted() {
-            //let clave = "5b449a85-fe0c-4e0d-940a-f2b918a85634";
-            //let clave = false;
-            this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4(); // si la clave ya existe usarla
+            this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
@@ -131,7 +129,6 @@
             } else {
               this.camposGuardadosObtenidos = true;
             }
-            //
         },
 
         data() {
@@ -352,7 +349,8 @@
                   });
                   informacion.campos=camposObj;
                   informacion.tipoPersona=datosFormulario.tipoPersona,
-                  informacion.declararEn0 = this.declararEn0
+                  informacion.declararEn0 = this.declararEn0,
+                  informacion.motivoDeclaracion0 = datosFormulario.motivoDeclaracion0
                 } else {
                   informacion.camposComplementaria = this.datosComplementaria;
                 }
@@ -365,10 +363,7 @@
               let tramite = datosTabs[1];
               let datosFormulario = datosTabs[2];
 
-              
-
               datosFormulario.campos = this.formatearCampos(datosFormulario.campos);
-              console.log( JSON.parse( JSON.stringify(datosFormulario)));
               let informacion = this.getInformacion( tramite, datosFormulario );
 
 
@@ -376,7 +371,6 @@
             },
 
             formatearCampos(campos){
-              console.log( JSON.parse( JSON.stringify( campos ) ) )
               let camposFormateados = campos.map(campo =>{
                 let caracteristicas = this.getCaracteristicas(campo);
                 if(caracteristicas.formato == 'moneda'){

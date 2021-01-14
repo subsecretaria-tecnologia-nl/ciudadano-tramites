@@ -87,31 +87,17 @@
 													:campo="campo" 
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
-													@updateForm="updateForm"
+													@updateForm="updateForm" :files="files"
+													@validarFormulario="validarFormulario"
 												></file-component>
-
-												<div v-else-if="JSON.parse(campo.caracteristicas).tipo == 'expediente_validacion_excel'" class=" fv-plugins-icon-container">
-													<div class="input-group">
-													  <div class="input-group-prepend">
-													  <span class="input-group-text" id="inputGroupFileAddon01">{{ campo.nombre}}</span>
-													  </div>	
-														<div class="custom-file">
-															<input  
-																:id="[[campo.campo_id]]"
-																:name="[[campo.campo_id]]" 
-																class="custom-file-input"  style="background-color: #e5f2f5 !important"
-																ref="fileInput"
-																type="file"
-																accept=".xlsx,.xls"
-																@change="fileSaved(campo.campo_id)"/>
-															<label class="custom-file-label" :for="[[campo.campo_id]]">
-																<span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'"> 	{{ campo.attach || 'Seleccione archivo' }}
-																</span>
-															</label>
-													  	</div>
-													</div>
-													<a v-if="/^{*}|Expediente$/.test(campo.nombre) == true" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
-												</div>
+												<expediente-excel-component  
+													v-else-if="JSON.parse(campo.caracteristicas).tipo == 'expediente_validacion_excel'"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm" :files="files"
+													@validarFormulario="validarFormulario">
+												</expediente-excel-component>
 			 								</div>
 										</div>
 							      	</v-expansion-panel-content>
@@ -127,26 +113,6 @@
 </template>
 
 <script>
-	const getFile = (url, nombreArchivo, campo) => {
-	  return new Promise((resolve, reject) => {
-	    axios({
-	      	method: "get",
-	      	url,
-	      	responseType: "ArrayBuffer",
-	      	headers: {
-				'nombreArchivo': nombreArchivo,
-				campo_id: campo.campo_id,
-				campo_nombre:campo.nombre
-			}
-	    })
-	      .then(data => {
-	        resolve(data);
-	      })
-	      .catch(error => {
-	        reject(error.toString());
-	      });
-	  });
-	}
 
     export default {
 
@@ -192,7 +158,6 @@
                 	this.obtenerCampos();
               	}
 	        } else {
-	        	//localStorage.removeItem('datosFormulario');
 	        	this.obtenerCampos();
 			}
 			
@@ -205,7 +170,8 @@
 				    if(this.declararEn0){
 						agrupacionDatosImpuesto.campos.map( campo =>{
 							if(campo.nombre == 'Motivo'){
-								campo.valor = "";
+								campo.valor = this.motivoDeclaracion0;
+								campo.valido = !!this.motivoDeclaracion0;
 							} else {
 								campo.valor = 0;							
 								campo.valido = true;
@@ -229,11 +195,9 @@
 				}
         	},
         	updateForm(campo){
-        		if(campo.tipo == 'file' && campo.valido){
-        			var fileInput = document.getElementById(campo.campo_id);
-        			let file = fileInput.files[0];
 
-        			let nuevoFile = {valor:file, nombre:campo.nombre, id:campo.campo_id, nombrreFile:file.name};
+        		if(campo.tipo == 'file' && campo.valido){
+        			let nuevoFile = {valor:campo.valor, nombre:campo.nombre, id:campo.campo_id, nombrreFile:campo.valor.name};
         			let indexArchivoEnLista = this.files.findIndex( file => file.id == campo.campo_id );
         			if(indexArchivoEnLista>=0){
         				this.files[indexArchivoEnLista] = nuevoFile;
@@ -257,7 +221,7 @@
             	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
         	},
 
-        	validarFormulario(  ){
+        	validarFormulario( ){
         		let formularioValido = true;
 
         		let camposValidables = [];
@@ -266,9 +230,7 @@
         			return agrupacion;
         		});
                 camposValidables.forEach( (campo, indice) => {
-                	/*if(campo.tipo == 'file'){
-                		formularioValido = formularioValido && true;
-                	} else*/	if( campo.nombre == 'Motivo'  ){
+                	if( campo.nombre == 'Motivo'  ){
                 		if(this.declararEn0){
 							formularioValido = formularioValido && !!campo.valido;
 							this.motivoDeclaracion0 = campo.valor;
@@ -278,8 +240,6 @@
                 	}
 		    		
                 });
-                console.log(JSON.parse(JSON.stringify(camposValidables)))
-				console.log(formularioValido);
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
 		    },
@@ -296,13 +256,12 @@
 					if( this.infoGuardada && this.infoGuardada.campos ){
 						this.tipoPersona = this.infoGuardada.tipoPersona;
 						this.motivoDeclaracion0 = this.infoGuardada.motivoDeclaracion0;
-						this.campos.forEach( (campo) =>{	
+						this.campos.forEach( (campo, index) =>{	
 							campo.valor = this.infoGuardada.campos[ campo.campo_id ];
 							if( campo.tipo == 'file' && this.infoGuardada.archivosGuardados){
 								let infoArchivoGuardado = this.infoGuardada.archivosGuardados.find( archivo => archivo.mensaje == campo.nombre );
 								campo.archivoGuardado = true;
-								let urlFile = process.env.TESORERIA_HOSTNAME + '/download/' + infoArchivoGuardado.attach;
-								promises.push(getFile( urlFile, infoArchivoGuardado.attach, campo ));
+								campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
 							}
 							
 						});
@@ -310,29 +269,10 @@
 				} catch (error) {
 				  	console.log(error);
 				}
-		       	Promise.all(promises).then(( respuestas ) => {
-					respuestas.forEach( (res) => {
-						const blob = new Blob([res.data], { type: res.headers['content-type'] });
-						var fileNew = new File([blob], res.config.headers.nombreArchivo , {
-							type: res.headers['content-type'], 
-							lastModified: Date.now()
-						});
-						let headers = res.config.headers;
-						this.files.push( {valor:fileNew, nombre: headers.campo_nombre});
-						this.$emit('updatingFiles', this.files);
 
-						var fileInput = document.getElementById(headers.campo_id /*+ '-' + headers.campo_nombre.replace('*', '')*/);
-	  					fileInput.files.push(fileNew);
-
-					})
-		       	}).catch(errors => {
-				  // react on errors.
-				}).finally(() => {
-					console.log("no hay archivos")
-					this.agruparCampos();
-					let segg= this;
+				this.agruparCampos();
+				let segg= this;
 					setTimeout(function(){ segg.cambioModelo(); }, 1000);
-				});
 				this.mostrar = true;
 				
 		    },
@@ -405,107 +345,6 @@
 		    onlyUnique(value, index, self) { 
 			    return self.findIndex (dato => dato.agrupacion_id == value.agrupacion_id) === index;
 			},
-/*
-			fileSaved(campo_id){
-				var file = document.getElementById(campo_id);
-
-				if (file != null ) {
-					  file =file.files[0];
-					  console.log('file..' + file);
-					if(file){
-						var fileReader = new FileReader();
-						fileReader.readAsBinaryString(file);
-						fileReader.onload = function(e) {
-							var data =  e.target.result;
-							var workbook = XLSX.read(data, {type: "binary"});
-							workbook.SheetNames.forEach(sheetName => {
-								var rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-								var json_object = JSON.stringify(rowObject);		
-								var opcionesExp = ['Expediente Catastral' , 'Exp Catastral', 'E Catastral'];
-								var trueExp;
-								var tipoValidacion ;
-
-								for (let k = 0; k < opcionesExp.length; k++) {
-									if (Object.keys(rowObject[0]).indexOf(opcionesExp[k]) != -1) {
-										console.log(Object.keys(rowObject[0]).indexOf(opcionesExp[k]));
-										var index = Object.keys(rowObject[0]).indexOf(opcionesExp[k]);
-										trueExp = opcionesExp[k];
-										break;
-									}
-									
-								}
-
-								var index = Object.keys(rowObject[0]).indexOf(trueExp);
-								index != -1 ? tipoValidacion  = '1' : tipoValidacion = '2';
-								console.log('tipo de validacion: ' +tipoValidacion);
-								
-								//cuando el usuario añada los expedientes bajo una unica columna de expediente catastral 
-								if (tipoValidacion == 1 ) {
-									
-									var expName =  Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf(trueExp)]
-									for (let i = 0; i < rowObject.length; i++) {
-											// var key = Object.keys(rowObject[0]);
-											var value = rowObject[i][expName];
-											if ( (/^([0-9]{3,3})(-)?([0-9]{3,3})(-)?([0-9]{3,3})$/).test(value) == false ) {
-												alert('el documento excel no cuenta con el formato requerido error: "el formato de expediente completo es invalido"');
-												break;
-											}
-									}
-									console.log('file : ' + file);
-									//this.files.push( {valor:file, nombre:file});
-									//this.$emit('updatingFiles', this.files);
-									
-								}else if(tipoValidacion == 2){
-
-										var municipio = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Municipio')];
-											municipio == undefined ? 'municipio' : municipio;
-
-										var region = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Region')];
-											region == undefined ? region = 'region' : region;
-
-										var manzana = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Manzana')];
-											manzana == undefined ? manzana = 'manzana' : manzana;
-
-										var lote = Object.keys(rowObject[0])[Object.keys(rowObject[0]).indexOf('Lote')];
-											lote == undefined ? lote = 'lote' : lote;
-
-										for (let i = 0; i < rowObject.length; i++) {
-											var valueMunicipio = rowObject[i][municipio];
-												valueMunicipio = valueMunicipio.toString().padStart(3, '0');
-											var valueRegion = rowObject[i][region];
-												valueRegion = valueRegion.toString().padStart(3, '0');
-											var valueManzana = rowObject[i][manzana];
-												valueManzana = valueManzana.toString().padStart(3, '0');
-											var valueLote = rowObject[i][lote];
-												valueLote = valueLote.toString().padStart(3, '0');
-											
-											if ( /^([0-9]){1,3}$/.test(valueMunicipio) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto" ')
-												break;
-											}
-											if ( /^([0-9]){1,3}$/.test(valueRegion) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
-												break;
-											}
-											if ( /^([0-9]){1,3}$/.test(valueManzana) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
-												break;
-											}
-											if ( /^([0-9]){1,3}$/.test(valueLote) == false) {
-												alert('el documento excel no cuenta con el formato requerido error: "el expediente formado por municipio, region, manzana, lote es incorrecto"')
-												break;
-											}
-										}	
-								}
-							})
-						}.bind(this);
-				
-					
-					}
-				}
-				this.cambioModelo();
-
-			}*/
 	
      	}	
 	}
