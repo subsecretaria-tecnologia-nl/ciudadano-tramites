@@ -1,6 +1,6 @@
 <template>
   <div class=" fv-plugins-icon-container">
-    <label>{{ campo.nombre }} TEX</label>
+    <label>{{ campo.nombre }} </label>
     <textarea  
       :id="[[campo.idElemento ? campo.idElemento : campo.campo_id]]"
       :name="[[campo.campo_id]]" 
@@ -19,6 +19,8 @@
     export default {
       props: ['campo', 'estadoFormulario', 'showMensajes'],
       created() {
+        //this.campo.valor = !!this.campo.valor ? this.campo.valor : ''; 
+        //console.log(JSON.parse(JSON.stringify( this.campo )))
         this.validar();
       },
       methods: {
@@ -37,7 +39,7 @@
 
 
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
-            requeridoValido =  this.campo.valor && this.campo.valor.length > 0;
+            requeridoValido =  !!this.campo.valor && this.campo.valor.length > 0;
             if( !requeridoValido ){
               let mensaje = { 
                 tipo:'required',
@@ -46,6 +48,8 @@
               this.campo.mensajes.push( mensaje );
             }
           }
+
+          this.$forceUpdate();
           this.campo.valido = requeridoValido;
           this.$emit('updateForm', this.campo);
         }

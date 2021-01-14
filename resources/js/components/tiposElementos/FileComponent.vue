@@ -26,7 +26,9 @@
 <script>
     export default {
       props: ['campo', 'estadoFormulario', 'showMensajes'],
-
+      created() {
+        this.validar();
+      },
       methods: {
 
         validar(){
@@ -42,11 +44,10 @@
           }
           var fileInput = document.getElementById(this.campo.campo_id );
           if( fileInput && fileInput.files.length > 0  ){
-            requeridoValido =  true
+            requeridoValido = true;
             $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name );
-            //this.file = fileInput.files[0];
-               // this.files.push( {valor:this.file, nombre:file.nombre});
-               // this.$emit('updatingFiles', this.files);
+          } else {
+            requeridoValido = false;
           }
           if( !requeridoValido ){
             let mensaje = { 
