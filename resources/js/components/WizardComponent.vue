@@ -40,9 +40,20 @@
                                                   @valueRadio="cambioRadio"
                                                   :disabledDefault='tipoTramiteDisabled'></radio-option-component>
                                               </div>
+                                              <div v-if="tipoTramite == 'normal' && tramite.tramite == '5% de Enajenación de Inmuebles'" class="row">
+                                                <div class="col-md-12 col-lg-12">
+                                                  <input type="checkbox"    
+                                                    id="declarareeN0"
+                                                    name="declarareeN0"
+                                                    v-model="declararEn0"  >
+                                                    <label> Declarar en 0</label>
+                                                </div>
+                                              </div>
                                               <div v-if="tipoTramite == 'normal' && camposGuardadosObtenidos" >
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
-                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada"></campos-tramite-component>
+                                                :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada" :declararEn0="declararEn0">
+                                                  
+                                                </campos-tramite-component>
                                               </div>
                                               <div v-else-if="tipoTramite == 'complementaria' && camposGuardadosObtenidos">
                                                   <formulario-complementaria-component @updatingScore="updateScore" 
@@ -66,7 +77,7 @@
                                                 </div>
                                                 <div >
                                                   <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-on:click="saveTemp()" :disabled="enviando" v-if="currentStep != 3">
+                                                    <button type="button" class="btn btn-default font-weight-bolder text-uppercase px-9 py-4"  v-on:click="saveTemp()" :disabled="enviando" v-if="currentStep != 3">
                                                       Guardar y Continuar después                                                                         
                                                       <div id="spinner-guardaContinuaDespues" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
@@ -106,21 +117,18 @@
     import { uuid } from 'vue-uuid';
 
     export default {
-        props: ['tramite','idUsuario'],
+        props: ['tramite','idUsuario', 'clave'],
         mounted() {
-            //let clave = "ff9bfabf-531b-4458-8930-1a0d5475df88";
-            let clave = false;
-            this.tramite.id_seguimiento = clave ? clave : uuid.v4(); // si la clave ya existe usarla
+            this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
 
-            if( clave ){
+            if( this.clave ){
                this.obtenerCamposTemporales(); 
             } else {
               this.camposGuardadosObtenidos = true;
             }
-            //
         },
 
         data() {
@@ -160,7 +168,8 @@
                   wizardNumber:3,
                   wizardTitle:'Finalizar d',
                   wizardDesc:'Revisar y completar',
-                }]
+                }],
+                declararEn0:false
             }
         },
 
@@ -339,7 +348,9 @@
                     }
                   });
                   informacion.campos=camposObj;
-                  informacion.tipoPersona=datosFormulario.tipoPersona
+                  informacion.tipoPersona=datosFormulario.tipoPersona,
+                  informacion.declararEn0 = this.declararEn0,
+                  informacion.motivoDeclaracion0 = datosFormulario.motivoDeclaracion0
                 } else {
                   informacion.camposComplementaria = this.datosComplementaria;
                 }
@@ -351,16 +362,44 @@
               let listaSolicitantes = datosTabs[0];
               let tramite = datosTabs[1];
               let datosFormulario = datosTabs[2];
+
+              datosFormulario.campos = this.formatearCampos(datosFormulario.campos);
               let informacion = this.getInformacion( tramite, datosFormulario );
+
+
               return this.buildFormData( informacion, listaSolicitantes, tramite );
             },
 
+            formatearCampos(campos){
+              let camposFormateados = campos.map(campo =>{
+                let caracteristicas = this.getCaracteristicas(campo);
+                if(caracteristicas.formato == 'moneda'){
+                  campo.valor = this.formatoNumero( campo.valor );
+                }
+                return campo;
+              })
+              return camposFormateados;
+            },
+            getCaracteristicas(campo){
+              let caracteristicas = {};
+              try {
+                caracteristicas = JSON.parse(campo.caracteristicas + '');
+              }catch(err){
+                console.log(err);
+              }
+              return caracteristicas;
+            },
+            formatoNumero(numberStr){
+                let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+                return valor;
+            },
 
+            async saveTemp(){
 
-            async saveTemp(){              
               let guardandoTemporarmente = true;
               let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
               let formData = this.getFormData();
+                 
               try {
                 let response = await axios.post(url, formData, {
                   headers:{
@@ -394,6 +433,10 @@
                 }
                 this.tipoTramite = this.infoGuardada.campos ? 'normal' : 'complementaria';
                 this.tipoTramiteDisabled = !this.infoGuardada.campos ? 'normal' : 'complementaria';
+
+                if( this.tipoTramite == 'normal' ){
+                  this.declararEn0 = this.infoGuardada && this.infoGuardada.declararEn0 ? this.infoGuardada.declararEn0 : false;
+                }
                 this.camposGuardadosObtenidos = true;
 
                 this.solicitantesGuardados = response.data.map( solicitante => {

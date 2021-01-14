@@ -648,7 +648,8 @@ class TramitesController extends Controller
 
     public function detalle ( Request $request ) {
       $id_tramite = $request->idTramite;
-
+      $clave = isset($request->clave) ? $request->clave : "";
+      
       $detalle = array();
       $data = $this->tiposer->where('Tipo_Code', $id_tramite)->get();
       foreach ($data as $d) {
@@ -660,11 +661,11 @@ class TramitesController extends Controller
       $detalle [] = array(
         'id_tramite'=>$id_tramite,
         'tramite' => $nombre_tramite,
-        'partidas' => $info,
+        'partidas' => $info
       );
 
       set_layout_arg("subtitle", "Detalle Trámite");
-      return layout_view("tramites.detalleTramite",[ "detalle" => $detalle ] );
+      return layout_view("tramites.detalleTramite",[ "detalle" => $detalle, "clave" => $clave ] );
     }
 
     /**
