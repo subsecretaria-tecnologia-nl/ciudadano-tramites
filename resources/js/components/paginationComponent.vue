@@ -1,7 +1,7 @@
 <template>
 	<div class="pagination flex-column">
 		<div class="pagination-content">
-			<tramite-component v-for="(tramite, index) in items" :tramite="tramite" v-bind:key="index" v-if="totalItems != 0"></tramite-component>
+			<tramite-component v-for="(tramite, index) in tramitesPaginados" :tramite="tramite" v-bind:key="index" v-if="totalItems != 0"></tramite-component>
             <div class="card mb-4" v-if="totalItems == 0">
                 <div class="card-body">
                     <h3 class="text-center">{{ message || '¡Lo sentimos! No se encuentran registros para mostrar.' }}</h3>
@@ -55,6 +55,7 @@
 			if(!attrs.currentPage) attrs.currentPage = 1;
 			if(!attrs.pages) attrs.pages = 0;
 			if(!attrs.index) attrs.index = 1;
+			if(!attrs.tramitesPaginados) attrs.tramitesPaginados = [];
 			attrs.limit = 10;
 			attrs.totalItems = 0;
 			if(!attrs.message) attrs.message = null;
@@ -71,11 +72,15 @@
                 this.goto(1);
             },
             pagination( page ){
+            	console.log(page)
                 let limitInt = parseInt(this.limit);
                 let indiceInicial = (page - 1 ) * limitInt;
-                let indiceFinal =   ( (page - 1 ) * limitInt  )  + limitInt;
+                let indiceFinal = ( (page - 1 ) * limitInt  )  + limitInt;
+
+                console.log(indiceInicial,  indiceFinal, this.items.length);
 
                 this.tramitesPaginados = this.items.slice( indiceInicial,  indiceFinal );
+                console.log(this.tramitesPaginados);
                 this.totalItems = this.tramitesPaginados.length;
             },
             goto( page ){ 
