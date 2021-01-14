@@ -247,7 +247,7 @@ class SolicitudesController extends Controller
 
 
       }
-
+      
       $data_costo = $this->costo->where('tramite_id', $id_tramite)->where('status', 1)->get();
 
       foreach ($data_costo as $d) {
