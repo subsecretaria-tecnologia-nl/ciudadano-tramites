@@ -475,8 +475,8 @@ class CalculoimpuestosController extends Controller
     {
     	$d = explode("-",$fecha);
 
-    	$year 	= $d[0];
-    	$month 	= $d[1];
+    	$year 	= (integer)$d[0];
+    	$month 	= (integer)$d[1];
 
 
     	// buscar en la tabla todos los factores que correspondan al año
@@ -486,7 +486,7 @@ class CalculoimpuestosController extends Controller
 
 
     	}catch( \Exception $e ){
-    		dd("CalculoimpuestosController::getInpc " . $e->getMessage());
+    		dd($this->inpc_values, "CalculoimpuestosController::getInpc " . $e->getMessage());
     	}
 
 
@@ -728,7 +728,7 @@ class CalculoimpuestosController extends Controller
   			//$count = 0;
   			foreach($this->porcentajes_values as $p => $data)
   			{
-  				if($p >= $i && $p <= $f)
+  				if($p <= $i && $p >= $f)
   				{
   					$total += $data["vencido"];
   				}

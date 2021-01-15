@@ -59,9 +59,9 @@ class TramitesController extends Controller
         $this->group = $group;
       }
 
-    public function index ($type) {
+    public function index ($type, $id) {
     	set_layout_arg(["subtitle" => "Trámites: {$type}","fluid_container"=> true]);
-    	return layout_view("tramites.index", [ "type" => $type ]);
+    	return layout_view("tramites.index", [ "type" => $type, "id" => $id ]);
     }
 
     public function new () {
@@ -574,7 +574,7 @@ class TramitesController extends Controller
                 $costoMaximo = $max * $actual_uma;
                 $costoMax = $this->redondeo($costoMaximo);
                 if($costoxhoja < $costoMinimo){
-                  $costo_final = $costoMinimo;
+                  $costo_final = $costoMin;
                 }elseif($costoxhoja > $costoMax){
                   $costo_final = $costoMax;
                 }else{
@@ -648,7 +648,8 @@ class TramitesController extends Controller
 
     public function detalle ( Request $request ) {
       $id_tramite = $request->idTramite;
-
+      $clave = isset($request->clave) ? $request->clave : "";
+      
       $detalle = array();
       $data = $this->tiposer->where('Tipo_Code', $id_tramite)->get();
       foreach ($data as $d) {
@@ -660,11 +661,11 @@ class TramitesController extends Controller
       $detalle [] = array(
         'id_tramite'=>$id_tramite,
         'tramite' => $nombre_tramite,
-        'partidas' => $info,
+        'partidas' => $info
       );
 
       set_layout_arg("subtitle", "Detalle Trámite");
-      return layout_view("tramites.detalleTramite",[ "detalle" => $detalle ] );
+      return layout_view("tramites.detalleTramite",[ "detalle" => $detalle, "clave" => $clave ] );
     }
 
     /**
@@ -727,7 +728,7 @@ class TramitesController extends Controller
       ]);
       $json = $response->json();
       $json['codigoCambioEstatus'] = $this->cambiarEstatusTransaccion( $json );
-      
+
       if( $json['data'] ){
         return layout_view("tramites.respuestaPago",  [ "respuestabanco" =>$json] );
       } else {

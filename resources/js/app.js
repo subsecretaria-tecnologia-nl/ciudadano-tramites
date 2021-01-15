@@ -59,6 +59,15 @@ Vue.component("table-component", () => import ( /* webpackChunkName: "js/compone
 Vue.component("radio-option-component", () => import ( /* webpackChunkName: "js/components/generales/radio-option-component" */ './components/generales/radioOptionComponent.vue' ));
 Vue.component("formulario-complementaria-component" , () => import ( /* webpackChunkName: "js/components/formulario-complementaria-component" */ './components/FormularioComplementariaComponent.vue' ));
 
+
+Vue.component("input-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/input-component" */ './components/tiposElementos/InputComponent.vue' ));
+Vue.component("select-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/select-component" */ './components/tiposElementos/SelectComponent.vue' ));
+Vue.component("option-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/option-component" */ './components/tiposElementos/OptionComponent.vue' ));
+Vue.component("textbox-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/textbox-component" */ './components/tiposElementos/TextBoxComponent.vue' ));
+Vue.component("checkbox-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/checkbox-component" */ './components/tiposElementos/CheckboxComponent.vue' ));
+Vue.component("expediente-excel-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/expediente-excel-component" */ './components/tiposElementos/ExpedienteExcelComponent.vue' ));
+Vue.component("file-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/file-component" */ './components/tiposElementos/FileComponent.vue' ));
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

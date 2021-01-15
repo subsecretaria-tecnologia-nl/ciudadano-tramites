@@ -19,14 +19,16 @@ Route::get("/", function(){
 	return redirect()->route("dashboard");
 });
 
+
 Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
+	Route::get("/formato-declaracion/{id}", "FormatoDeclaracionController@index");
 	Route::get("/email/template", "EmailController@index");
 	Route::middleware(["validate_session", "validate_rol"])->group(function(){
 		Route::get('/', function () {
 			return redirect()->route("dashboard");
 		})->name("home");
 		Route::get('/dashboard', "DashboardController@index")->name("dashboard");
-		Route::get('/tramites/{type}', "TramitesController@index")->name("tramites");
+		Route::get('/tramites/{type}/{id}', "TramitesController@index")->name("tramites");
 		Route::get('/detalle/{id}', "TramitesDetailsController@index")->name("tramites.details");
 		Route::get('/nuevo-tramite', "TramitesController@new")->name("tramite.nuevo");
 		Route::get('/perfil',  "AcountInfoController@index")->name("perfil");
@@ -56,7 +58,7 @@ Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
 		Route::post('/getcostoImpuesto', 'CalculoimpuestosController@index')->name("costo-impuesto");
 		Route::post('/getComplementaria', 'CalculoimpuestosController@complementaria')->name("costo-complementaria");
 
-		Route::get('/detalle-tramite/{idTramite}', "TramitesController@detalle")->name("tramite.detalle");
+		Route::get('/detalle-tramite/{idTramite}/{clave?}', "TramitesController@detalle")->name("tramite.detalle");
 		Route::get('/cart/', "TramitesController@carshop")->name("tramite.cart");
 
 		Route::get('/respuestaPago', "TramitesController@respuestaPago")->name("respuestaPago");

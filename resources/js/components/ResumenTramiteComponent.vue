@@ -164,11 +164,11 @@
                         let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
 
                         paramsCosto.fecha_escritura = campoFechaMinuta.valor;
-                        paramsCosto.monto_operacion = campoMonto.valor;
-                        paramsCosto.ganancia_obtenida = campoGananciaObtenida.valor;    
-                        paramsCosto.pago_provisional_lisr = campoPagoProvisional.valor;
+                        paramsCosto.monto_operacion = this.formatoNumero(campoMonto.valor);
+                        paramsCosto.ganancia_obtenida = this.formatoNumero(campoGananciaObtenida.valor);    
+                        paramsCosto.pago_provisional_lisr = this.formatoNumero(campoPagoProvisional.valor);
                         if( campoMulta ){
-                            paramsCosto.multa_correccion_fiscal = campoMulta.valor;
+                            paramsCosto.multa_correccion_fiscal = this.formatoNumero(campoMulta.valor);
                         }
                     } else {
                         let campoLote           = this.getCampoByName(CAMPO_LOTE);
@@ -178,15 +178,20 @@
                         let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
 
                         if( campoCatastral ){
-                            paramsCosto.valor_catastral = campoCatastral.valor;
+                            paramsCosto.valor_catastral = this.formatoNumero(campoCatastral.valor);
                         }
 
-                        if(campoSubsidio){
-                            paramsCosto.subsidio = campoSubsidio.valor;//62
+                        if(campoSubsidio){                            
+                            if( campoSubsidio.tipo == 'select'  ){
+                                paramsCosto.subsidio = campoSubsidio.valor[0][0];//62  
+                            } else {
+                                paramsCosto.subsidio = campoSubsidio.valor;//62    
+                            }
+                            
                         }
 
                         if(campoValorOperacion ){
-                            paramsCosto.valor_operacion = campoValorOperacion.valor;
+                            paramsCosto.valor_operacion = this.formatoNumero(campoValorOperacion.valor);
                         }
 
                         if( campoHoja ){
@@ -202,6 +207,11 @@
                 }
 
                 return Object.assign(params, paramsCosto);
+            },
+
+            formatoNumero(numberStr){
+                let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+                return valor;
             },
 
             async obtenerCosto(){
@@ -222,7 +232,7 @@
                 try {
                     let response = await axios.post(url, data);
                     let detalleTramite = response.data;
-                    console.log( detalleTramite )
+
                     if( consulta_api == "/getcostoImpuesto" || this.tipoTramite =='complementaria'  ){
                         this.tramite.detalle =  detalleTramite;
                     } else {
