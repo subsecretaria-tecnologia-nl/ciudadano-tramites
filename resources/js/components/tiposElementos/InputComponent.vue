@@ -26,13 +26,14 @@
         formatear(){
           var number = this.campo.valor ? Number(this.campo.valor.replace(/[^0-9.-]+/g,"")) : "";
           let caracteristicas= this.getCaracteristicas();
-          if( caracteristicas.formato == "moneda" ){
+          if( caracteristicas.formato == "moneda" && this.campo.valido){
             const formatter  = new Intl.NumberFormat('en-US', {
               style: 'currency',
               currency: 'MXN',
               minimumFractionDigits: 0
             });
             this.campo.valor = formatter.format(number);
+            this.$forceUpdate();
           }
         },
 
@@ -81,8 +82,9 @@
             }
           }
           this.campo.valido = curpValido && requeridoValido;
-          this.$emit('updateForm', this.campo);
           this.formatear();
+          this.$emit('updateForm', this.campo);
+          
         }
       }
     }
