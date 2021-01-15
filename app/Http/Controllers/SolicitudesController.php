@@ -247,42 +247,33 @@ class SolicitudesController extends Controller
 
 
       }
-      
-      $data_costo = $this->costo->where('tramite_id', $id_tramite)->where('status', 1)->get();
-
-      foreach ($data_costo as $d) {
-        $tipo_costo = $c->variable;
-
-        if($tipo_costo == null){
-          $tipo_costo = 0;
-        }
-      }
-
-
       $data = array();
 
       if ($id_tramite == 516 ) {
 
         $data [] = array(
           "campos_data" => $campos_data,
-          "consulta_api" => "/getcostoImpuesto",
-          "tipo_costo" => $tipo_costo
+          "consulta_api" => "/getcostoImpuesto"
         );
       }elseif($id_tramite == 399){
         $data [] = array(
           "campos_data" => $campos_data,
-          "consulta_api" => "/getcostoImpuesto",
-          "tipo_costo" => $tipo_costo
+          "consulta_api" => "/getcostoImpuesto"
         );
       }else{
         $data_costo = $this->costo->where('tramite_id', $id_tramite)->where('status', 1)->get();
 
-        foreach ($data_costo as $d) {
-          $tipo_costo = $c->variable;
+        if ($data_costo) {
+          foreach ($data_costo as $d) {
+            $tipo_costo = $d->variable;
 
-          if($tipo_costo == null){
-            $tipo_costo = 0;
+            if($tipo_costo == null){
+              $tipo_costo = 0;
+            }
           }
+
+        }else{
+          $tipo_costo = 0;
         }
 
         $data [] = array(
