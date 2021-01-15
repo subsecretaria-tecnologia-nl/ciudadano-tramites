@@ -125,51 +125,13 @@
 													</div>
 														<a v-if="campo.campo_id=82" href="images\Formato.xlsx" download="Formato.xlsx">Descargar Formato</a>
 												</div>
-												<div   class="form-group fv-plugins-icon-container">
-													<div class="progress">
-														<div class="progress-bar " role="progressbar" :style=" 'width: ' + progress + '%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-													<label>{{ campos.nombre }}</label>
-													<table class="table">
-														<thead>
-															<tr>
-																<th  v-for="(registro, key) in campos[0].registros[0]" :key="registro" >
-																		{{key}}
-																</th>
-																<th>
-																		seleccionar
-																</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr  v-for="(registro, key) in campos[0].registros"  :key="registro.nombre" >
-																<td>
-																		{{registro.nombre}}	
-																</td>	
-																<td>
-																		{{registro.id}}	
-																</td>	
-																<td>
-																	<input  :id="registro.id" class="form-control campo" type="number" min="0" max="100" @focusout="check()" >
-																</td>
-																<td>
-																		<input type="checkbox" @change="check($event)"  :value="registro.id" class="text-center pl-4 checkbox"  v-model="selectedId">
-																</td>
-															</tr>
-														</tbody>
-													</table>
-													
-												</div>
-
-												<!-- <code> {{campos}} </code> -->
-
 			 								</div>
+												<table-component v-if="1 == 1"></table-component>
 										</div>
 							      	</v-expansion-panel-content>
 							    </v-expansion-panel>
 							</v-expansion-panels>
  						</div>
- 		
  					</div>
  				</div>
 			</form>
@@ -192,24 +154,31 @@
                 files:[], file:null,
                 tipoPersona:'pf',
 				consulta_api:'',
-				campos:[
-					{
-						"relationship":229,
-						"tipo":"selecction",
-						"nombre":"Vendedores",
-						"registros" : [
-							{nombre:"jaime", id:1223  },
-							{nombre:"dexter", id:1224  },
-							{nombre:"thania", id:1225  }
-						],
-						"caracteristicas":"{\"required\":\"false\"}",
-						"campo_id":79,
-						"agrupacion_id":8,
-						"orden":2,
-						"nombre_agrupacion":"Expediente"
-					}
-				],
+				// campos:[
+				// 	{
+				// 		"relationship":229,
+				// 		"tipo":"selecction",
+				// 		"nombre":"Vendedores",
+				// 		"registros" : [
+				// 			{nombre:"jaime",  tipoPersona:"FISICA" , rfc: "CACJ9607222L1", curp: "CACJ960722HNLSMM14" , porcentajePropiedad : '', unsufructo: '', porcentajeVenta: ''},
+				// 			{nombre:"dexter", tipoPersona:"FISICA" , rfc: "BEBT9509042L1", curp: "BEBT950904FCOBK22" , porcentajePropiedad : '', unsufructo: '', porcentajeVenta: ''},
+				// 			{nombre:"thania", tipoPersona:"FISICA", rfc: "GATO" , curp: "---" , porcentajePropiedad : '', unsufructo: '', porcentajeVenta: ''}
+				// 		],
+				// 		"caracteristicas":"{\"required\":\"false\"}",
+				// 		"campo_id":79,
+				// 		"agrupacion_id":8,
+				// 		"orden":2,
+				// 		"nombre_agrupacion":"Expediente"
+				// 	}
+				// ],
 				panel : [0,1,2,3,4],
+				// modalx: {
+				// 	tipoPropietario: '',
+				// 	porcentajePropiedad: '',
+				// 	unsufructo: '',
+				// 	porcentajeVenta: '',
+				// 	rfc: '',
+				// }
             }
         },
   
@@ -299,7 +268,7 @@
 		    	try {
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
-					//this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
+					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 					this.agruparCampos();
 
 
@@ -481,7 +450,14 @@
 
 
 			},
-			check: function (e ) {
+			check: function (registro ) {
+				console.log('modal');
+				$('#myModal').modal();
+				console.log(rfc);
+				this.modalx.tipoPropietario = registro.tipoPropietario;
+				this.modalx.porcentajePropiedad = registro.porcentajePropiedad;
+				this.modalx.porcentajeVenta = registro.porcentajeVenta;
+
 			let total = 0;
                 self = this;
  					Array.from(document.getElementsByClassName('checkbox')).forEach(function(row,index){
@@ -494,9 +470,23 @@
 					
 				console.log(this.selectedId);
 				console.log('...' +  this.progress);
+			},
+			modal(){
+				console.log('modal');
+				$('#myModal').modal();
+			},
+			save(){
+				console.log('guardado');
+				console.log(this.modalx.unsufructo);
+				this.campos[0].registros.push({tipoPersona: this.modalx.tipoPropietario, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no' })
+				this.modalx.porcentajePropiedad =''
+				this.modalx.porcentajeVenta =''
+				this.modalx.tipoPropietario =''
+				this.modalx.unsufructo =''
 			}
 
      	}	
 	}
+
 
 </script>
