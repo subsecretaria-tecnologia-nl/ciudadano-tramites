@@ -261,12 +261,17 @@ class SolicitudesController extends Controller
         );
       }else{
         $data_costo = $this->costo->where('tramite_id', $id_tramite)->where('status', 1)->get();
+        if ($data_costo) {
+          foreach ($data_costo as $d) {
+            $tipo_costo = $d->variable;
 
-        foreach ($data_costo as $d) {
-          $tipo_costo = $c->variable;
-          if($tipo_costo == null){
-            $tipo_costo = 0;
+            if($tipo_costo == null){
+              $tipo_costo = 0;
+            }
           }
+
+        }else{
+          $tipo_costo = 0;
         }
 
         $data [] = array(
