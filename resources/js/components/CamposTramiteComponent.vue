@@ -99,14 +99,13 @@
 													@validarFormulario="validarFormulario">
 												</expediente-excel-component>
 			 								</div>
-												<table-component v-if="1 == 1"></table-component>
+												<table-component v-if="1 == 2"></table-component>
 										</div>
 							      	</v-expansion-panel-content>
 							    </v-expansion-panel>
 							</v-expansion-panels>
  						</div>
  					</div>
-					 {{campos}}
  				</div>
 			</form>
 		</div>
