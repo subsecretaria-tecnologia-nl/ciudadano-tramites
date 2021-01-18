@@ -185,7 +185,7 @@
 				    } else {
 						
 						agrupacionDatosImpuesto.campos.map( campo =>{
-							campo.valor = '';
+							//campo.valor = '';
 							$("#" + campo.campo_id).removeAttr("disabled")
 							$("#" + campo.campo_id).trigger("change");
 							return campo;
@@ -254,6 +254,10 @@
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
+						console.log("guardados")
+						console.log(JSON.parse(JSON.stringify( this.infoGuardada.campos )))
+												console.log("campos")
+						console.log(JSON.parse(JSON.stringify( this.campos )))
 						this.tipoPersona = this.infoGuardada.tipoPersona;
 						this.motivoDeclaracion0 = this.infoGuardada.motivoDeclaracion0;
 						this.campos.forEach( (campo, index) =>{	
@@ -265,14 +269,15 @@
 							}
 							
 						});
+																		console.log("campos con valor")
+						console.log(JSON.parse(JSON.stringify( this.campos )))
 					}
 				} catch (error) {
 				  	console.log(error);
 				}
 
 				this.agruparCampos();
-				let segg= this;
-					setTimeout(function(){ segg.cambioModelo(); }, 1000);
+				
 				this.mostrar = true;
 				
 		    },
@@ -337,8 +342,13 @@
 
 				  	this.agrupaciones = agrupaciones.sort(function(a,b) { return parseFloat(a.orden_agrupacion) - parseFloat(b.orden_agrupacion) } );
 				  	
+				  	
 				  	let segg= this;
-					setTimeout(function(){ segg.setDeclararEn0(); }, 1000);
+					setTimeout(function(){ 
+						segg.cambioModelo();
+						segg.setDeclararEn0(); 
+					}, 1000);
+					//setTimeout(function(){  }, 1000);
 
 		    },
 
