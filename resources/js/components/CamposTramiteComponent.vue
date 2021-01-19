@@ -98,6 +98,36 @@
 													@updateForm="updateForm" :files="files"
 													@validarFormulario="validarFormulario">
 												</expediente-excel-component>
+												<div v-else-if="campo.tipo == 'question'">
+													¿Desea realizar el cobro por ?
+													<div class="col-md-12 col-lg-12">
+													    <div >
+														    <div class="custom-control custom-radio custom-control-inline">
+														      	<input type="radio" value="millar"  name="radioInline" class="custom-control-input" id="millar1" v-model="tipo_costo_obj.tipoCostoRadio" key="millar" @change="cambioModelo">
+														      	<label class="custom-control-label" for="millar1">
+														      		Millar	
+														      	</label>
+														    </div>
+
+														    <!-- Default inline 3-->
+														    <div class="custom-control custom-radio custom-control-inline">
+														      	<input type="radio" value="hoja" name="radioInline" class="custom-control-input" id="hoja1" v-model="tipo_costo_obj.tipoCostoRadio" key="millar" @change="cambioModelo">
+
+														      	<label class="custom-control-label" for="hoja1">
+														      		Hoja
+														      	</label>
+														    </div>
+														      <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'" >
+															    <label>
+															        Hoja
+															    </label>
+															    <span class="currencyinput">
+															      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" placeholder="Hoja" id="hojaInput" v-model="tipo_costo_obj.hojaInput"  @change="cambioModelo"/>
+															    </span>
+															  </div>
+														</div>
+													</div>
+												</div>
 			 								</div>
 										</div>
 							      	</v-expansion-panel-content>
@@ -128,6 +158,7 @@
                 consulta_api:'',
 				panel : [0,1,2,3,4],
 				motivoDeclaracion0:'',
+				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' }
             }
         },
 		watch: { 
@@ -142,6 +173,7 @@
                 	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite){
 		                this.campos = datosFormulario.campos;
 		                this.consulta_api = datosFormulario.consulta_api;
+		                this.tipo_costo_obj = datosFormulario.tipo_costo_obj;
 						this.agruparCampos();
 						this.showMensajes = true;
 						this.mostrar = true;
@@ -172,16 +204,19 @@
 							if(campo.nombre == 'Motivo'){
 								campo.valor = this.motivoDeclaracion0;
 								campo.valido = !!this.motivoDeclaracion0;
+								$("#" + campo.campo_id).val(campo.valor);
 							} else {
 								campo.valor = 0;							
 								campo.valido = true;
+        						$("#" + campo.campo_id).val(campo.valor);
 							}
+							this.$forceUpdate();
 							$("#" + campo.campo_id).attr("disabled", true);
 							campo.mensajes = [];
 							$("#" + campo.campo_id).trigger("change");
 							return campo;
 						});
-						this.$forceUpdate();
+						
 				    } else {
 						
 						agrupacionDatosImpuesto.campos.map( campo =>{
@@ -216,7 +251,8 @@
             		tipoPersona:this.tipoPersona,
             		consulta_api: this.consulta_api,
             		formularioValido:formvALID,
-            		motivoDeclaracion0:this.motivoDeclaracion0
+            		motivoDeclaracion0:this.motivoDeclaracion0,
+            		tipo_costo_obj:this.tipo_costo_obj
             	}
             	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
         	},
@@ -238,8 +274,12 @@
 					} else {
                 		formularioValido = formularioValido && !!campo.valido;
                 	}
-		    		
                 });
+                if(this.tipo_costo_obj.tipoCostoRadio == 'hoja'){
+                	formularioValido = formularioValido && !!this.tipo_costo_obj.hojaInput;
+                	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
+                	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
+                }
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
 		    },
@@ -252,14 +292,13 @@
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
+					this.tipo_costo_obj.tipo_costo = response.data && response.data.length > 0 ? response.data[0].tipo_costo : '';
+
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
-						console.log("guardados")
-						console.log(JSON.parse(JSON.stringify( this.infoGuardada.campos )))
-												console.log("campos")
-						console.log(JSON.parse(JSON.stringify( this.campos )))
 						this.tipoPersona = this.infoGuardada.tipoPersona;
 						this.motivoDeclaracion0 = this.infoGuardada.motivoDeclaracion0;
+						this.tipo_costo_obj = this.infoGuardada.tipo_costo_obj;
 						this.campos.forEach( (campo, index) =>{	
 							campo.valor = this.infoGuardada.campos[ campo.campo_id ];
 							if( campo.tipo == 'file' && this.infoGuardada.archivosGuardados){
@@ -267,10 +306,7 @@
 								campo.archivoGuardado = true;
 								campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
 							}
-							
 						});
-																		console.log("campos con valor")
-						console.log(JSON.parse(JSON.stringify( this.campos )))
 					}
 				} catch (error) {
 				  	console.log(error);
@@ -300,7 +336,6 @@
 				  	let agrupacionDatosImpuesto = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
 				  	let nombreCampoMotivo = 'Motivo';
 				  	if( agrupacionDatosImpuesto ){
-
 				  		let campo = {
 				  			idElemento:'campo_motivo_declaracion_0',
 							agrupacion_id: agrupacionDatosImpuesto.agrupacion_id,
@@ -326,10 +361,23 @@
 								}
 							}			  			
 				  		}
-
-				  		agrupacionDatosImpuesto.campos.push( campo )
-
-				  						  		
+				  		agrupacionDatosImpuesto.campos.push( campo );				  		
+				  	}
+				  	let agrupacionDatosCostos = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Costos"); 
+				  	
+				  	if( agrupacionDatosCostos  && this.tipo_costo_obj.tipo_costo == '1'){
+				  		let campo = {
+				  			idElemento:'tipoCostoElement',
+							agrupacion_id: agrupacionDatosCostos.agrupacion_id,
+							caracteristicas: '{"required":"true"}',
+							nombre: "",
+							//valor: this.motivoDeclaracion0 ? this.motivoDeclaracion0 : '',
+							nombre_agrupacion: agrupacionDatosCostos.nombre_agrupacion,
+							orden: agrupacionDatosCostos.campos[ agrupacionDatosCostos.campos.length - 1 ].orden + 1,
+							tipo: "question",
+							valido:true			  			
+				  		}
+				  		agrupacionDatosCostos.campos.push( campo );
 				  	}
 
 				  	this.datosPersonales = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Datos Personales' );
