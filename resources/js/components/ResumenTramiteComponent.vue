@@ -152,7 +152,7 @@
                 return this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase()  === nameCampo.toLowerCase() );
             }, 
 
-            getParamsCalculoCosto( consulta_api , params){
+            getParamsCalculoCosto( consulta_api , params, tipo_costo_obj){
                 let paramsCosto = {};
                 if(this.tipoTramite =='normal'  ){
                     if( consulta_api == "/getcostoImpuesto" ){
@@ -164,43 +164,48 @@
                         let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
 
                         paramsCosto.fecha_escritura = campoFechaMinuta.valor;
-                        paramsCosto.monto_operacion = campoMonto.valor;
-                        paramsCosto.ganancia_obtenida = campoGananciaObtenida.valor;    
-                        paramsCosto.pago_provisional_lisr = campoPagoProvisional.valor;
+                        paramsCosto.monto_operacion = this.formatoNumero(campoMonto.valor);
+                        paramsCosto.ganancia_obtenida = this.formatoNumero(campoGananciaObtenida.valor);    
+                        paramsCosto.pago_provisional_lisr = this.formatoNumero(campoPagoProvisional.valor);
                         if( campoMulta ){
-                            paramsCosto.multa_correccion_fiscal = campoMulta.valor;
+                            paramsCosto.multa_correccion_fiscal = this.formatoNumero(campoMulta.valor);
                         }
                     } else {
-                        let campoLote           = this.getCampoByName(CAMPO_LOTE);
-                        let campoHoja           = this.getCampoByName(CAMPO_HOJA);
-                        let campoSubsidio       = this.getCampoByName(CAMPO_SUBSIDIO);
-                        let campoCatastral      = this.getCampoByName(CAMPO_VALOR_CATASTRAL);
-                        let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
 
-                        if( campoCatastral ){
-                            paramsCosto.valor_catastral = campoCatastral.valor;
-                        }
+                        if ( tipo_costo_obj.tipo_costo == '1' && tipo_costo_obj.tipoCostoRadio == 'hoja' ){
+                            paramsCosto.tipo_costo_obj = tipo_costo_obj;
+                        }  else {
+                            let campoLote           = this.getCampoByName(CAMPO_LOTE);
+                            let campoHoja           = this.getCampoByName(CAMPO_HOJA);
+                            let campoSubsidio       = this.getCampoByName(CAMPO_SUBSIDIO);
+                            let campoCatastral      = this.getCampoByName(CAMPO_VALOR_CATASTRAL);
+                            let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
 
-                        if(campoSubsidio){                            
-                            if( campoSubsidio.tipo == 'select'  ){
-                                paramsCosto.subsidio = campoSubsidio.valor[0][0];//62  
-                            } else {
-                                paramsCosto.subsidio = campoSubsidio.valor;//62    
+                            if( campoCatastral ){
+                                paramsCosto.valor_catastral = this.formatoNumero(campoCatastral.valor);
                             }
-                            
-                        }
 
-                        if(campoValorOperacion ){
-                            paramsCosto.valor_operacion = campoValorOperacion.valor;
-                        }
+                            if(campoSubsidio){                            
+                                if( campoSubsidio.tipo == 'select'  ){
+                                    paramsCosto.subsidio = campoSubsidio.valor[0][0];//62  
+                                } else {
+                                    paramsCosto.subsidio = campoSubsidio.valor;//62    
+                                }
+                                
+                            }
 
-                        if( campoHoja ){
-                            paramsCosto.hoja = campoHoja.valor; 
-                        }
+                            if(campoValorOperacion ){
+                                paramsCosto.valor_operacion = this.formatoNumero(campoValorOperacion.valor);
+                            }
 
-                        if( campoLote ){
-                            paramsCosto.lote = campoLote.valor
-                        }                  
+                            if( campoHoja ){
+                                paramsCosto.hoja = campoHoja.valor; 
+                            }
+
+                            if( campoLote ){
+                                paramsCosto.lote = campoLote.valor
+                            }
+                        }                 
                     }
                 } else {
                     return this.datosComplementaria;
@@ -209,9 +214,16 @@
                 return Object.assign(params, paramsCosto);
             },
 
+            formatoNumero(numberStr){
+                let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+                return valor;
+            },
+
             async obtenerCosto(){
                 let url = "";
                 let consulta_api =  this.datosFormulario.consulta_api;
+                let tipo_costo_obj = this.datosFormulario.tipo_costo_obj ;
+                
                 if( this.tipoTramite =='normal' ){
                     url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
                 } else {
@@ -222,7 +234,7 @@
                     tramite_id: this.tramite.id_tramite
                 }
                 
-                data = this.getParamsCalculoCosto(consulta_api, data);
+                data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
                 
                 try {
                     let response = await axios.post(url, data);

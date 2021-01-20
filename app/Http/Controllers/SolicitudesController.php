@@ -244,8 +244,6 @@ class SolicitudesController extends Controller
             'orden'=> $c->orden,
             'nombre_agrupacion' => $desc,
           );
-
-
       }
 
       $data = array();
@@ -263,7 +261,6 @@ class SolicitudesController extends Controller
         );
       }else{
         $data_costo = $this->costo->where('tramite_id', $id_tramite)->where('status', 1)->get();
-
         if ($data_costo) {
           foreach ($data_costo as $d) {
             $tipo_costo = $d->variable;

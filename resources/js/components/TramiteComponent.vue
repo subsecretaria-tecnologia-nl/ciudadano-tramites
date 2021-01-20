@@ -14,14 +14,14 @@
                                 <strong class="text-uppercase">{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.clave }}</span>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.created_at }}</span>
-                                <span class="mt-3" v-if="tramite.info">{{ tramite.info.solicitante ? tramite.info.solicitante.rfc : "" }} - {{ tramite.info.solicitante && tramite.info.solicitante.tipoPersona == "pm" ? tramite.info.solicitante.razonSocial : `${tramite.info.solicitante.nombreSolicitante} ${tramite.info.solicitante.apPat} ${tramite.info.solicitante.apMat}` }}</span>
+                                <span class="mt-3" v-if="tramite.info">{{ tramite.info.solicitante ? tramite.info.solicitante.rfc : "" }} - {{ tramite.info.solicitante ? (tramite.info.solicitante.tipoPersona == "pm" ? tramite.info.solicitante.razonSocial : `${tramite.info.solicitante.nombreSolicitante} ${tramite.info.solicitante.apPat} ${tramite.info.solicitante.apMat}`) : '' }}</span>
                             </a>
                             <!--end::Name-->
                         </div>
                         <!--begin::User-->
                         <!--begin::Actions-->
                         <div class="my-lg-0 my-1">
-                            <span v-if="tramite.info" class="btn btn-secondary mr-2">{{ tramite.descripcion || "CERRADO" }}</span>
+                            <span v-if="tramite.info" class="btn btn-secondary mr-2">{{ tramite.descripcion || "CERRADO" }} </span>
                             <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" v-if="!tramite.info">
                                 INICIAR TRAMITE
                             </a>
@@ -71,8 +71,13 @@
         },
 
         methods:{
-            goTo(tramite){ 
-                redirect(`/detalle${ tramite.id_tramite ? "-tramite" : "" }/` +  (tramite.id_tramite || tramite.id));
+            goTo(tramite){
+                if(window.location.href.indexOf("borradores") >= 0){
+                    redirect("detalle-tramite/" + tramite.tramite_id + "?clave=" + tramite.clave );
+                } else {
+                    redirect(`/detalle${ tramite.id_tramite ? "-tramite" : "" }/` +  (tramite.id_tramite || tramite.id));
+                }
+                
             }
         }
     }
