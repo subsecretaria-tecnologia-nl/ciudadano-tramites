@@ -149,6 +149,7 @@ class TramitesController extends Controller
 
       //Informacion del costo y reglas del trámite
       $data_costo = $this->costotramites->where('tramite_id', $tramite_id)->where('status', 1)->get();
+      
       foreach($data_costo as $data){
         $tipo = $data->tipo;
         $costoX = $data->costo;
@@ -157,10 +158,24 @@ class TramitesController extends Controller
         $min = $data->minimo;
         $max = $data->maximo;
         $valor = $data->valor;
+        $variable = $data->variable;
+        $var_minimo = $data->var_minimo;
+        $var_valor = $data->var_valor;
         $vigencia = $data->vigencia;
         $porcentaje = $data->porcentaje;
         $status = $data->status;
       }
+
+      //Valor variable
+      if ( $tipo_costo == 1){ //cuando el costo seleccionado es variable
+        if($tipo_costo_radio == "hoja"){ //cuando el costo en el radio seleccionado es hoja
+          $costoX = "H";
+          $min = $var_minimo;
+          $valor = $var_valor;
+        }
+      }
+
+
       $detalle = array();
       //Validamos si el tramite tiene subsidio
       $subsidio_data = $this->subsidiotramites->where('tramite_id', $tramite_id)->get();
