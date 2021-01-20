@@ -173,7 +173,9 @@
                     } else {
 
                         if ( tipo_costo_obj.tipo_costo == '1' && tipo_costo_obj.tipoCostoRadio == 'hoja' ){
-                            paramsCosto.tipo_costo_obj = tipo_costo_obj;
+                            paramsCosto.tipo_costo = tipo_costo_obj.tipo_costo;
+                            paramsCosto.tipoCostoRadio = tipo_costo_obj.tipoCostoRadio;
+                            paramsCosto.hojaInput = tipo_costo_obj.hojaInput;
                         }  else {
                             let campoLote           = this.getCampoByName(CAMPO_LOTE);
                             let campoHoja           = this.getCampoByName(CAMPO_HOJA);
