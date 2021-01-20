@@ -149,7 +149,7 @@ class TramitesController extends Controller
 
       //Informacion del costo y reglas del trámite
       $data_costo = $this->costotramites->where('tramite_id', $tramite_id)->where('status', 1)->get();
-      
+
       foreach($data_costo as $data){
         $tipo = $data->tipo;
         $costoX = $data->costo;
@@ -166,12 +166,16 @@ class TramitesController extends Controller
         $status = $data->status;
       }
 
+      //$tipo_costo_obj = $request->tipo_costo_obj;
+
       //Valor variable
-      if ( $tipo_costo == 1){ //cuando el costo seleccionado es variable
-        if($tipo_costo_radio == "hoja"){ //cuando el costo en el radio seleccionado es hoja
+      if ( $request->tipo_costo == 1){ //cuando el costo seleccionado es variable
+        if($request->tipoCostoRadio == "hoja"){ //cuando el costo en el radio seleccionado es hoja
           $costoX = "H";
           $min = $var_minimo;
           $valor = $var_valor;
+        }elseif($request->tipoCostoRadio == "millar"){ //cuando el costo en el radio seleccionado sea millar
+          $costoX = "M";
         }
       }
 
@@ -721,7 +725,7 @@ class TramitesController extends Controller
     public function detalle ( Request $request ) {
       $id_tramite = $request->idTramite;
       $clave = isset($request->clave) ? $request->clave : "";
-      
+
       $detalle = array();
       $data = $this->tiposer->where('Tipo_Code', $id_tramite)->get();
       foreach ($data as $d) {
