@@ -101,6 +101,11 @@
                             <input class="form-check-input ml-6" type="radio" id="Mexicano" name="nacionalidad" value="Mexicano"  v-model="modalx.nacionalidad">
                             <label class="form-check-label" for="other">Mexicano</label>	
                         </div>
+                        <small v-if="!modalx.nacionalidad">
+                            <span class="form-text text-danger" :id="[[modalx.nacionalidad]]">  
+                                Nacionalidad: {{mensajeRequerido}}
+                            </span>
+                        </small>
                         <div v-if="modalx.nacionalidad == 'Mexicano'">
                             <p>Seleccione el tipo de persona</p>
                             <div class="form-check form-check-inline pb-4">
@@ -109,16 +114,26 @@
                                 <input class="form-check-input ml-6" type="radio" id="Moral" name="persona" value="Moral"  v-model="modalx.persona">
                                 <label class="form-check-label" for="other">Moral</label>	
                             </div>
+                            <small v-if="!modalx.persona">
+                                <span class="form-text text-danger" :id="[[modalx.persona]]">  
+                                  Tipo de persona: {{mensajeRequerido}}
+                                </span>
+                            </small>
                         </div>
                         <div class="col" >
                             <label for="">Tipo de propietario</label>
                             <select v-model="modalx.tipoPropietario" class="row form-control">
                                 <option  selected disabled value="0">Seleccione</option>
-                                <option value="Propietario">Propietario</option>
+                                <option value="PROPIETARIO">Propietario</option>
                                 <option value="Nuda Propiedad">Nuda Propiedad</option>
                                 <option value="Unsufructuario">Unsufructuario</option>
                                 <option value="Copropietario">Copropietario</option>
                             </select>
+                             <small v-if="!modalx.tipoPropietario">
+                                <span class="form-text text-danger" :id="[[modalx.tipoPropietario]]">  
+                                  Tipo de propietario: {{mensajeRequerido}}
+                                </span>
+                            </small>
                         </div>
                         
                         <div v-if="modalx.nacionalidad== 'Extranjero'">
@@ -126,20 +141,40 @@
                                 <div class="col">
                                     <label for="">Nombre(s):</label>
                                     <input v-model="modalx.nombre" type="text" class="form-control">
+                                    <small v-if="!modalx.nombre">
+                                        <span class="form-text text-danger" :id="[[modalx.nombre]]">  
+                                        Nombre: {{mensajeRequerido}}
+                                        </span>
+                                    </small>
                                 </div>
                                 <div class="col">
                                     <label for="">Apellido Paterno:</label>
                                     <input v-model="modalx.apellidoP" type="text" class="form-control">
+                                    <small v-if="!modalx.apellidoP">
+                                        <span class="form-text text-danger" :id="[[modalx.apellidoP]]">  
+                                        Apellido Paterno: {{mensajeRequerido}}
+                                        </span>
+                                    </small>
                                 </div>
                             </div>
                             <div class=" form-group row">
                                 <div class="col">
                                     <label for="">Apellido Materno:</label>
                                     <input v-model="modalx.apellidoM" type="text" class="form-control">
+                                    <small v-if="!modalx.apellidoM">
+                                        <span class="form-text text-danger" :id="[[modalx.apellidoM]]">  
+                                        Apellido Materno: {{mensajeRequerido}}
+                                        </span>
+                                    </small>
                                 </div>
                                 <div class="col">
                                     <label for="">Fecha de Nacimiento:</label>
                                     <input v-model="modalx.fechaNac" type="text" class="form-control">
+                                    <small v-if="!modalx.fechaNac">
+                                        <span class="form-text text-danger" :id="[[modalx.fechaNac]]">  
+                                        Fecha de nacimiento: {{mensajeRequerido}}
+                                        </span>
+                                    </small>
                                 </div>
                             </div>
                             <div class="col">
@@ -149,6 +184,11 @@
                                     <option value="USA">Estados Unidos </option>
                                     <option value="Canada">Canada</option>
                                 </select>
+                                <small v-if="!modalx.country">
+                                        <span class="form-text text-danger" :id="[[modalx.country]]">  
+                                        Pais: {{mensajeRequerido}}
+                                        </span>
+                                </small>
                             </div>
                         </div>
 
@@ -160,48 +200,95 @@
                                 <label class="form-check-label">Si</label><br>
                                 <input class="form-check-input ml-6" type="radio" id="No" name="nacionalidad" value="No"  v-model="modalx.curpExist">
                                 <label class="form-check-label" for="other">No</label>	
-                                </div>
-                            <div class=" form-group row">
-                                <div class="col">
-                                    <label for="">Curp:</label>
-                                    <input v-model="modalx.curp" :disabled="modalx.curpExist == 'No'" @blur='buscarCurp(modalx.curp)' type="text" class="form-control">
-                                </div>
-                                <div class="col">
-                                    <label for="">RFC:</label>
-                                    <input v-model="modalx.rfc" type="text" class="form-control">
-                                </div>
                             </div>
-                            <div class=" form-group row">
-                                <div class="col">
-                                    <label for="">Nombre(s):</label>
-                                    <input v-model="modalx.nombre" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                <small v-if="!modalx.curpExist">
+                                        <span class="form-text text-danger" :id="[[modalx.curpExist]]">  
+                                        Campo requerido
+                                        </span>
+                                </small>
+                            <div v-if="modalx.curpExist != ''">  
+                                <div class=" form-group row">
+                                    <div class="col">
+                                        <label for="">Curp:</label>
+                                        <input v-model="modalx.curp" :disabled="modalx.curpExist == 'No'" @blur='buscarCurp(modalx.curp)' type="text" class="form-control">
+                                        <small v-if="!modalx.curp && modalx.curpExist != 'No'"> 
+                                            <span class="form-text text-danger" :id="[[modalx.curp]]">  
+                                            Curp: {{mensajeRequerido}}
+                                            </span>
+                                        </small>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">RFC:</label>
+                                        <input v-model="modalx.rfc" type="text" class="form-control">
+                                        <small v-if="!modalx.rfc">
+                                            <span class="form-text text-danger" :id="[[modalx.rfc]]">  
+                                            Rfc: {{mensajeRequerido}}
+                                            </span>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <label for="">Apellido Paterno:</label>
-                                    <input v-model="modalx.apellidoP" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                <div class=" form-group row">
+                                    <div class="col">
+                                        <label for="">Nombre(s):</label>
+                                        <input v-model="modalx.nombre" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                        <small v-if="!modalx.nombre">
+                                            <span class="form-text text-danger" :id="[[modalx.nombre]]">  
+                                            Nombre: {{mensajeRequerido}}
+                                            </span>
+                                        </small>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Apellido Paterno:</label>
+                                        <input v-model="modalx.apellidoP" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                        <small v-if="!modalx.apellidoP">
+                                                <span class="form-text text-danger" :id="[[modalx.apellidoP]]">  
+                                                Apellido Paterno {{mensajeRequerido}}
+                                                </span>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class=" form-group row">
-                                <div class="col">
-                                    <label for="">Apellido Materno:</label>
-                                    <input v-model="modalx.apellidoM" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                <div class=" form-group row">
+                                    <div class="col">
+                                        <label for="">Apellido Materno:</label>
+                                        <input v-model="modalx.apellidoM" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                        <small v-if="!modalx.apellidoM">
+                                            <span class="form-text text-danger" :id="[[modalx.apellidoM]]">  
+                                            Apellido Materno {{mensajeRequerido}}
+                                            </span>
+                                        </small>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Fecha de Nacimiento:</label>
+                                        <input v-model="modalx.fechaNac" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                        <small v-if="!modalx.fechaNac">
+                                            <span class="form-text text-danger" :id="[[modalx.fechaNac]]">  
+                                            Fecha nacimiento {{mensajeRequerido}}
+                                            </span>
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <label for="">Fecha de Nacimiento:</label>
-                                    <input v-model="modalx.fechaNac" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                            
+                                <div class=" form-group row">
+                                    <div class="col">
+                                        <label for="">Genero:</label>
+                                        <input v-model="modalx.sexo"  :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
+                                        <small v-if="!modalx.sexo">
+                                            <span class="form-text text-danger" :id="[[modalx.sexo]]">  
+                                            Genero {{mensajeRequerido}}
+                                            </span>
+                                        </small>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Estado de Nacimiento:</label>
+                                        <input type="text" v-model="modalx.EstadoNac" :disabled="modalx.curpExist == 'Si'" class="form-control">
+                                        <small v-if="!modalx.fec">
+                                            <span class="form-text text-danger" :id="[[modalx.EstadoNac]]">  
+                                            Fecha nacimiento{{mensajeRequerido}}
+                                            </span>
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                           
-                            <div class=" form-group row">
-                                <div class="col">
-                                    <label for="">Genero:</label>
-                                    <input v-model="modalx.sexo"  :disabled="modalx.curpExist == 'No'" type="text" class="form-control">
-                                </div>
-                                <div class="col">
-                                    <label for="">Estado de Nacimiento:</label>
-                                    <input type="text" :disabled="modalx.curpExist == 'No'" class="form-control">
-                                </div>
-                            </div>
+                            </div>    
                            
                         </div>
 
@@ -210,10 +297,20 @@
                                 <div class="col">
                                     <label for="">RFC:</label>
                                     <input v-model="modalx.rfc" type="text" class="form-control">
+                                    <small v-if="!modalx.rfc">
+                                        <span class="form-text text-danger" :id="[[modalx.rfc]]">  
+                                        Rfc {{mensajeRequerido}}
+                                        </span>
+                                    </small>
                                 </div>
                                 <div class="col">
                                     <label for="">Razon Social:</label>
                                     <input v-model="modalx.razonS" type="text" class="form-control">
+                                    <small v-if="!modalx.razonS">
+                                        <span class="form-text text-danger" :id="[[modalx.razonS]]">  
+                                        Razon social {{mensajeRequerido}}
+                                        </span>
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -223,6 +320,11 @@
                             <div class="col">
                                 <label for="">Porcentaje de propiedad</label>
                                 <input v-model="modalx.porcentajePropiedad" class="form-control" type="number" name="porcentaje" id="">
+                                <small v-if="!modalx.porcentajePropiedad">
+                                        <span class="form-text text-danger" :id="[[modalx.porcentajePropiedad]]">  
+                                        Porcentaje de propiedad {{mensajeRequerido}}
+                                        </span>
+                                </small>
                             </div>
                             <div class="col pt-8" >
                                 <input v-model="modalx.unsufructo" class="form-check pt-8" style="margin-left:28%" type="checkbox" name="unsufructo" id="">
@@ -232,6 +334,11 @@
                         <div class="col-6 form-group row">
                             <label for="">Porcentaje de venta</label>
                             <input v-model="modalx.porcentajeVenta" class="form-control" type="number" name="venta" id="">
+                            <small v-if="!modalx.porcentajeVenta">
+                                    <span class="form-text text-danger" :id="[[modalx.porcentajeVenta]]">  
+                                    Porcentaje de venta {{mensajeRequerido}}
+                                    </span>
+                            </small>
                         </div>
                         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem ipsum esse dignissimos, quas ab quia libero itaque enim aut repellendus molestias sunt totam hic. Nisi, eius cumque.</p>
                         <div class="dropdown-divider"></div>
@@ -345,11 +452,13 @@ export default {
                 apellidoM: '',
                 razonS: '',
                 sexo: '',
+                EstadoNac: '',
             },
             helper: '',
             progress: '',
             rowSelected: '',
             access_token: '',
+            mensajeRequerido: ' es requerido'
         }
     },
     methods: {
@@ -360,12 +469,12 @@ export default {
                 this.helper = 1;
                 this.rowSelected = key;
 				this.modalx.nacionalidad = registro.nacionalidad;
-				this.modalx.tipoPropietario = registro.tipoPropietario;
-				this.modalx.persona = registro.tipoPersona;
-				this.modalx.porcentajePropiedad = registro.porcentajePropiedad;
+				this.modalx.tipoPropietario = registro.tipoPro;
+				this.modalx.persona = registro.clasePro;
+				this.modalx.porcentajePropiedad = registro.nuda;
 				this.modalx.porcentajeVenta = registro.porcentajeVenta;
-				this.modalx.curp = registro.curp;
-				this.modalx.nombre = registro.nombre;
+				this.modalx.curp = registro.id_propietario;
+				this.modalx.nombre = registro.nombrePro;
 				this.modalx.rfc = registro.rfc;
 
 			},
@@ -375,25 +484,28 @@ export default {
                 this.cleanModal();
 			},
 			saveNew(){
-				console.log('guardado nuevo');
-                console.log(this.modalx.unsufructo);
-                this.progres =this.modalx.porcentajeVenta;
-                this.campos[0].registros.push({tipoPersona: this.modalx.persona, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no' })
+                if(  ( parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta) ) <= 100 ){
+                    this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
+                    this.campos[0].registros.push({tipoPersona: this.modalx.persona, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no' })
+                     console.log('guardado nuevo');
+                }else{
+                    alert('el porcentaje de venta no puede ser mayor a 100')
+                }
                 this.cleanModal();
             },
             saveEdit(){
                 //todo
-                this.campos[0].registros[this.rowSelected] =     {  tipoPersona: this.modalx.persona, 
+                this.campos[0].registros[this.rowSelected] =     {  clasePro: this.modalx.persona, 
                                                                     porcentajeVenta: this.modalx.porcentajeVenta, 
-                                                                    porcentajePropiedad: this.modalx.porcentajePropiedad, 
+                                                                    nuda: this.modalx.porcentajePropiedad, 
                                                                     unsufructo:  this.modalx.unsufructo = true ? 'si': 'no',
                                                                     id:1221 , 
                                                                     nacionalidad: this.modalx.nacionalidad , 
-                                                                    nombre: this.modalx.nombre,  
-                                                                    tipoPropietario: this.modalx.tipoPropietario , 
+                                                                    nombrePro: this.modalx.nombre,  
+                                                                    tipoPro: this.modalx.tipoPropietario , 
                                                                     rfc: this.modalx.rfc, 
                                                                     curp: this.modalx.curp , 
-                                                                    porcentajePropiedad : this.modalx.porcentajePropiedad, 
+                                                                    // porcentajePropiedad : this.modalx.porcentajePropiedad, 
                                                                     unsufructo: this.modalx.unsufructo, 
                                                                     porcentajeVenta: this.modalx.porcentajeVenta
 
@@ -401,7 +513,9 @@ export default {
                 }
                 console.log('edicion guardada');
 
-                this.progress =  this.modalx.porcentajeVenta;
+                if(  ( this.progress + this.modalx.porcentajeVenta ) <= 100 ){
+                    this.progress = this.progress + this.modalx.porcentajeVenta;
+                }
                 console.log(this.progress);
 
             },
@@ -434,6 +548,7 @@ export default {
                     success:function(data){
                         // console.log('..... ' + data.token);
                         self.access_token = data.token;
+                        console.log(data.token);
                     },
                     error:function(error){
                         console.log(error);
