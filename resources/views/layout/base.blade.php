@@ -1561,6 +1561,10 @@
 			<script src="{{ assets("plugins/global/plugins.bundle.js") }}"></script>
 			<script src="{{ assets("plugins/custom/prismjs/prismjs.bundle.js") }}"></script>
 			<script>
+				$(document).ready(() => {
+					$('[data-toggle=tooltip]').tooltip()
+				})
+
 				function iehelper() {
 					var isAtLeastIE11 = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
 					if (isAtLeastIE11) {

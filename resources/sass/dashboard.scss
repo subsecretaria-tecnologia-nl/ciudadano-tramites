@@ -1,5 +1,13 @@
 @import "./_variables.scss";
 
+.b-tooltip{
+    opacity: 1;
+
+    .tooltip-inner{
+        padding: 10px;
+    }
+}
+
 .dashboard {
     // max-height: 210px;
     // position: relative;

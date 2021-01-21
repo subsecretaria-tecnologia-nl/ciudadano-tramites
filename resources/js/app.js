@@ -1,24 +1,16 @@
 require('./bootstrap');
 
-//require('dotenv').config();
-
-
-//window.Vue = require('vue');
 import Vue from 'vue'
 import UUID from "vue-uuid";
 import Vuetify from 'vuetify';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+// import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 Vue.use(UUID);
 Vue.use(Vuetify);
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 document.getElementById("close-header").addEventListener("click", () => {
     let sideBar = document.getElementById("kt-header-sidebar");
@@ -66,6 +58,7 @@ Vue.component("textbox-component" , () => import ( /* webpackChunkName: "js/comp
 Vue.component("checkbox-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/checkbox-component" */ './components/tiposElementos/CheckboxComponent.vue' ));
 Vue.component("expediente-excel-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/expediente-excel-component" */ './components/tiposElementos/ExpedienteExcelComponent.vue' ));
 Vue.component("file-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/file-component" */ './components/tiposElementos/FileComponent.vue' ));
+Vue.component("results-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/results-component" */ './components/tiposElementos/ResultsComponent.vue' ));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
