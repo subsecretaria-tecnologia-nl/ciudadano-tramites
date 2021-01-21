@@ -562,6 +562,7 @@
 						final = this.campos.map((ele, ind) => ele.nombre === 'Manzana Final' ? ind : null).filter(ele => ele).toString()
 						inicial = this.campos.map((ele, ind) => ele.nombre === 'Manzana Inicial' ? ind : null).filter(ele => ele).toString()
 						unico = this.campos.map((ele, ind) => ele.nombre === 'Manzana Unica' ? ele.valor : null).filter(ele => ele).toString()
+						console.log(final, inicial, unico === 'true');
 						if(unico === 'true'){
 							this.campos[final].valor = this.campos[inicial].valor || 0;
 						}else{
@@ -575,6 +576,7 @@
 						final = this.campos.map((ele, ind) => ele.nombre === 'Lote Final' ? ind : null).filter(ele => ele).toString()
 						inicial = this.campos.map((ele, ind) => ele.nombre === 'Lote Inicial' ? ind : null).filter(ele => ele).toString()
 						unico = this.campos.map((ele, ind) => ele.nombre === 'Lote Unico' ? ele.valor : null).filter(ele => ele).toString()
+						console.log(final, inicial, unico === 'true');
 						if(unico === 'true'){
 							this.campos[final].valor = this.campos[inicial].valor || 0;
 						}else{
@@ -594,13 +596,13 @@
 
 				empty = Object.entries(all).map(ele => {
 					const valor = ele[1].valor ? typeof ele[1].valor === 'string' ? ele[1].valor : ele[1].valor.toString() : null;
-					return valor == '' || !ele[1].valido ? ele[1] : null;
+					return valor == '' || valor == null || !ele[1].valido ? ele[1] : null;
 				}).filter(ele => ele)
-
-				console.log(empty);
 
 				if(empty.length == 0){
 					this.panel = [0, 2, 4];
+					const exp = [];
+
 				}else{
 					this.panel = [0, 2];
 				}
