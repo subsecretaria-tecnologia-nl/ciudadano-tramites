@@ -350,7 +350,8 @@
                   informacion.campos=camposObj;
                   informacion.tipoPersona=datosFormulario.tipoPersona,
                   informacion.declararEn0 = this.declararEn0,
-                  informacion.motivoDeclaracion0 = datosFormulario.motivoDeclaracion0
+                  informacion.motivoDeclaracion0 = datosFormulario.motivoDeclaracion0,
+                  informacion.tipo_costo_obj = datosFormulario.tipo_costo_obj
                 } else {
                   informacion.camposComplementaria = this.datosComplementaria;
                 }
