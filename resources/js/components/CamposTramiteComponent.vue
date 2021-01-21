@@ -274,7 +274,7 @@
 							url,
 							success:function(data){
 								// self.rellenarForm(data);
-								console.log('expedientes catastrales lsita:  ' + JSON.stringify(data) );
+								// console.log('expedientes catastrales lsita:  ' + JSON.stringify(data) );
 								// data.forEach( o => { self.rows.push({ o  } )} )
 								// for (let index = 0; index < data.length; index++) {
 								// 	self.rows.push(data[index].campos]) ;
