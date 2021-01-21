@@ -102,6 +102,19 @@
                 workbook.SheetNames.forEach(sheetName => {
                   var rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
                   var json_object = JSON.stringify(rowObject);    
+
+                  rowObject.map(item => {
+                    let exp = `${item.Municipio}${item.Region}${item.Manzana}${item.Lote}`;
+                    $.ajax({
+                      url : `http://10.153.144.228/insumos-catastro-consulta/${exp}`,
+                      type: 'get',
+                      success : (res) => {
+                        console.log(res)
+                      }
+                    });
+
+                  })
+
                   var opcionesExp = ['Expediente Catastral' , 'Exp Catastral', 'E Catastral'];
                   var trueExp;
                   var tipoValidacion ;
@@ -178,6 +191,7 @@
                         }
                       }
                     console.log('file validacion 2: ' + file);
+                    console.log(file);
                     //this.files.push( {valor:file, nombre:file});
                       //this.$emit('updatingFiles', this.files);    
                   }

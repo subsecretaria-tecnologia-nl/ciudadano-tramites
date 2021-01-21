@@ -97,10 +97,13 @@
           var fileInput = document.getElementById(this.campo.campo_id );
           if( fileInput && fileInput.files.length > 0  ){
             requeridoValido = true;
-            $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name );
+            $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files.length > 0 ? fileInput.files[0].name : null );
           } else {
             requeridoValido = false;
           }
+          if(caracteristicas.hasOwnProperty('required') && caracteristicas.required !== 'true')
+            requeridoValido = true;
+
           if( !requeridoValido ){
             let mensaje = { 
               tipo:'required',

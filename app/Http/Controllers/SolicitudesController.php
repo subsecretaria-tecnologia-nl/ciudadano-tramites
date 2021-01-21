@@ -279,6 +279,7 @@ class SolicitudesController extends Controller
           "consulta_api" => "/getcostoTramite",
           "tipo_costo" => $tipo_costo
         );
+
       }
 
 
