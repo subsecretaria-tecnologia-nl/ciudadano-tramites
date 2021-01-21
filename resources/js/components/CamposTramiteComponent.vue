@@ -158,7 +158,6 @@
  				</div>
 			</form>
 		</div>
-					<code> {{campos}}</code>
     </div>
 
 </template>
