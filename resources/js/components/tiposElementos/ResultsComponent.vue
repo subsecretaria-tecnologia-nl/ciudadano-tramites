@@ -20,6 +20,9 @@
 							</ul>
 						</b-tooltip>
 					</td>
+					<td v-if="JSON.parse(campo.caracteristicas).formato == 'seleccion' ">
+                       <input type="checkbox" @change="check($event)"  :value="row.expediente" class="text-center pl-4 checkbox"  v-model="selectedId">
+                    </td>
 				</tr>
 			</tbody>
 		</table>
@@ -35,6 +38,10 @@
 <script>
 	export default {
 		props: ['campo', 'estadoFormulario', 'showMensajes', 'info', 'table', 'fields', 'rows', 'loading', 'infoExtra'],
+		data(){
+			return{
+				selectedId: '',
+		}},
 		created () {
 			this.campo.valido = true;
 		},
@@ -50,6 +57,20 @@
 			},
 			infoExtra: function(newVal, oldVal) {
 				this.infoExtra = newVal;
+			}
+		},
+		methods: {
+
+			check: function (e ) {
+				let total = 0;
+                self = this;
+ 					Array.from(document.getElementsByClassName('checkbox')).forEach(function(row,index){
+						 if(document.getElementsByClassName('checkbox')[index].checked){
+							 console.log(row.value);
+						}
+					});
+					
+				console.log(this.selectedId);
 			}
 		}
 	}
