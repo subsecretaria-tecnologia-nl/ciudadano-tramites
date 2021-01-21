@@ -5,8 +5,11 @@
         <div class="alert text-center" role="alert" style="background-color:#e1f5fe !important; border-color:#e1f5fe;">
         Expediente Catastral : 
         </div>
-        <div class="alert p-8" role="alert" style="background-color:#fbe3e4 !important ; border-color:#fbe3e4l ; color:red">
-        Informacion! los siguientes detalles deben de tomarse en cuenta
+        <div class="alert alert-dismissible p-8" role="alert" style="background-color:#fbe3e4 !important ; border-color:#fbe3e4l ; color:red">
+            Informacion! los siguientes detalles deben de tomarse en cuenta
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             <li class="pl-6" style="color:red">Debe de existir un porcentaje de venta</li>
         </div>
 
@@ -15,8 +18,8 @@
         </div>
 
         <label>{{ campos.nombre }}</label>
-        <table class="table ">
-            <thead>
+        <table class="table  table-striped">
+            <thead style="border-bottom: solid;">
                 <tr>
                     <th>
                             Tipo de persona
@@ -50,14 +53,14 @@
                         {{registro.clasePro}}
                     </td>	
                     <td>
-                        {{registro.nombrePro}}	{{registro.apePat}} {{registro.apeMat}}
+                        {{registro.nombrePro}}	{{registro.apePat}} {{registro.apeMat}} {{registro.razonS}}
                     </td>	
                     <td>
                         {{registro.rfc}}
+                        {{registro.id_propietario}}
                     </td>	
                     <td>
                         {{registro.curp}}
-                        {{registro.id_propietario}}
                     </td>	
                     <td>
                         {{registro.nuda}}
@@ -74,8 +77,11 @@
                 </tr>
             </tbody>
         </table>
-        <div class="btn bg-success w-80 mb-4 " @click="add()">
+        <div v-if="propietario == 1 && progress < 100" class="btn bg-success w-80 mb-4 " @click="add()">
                 <div style="color:white"><i class="la la-plus" style="color:white"></i> Agregar vendedor </div>	
+        </div>
+        <div  v-if="propietario == 0  && progress < 100" class="btn bg-success w-80 mb-4 " @click="add()">
+                <div style="color:white"><i class="la la-plus" style="color:white"></i> Agregar comprador </div>	
         </div>
         <div class="progress" style="height: 3px;">
             <div class="progress-bar " role="progressbar" :style=" 'width: ' + progress + '%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -83,17 +89,17 @@
     </div>
 
     <!-- <code> {{campos}} </code> -->
-        <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal fade" :id="propietario" :class="propietario" role="dialog">
             <div class="modal-dialog">
             
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title left" v-if="helper==1">Editar Vendedor</h4>
-                    <h4 class="modal-title left" v-if="helper==0">Agregar Vendedor</h4>
+                    <h4 class="modal-title left" v-if="helper==1">Editar</h4>
+                    <h4 class="modal-title left" v-if="helper==0">Agregar</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="">
+                    <form action="" id="newModalForm">
                         <p>Seleccione una nacionalidad</p>
                         <div class="form-check form-check-inline pb-4">
                             <input class="form-check-input" type="radio" id="Extranjero" name="nacionalidad" value="Extranjero"  v-model="modalx.nacionalidad">
@@ -102,21 +108,21 @@
                             <label class="form-check-label" for="other">Mexicano</label>	
                         </div>
                         <small v-if="!modalx.nacionalidad">
-                            <span class="form-text text-danger" :id="[[modalx.nacionalidad]]">  
+                            <span class="form-text text-danger" >  
                                 Nacionalidad: {{mensajeRequerido}}
                             </span>
                         </small>
                         <div v-if="modalx.nacionalidad == 'Mexicano'">
                             <p>Seleccione el tipo de persona</p>
                             <div class="form-check form-check-inline pb-4">
-                                <input class="form-check-input" type="radio" id="Fisica" name="persona" value="Fisica"  v-model="modalx.persona">
+                                <input class="form-check-input" type="radio" id="Fisica" name="persona" value="PERSONA FISICA"  v-model="modalx.persona">
                                 <label class="form-check-label">Fisica</label><br>
-                                <input class="form-check-input ml-6" type="radio" id="Moral" name="persona" value="Moral"  v-model="modalx.persona">
+                                <input class="form-check-input ml-6" type="radio" id="Moral" name="persona" value="PERSONA MORAL"  v-model="modalx.persona">
                                 <label class="form-check-label" for="other">Moral</label>	
                             </div>
                             <small v-if="!modalx.persona">
-                                <span class="form-text text-danger" :id="[[modalx.persona]]">  
-                                  Tipo de persona: {{mensajeRequerido}}
+                                <span class="form-text text-danger" >  
+                                  Tipo de persona {{mensajeRequerido}}
                                 </span>
                             </small>
                         </div>
@@ -130,7 +136,7 @@
                                 <option value="Copropietario">Copropietario</option>
                             </select>
                              <small v-if="!modalx.tipoPropietario">
-                                <span class="form-text text-danger" :id="[[modalx.tipoPropietario]]">  
+                                <span class="form-text text-danger" >  
                                   Tipo de propietario: {{mensajeRequerido}}
                                 </span>
                             </small>
@@ -142,7 +148,7 @@
                                     <label for="">Nombre(s):</label>
                                     <input v-model="modalx.nombre" type="text" class="form-control">
                                     <small v-if="!modalx.nombre">
-                                        <span class="form-text text-danger" :id="[[modalx.nombre]]">  
+                                        <span class="form-text text-danger" >  
                                         Nombre: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -151,7 +157,7 @@
                                     <label for="">Apellido Paterno:</label>
                                     <input v-model="modalx.apellidoP" type="text" class="form-control">
                                     <small v-if="!modalx.apellidoP">
-                                        <span class="form-text text-danger" :id="[[modalx.apellidoP]]">  
+                                        <span class="form-text text-danger" >  
                                         Apellido Paterno: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -162,7 +168,7 @@
                                     <label for="">Apellido Materno:</label>
                                     <input v-model="modalx.apellidoM" type="text" class="form-control">
                                     <small v-if="!modalx.apellidoM">
-                                        <span class="form-text text-danger" :id="[[modalx.apellidoM]]">  
+                                        <span class="form-text text-danger" >  
                                         Apellido Materno: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -171,7 +177,7 @@
                                     <label for="">Fecha de Nacimiento:</label>
                                     <input v-model="modalx.fechaNac" type="text" class="form-control">
                                     <small v-if="!modalx.fechaNac">
-                                        <span class="form-text text-danger" :id="[[modalx.fechaNac]]">  
+                                        <span class="form-text text-danger" >  
                                         Fecha de nacimiento: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -185,16 +191,16 @@
                                     <option value="Canada">Canada</option>
                                 </select>
                                 <small v-if="!modalx.country">
-                                        <span class="form-text text-danger" :id="[[modalx.country]]">  
+                                        <span class="form-text text-danger">  
                                         Pais: {{mensajeRequerido}}
                                         </span>
                                 </small>
                             </div>
                         </div>
 
-                        <div v-if="modalx.persona== 'Fisica'">
+                        <div v-if="modalx.persona== 'PERSONA FISICA'">
 
-                            <p>¿Cuenta con el curp del vendedor?</p>
+                            <p> ¿Cuenta con el curp?</p>
                             <div class="form-check form-check-inline pb-4">
                                 <input class="form-check-input" type="radio" id="Si" name="nacionalidad" value="Si"  v-model="modalx.curpExist">
                                 <label class="form-check-label">Si</label><br>
@@ -202,7 +208,7 @@
                                 <label class="form-check-label" for="other">No</label>	
                             </div>
                                 <small v-if="!modalx.curpExist">
-                                        <span class="form-text text-danger" :id="[[modalx.curpExist]]">  
+                                        <span class="form-text text-danger" >  
                                         Campo requerido
                                         </span>
                                 </small>
@@ -213,7 +219,7 @@
                                         <input v-model="modalx.curp" :disabled="modalx.curpExist == 'No'" @blur='buscarCurp(modalx.curp)' type="text" class="form-control">
                                         <small v-if="!modalx.curp && modalx.curpExist != 'No'"> 
                                             <span class="form-text text-danger" :id="[[modalx.curp]]">  
-                                            Curp: {{mensajeRequerido}}
+                                            Curp {{mensajeRequerido}}
                                             </span>
                                         </small>
                                     </div>
@@ -222,7 +228,7 @@
                                         <input v-model="modalx.rfc" type="text" class="form-control">
                                         <small v-if="!modalx.rfc">
                                             <span class="form-text text-danger" :id="[[modalx.rfc]]">  
-                                            Rfc: {{mensajeRequerido}}
+                                            Rfc {{mensajeRequerido}}
                                             </span>
                                         </small>
                                     </div>
@@ -233,7 +239,7 @@
                                         <input v-model="modalx.nombre" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
                                         <small v-if="!modalx.nombre">
                                             <span class="form-text text-danger" :id="[[modalx.nombre]]">  
-                                            Nombre: {{mensajeRequerido}}
+                                            Nombre {{mensajeRequerido}}
                                             </span>
                                         </small>
                                     </div>
@@ -292,7 +298,7 @@
                            
                         </div>
 
-                        <div v-if="modalx.persona== 'Moral'">
+                        <div v-if="modalx.persona== 'PERSONA MORAL'">
                             <div class=" form-group row">
                                 <div class="col">
                                     <label for="">RFC:</label>
@@ -315,13 +321,12 @@
                             </div>
                         </div>
 
-
                         <div class="form-group row">
                             <div class="col">
                                 <label for="">Porcentaje de propiedad</label>
                                 <input v-model="modalx.porcentajePropiedad" class="form-control" type="number" name="porcentaje" id="">
                                 <small v-if="!modalx.porcentajePropiedad">
-                                        <span class="form-text text-danger" :id="[[modalx.porcentajePropiedad]]">  
+                                        <span class="form-text text-danger">  
                                         Porcentaje de propiedad {{mensajeRequerido}}
                                         </span>
                                 </small>
@@ -335,7 +340,7 @@
                             <label for="">Porcentaje de venta</label>
                             <input v-model="modalx.porcentajeVenta" class="form-control" type="number" name="venta" id="">
                             <small v-if="!modalx.porcentajeVenta">
-                                    <span class="form-text text-danger" :id="[[modalx.porcentajeVenta]]">  
+                                    <span class="form-text text-danger">  
                                     Porcentaje de venta {{mensajeRequerido}}
                                     </span>
                             </small>
@@ -404,8 +409,8 @@
                 </div>
                 <div class="modal-footer row">
                     <button type="button" class="btn btn-danger" style="width: 48%;" data-dismiss="modal">Cancelar</button>
-                    <button v-if="helper == 1" type="button" class="btn btn-primary" style="width: 48%;" data-dismiss="modal" @click="saveEdit()">Guardar</button>
-                    <button v-if="helper == 0" type="button" class="btn btn-primary" style="width: 48%;" data-dismiss="modal" @click="saveNew()">Guardar</button>
+                    <button v-if="helper == 1" type="button" class="btn btn-primary" style="width: 48%;"   @click="saveEdit()">Guardar</button>
+                    <button v-if="helper == 0" type="button" class="btn btn-primary" style="width: 48%;"   @click="saveNew()">Guardar</button>
                 </div>
             </div>
             
@@ -416,6 +421,7 @@
 
 <script>
 export default {
+    props: ['propietario'],
     data(){
         return {
             campos:[
@@ -455,17 +461,18 @@ export default {
                 EstadoNac: '',
             },
             helper: '',
-            progress: '',
+            progress: 0,
             rowSelected: '',
             access_token: '',
-            mensajeRequerido: ' es requerido'
+            mensajeRequerido: ' es requerido',
+            validado: '',
         }
     },
     methods: {
             editar: function (key , registro) {
 				console.log('editar');
 				console.log('...' + key);
-                $('#myModal').modal();
+                $( '#' + this.propietario).modal();
                 this.helper = 1;
                 this.rowSelected = key;
 				this.modalx.nacionalidad = registro.nacionalidad;
@@ -479,45 +486,71 @@ export default {
 
 			},
 			add(){
-				$('#myModal').modal();
+				$( '#' + this.propietario).modal();
                 this.helper  = 0 ;
                 this.cleanModal();
 			},
 			saveNew(){
-                if(  ( parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta) ) <= 100 ){
-                    this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
-                    this.campos[0].registros.push({tipoPersona: this.modalx.persona, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no' })
-                     console.log('guardado nuevo');
+                this.validateModal();
+                if(this.validado == true){
+
+                    if(  ( parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta) ) <= 100 ){
+                        this.campos[0].registros.push({tipoPersona: this.modalx.persona, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
+                        this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
+                        console.log('guardado nuevo');
+                        $( '#' +  this.propietario).modal('hide');
+                        this.cleanModal();
+                    }else{
+                        alert('el porcentaje de venta no puede ser mayor a 100')
+                    }
+
+
                 }else{
-                    alert('el porcentaje de venta no puede ser mayor a 100')
-                }
-                this.cleanModal();
+                    alert('campos pendientes de llenado')
+                };
             },
             saveEdit(){
                 //todo
-                this.campos[0].registros[this.rowSelected] =     {  clasePro: this.modalx.persona, 
-                                                                    porcentajeVenta: this.modalx.porcentajeVenta, 
-                                                                    nuda: this.modalx.porcentajePropiedad, 
-                                                                    unsufructo:  this.modalx.unsufructo = true ? 'si': 'no',
-                                                                    id:1221 , 
-                                                                    nacionalidad: this.modalx.nacionalidad , 
-                                                                    nombrePro: this.modalx.nombre,  
-                                                                    tipoPro: this.modalx.tipoPropietario , 
-                                                                    rfc: this.modalx.rfc, 
-                                                                    curp: this.modalx.curp , 
-                                                                    // porcentajePropiedad : this.modalx.porcentajePropiedad, 
-                                                                    unsufructo: this.modalx.unsufructo, 
-                                                                    porcentajeVenta: this.modalx.porcentajeVenta
+                this.validateModal();
+                if(this.validado == true){
 
-                                                                    
-                }
-                console.log('edicion guardada');
+                    if(  ( parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta) ) <= 100 ){
+                        this.campos[0].registros[this.rowSelected] =     {  clasePro: this.modalx.persona, 
+                                                                        porcentajeVenta: this.modalx.porcentajeVenta, 
+                                                                        nuda: this.modalx.porcentajePropiedad, 
+                                                                        unsufructo:  this.modalx.unsufructo = true ? 'si': 'no',
+                                                                        nacionalidad: this.modalx.nacionalidad , 
+                                                                        nombrePro: this.modalx.nombre,  
+                                                                        tipoPro: this.modalx.tipoPropietario , 
+                                                                        rfc: this.modalx.rfc, 
+                                                                        curp: this.modalx.curp , 
+                                                                        unsufructo: this.modalx.unsufructo, 
+                                                                        porcentajeVenta: this.modalx.porcentajeVenta
+                                          
+                        }    
+                        this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
+                        $( '#' +  this.propietario).modal('hide');
+                        console.log('edicion guardada');
+                    }else{
+                        alert('el porcentaje de venta no puede ser mayor a 100')
+                    };
 
-                if(  ( this.progress + this.modalx.porcentajeVenta ) <= 100 ){
-                    this.progress = this.progress + this.modalx.porcentajeVenta;
+                }else{
+                    alert('campos pendientes de llenado')
                 }
                 console.log(this.progress);
 
+            },
+            validateModal(){
+                   var parent = document.getElementById(this.propietario);
+                   var child = document.querySelector('.text-danger');
+                   if(parent.contains(child)){
+                       this.validado = false;
+                   }else{
+                       this.validado =  true;
+                   }
+                   console.log(parent);
+                    console.log('vlaidado es:'  + this.validado);
             },
             cleanModal(){
                 this.modalx.nacionalidad = '';
@@ -605,8 +638,13 @@ export default {
     mounted() {
         this.accesToken();
         this.Vendedores();
+        console.log(this.propietario);
     }
 }
+
+
+
+
 </script>
 
 <style>

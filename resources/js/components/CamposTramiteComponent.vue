@@ -98,14 +98,16 @@
 													@updateForm="updateForm" :files="files"
 													@validarFormulario="validarFormulario">
 												</expediente-excel-component>
+												<table-component 
+													:propietario="JSON.parse(campo.caracteristicas).propietario"
+													v-else-if="campo.tipo == 'results'">
+												</table-component>
 			 								</div>
 										</div>
 							      	</v-expansion-panel-content>
 							    </v-expansion-panel>
-							<table-component v-if="1 == 1"></table-component>
 							</v-expansion-panels>
  						</div>
-						 <code>{{campos}}</code>
  					</div>
  				</div>
 			</form>
@@ -162,7 +164,7 @@
                 	this.obtenerCampos();
               	}
 	        } else {
-	        	this.obtenerCampos();
+				this.obtenerCampos();
 			}
 			
         },
@@ -256,6 +258,7 @@
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
+					console.log('..' + this.campos);
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
 						this.tipoPersona = this.infoGuardada.tipoPersona;
