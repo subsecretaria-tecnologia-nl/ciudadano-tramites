@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
 		<input hidden :id="[[campo.campo_id]]" :name="[[campo.campo_id]]" :value="info">
-		<table width="100%" class="table table-hover table-striped mt-3" :class="infoExtra && 'col-md-9 col-12' ">
+		<table width="100%" class="table table-hover table-striped mt-3" :class="Object.entries(this.infoExtra).length > 0 && 'col-md-9 col-12' ">
 			<thead class="thead-light">
 				<tr v-if="fields.length != 0">
 					<th v-for="field in fields">{{ field }}</th>
@@ -23,7 +23,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<div v-if="infoExtra" class="col-md-3 col-12">
+		<div v-if="Object.entries(this.infoExtra).length > 0" class="col-md-3 col-12">
 			<ul v-if="infoExtra.listItems" class="list-group">
 				<li v-if="infoExtra.title" class="list-group-item bg-secondary"><h3>{{ infoExtra.title }}</h3></li>
 				<li v-for="item in infoExtra.listItems" class="list-group-item"><strong>{{ item.label }}:</strong> {{ item.value }}</li>
