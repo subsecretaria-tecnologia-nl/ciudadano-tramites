@@ -24,7 +24,8 @@
       },
       methods: {
         formatear(){
-          var number = this.campo.valor ? Number(this.campo.valor.replace(/[^0-9.-]+/g,"")) : "";
+          console.log(this.campo.valor)
+          var number = this.campo.valor ? Number((this.campo.valor+"").replace(/[^0-9.-]+/g,"")) : "";
           let caracteristicas= this.getCaracteristicas();
           if( caracteristicas.formato == "moneda" && this.campo.valido){
             const formatter  = new Intl.NumberFormat('en-US', {
