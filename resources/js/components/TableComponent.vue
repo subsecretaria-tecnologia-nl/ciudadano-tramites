@@ -3,7 +3,7 @@
     <div   class="form-group fv-plugins-icon-container">
 
         <div class="alert text-center" role="alert" style="background-color:#e1f5fe !important; border-color:#e1f5fe;">
-        Expediente Catastral : 
+            Expediente Catastral : {{expediente}}
         </div>
         <div class="alert alert-dismissible p-8" role="alert" style="background-color:#fbe3e4 !important ; border-color:#fbe3e4l ; color:red">
             Informacion! los siguientes detalles deben de tomarse en cuenta
@@ -47,7 +47,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="">
+            <tbody>
                 <tr  v-for="(registro, key) in campos[0].registros"  :key="registro.rfc" >
                     <td>
                         {{registro.clasePro}}
@@ -72,7 +72,7 @@
                         {{registro.porcentajeVenta}}
                     </td>	
                     <td>
-                            <button type="button" @click="editar(key, registro)"  class="text-center p-2 btn btn-info eddit" ><i class="la la-pencil-alt"></i></button>
+                        <button type="button" @click="editar(key, registro)"  class="text-center p-2 btn btn-info eddit" ><i class="la la-pencil-alt"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -108,20 +108,20 @@
                             <label class="form-check-label" for="other">Mexicano</label>	
                         </div>
                         <small v-if="!modalx.nacionalidad">
-                            <span class="form-text text-danger" >  
+                            <span class="form-text text-danger validate" >  
                                 Nacionalidad: {{mensajeRequerido}}
                             </span>
                         </small>
                         <div v-if="modalx.nacionalidad == 'Mexicano'">
                             <p>Seleccione el tipo de persona</p>
                             <div class="form-check form-check-inline pb-4">
-                                <input class="form-check-input" type="radio" id="Fisica" name="persona" value="PERSONA FISICA"  v-model="modalx.persona">
+                                <input class="form-check-input" type="radio" id="FÍSICA" name="persona" value="PERSONA FÍSICA"  v-model="modalx.persona">
                                 <label class="form-check-label">Fisica</label><br>
                                 <input class="form-check-input ml-6" type="radio" id="Moral" name="persona" value="PERSONA MORAL"  v-model="modalx.persona">
                                 <label class="form-check-label" for="other">Moral</label>	
                             </div>
                             <small v-if="!modalx.persona">
-                                <span class="form-text text-danger" >  
+                                <span class="form-text text-danger validate" >  
                                   Tipo de persona {{mensajeRequerido}}
                                 </span>
                             </small>
@@ -136,7 +136,7 @@
                                 <option value="Copropietario">Copropietario</option>
                             </select>
                              <small v-if="!modalx.tipoPropietario">
-                                <span class="form-text text-danger" >  
+                                <span class="form-text text-danger validate" >  
                                   Tipo de propietario: {{mensajeRequerido}}
                                 </span>
                             </small>
@@ -148,7 +148,7 @@
                                     <label for="">Nombre(s):</label>
                                     <input v-model="modalx.nombre" type="text" class="form-control">
                                     <small v-if="!modalx.nombre">
-                                        <span class="form-text text-danger" >  
+                                        <span class="form-text text-danger validate" >  
                                         Nombre: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -157,7 +157,7 @@
                                     <label for="">Apellido Paterno:</label>
                                     <input v-model="modalx.apellidoP" type="text" class="form-control">
                                     <small v-if="!modalx.apellidoP">
-                                        <span class="form-text text-danger" >  
+                                        <span class="form-text text-danger validate" >  
                                         Apellido Paterno: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -168,7 +168,7 @@
                                     <label for="">Apellido Materno:</label>
                                     <input v-model="modalx.apellidoM" type="text" class="form-control">
                                     <small v-if="!modalx.apellidoM">
-                                        <span class="form-text text-danger" >  
+                                        <span class="form-text text-danger validate" >  
                                         Apellido Materno: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -177,7 +177,7 @@
                                     <label for="">Fecha de Nacimiento:</label>
                                     <input v-model="modalx.fechaNac" type="text" class="form-control">
                                     <small v-if="!modalx.fechaNac">
-                                        <span class="form-text text-danger" >  
+                                        <span class="form-text text-danger validate" >  
                                         Fecha de nacimiento: {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -191,14 +191,14 @@
                                     <option value="Canada">Canada</option>
                                 </select>
                                 <small v-if="!modalx.country">
-                                        <span class="form-text text-danger">  
+                                        <span class="form-text text-danger validate">  
                                         Pais: {{mensajeRequerido}}
                                         </span>
                                 </small>
                             </div>
                         </div>
 
-                        <div v-if="modalx.persona== 'PERSONA FISICA'">
+                        <div v-if="modalx.persona== 'PERSONA FÍSICA'">
 
                             <p> ¿Cuenta con el curp?</p>
                             <div class="form-check form-check-inline pb-4">
@@ -208,7 +208,7 @@
                                 <label class="form-check-label" for="other">No</label>	
                             </div>
                                 <small v-if="!modalx.curpExist">
-                                        <span class="form-text text-danger" >  
+                                        <span class="form-text text-danger validate" >  
                                         Campo requerido
                                         </span>
                                 </small>
@@ -218,7 +218,7 @@
                                         <label for="">Curp:</label>
                                         <input v-model="modalx.curp" :disabled="modalx.curpExist == 'No'" @blur='buscarCurp(modalx.curp)' type="text" class="form-control">
                                         <small v-if="!modalx.curp && modalx.curpExist != 'No'"> 
-                                            <span class="form-text text-danger" :id="[[modalx.curp]]">  
+                                            <span class="form-text text-danger validate" :id="[[modalx.curp]]">  
                                             Curp {{mensajeRequerido}}
                                             </span>
                                         </small>
@@ -227,7 +227,7 @@
                                         <label for="">RFC:</label>
                                         <input v-model="modalx.rfc" type="text" class="form-control">
                                         <small v-if="!modalx.rfc">
-                                            <span class="form-text text-danger" :id="[[modalx.rfc]]">  
+                                            <span class="form-text text-danger validate" :id="[[modalx.rfc]]">  
                                             Rfc {{mensajeRequerido}}
                                             </span>
                                         </small>
@@ -238,7 +238,7 @@
                                         <label for="">Nombre(s):</label>
                                         <input v-model="modalx.nombre" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
                                         <small v-if="!modalx.nombre">
-                                            <span class="form-text text-danger" :id="[[modalx.nombre]]">  
+                                            <span class="form-text text-danger validate" :id="[[modalx.nombre]]">  
                                             Nombre {{mensajeRequerido}}
                                             </span>
                                         </small>
@@ -246,8 +246,8 @@
                                     <div class="col">
                                         <label for="">Apellido Paterno:</label>
                                         <input v-model="modalx.apellidoP" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
-                                        <small v-if="!modalx.apellidoP">
-                                                <span class="form-text text-danger" :id="[[modalx.apellidoP]]">  
+                                        <small v-if="!modalx.apellidoP  && modalx.curpExist != 'Si'">
+                                                <span class="form-text text-danger validate" :id="[[modalx.apellidoP]]">  
                                                 Apellido Paterno {{mensajeRequerido}}
                                                 </span>
                                         </small>
@@ -257,8 +257,8 @@
                                     <div class="col">
                                         <label for="">Apellido Materno:</label>
                                         <input v-model="modalx.apellidoM" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
-                                        <small v-if="!modalx.apellidoM">
-                                            <span class="form-text text-danger" :id="[[modalx.apellidoM]]">  
+                                        <small v-if="!modalx.apellidoM  && modalx.curpExist != 'Si'">
+                                            <span class="form-text text-danger validate" :id="[[modalx.apellidoM]]">  
                                             Apellido Materno {{mensajeRequerido}}
                                             </span>
                                         </small>
@@ -266,8 +266,8 @@
                                     <div class="col">
                                         <label for="">Fecha de Nacimiento:</label>
                                         <input v-model="modalx.fechaNac" :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
-                                        <small v-if="!modalx.fechaNac">
-                                            <span class="form-text text-danger" :id="[[modalx.fechaNac]]">  
+                                        <small v-if="!modalx.fechaNac  && modalx.curpExist != 'Si'">
+                                            <span class="form-text text-danger validate" :id="[[modalx.fechaNac]]">  
                                             Fecha nacimiento {{mensajeRequerido}}
                                             </span>
                                         </small>
@@ -278,8 +278,8 @@
                                     <div class="col">
                                         <label for="">Genero:</label>
                                         <input v-model="modalx.sexo"  :disabled="modalx.curpExist == 'Si'" type="text" class="form-control">
-                                        <small v-if="!modalx.sexo">
-                                            <span class="form-text text-danger" :id="[[modalx.sexo]]">  
+                                        <small v-if="!modalx.sexo  && modalx.curpExist != 'Si'">
+                                            <span class="form-text text-danger validate" :id="[[modalx.sexo]]">  
                                             Genero {{mensajeRequerido}}
                                             </span>
                                         </small>
@@ -287,9 +287,9 @@
                                     <div class="col">
                                         <label for="">Estado de Nacimiento:</label>
                                         <input type="text" v-model="modalx.EstadoNac" :disabled="modalx.curpExist == 'Si'" class="form-control">
-                                        <small v-if="!modalx.fec">
-                                            <span class="form-text text-danger" :id="[[modalx.EstadoNac]]">  
-                                            Fecha nacimiento{{mensajeRequerido}}
+                                        <small v-if="!modalx.EstadoNac  && modalx.curpExist != 'Si'">
+                                            <span class="form-text text-danger validate" :id="[[modalx.EstadoNac]]">  
+                                            Estado de Nacimiento {{mensajeRequerido}}
                                             </span>
                                         </small>
                                     </div>
@@ -302,9 +302,9 @@
                             <div class=" form-group row">
                                 <div class="col">
                                     <label for="">RFC:</label>
-                                    <input v-model="modalx.rfc" type="text" class="form-control">
+                                    <input v-model="modalx.rfc" type="text" class="form-control" required>
                                     <small v-if="!modalx.rfc">
-                                        <span class="form-text text-danger" :id="[[modalx.rfc]]">  
+                                        <span class="form-text text-danger validate" :id="[[modalx.rfc]]">  
                                         Rfc {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -313,7 +313,7 @@
                                     <label for="">Razon Social:</label>
                                     <input v-model="modalx.razonS" type="text" class="form-control">
                                     <small v-if="!modalx.razonS">
-                                        <span class="form-text text-danger" :id="[[modalx.razonS]]">  
+                                        <span class="form-text text-danger validate" :id="[[modalx.razonS]]">  
                                         Razon social {{mensajeRequerido}}
                                         </span>
                                     </small>
@@ -326,7 +326,7 @@
                                 <label for="">Porcentaje de propiedad</label>
                                 <input v-model="modalx.porcentajePropiedad" class="form-control" type="number" name="porcentaje" id="">
                                 <small v-if="!modalx.porcentajePropiedad">
-                                        <span class="form-text text-danger">  
+                                        <span class="form-text text-danger validate">  
                                         Porcentaje de propiedad {{mensajeRequerido}}
                                         </span>
                                 </small>
@@ -340,7 +340,7 @@
                             <label for="">Porcentaje de venta</label>
                             <input v-model="modalx.porcentajeVenta" class="form-control" type="number" name="venta" id="">
                             <small v-if="!modalx.porcentajeVenta">
-                                    <span class="form-text text-danger">  
+                                    <span class="form-text text-danger validate">  
                                     Porcentaje de venta {{mensajeRequerido}}
                                     </span>
                             </small>
@@ -421,25 +421,11 @@
 
 <script>
 export default {
-    props: ['propietario'],
+    props: ['propietario', 'expediente', 'campo'],
     data(){
         return {
             campos:[
-                {
-                    "relationship":229,
-						"tipo":"selecction",
-						"nombre":"Vendedores",
-						"registros" : [
-                            {id:1221 , nacionalidad: 'Mexicano' , nombre:"jaime",  tipoPersona:"Fisica" , tipoPropietario: 'Propietario' , rfc: "CACJ9607222L1", curp: "CACJ960722HNLSMM14" , porcentajePropiedad : '', unsufructo: '', porcentajeVenta: ''},
-							{id:1222 , nacionalidad: 'Mexicano' , nombre:"dexter",  tipoPersona:"Fisica" ,  tipoPropietario: 'Copropietario', rfc: "BEBT9509042L1", curp: "BEBT950904FCOBK22" , porcentajePropiedad : '', unsufructo: '', porcentajeVenta: ''},
-							{id:1223 , nacionalidad: 'Mexicano' ,nombre:"thania", tipoPersona:"Moral",  tipoPropietario: 'Nuda Propiedad' ,rfc: "GATO" , curp: "---" , porcentajePropiedad : '', unsufructo: '', porcentajeVenta: ''}
-						],
-						"caracteristicas":"{\"required\":\"false\"}",
-						"campo_id":79,
-						"agrupacion_id":8,
-						"orden":2,
-						"nombre_agrupacion":"Expediente"
-					}
+                {   "registros" : [] }
             ],
             modalx: {
                 persona: '',
@@ -470,8 +456,6 @@ export default {
     },
     methods: {
             editar: function (key , registro) {
-				console.log('editar');
-				console.log('...' + key);
                 $( '#' + this.propietario).modal();
                 this.helper = 1;
                 this.rowSelected = key;
@@ -483,7 +467,6 @@ export default {
 				this.modalx.curp = registro.id_propietario;
 				this.modalx.nombre = registro.nombrePro;
 				this.modalx.rfc = registro.rfc;
-
 			},
 			add(){
 				$( '#' + this.propietario).modal();
@@ -495,15 +478,13 @@ export default {
                 if(this.validado == true){
 
                     if(  ( parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta) ) <= 100 ){
-                        this.campos[0].registros.push({tipoPersona: this.modalx.persona, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
+                        this.campos[0].registros.push({clasePro: this.modalx.persona, tipoPro: this.modalx.tipoPropietario, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
                         this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
-                        console.log('guardado nuevo');
                         $( '#' +  this.propietario).modal('hide');
                         this.cleanModal();
                     }else{
                         alert('el porcentaje de venta no puede ser mayor a 100')
                     }
-
 
                 }else{
                     alert('campos pendientes de llenado')
@@ -511,6 +492,8 @@ export default {
             },
             saveEdit(){
                 //todo
+                this.progress == 0 ? this.progress  : this.progress =  parseInt(this.progress) - parseInt(this.campos[0].registros[this.rowSelected].porcentajeVenta);
+
                 this.validateModal();
                 if(this.validado == true){
 
@@ -530,7 +513,6 @@ export default {
                         }    
                         this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
                         $( '#' +  this.propietario).modal('hide');
-                        console.log('edicion guardada');
                     }else{
                         alert('el porcentaje de venta no puede ser mayor a 100')
                     };
@@ -538,12 +520,11 @@ export default {
                 }else{
                     alert('campos pendientes de llenado')
                 }
-                console.log(this.progress);
 
             },
             validateModal(){
                    var parent = document.getElementById(this.propietario);
-                   var child = document.querySelector('.text-danger');
+                   var child = document.querySelector('.validate');
                    if(parent.contains(child)){
                        this.validado = false;
                    }else{
@@ -579,9 +560,7 @@ export default {
                     dataType: 'json', 
                     url,
                     success:function(data){
-                        // console.log('..... ' + data.token);
                         self.access_token = data.token;
-                        console.log(data.token);
                     },
                     error:function(error){
                         console.log(error);
@@ -614,31 +593,34 @@ export default {
                 });
             },
             Vendedores() {
-                let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
-                $.ajax({
-                    type: "GET",
-                    url,
-                    headers: {
-                        "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
-                        "Content-type":"application/json"
-                    }
-                }).done((response) => {
-                    if(response) {   
-                        response = JSON.parse( response)
-                        this.campos[0].registros = response.datos_propietarios;
-                    } else {
-                        alert('error en la busqueda de propietarios');
-                    }
-                }).fail((error)=> {
-                    console.log( error)
-                })
+                let url = "http://10.153.144.228/insumos-catastro-consulta/" + this.expediente;  
+                if (this.propietario == 1) {
+                    
+                    $.ajax({
+                        type: "GET",
+                        url,
+                        headers: {
+                            "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+                            "Content-type":"application/json"
+                        }
+                    }).done((response) => {
+                        if(response) {   
+                            response = JSON.parse( response)
+                            this.campos[0].registros = response.datos_propietarios;
+                        } else {
+                            alert('error en la busqueda de propietarios');
+                        }
+                    }).fail((error)=> {
+                        console.log( error)
+                    })
+                }
             },
 
     },
     mounted() {
         this.accesToken();
         this.Vendedores();
-        console.log(this.propietario);
+        console.log(this.campo);
     }
 }
 
@@ -646,7 +628,3 @@ export default {
 
 
 </script>
-
-<style>
-
-</style>

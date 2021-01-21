@@ -100,7 +100,10 @@
 												</expediente-excel-component>
 												<table-component 
 													:propietario="JSON.parse(campo.caracteristicas).propietario"
-													v-else-if="campo.tipo == 'results'">
+													:campo="campo"
+													:expediente="7001002010"
+													@updateForm="updateForm"
+													v-else-if="campo.tipo == 'table'">
 												</table-component>
 			 								</div>
 										</div>
@@ -258,7 +261,7 @@
 				  	let response = await axios.get(url,  { params: { id_tramite: this.tramite.id_tramite } });
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
-					console.log('..' + this.campos);
+					console.log('..' + JSON.stringify(this.campos));
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
 						this.tipoPersona = this.infoGuardada.tipoPersona;
