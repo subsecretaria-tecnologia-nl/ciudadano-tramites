@@ -203,7 +203,7 @@
                 		console.log(this.disabled);
                 	}
 
-                	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite){
+                	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite && datosFormulario.tramite.tramite != 'AVISO DE ENAJENACIÓN'){
 		                this.campos = datosFormulario.campos;
 		                this.consulta_api = datosFormulario.consulta_api;
 		                this.tipo_costo_obj = datosFormulario.tipo_costo_obj;
@@ -265,7 +265,7 @@
 
 				if (tramite && tramite.tramite === 'AVISO DE ENAJENACIÓN') {
 					this.fields = ['Expediente Catastral' ,	'Fólio', 	'Días Restantes', 	'Fecha pago informativo',	'Capturista',	'Accion'];
-					this.rows = [{expediente : 123123 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
+					// this.rows = [{expediente : 123123 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
 					var self = this;
 						let url = "http://10.153.144.228/valor-catastral-notaria/6" // + self.notary;  
 						console.log('notary: ' + self.notary);

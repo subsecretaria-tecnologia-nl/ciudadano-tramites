@@ -83,6 +83,9 @@
         <div  v-if="propietario == 0  && progress < 100" class="btn bg-success w-80 mb-4 " @click="add()">
                 <div style="color:white"><i class="la la-plus" style="color:white"></i> Agregar comprador </div>	
         </div>
+        <div class="btn bg-success w-80 mb-4 " @click="updateForm()">
+                <div style="color:white"><i class="la la-plus" style="color:white"></i> updateform </div>	
+        </div>
         <div class="progress" style="height: 3px;">
             <div class="progress-bar " role="progressbar" :style=" 'width: ' + progress + '%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -476,10 +479,11 @@ export default {
 			saveNew(){
                 this.validateModal();
                 if(this.validado == true){
-
-                    if(  ( parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta) ) <= 100 ){
-                        this.campos[0].registros.push({clasePro: this.modalx.persona, tipoPro: this.modalx.tipoPropietario, porcentajeVenta: this.modalx.porcentajeVenta, porcentajePropiedad: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
-                        this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
+                        let porcentajeProp = this.modalx.porcentajePropiedad/100;
+                        let aux =  this.progress + (this.modalx.porcentajeVenta * porcentajeProp);
+                    if(  aux <= 100 ){
+                        this.campos[0].registros.push({clasePro: this.modalx.persona, tipoPro: this.modalx.tipoPropietario, porcentajeVenta: this.modalx.porcentajeVenta, nuda: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
+                        this.progress = aux;
                         $( '#' +  this.propietario).modal('hide');
                         this.cleanModal();
                     }else{
@@ -492,12 +496,18 @@ export default {
             },
             saveEdit(){
                 //todo
-                this.progress == 0 ? this.progress  : this.progress =  parseInt(this.progress) - parseInt(this.campos[0].registros[this.rowSelected].porcentajeVenta);
+                console.log('rowselected' ,this.rowSelected);
+                let porcentajeProp = this.modalx.porcentajePropiedad/100;
+                console.log('progress:', this.progress , '||' , 'porcentaje en registro' , this.campos[0].registros[this.rowSelected].porcentajeVenta);
+                this.progress == 0 ? this.progress  : this.progress =  (this.progress -  parseInt(this.campos[0].registros[this.rowSelected].porcentajeVenta));
+                console.log('progress:', this.progress , '||' , 'modalx.porcentaheventa' , this.modalx.porcentajeVenta, '|||' , 'prop: ' , porcentajeProp);
 
+                let aux =  parseInt(this.progress) + (parseInt(this.modalx.porcentajeVenta) * porcentajeProp);
                 this.validateModal();
+                console.log('aux : ' ,aux);
                 if(this.validado == true){
 
-                    if(  ( parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta) ) <= 100 ){
+                    if(  ( aux ) <= 100 ){
                         this.campos[0].registros[this.rowSelected] =     {  clasePro: this.modalx.persona, 
                                                                         porcentajeVenta: this.modalx.porcentajeVenta, 
                                                                         nuda: this.modalx.porcentajePropiedad, 
@@ -507,11 +517,9 @@ export default {
                                                                         tipoPro: this.modalx.tipoPropietario , 
                                                                         rfc: this.modalx.rfc, 
                                                                         curp: this.modalx.curp , 
-                                                                        unsufructo: this.modalx.unsufructo, 
-                                                                        porcentajeVenta: this.modalx.porcentajeVenta
-                                          
                         }    
-                        this.progress = parseInt(this.progress) + parseInt(this.modalx.porcentajeVenta);
+                        this.progress = this.progress + aux;
+                        console.log('progres al ternimar: ' ,this.progress);
                         $( '#' +  this.propietario).modal('hide');
                     }else{
                         alert('el porcentaje de venta no puede ser mayor a 100')
@@ -530,8 +538,6 @@ export default {
                    }else{
                        this.validado =  true;
                    }
-                   console.log(parent);
-                    console.log('vlaidado es:'  + this.validado);
             },
             cleanModal(){
                 this.modalx.nacionalidad = '';
@@ -615,6 +621,9 @@ export default {
                     })
                 }
             },
+            updateForm(){
+                          this.$emit('updateForm', this.campo);
+            }
 
     },
     mounted() {
