@@ -11,15 +11,15 @@
  					<div class="panel-heading">
  						<div class="row">
 							<v-expansion-panels accordion multiple hover style="z-index: inherit" v-model="panel">
-							    <v-expansion-panel v-for="(agrupacion, i) in agrupaciones" :key="i">
+							    <v-expansion-panel v-for="(agrupacion, i) in agrupaciones" :key="i" close :disabled=" disabled.includes(i) ">
 							      	<v-expansion-panel-header >
 							        	{{ agrupacion.nombre_agrupacion }}
 							        	 <template v-slot:actions >
-								        	<v-icon right class="fa fa-angle-down" />
+								        	<i class="fa fa-angle-down" />
 								    	</template>
 							      	</v-expansion-panel-header>
 							      	<v-expansion-panel-content>
-										<div class="row">
+										<div class="row align-items-center">
 											<div v-if="agrupacion.tipo === 'agrupacion'" class="col-lg-12">
 												<div class="col-md-12 col-lg-12">
 												    <div >
@@ -45,7 +45,7 @@
 												</div>
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
-			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || campo.tipo == 'file'? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
 												<input-component
 													v-if="campo.tipo === 'input'" 
@@ -90,6 +90,19 @@
 													@updateForm="updateForm" :files="files"
 													@validarFormulario="validarFormulario"
 												></file-component>
+												<results-component 
+													v-else-if="campo.tipo === 'results'"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"
+													:info="response"
+													:fields="fields"
+													:rows="rows"
+													:loading="loading"
+													:infoExtra="infoExtra"
+													>
+												</results-component>
 												<expediente-excel-component  
 													v-else-if="JSON.parse(campo.caracteristicas).tipo == 'expediente_validacion_excel'"
 													:campo="campo" 
@@ -139,13 +152,9 @@
 			</form>
 		</div>
     </div>
-
 </template>
-
 <script>
-
     export default {
-
         props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0'],
         data() {
             return {
@@ -158,6 +167,13 @@
                 consulta_api:'',
 				panel : [0,1,2,3,4],
 				motivoDeclaracion0:'',
+				disabled : [],
+				ajax : null,
+				response : [],
+				fields : [],
+				rows :[],
+				loading : false,
+				infoExtra : {},
 				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' }
             }
         },
@@ -170,6 +186,13 @@
 			if (localStorage.getItem('datosFormulario')) {
               	try {
                 	let datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
+                	console.log(datosFormulario.tramite.tramite);
+                	if(datosFormulario.tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
+                		this.panel = [0];
+                		this.disabled = [1,2,3,4,5];
+                		console.log(this.disabled);
+                	}
+
                 	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite){
 		                this.campos = datosFormulario.campos;
 		                this.consulta_api = datosFormulario.consulta_api;
@@ -192,9 +215,7 @@
 	        } else {
 	        	this.obtenerCampos();
 			}
-			
         },
-
         methods: {
         	setDeclararEn0(){
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
@@ -229,10 +250,54 @@
 				    }
 				}
         	},
-        	updateForm(campo){
+        	async updateForm(campo){
+				const tramite = localStorage.getItem('tramite') && JSON.parse(localStorage.getItem('tramite')) ;
+				if(tramite && tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
+					const datosFormulario = localStorage.getItem('datosFormulario') && JSON.parse(localStorage.getItem('datosFormulario')) ;
+					if(campo.nombre.search(/region/i) >= 0){
+						const value = campo.valor && campo.valor.toString();
+						if(value && value.length == 3 && value[0] === '0')
+							campo.valor = value.slice(1)
+					}
+
+					if(campo.nombre.search(/tipo de busqueda/i) >= 0){
+						this.fields = [ 'Expediente Catastral', 'Municipio', 'Tipo de predio', 'Tipo de Construcción', 'Ejemplo' ];
+						if(campo.valor){
+							switch(campo.valor.toString()){
+								case 'individual':
+									this.panel = [0, 1];
+									this.disabled = [2,3];
+								break;
+								case 'rango':
+									this.panel = [0, 2];
+									this.disabled = [1,3];
+								break;
+								case 'grupal':
+									this.panel = [0, 3];
+									this.disabled = [1,2];
+								break;
+								default:
+									this.panel = [0];
+								break;
+							}
+						}
+					}
+
+					switch(campo.nombre_agrupacion){
+						case 'Individual':
+							await this.processIndividual({campo, tramite, datosFormulario})
+						break;
+						case 'Rango':
+							await this.processRango({campo, tramite, datosFormulario})
+						break;
+						case 'Grupal':
+							this.panel = [0, 3];
+						break;
+					}
+				}
 
         		if(campo.tipo == 'file' && campo.valido){
-        			let nuevoFile = {valor:campo.valor, nombre:campo.nombre, id:campo.campo_id, nombrreFile:campo.valor.name};
+        			let nuevoFile = {valor:campo.valor, nombre:campo.nombre, id:campo.campo_id, nombrreFile:campo.valor ? campo.valor.name : ''};
         			let indexArchivoEnLista = this.files.findIndex( file => file.id == campo.campo_id );
         			if(indexArchivoEnLista>=0){
         				this.files[indexArchivoEnLista] = nuevoFile;
@@ -241,6 +306,7 @@
         			}
 		    		this.$emit('updatingFiles', this.files);
         		}
+
         		this.cambioModelo();
         	},
 		    cambioModelo(){
@@ -275,7 +341,7 @@
                 		formularioValido = formularioValido && !!campo.valido;
                 	}
                 });
-                if(this.tipo_costo_obj.tipoCostoRadio == 'hoja'){
+                if(this.tipo_costo_obj && this.tipo_costo_obj.tipoCostoRadio == 'hoja'){
                 	formularioValido = formularioValido && !!this.tipo_costo_obj.hojaInput;
                 	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
                 	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
@@ -315,7 +381,6 @@
 				this.agruparCampos();
 				
 				this.mostrar = true;
-				
 		    },
 
 		    agruparCampos(){
@@ -397,13 +462,153 @@
 						segg.setDeclararEn0(); 
 					}, 1000);
 					//setTimeout(function(){  }, 1000);
-
 		    },
 
 		    onlyUnique(value, index, self) { 
 			    return self.findIndex (dato => dato.agrupacion_id == value.agrupacion_id) === index;
 			},
-	
+			async processIndividual({campo, tramite, datosFormulario}){
+				let empty = [];
+				let all = {}
+				datosFormulario.campos.map(ele => {
+					if(['Municipio', 'Region', 'Manzana', 'Lote'].includes(ele.nombre)){
+						if(ele.nombre == campo.nombre)
+							ele.valor = campo.valor
+						all[ele.nombre] = ele
+					}
+				})
+
+				empty = Object.entries(all).map(ele => {
+					const valor = ele[1].valor ? typeof ele[1].valor === 'string' ? ele[1].valor : ele[1].valor.toString() : null;
+					return valor == '' || !ele[1].valido ? ele[1] : null;
+				}).filter(ele => ele)
+
+				if(empty.length == 0){
+					this.panel = [0, 1, 4];
+					const exp = `${all['Municipio'].valor.toString()}${all['Region'].valor}${all['Manzana'].valor}${all['Lote'].valor}`;
+					const url = `${process.env.TESORERIA_HOSTNAME}/insumos-catastro-consulta/${exp}`;
+					if(this.ajax !== url){
+						this.ajax = url;
+						this.loading = true;
+						const response = await axios.get(url);
+						const rows = [];
+						this.response = [response.data];
+						if(response.data.resultado) rows.push([exp, response.data.resultado])
+						else{
+							const propietarios = response.data.datos_propietarios.length > 1 ? { label : response.data.datos_propietarios[0].nombrePro, tooltip : { title : 'Propietarios', listItems : response.data.datos_propietarios.map(e => e.nombrePro) } } : response.data.datos_propietarios[0].nombrePro;
+							rows.push([
+								response.data.datos_catastrales[0].expediente_catastral,
+								response.data.nombre_municipio,
+								response.data.tipo_predio,
+								response.data.uso_suelo,
+								propietarios
+							])
+						}
+
+						const noValido = this.response.filter(ele => ele.cta_valida === '0');
+						const bloqueados = this.response.filter(ele => ele.bloqueado && ele.bloqueado !== '0');
+						const fallidos = this.response.filter(ele => ele.resultado === 'NO ENCONTRADO');
+						const autorizados = this.response.filter(ele => ele.datos_propietarios);
+
+						const infoExtra = [
+							{
+								label : 'Registros Consultados',
+								value : rows.length
+							},
+							{
+								label : 'No Validos',
+								value : noValido ? noValido.length : 0
+							},
+							{
+								label : 'Bloqueados',
+								value : bloqueados ? bloqueados.length : 0
+							},
+							{
+								label : 'Fallidos',
+								value : fallidos ? fallidos.length : 0
+							},
+							{
+								label : 'Duplicados',
+								value : 0
+							},
+							{
+								label : 'Autorizados',
+								value : autorizados ? autorizados.length : 0
+							}
+						];
+
+						this.infoExtra = {
+							title : 'Resultados de la búsqueda',
+							listItems : infoExtra
+						};
+
+						this.rows = rows;
+						this.loading = false;
+					}
+				}else{
+					this.panel = [0, 1];
+				}
+			},
+			async processRango({ campo, tramite, datosFormulario }){
+				this.panel = [0, 2];
+				let final = null;
+				let inicial = null;
+				let unico = null;
+
+				let empty = [];
+				let all = {}
+
+				switch(campo.nombre){
+					case 'Manzana Unica':
+					case 'Manzana Inicial':
+						final = this.campos.map((ele, ind) => ele.nombre === 'Manzana Final' ? ind : null).filter(ele => ele).toString()
+						inicial = this.campos.map((ele, ind) => ele.nombre === 'Manzana Inicial' ? ind : null).filter(ele => ele).toString()
+						unico = this.campos.map((ele, ind) => ele.nombre === 'Manzana Unica' ? ele.valor : null).filter(ele => ele).toString()
+						console.log(final, inicial, unico === 'true');
+						if(unico === 'true'){
+							this.campos[final].valor = this.campos[inicial].valor || 0;
+						}else{
+							this.campos[final].valor = '';
+						}
+						this.cambioModelo();
+					break;
+
+					case 'Lote Unico':
+					case 'Lote Inicial':
+						final = this.campos.map((ele, ind) => ele.nombre === 'Lote Final' ? ind : null).filter(ele => ele).toString()
+						inicial = this.campos.map((ele, ind) => ele.nombre === 'Lote Inicial' ? ind : null).filter(ele => ele).toString()
+						unico = this.campos.map((ele, ind) => ele.nombre === 'Lote Unico' ? ele.valor : null).filter(ele => ele).toString()
+						console.log(final, inicial, unico === 'true');
+						if(unico === 'true'){
+							this.campos[final].valor = this.campos[inicial].valor || 0;
+						}else{
+							this.campos[final].valor = '';
+						}
+						this.cambioModelo();
+					break;
+				}
+
+				datosFormulario.campos.map(ele => {
+					if(['*Municipios', '*Región', 'Manzana Inicial', 'Manzana Final', 'Lote Inicial', 'Lote Final'].includes(ele.nombre)){
+						if(ele.nombre == campo.nombre)
+							ele.valor = campo.valor
+						all[ele.nombre] = ele
+					}
+				})
+
+				empty = Object.entries(all).map(ele => {
+					const valor = ele[1].valor ? typeof ele[1].valor === 'string' ? ele[1].valor : ele[1].valor.toString() : null;
+					return valor == '' || valor == null || !ele[1].valido ? ele[1] : null;
+				}).filter(ele => ele)
+
+				if(empty.length == 0){
+					this.panel = [0, 2, 4];
+					const exp = [];
+
+				}else{
+					this.panel = [0, 2];
+				}
+			}
      	}	
 	}
 

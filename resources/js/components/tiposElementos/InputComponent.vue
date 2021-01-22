@@ -4,7 +4,16 @@
         {{ campo.nombre }}
     </label>
     <span class="currencyinput">
-      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" :placeholder="[[campo.nombre]]" :id="[[campo.campo_id]]" v-model="campo.valor"  @change="validar" @focus="validar" />
+      <input
+        type="text"
+        class="form-control  form-control-lg "
+        style="background-color: #e5f2f5 !important"
+        :placeholder="[[campo.nombre]]"
+        :id="[[campo.campo_id]]"
+        v-model="campo.valor"
+        @change="validar"
+        @focus="validar"
+      />
     </span>
     <small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || estadoFormulario > 0)">
         <span v-for="mensaje in campo.mensajes" class="form-text text-danger">
@@ -47,7 +56,7 @@
           return caracteristicas;
         },
 
-        validar(){
+        validar(a){
           let curpValido = true;
           let requeridoValido = true;
           let caracteristicas = {};
@@ -71,7 +80,8 @@
               this.campo.mensajes.push( mensaje );
             }
           } 
-          if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
+          // console.log(caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true');
+          if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
             requeridoValido =  !!this.campo.valor && (this.campo.valor+"").length > 0;
             if( !requeridoValido ){
               let mensaje = { 

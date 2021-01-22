@@ -19,7 +19,7 @@
                                         <tbody>
                                             @foreach ($draft as $item)
                                                 @php
-                                                    $infoDraf = json_decode($item->info);
+                                                    $infoDraft = json_decode($item->info);
                                                 @endphp
                                                 <tr>
                                                     <td class="mobile-id" style="vertical-align: middle">
@@ -34,7 +34,17 @@
                                                             {{$item->titulo}}
                                                         </span>
                                                         <div class="nombre">
-                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoDraf->solicitante) ? ($infoDraf->solicitante->tipoPersona == 'pf' ? "- {$infoDraf->solicitante->nombreSolicitante} {$infoDraf->solicitante->apPat} {$infoDraf->solicitante->apMat}" : $infoDraf->solicitante->razonSocial) : "" }}
+                                                            <strong>{{ $item->clave }}</strong>
+                                                            @php
+                                                                if(isset($infoDraft->solicitante)){
+                                                                    if($infoDraft->solicitante->tipoPersona == 'pf'){
+                                                                        $apMat = isset($infoDraft->solicitante->apMat) ? $infoDraft->solicitante->apMat : '';
+                                                                        echo "- {$infoDraft->solicitante->nombreSolicitante} {$infoDraft->solicitante->apPat} {$apMat}";
+                                                                    }else{
+                                                                        echo "- {$infoDraft->solicitante->razonSocial}";
+                                                                    }
+                                                                }
+                                                            @endphp
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -76,7 +86,17 @@
                                                             {{$item->titulo}}
                                                         </span>
                                                         <div class="nombre">
-                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoPP->solicitante) ? ($infoPP->solicitante->tipoPersona == 'pf' ? "- {$infoPP->solicitante->nombreSolicitante} {$infoPP->solicitante->apPat} {$infoPP->solicitante->apMat}" : $infoPP->solicitante->razonSocial) : "" }}
+                                                            <strong>{{ $item->clave }}</strong>
+                                                            @php
+                                                                if(isset($infoPP->solicitante)){
+                                                                    if($infoPP->solicitante->tipoPersona == 'pf'){
+                                                                        $apMat = isset($infoPP->solicitante->apMat) ? $infoPP->solicitante->apMat : '';
+                                                                        echo "- {$infoPP->solicitante->nombreSolicitante} {$infoPP->solicitante->apPat} {$apMat}";
+                                                                    }else{
+                                                                        echo "- {$infoPP->solicitante->razonSocial}";
+                                                                    }
+                                                                }
+                                                            @endphp
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -118,7 +138,17 @@
                                                             {{$item->titulo}}
                                                         </span>
                                                         <div class="nombre">
-                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoWait->solicitante) ? ($infoWait->solicitante->tipoPersona == 'pf' ? "- {$infoWait->solicitante->nombreSolicitante} {$infoWait->solicitante->apPat} {$infoWait->solicitante->apMat}" : $infoWait->solicitante->razonSocial) : "" }}
+                                                            <strong>{{ $item->clave }}</strong>
+                                                            @php
+                                                                if(isset($infoWait->solicitante)){
+                                                                    if($infoWait->solicitante->tipoPersona == 'pf'){
+                                                                        $apMat = isset($infoWait->solicitante->apMat) ? $infoWait->solicitante->apMat : '';
+                                                                        echo "- {$infoWait->solicitante->nombreSolicitante} {$infoWait->solicitante->apPat} {$apMat}";
+                                                                    }else{
+                                                                        echo "- {$infoWait->solicitante->razonSocial}";
+                                                                    }
+                                                                }
+                                                            @endphp
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -160,7 +190,17 @@
                                                             {{$item->titulo}}
                                                         </span>
                                                         <div class="nombre">
-                                                            <strong>{{ $item->clave }}</strong>{{ isset($infoProgress->solicitante) ? ($infoProgress->solicitante->tipoPersona == 'pf' ? "- {$infoProgress->solicitante->nombreSolicitante} {$infoProgress->solicitante->apPat} {$infoProgress->solicitante->apMat}" : $infoProgress->solicitante->razonSocial) : "" }}
+                                                            <strong>{{ $item->clave }}</strong>
+                                                            @php
+                                                                if(isset($infoProgress->solicitante)){
+                                                                    if($infoProgress->solicitante->tipoPersona == 'pf'){
+                                                                        $apMat = isset($infoProgress->solicitante->apMat) ? $infoProgress->solicitante->apMat : '';
+                                                                        echo "- {$infoProgress->solicitante->nombreSolicitante} {$infoProgress->solicitante->apPat} {$apMat}";
+                                                                    }else{
+                                                                        echo "- {$infoProgress->solicitante->razonSocial}";
+                                                                    }
+                                                                }
+                                                            @endphp
                                                         </div>
                                                     </td>
                                                 </tr>
