@@ -245,9 +245,9 @@ class TramitesController extends Controller
           }
           elseif ($costoX == "H") { // costo x hojas
             if(!empty($valor)){
-              $costo_real = $actual_uma;
-            }else{
               $costo_real = $actual_uma * $valor;
+            }else{
+              $costo_real = $actual_uma;
             }
 
             $primer_costo = $this->redondeo($costo_real);
