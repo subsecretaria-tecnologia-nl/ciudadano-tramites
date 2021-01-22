@@ -173,8 +173,14 @@ class TramitesController extends Controller
           $costoX = "H";
           $min = $var_minimo;
           $valor = $var_valor;
-        }elseif($request->tipoCostoRadio == "millar"){ //cuando el costo en el radio seleccionado sea millar
+        }
+        elseif($request->tipoCostoRadio == "millar"){ //cuando el costo en el radio seleccionado sea millar
           $costoX = "M";
+        }
+        elseif ($request->tipoCostoRadio == "lote") { //cuando el costo en el radio seleccionado sea lote
+          $costoX = "L";
+          $min = $var_minimo;
+          $valor = $var_valor;
         }
       }
 
