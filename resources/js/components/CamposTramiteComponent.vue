@@ -252,46 +252,48 @@
         	},
         	async updateForm(campo){
 				const tramite = localStorage.getItem('tramite') && JSON.parse(localStorage.getItem('tramite')) ;
-				const datosFormulario = localStorage.getItem('datosFormulario') && JSON.parse(localStorage.getItem('datosFormulario')) ;
-				if(campo.nombre.search(/region/i) >= 0){
-					const value = campo.valor && campo.valor.toString();
-					if(value && value.length == 3 && value[0] === '0')
-						campo.valor = value.slice(1)
-				}
+				if(tramite && tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
+					const datosFormulario = localStorage.getItem('datosFormulario') && JSON.parse(localStorage.getItem('datosFormulario')) ;
+					if(campo.nombre.search(/region/i) >= 0){
+						const value = campo.valor && campo.valor.toString();
+						if(value && value.length == 3 && value[0] === '0')
+							campo.valor = value.slice(1)
+					}
 
-				if(tramite && tramite.tramite === 'INFORMATIVO VALOR CATASTRAL' && campo.nombre.search(/tipo de busqueda/i) >= 0){
-					this.fields = [ 'Expediente Catastral', 'Municipio', 'Tipo de predio', 'Tipo de Construcción', 'Ejemplo' ];
-					if(campo.valor){
-						switch(campo.valor.toString()){
-							case 'individual':
-								this.panel = [0, 1];
-								this.disabled = [2,3];
-							break;
-							case 'rango':
-								this.panel = [0, 2];
-								this.disabled = [1,3];
-							break;
-							case 'grupal':
-								this.panel = [0, 3];
-								this.disabled = [1,2];
-							break;
-							default:
-								this.panel = [0];
-							break;
+					if(campo.nombre.search(/tipo de busqueda/i) >= 0){
+						this.fields = [ 'Expediente Catastral', 'Municipio', 'Tipo de predio', 'Tipo de Construcción', 'Ejemplo' ];
+						if(campo.valor){
+							switch(campo.valor.toString()){
+								case 'individual':
+									this.panel = [0, 1];
+									this.disabled = [2,3];
+								break;
+								case 'rango':
+									this.panel = [0, 2];
+									this.disabled = [1,3];
+								break;
+								case 'grupal':
+									this.panel = [0, 3];
+									this.disabled = [1,2];
+								break;
+								default:
+									this.panel = [0];
+								break;
+							}
 						}
 					}
-				}
 
-				switch(campo.nombre_agrupacion){
-					case 'Individual':
-						await this.processIndividual({campo, tramite, datosFormulario})
-					break;
-					case 'Rango':
-						await this.processRango({campo, tramite, datosFormulario})
-					break;
-					case 'Grupal':
-						this.panel = [0, 3];
-					break;
+					switch(campo.nombre_agrupacion){
+						case 'Individual':
+							await this.processIndividual({campo, tramite, datosFormulario})
+						break;
+						case 'Rango':
+							await this.processRango({campo, tramite, datosFormulario})
+						break;
+						case 'Grupal':
+							this.panel = [0, 3];
+						break;
+					}
 				}
 
         		if(campo.tipo == 'file' && campo.valido){

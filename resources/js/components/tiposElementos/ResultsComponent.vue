@@ -35,7 +35,7 @@
 <script>
 	export default {
 		props: ['campo', 'estadoFormulario', 'showMensajes', 'info', 'table', 'fields', 'rows', 'loading', 'infoExtra'],
-		created () {
+		updated () {
 			this.campo.valido = true;
 		},
 		watch : {
