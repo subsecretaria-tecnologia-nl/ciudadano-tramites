@@ -28,7 +28,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal'">
+                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal' ">
                                         <tr>
                                             <td class="left" style="width: 70%">
                                                 <strong>H (Importe total)</strong>
@@ -226,14 +226,15 @@
                 let consulta_api =  this.datosFormulario.consulta_api;
                 let tipo_costo_obj = this.datosFormulario.tipo_costo_obj ;
                 
-                if( this.tipoTramite =='normal' ){
+                if( this.tipoTramite =='normal'  ){
                     url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
-                } else {
+                } else if(this.tipoTramite =='complementaria'){
                     url = process.env.APP_URL + "/getComplementaria"; 
                 }
                 let data = {  
                     id_seguimiento: this.tramite.id_seguimiento,
-                    tramite_id: this.tramite.id_tramite
+                    tramite_id: this.tramite.id_tramite,
+                    tipoPersona:this.datosFormulario.tipoPersona
                 }
                 
                 data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
