@@ -621,6 +621,10 @@ export default {
         this.accesToken();
         this.Vendedores();
         console.log(this.campo);
+        this.campo.valido = true;
+        // this.$emit('updateForm', this.campo);
+    },
+    updated(){
     }
 }
 

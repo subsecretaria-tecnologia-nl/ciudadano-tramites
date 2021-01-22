@@ -40,7 +40,7 @@
 													      	</label>
 													    </div>
 
-													    <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div>
+													    <!-- <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div> -->
 													</div>
 												</div>
 											</div>
@@ -162,7 +162,7 @@
 </template>
 <script>
     export default {
-        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0'],
+        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0', 'notary'],
         data() {
             return {
 				progress: '',
@@ -196,7 +196,7 @@
               	try {
 					  this.obtenerCampos();
                 	let datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
-                	console.log(datosFormulario.tramite.tramite);
+                	console.log('datosformulario : ' , datosFormulario);
                 	if(datosFormulario.tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
                 		this.panel = [0];
                 		this.disabled = [1,2,3,4,5];
@@ -267,7 +267,8 @@
 					this.fields = ['Expediente Catastral' ,	'Fólio', 	'Días Restantes', 	'Fecha pago informativo',	'Capturista',	'Accion'];
 					this.rows = [{expediente : 123123 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
 					var self = this;
-						let url = "http://10.153.144.228/valor-catastral-notaria/6";  
+						let url = "http://10.153.144.228/valor-catastral-notaria/6" // + self.notary;  
+						console.log('notary: ' + self.notary);
 						$.ajax({
 							type: "GET",
 							dataType: 'json', 
@@ -276,10 +277,13 @@
 								// self.rellenarForm(data);
 								// console.log('expedientes catastrales lsita:  ' + JSON.stringify(data) );
 								// data.forEach( o => { self.rows.push({ o  } )} )
-								// for (let index = 0; index < data.length; index++) {
-								// 	self.rows.push(data[index].campos]) ;
-								// 	console.log(self.rows);
-								// }
+								let rows = [];
+								for (let index = 0; index < data.length; index++) {
+									let row = [];
+									data[index]
+									self.rows.push(data[index].campos) ;
+									console.log(self.rows);
+								}
 								self.rows = data;
 							},
 							error:function(error){
@@ -347,7 +351,8 @@
         		this.cambioModelo();
         	},
 		    cambioModelo(){
-		    	let formvALID = this.validarFormulario();
+				let formvALID = this.validarFormulario();
+				console.log(formvALID);
             	let datosFormulario = {
             		tramite: this.tramite,
             		campos: this.campos,
@@ -375,14 +380,16 @@
 							this.motivoDeclaracion0 = campo.valor;
                 		} 
 					} else {
-                		formularioValido = formularioValido && !!campo.valido;
+						console.log( 'campo: ' , campo.nombre,  'forvalido: ' ,formularioValido ,   ' !!campovalido ' , !!campo.valido);
+						formularioValido = formularioValido && !!campo.valido;
                 	}
                 });
                 if(this.tipo_costo_obj && this.tipo_costo_obj.tipoCostoRadio == 'hoja'){
                 	formularioValido = formularioValido && !!this.tipo_costo_obj.hojaInput;
                 	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
                 	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
-                }
+				}
+				console.log( 'camposValidables', camposValidables);
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
 		    },
@@ -408,6 +415,9 @@
 								let infoArchivoGuardado = this.infoGuardada.archivosGuardados.find( archivo => archivo.mensaje == campo.nombre );
 								campo.archivoGuardado = true;
 								campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
+							}
+							if (campo.tipo == 'table' || campo.tipo == 'results') {
+								campo.valido = true;
 							}
 						});
 					}
@@ -646,7 +656,13 @@
 					this.panel = [0, 2];
 				}
 			}
-     	}	
+		 },
+		 updated(){
+			 console.log('en 0' ,this.declararEn0);
+		 },
+		 mounted(){
+			 console.log('agrupacion ==', this.agrupaciones);
+		 }
 	}
 
 

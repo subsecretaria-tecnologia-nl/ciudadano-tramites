@@ -42,8 +42,9 @@
 			return{
 				selectedId: '',
 		}},
-		created () {
+		updated () {
 			this.campo.valido = true;
+			// this.$emit('updateForm', this.campo);
 		},
 		watch : {
 			rows: function(newVal, oldVal) {

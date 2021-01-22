@@ -50,7 +50,7 @@
                                                 </div>
                                               </div>
                                               <div v-if="tipoTramite == 'normal' && camposGuardadosObtenidos" >
-                                                <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
+                                                <campos-tramite-component :tramite="tramite" v-if="currentStep == 1" :notary="this.notary"
                                                 :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada" :declararEn0="declararEn0">
                                                   
                                                 </campos-tramite-component>
@@ -117,7 +117,7 @@
     import { uuid } from 'vue-uuid';
 
     export default {
-        props: ['tramite','idUsuario', 'clave'],
+        props: ['tramite','idUsuario', 'clave', 'notary'],
         mounted() {
             this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
