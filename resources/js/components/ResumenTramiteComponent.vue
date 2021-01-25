@@ -240,10 +240,11 @@
                 } else if(this.tipoTramite =='complementaria'){
                     url = process.env.APP_URL + "/getComplementaria"; 
                 }
+
                 let data = {  
                     id_seguimiento: this.tramite.id_seguimiento,
                     tramite_id: this.tramite.id_tramite,
-                    tipoPersona:this.datosFormulario.tipoPersona
+                    tipoPersona:this.listaSolicitantes[0].tipoPersona
                 }
                 
                 data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
