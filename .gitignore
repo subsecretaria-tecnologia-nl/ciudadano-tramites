@@ -14,3 +14,4 @@ yarn-error.log
 .sass-cache
 compressed
 style
+_*
