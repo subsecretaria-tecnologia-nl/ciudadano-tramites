@@ -8,12 +8,12 @@
       </div>
       <div class="custom-file">
         <input  
-          :id="[[campo.campo_id]]"
-          :name="[[campo.campo_id]]" 
+          :id="[[campo.campo_id]] + '-' + [[campo.relationship]]"
+          :name="[[campo.campo_id]] + '-' + [[campo.relationship]]" 
           class="custom-file-input"  style="background-color: #e5f2f5 !important"
           ref="fileInput"
           type="file" @change="validar"/>
-        <label class="custom-file-label" :for="[[campo.campo_id]]">
+        <label class="custom-file-label" :for="[[campo.campo_id]] + '-' + [[campo.relationship]]">
           <span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'">  
             {{ campo.attach || 'Seleccione archivo' }}
           </span>
@@ -32,7 +32,7 @@
             responseType: "ArrayBuffer",
             headers: {
           'nombreArchivo': nombreArchivo,
-          campo_id: campo.campo_id,
+          campo_id: campo.campo_id + "-" + campo.relationship,
           campo_nombre:campo.nombre
         }
         })
@@ -94,7 +94,7 @@
           }catch(err){
             console.log(err);
           }
-          var fileInput = document.getElementById(this.campo.campo_id );
+          var fileInput = document.getElementById(this.campo.campo_id +  "-" + this.campo.relationship );
           if( fileInput && fileInput.files.length > 0  ){
             requeridoValido = true;
             $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files.length > 0 ? fileInput.files[0].name : null );
@@ -111,7 +111,7 @@
             }
             this.campo.mensajes.push( mensaje );
           } else{
-            var fileInput = document.getElementById(this.campo.campo_id);
+            var fileInput =  document.getElementById(this.campo.campo_id +  "-" + this.campo.relationship );;
             let file = fileInput.files[0];
             this.campo.valor = file;
           }

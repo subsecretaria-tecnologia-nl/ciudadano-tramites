@@ -41,7 +41,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody v-else-if="this.tramite.detalle && tramite.detalle.costo_final ">
+                                    <tbody v-else-if="tramite.detalle && tramite.detalle.costo_final >= 0">
                                         <tr >
                                             <td class="left">
                                                 <strong>Total</strong>
@@ -115,10 +115,19 @@
 
         props: ['datosComplementaria','tipoTramite'],
         mounted() {
-            console.log( this.datosComplementaria );
-            console.log( this.tipoTramite )
             this.obtenerInformacionDelTramite();
-            this.obtenerCosto();
+            console.log(this.tipoTramite)
+            if(this.tipoTramite == 'declaracionEn0'){
+                this.obteniendoCosto= false;
+                this.tramite.detalle = {costo_final:0};
+                const parsed = JSON.stringify(this.tramite);
+                localStorage.setItem('tramite', parsed);  
+                this.$forceUpdate();
+                this.obteniendoCosto = false;
+            } else {
+                this.obtenerCosto();    
+            }
+           
         },
 
         data(){
@@ -221,7 +230,7 @@
                 return valor;
             },
 
-            async obtenerCosto(){
+            async obtenerCosto(){    
                 let url = "";
                 let consulta_api =  this.datosFormulario.consulta_api;
                 let tipo_costo_obj = this.datosFormulario.tipo_costo_obj ;
