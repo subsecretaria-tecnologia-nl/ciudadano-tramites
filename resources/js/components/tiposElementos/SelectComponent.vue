@@ -42,6 +42,52 @@
             console.log(err);
           }
 
+           if( caracteristicas.formato == 'estado'){
+                var self = this;
+                let url = "http://10.153.144.228/obtener-estados" ;  
+                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                        // self.rellenarForm(data);
+                        console.log('..se consulto el curp respuesta : ' + data );
+                        // this.$data = data.data.nombres;
+                        self.$emit('estados', data)
+                        JSON.parse(self.campo.caracteristicas).opciones(data)
+                    },
+                    error:function(error){
+                        console.log(error);
+                    },
+                    complete:function(){
+                        console.log('ya quedo');
+                    }
+                });
+          }
+          if( caracteristicas.formato == 'municipio'){
+                var self = this;
+                let url = "http://10.153.144.228/consultar-curp/" + campo.valor ;  
+                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                        // self.rellenarForm(data);
+                        console.log('..se consulto el curp respuesta : ' + data );
+                        // this.$data = data.data.nombres;
+                        self.$emit('curpSearch', data)
+                    },
+                    error:function(error){
+                        console.log(error);
+                    },
+                    complete:function(){
+                        console.log('ya quedo');
+                    }
+                });
+          }
+
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
             requeridoValido =  this.campo.valor && this.campo.valor.length > 0;
             if( !requeridoValido ){

@@ -44,6 +44,29 @@
             this.campo.valor = formatter.format(number);
             this.$forceUpdate();
           }
+          if( caracteristicas.formato == 'curp'){
+                var self = this;
+                console.log('------');
+                let url = "http://10.153.144.228/consultar-curp/" + campo.valor ;  
+                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                        // self.rellenarForm(data);
+                        console.log('..se consulto el curp respuesta : ' + data );
+                        // this.$data = data.data.nombres;
+                        self.$emit('curpSearch', data)
+                    },
+                    error:function(error){
+                        console.log(error);
+                    },
+                    complete:function(){
+                        console.log('ya quedo');
+                    }
+                });
+          }
         },
 
         getCaracteristicas(){
@@ -57,7 +80,8 @@
         },
 
         validar(a){
-          let curpValido = true;
+          // let curpValido = true;
+                console.log('------');
           let requeridoValido = true;
           let caracteristicas = {};
           var caracteristicasStr = this.campo.caracteristicas;
@@ -69,17 +93,17 @@
             console.log(err);
           }
 
-          if( caracteristicas.expreg){
-            var re = new RegExp(caracteristicas.expreg, "i");
-            curpValido =  re.test(this.campo.valor) ;
-            if(  !curpValido ){
-              let mensaje = { 
-                tipo:'regex',
-                mensajeStr: "El campo " + this.campo.nombre + " no es válido"
-              }
-              this.campo.mensajes.push( mensaje );
-            }
-          } 
+          // if( caracteristicas.expreg){
+          //   var re = new RegExp(caracteristicas.expreg, "i");
+          //   curpValido =  re.test(this.campo.valor) ;
+          //   if(  !curpValido ){
+          //     let mensaje = { 
+          //       tipo:'regex',
+          //       mensajeStr: "El campo " + this.campo.nombre + " no es válido"
+          //     }
+          //     this.campo.mensajes.push( mensaje );
+          //   }
+          // } 
           // console.log(caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true');
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
             requeridoValido =  !!this.campo.valor && (this.campo.valor+"").length > 0;
