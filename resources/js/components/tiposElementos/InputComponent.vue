@@ -42,8 +42,9 @@
               minimumFractionDigits: 0
             });
             this.campo.valor = formatter.format(number);
-            this.$forceUpdate();
+            
           }
+          this.$forceUpdate();
         },
 
         getCaracteristicas(){

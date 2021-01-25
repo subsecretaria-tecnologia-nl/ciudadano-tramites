@@ -14,7 +14,7 @@
           ref="fileInput"
           type="file" @change="validar"/>
         <label class="custom-file-label" :for="[[campo.campo_id]] + '-' + [[campo.relationship]]">
-          <span :id="[[campo.campo_id]]+ '-' + [[campo.nombre.replace('*', '')]]+'-namefile'">  
+          <span :id="[[campo.campo_id]]+ '-' + [[campo.relationship]]+'-namefile'">  
             {{ campo.attach || 'Seleccione archivo' }}
           </span>
         </label>
@@ -67,7 +67,7 @@
 
                 this.campo.valor = fileNew;
                 this.campo.valido =  true;
-                $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '') + '-namefile' ).text(  this.campo.nombreArchivoGuardado );
+                $("#"+ this.campo.campo_id + '-' + this.campo.relationship + '-namefile' ).text(  this.campo.nombreArchivoGuardado );
                 this.$emit('updateForm', this.campo);
 
               })
@@ -97,7 +97,9 @@
           var fileInput = document.getElementById(this.campo.campo_id +  "-" + this.campo.relationship );
           if( fileInput && fileInput.files.length > 0  ){
             requeridoValido = true;
-            $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files.length > 0 ? fileInput.files[0].name : null );
+            //console.log(fileInput.files[0].name)
+             console.log( "#"+ this.campo.campo_id + '-' + this.campo.relationship + '-namefile' )
+            $("#"+ this.campo.campo_id + '-' + this.campo.relationship + '-namefile' ).text(   fileInput.files[0].name  );
           } else {
             requeridoValido = false;
           }
