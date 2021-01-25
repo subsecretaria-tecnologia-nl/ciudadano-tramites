@@ -7,8 +7,11 @@
                     <div >
                         <strong> {{ tramite.tramite }}</strong>
                     </div>
-                    <div v-if="tramite.detalle && tramite.detalle.Salidas" class="btn btn-link" v-on:click="toggleTabla()" >
-                        <small>Ver detalle </small> <i class="fa fa-angle-down"></i>
+                    <div v-if="tramite.detalle && tramite.detalle.Salidas"  >
+                       
+                        <button href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2" v-on:click="toggleTabla()" >
+                            Ver detalle <i class="fa fa-angle-down"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -36,7 +39,7 @@
                                             <td class="right">
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Salidas['H (Importe total)'] }}
+                                                        {{ this.tramite.detalle.Salidas['H (Importe total)']   }}
                                                     </span>
                                             </td>
                                         </tr>
@@ -111,6 +114,7 @@
     const CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR  = "PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR";
 
     
+
     export default {
 
         props: ['datosComplementaria','tipoTramite'],

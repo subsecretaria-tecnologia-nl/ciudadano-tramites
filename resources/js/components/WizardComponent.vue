@@ -148,21 +148,21 @@
                   state:'current',
                   clickGotTo:1,
                   wizardNumber:1,
-                  wizardTitle:'Datos d',
+                  wizardTitle:'Datos',
                   wizardDesc:'Información sobre el trámite',
                 },{  
                   id:"tab2",
                   state:'pending',
                   clickGotTo:2,
                   wizardNumber:2,
-                  wizardTitle:'Solicitantes d',
+                  wizardTitle:'Solicitantes',
                   wizardDesc:'Solicitantes del trámite',
                 },{  
                   id:"tab3",
                   state:'pending',
                   clickGotTo:3,
                   wizardNumber:3,
-                  wizardTitle:'Finalizar d',
+                  wizardTitle:'Finalizar',
                   wizardDesc:'Revisar y completar',
                 }],
                 //declararEn0:false
@@ -243,7 +243,7 @@
               let formData = new FormData();
               if( this.files && this.files.length > 0 ){
                 this.files.forEach( (file, index) => {
-                    if(this.files[index].valor){
+                    if(this.files[index].valor && this.files[index].valor.name){
                       formData.append('file['+  index +']', this.files[index].valor);
                       formData.append('descripcion['+  index +']',  this.files[index].nombre );
                     }
