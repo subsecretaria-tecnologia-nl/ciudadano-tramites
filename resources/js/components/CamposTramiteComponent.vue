@@ -470,7 +470,9 @@
 				  	}
 
 				  	let agrupacionDocumentacon = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Documentación");
-				  	agrupacionDocumentacon.tieneSeccionDocumentos =  !!agrupacionDocumentacon;
+				  	if(agrupacionDocumentacon){
+				  		agrupacionDocumentacon.tieneSeccionDocumentos =  !!agrupacionDocumentacon;
+				  	}
 
 
 				  	this.datosPersonales = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Datos Personales' );
