@@ -28,7 +28,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal'">
+                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal' ">
                                         <tr>
                                             <td class="left" style="width: 70%">
                                                 <strong>H (Importe total)</strong>
@@ -41,7 +41,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody v-else-if="this.tramite.detalle && tramite.detalle.costo_final ">
+                                    <tbody v-else-if="tramite.detalle && tramite.detalle.costo_final >= 0">
                                         <tr >
                                             <td class="left">
                                                 <strong>Total</strong>
@@ -115,10 +115,19 @@
 
         props: ['datosComplementaria','tipoTramite'],
         mounted() {
-            console.log( this.datosComplementaria );
-            console.log( this.tipoTramite )
             this.obtenerInformacionDelTramite();
-            this.obtenerCosto();
+            console.log(this.tipoTramite)
+            if(this.tipoTramite == 'declaracionEn0'){
+                this.obteniendoCosto= false;
+                this.tramite.detalle = {costo_final:0};
+                const parsed = JSON.stringify(this.tramite);
+                localStorage.setItem('tramite', parsed);  
+                this.$forceUpdate();
+                this.obteniendoCosto = false;
+            } else {
+                this.obtenerCosto();    
+            }
+           
         },
 
         data(){
@@ -172,7 +181,7 @@
                         }
                     } else {
 
-                        if ( tipo_costo_obj.tipo_costo == '1' && tipo_costo_obj.tipoCostoRadio == 'hoja' ){
+                        if ( tipo_costo_obj.tipo_costo == '1' && (tipo_costo_obj.tipoCostoRadio == 'hoja'||tipo_costo_obj.tipoCostoRadio == 'lote') ){
                             paramsCosto.tipo_costo = tipo_costo_obj.tipo_costo;
                             paramsCosto.tipoCostoRadio = tipo_costo_obj.tipoCostoRadio;
                             paramsCosto.hojaInput = tipo_costo_obj.hojaInput;
@@ -221,19 +230,21 @@
                 return valor;
             },
 
-            async obtenerCosto(){
+            async obtenerCosto(){    
                 let url = "";
                 let consulta_api =  this.datosFormulario.consulta_api;
                 let tipo_costo_obj = this.datosFormulario.tipo_costo_obj ;
                 
-                if( this.tipoTramite =='normal' ){
+                if( this.tipoTramite =='normal'  ){
                     url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
-                } else {
+                } else if(this.tipoTramite =='complementaria'){
                     url = process.env.APP_URL + "/getComplementaria"; 
                 }
+
                 let data = {  
                     id_seguimiento: this.tramite.id_seguimiento,
-                    tramite_id: this.tramite.id_tramite
+                    tramite_id: this.tramite.id_tramite,
+                    tipoPersona:this.listaSolicitantes[0].tipoPersona
                 }
                 
                 data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
