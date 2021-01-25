@@ -21,7 +21,7 @@
 						</b-tooltip>
 					</td>
 					<td v-if="JSON.parse(campo.caracteristicas).formato == 'seleccion' ">
-                       <input type="checkbox" @change="check($event)"  :value="row.expediente" class="text-center pl-4 checkbox"  v-model="selectedId">
+                       <input type="radio" @change="check($event)"  :value="row.expediente" name="checkbox" :id="row.expediente" class="text-center pl-4 radio" >
                     </td>
 				</tr>
 			</tbody>
@@ -65,13 +65,13 @@
 			check: function (e ) {
 				let total = 0;
                 self = this;
- 					Array.from(document.getElementsByClassName('checkbox')).forEach(function(row,index){
-						 if(document.getElementsByClassName('checkbox')[index].checked){
-							 console.log(row.value);
+ 					Array.from(document.getElementsByClassName('radio')).forEach(function(row,index){
+						 if(document.getElementsByClassName('radio')[index].checked){
+							console.log('value- ',row.value);
+							self.$emit('expedienteSeleccionado', row.value);
 						}
 					});
 					
-				console.log(this.selectedId);
 			}
 		}
 	}

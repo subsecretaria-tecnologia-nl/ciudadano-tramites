@@ -13,8 +13,8 @@
             <li class="pl-6" style="color:red">Debe de existir un porcentaje de venta</li>
         </div>
 
-        <div class="progress" style="height: 3px;">
-            <div class="progress-bar " role="progressbar" :style=" 'width: ' + progress + '%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress " style="height: 17px;">
+            <div class="progress-bar" role="progressbar" :style=" 'width: ' + progress + '%'"  :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{progress}}%</div>
         </div>
 
         <label>{{ campos.nombre }}</label>
@@ -82,9 +82,6 @@
         </div>
         <div  v-if="propietario == 0  && progress < 100" class="btn bg-success w-80 mb-4 " @click="add()">
                 <div style="color:white"><i class="la la-plus" style="color:white"></i> Agregar comprador </div>	
-        </div>
-        <div class="btn bg-success w-80 mb-4 " @click="updateForm()">
-                <div style="color:white"><i class="la la-plus" style="color:white"></i> updateform </div>	
         </div>
         <div class="progress" style="height: 3px;">
             <div class="progress-bar " role="progressbar" :style=" 'width: ' + progress + '%'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -424,7 +421,7 @@
 
 <script>
 export default {
-    props: ['propietario', 'expediente', 'campo'],
+    props: ['propietario', 'expediente', 'campo', 'porcentajeFinal'],
     data(){
         return {
             campos:[
@@ -478,21 +475,43 @@ export default {
 			},
 			saveNew(){
                 this.validateModal();
-                if(this.validado == true){
-                        let porcentajeProp = this.modalx.porcentajePropiedad/100;
-                        let aux =  this.progress + (this.modalx.porcentajeVenta * porcentajeProp);
-                    if(  aux <= 100 ){
-                        this.campos[0].registros.push({clasePro: this.modalx.persona, tipoPro: this.modalx.tipoPropietario, porcentajeVenta: this.modalx.porcentajeVenta, nuda: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
-                        this.progress = aux;
-                        $( '#' +  this.propietario).modal('hide');
-                        this.cleanModal();
+                if (this.propietario == 1) {
+                    if(this.validado == true){
+                            let porcentajeProp = this.modalx.porcentajePropiedad/100;
+                            let aux =  this.progress + (this.modalx.porcentajeVenta * porcentajeProp);
+                        if(  aux <= 100 ){
+                            this.campos[0].registros.push({clasePro: this.modalx.persona, tipoPro: this.modalx.tipoPropietario, porcentajeVenta: this.modalx.porcentajeVenta, nuda: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
+                            this.progress = aux;
+                            $( '#' +  this.propietario).modal('hide');
+                            this.cleanModal();
+                        }else{
+                            alert('el porcentaje de venta no puede ser mayor a 100')
+                        }
+    
                     }else{
-                        alert('el porcentaje de venta no puede ser mayor a 100')
-                    }
-
+                        alert('campos pendientes de llenado')
+                    };
+                    
                 }else{
-                    alert('campos pendientes de llenado')
-                };
+
+                    if(this.validado == true){
+                            let porcentajeProp = this.modalx.porcentajePropiedad/100;
+                            let aux =  this.progress + (this.modalx.porcentajeVenta * porcentajeProp);
+                        if(  aux <= this.porcentajeFinal ){
+                            this.campos[0].registros.push({clasePro: this.modalx.persona, tipoPro: this.modalx.tipoPropietario, porcentajeVenta: this.modalx.porcentajeVenta, nuda: this.modalx.porcentajePropiedad, unsufructo:  this.modalx.unsufructo = true ? 'si': 'no', razonS: this.modalx.razonS, id_propietario: this.modalx.rfc })
+                            this.progress = aux;
+                            $( '#' +  this.propietario).modal('hide');
+                            this.cleanModal();
+                        }else{
+                            alert('el porcentaje de compra no puede ser mayor al de compra - ' ,this.porcentajeFinal )
+                        }
+    
+                    }else{
+                        alert('campos pendientes de llenado')
+                    };
+                    
+                    
+                }
             },
             saveEdit(){
                 //todo
@@ -594,7 +613,7 @@ export default {
                         console.log(error);
                     },
                     complete:function(){
-                        console.log('ya quedo');
+                        console.log('.');
                     }
                 });
             },
@@ -622,22 +641,54 @@ export default {
                 }
             },
             updateForm(){
+                        this.campo.valido = true;
                           this.$emit('updateForm', this.campo);
             }
 
     },
     mounted() {
         this.accesToken();
-        this.Vendedores();
-        console.log(this.campo);
+        // this.Vendedores();
         this.campo.valido = true;
         // this.$emit('updateForm', this.campo);
     },
-    updated(){
+    watch: {
+        progress: function() {
+            console.log('-----');
+            if (this.progress != 0) {
+                console.log('-----', this.progress);
+                this.campo.valido = true;
+                this.$emit('updateForm', this.campo);
+                this.$emit('porcentaje', this.progress)
+            }else{
+                this.campo.valido = false;
+                this.$emit('updateForm', this.campo);
+            }
+        },
+        expediente: function () {
+            let url = "http://10.153.144.228/insumos-catastro-consulta/" + this.expediente;  
+                if (this.propietario == 1) {
+                    
+                    $.ajax({
+                        type: "GET",
+                        url,
+                        headers: {
+                            "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+                            "Content-type":"application/json"
+                        }
+                    }).done((response) => {
+                        if(response) {   
+                            response = JSON.parse( response)
+                            this.campos[0].registros = response.datos_propietarios;
+                        } else {
+                            alert('error en la busqueda de propietarios');
+                        }
+                    }).fail((error)=> {
+                        console.log( error)
+                    })
+                }
+        }
     }
 }
-
-
-
 
 </script>

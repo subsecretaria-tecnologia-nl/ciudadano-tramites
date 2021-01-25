@@ -101,6 +101,7 @@
 													:rows="rows"
 													:loading="loading"
 													:infoExtra="infoExtra"
+													v-on:expedienteSeleccionado="updateExpedienteSeleccionado($event)"
 													>
 												</results-component>
 												<expediente-excel-component  
@@ -114,7 +115,9 @@
 												<table-component 
 													:propietario="JSON.parse(campo.caracteristicas).propietario"
 													:campo="campo"
-													:expediente="7001002010"
+													:expediente="expediente"
+													v-on:porcentaje="updatePorcentaje($event)"
+													:porcentajeFinal="progress"
 													@updateForm="updateForm"
 													v-else-if="campo.tipo == 'table'">
 												</table-component>
@@ -166,6 +169,7 @@
         data() {
             return {
 				progress: '',
+				expediente: '',
 				selectedId: [],
                 campos: [], agrupaciones:[],
                 mostrar:false,
@@ -203,7 +207,7 @@
                 		console.log(this.disabled);
                 	}
 
-                	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite && datosFormulario.tramite.tramite != 'AVISO DE ENAJENACIÓN'){
+                	if( datosFormulario.tramite.id_tramite  == this.tramite.id_tramite){
 		                this.campos = datosFormulario.campos;
 		                this.consulta_api = datosFormulario.consulta_api;
 		                this.tipo_costo_obj = datosFormulario.tipo_costo_obj;
@@ -227,6 +231,12 @@
 			}
         },
         methods: {
+			updatePorcentaje(porcentaje){	
+				this.progress = porcentaje;
+			},
+			updateExpedienteSeleccionado(ex){
+				this.expediente = ex;
+			},
         	setDeclararEn0(){
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
         		if(agrupacionDatosImpuesto){
@@ -265,10 +275,9 @@
 
 				if (tramite && tramite.tramite === 'AVISO DE ENAJENACIÓN') {
 					this.fields = ['Expediente Catastral' ,	'Fólio', 	'Días Restantes', 	'Fecha pago informativo',	'Capturista',	'Accion'];
-					// this.rows = [{expediente : 123123 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
+						 this.rows = [{expediente : 7001002010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001002011 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001001010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
 					var self = this;
 						let url = "http://10.153.144.228/valor-catastral-notaria/6" // + self.notary;  
-						console.log('notary: ' + self.notary);
 						$.ajax({
 							type: "GET",
 							dataType: 'json', 
@@ -281,13 +290,14 @@
 								for (let index = 0; index < data.length; index++) {
 									let row = [];
 									data[index]
-									self.rows.push(data[index].campos) ;
-									console.log(self.rows);
+									self.rows.push(data[index].campos) ; 
+									// console.log(self.rows);
 								}
 								self.rows = data;
 							},
 							error:function(error){
 								console.log(error);
+								console.log('errorrr');
 							},
 							complete:function(){
 								console.log('ya quedo');
@@ -352,7 +362,6 @@
         	},
 		    cambioModelo(){
 				let formvALID = this.validarFormulario();
-				console.log(formvALID);
             	let datosFormulario = {
             		tramite: this.tramite,
             		campos: this.campos,
@@ -380,7 +389,6 @@
 							this.motivoDeclaracion0 = campo.valor;
                 		} 
 					} else {
-						console.log( 'campo: ' , campo.nombre,  'forvalido: ' ,formularioValido ,   ' !!campovalido ' , !!campo.valido);
 						formularioValido = formularioValido && !!campo.valido;
                 	}
                 });
@@ -389,7 +397,6 @@
                 	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
                 	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
 				}
-				console.log( 'camposValidables', camposValidables);
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
 		    },
@@ -417,7 +424,7 @@
 								campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
 							}
 							if (campo.tipo == 'table' || campo.tipo == 'results') {
-								campo.valido = true;
+								this.campos[index].valido = true
 							}
 						});
 					}
@@ -658,7 +665,7 @@
 			}
 		 },
 		 updated(){
-			 console.log('en 0' ,this.declararEn0);
+			//  console.log('en 0' ,this.declararEn0);
 		 },
 		 mounted(){
 			 console.log('agrupacion ==', this.agrupaciones);
