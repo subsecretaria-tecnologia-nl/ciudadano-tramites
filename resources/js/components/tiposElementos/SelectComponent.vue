@@ -5,15 +5,15 @@
 			:multiple="campo.tipo == 'multiple'"
 			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
 			v-model="campo.valor" @change="validar" @focus="validar">
-			<option v-if="campo.nombre == 'Estado'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+			<option v-if="campo.nombre == 'Estado' ||  'Municipio'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="opcion.clave">
 					{{ opcion.nombre }}
 			</option>
-			<option v-else-if="campo.nombre == 'Municipio'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
-				:value="1">
-					1
-			</option>
-			<option v-else-if="campo.nombre != 'Estado'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+			<!-- <option v-if="campo.nombre == 'Municipio'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+				:value="opcion.clave">
+					{{ opcion.nombre }}
+			</option> -->
+			<option v-else-if="campo.nombre != 'Estado' || 'Municipio'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="[[Object.keys(opcion)[0] ]]">
 					{{ opcion[ Object.keys(opcion)[0] ] }}
 			</option>
@@ -96,7 +96,9 @@
           this.$emit('updateForm', this.campo);
           if (this.campo.nombre == 'Estado') {
             this.$emit('estadoSelected', this.campo.valor);
-
+          }
+          if (this.estado == '') {
+            this.$emit('estadoSelected', 19);
           }
         }
       },
