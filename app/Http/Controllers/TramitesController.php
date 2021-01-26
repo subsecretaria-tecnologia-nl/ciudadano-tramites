@@ -144,6 +144,7 @@ class TramitesController extends Controller
       $data_uma = $this->uma->where('year', $dt)->get();
       foreach ($data_uma as $val) {
         $actual_uma = $val->daily;
+        $annual_uma = $val->yearly;
       }
 
       //Informacion del costo y reglas del trámite
@@ -200,14 +201,6 @@ class TramitesController extends Controller
           }
           //Se aplica redondeo decimal
           $costo_final = $this->redondeo($costo);
-
-          $detalle []= array(
-            'tramite_id' => $tramite_id,
-            'costo_final' => $costo_final,
-          );
-
-          return json_encode($detalle);
-
         }
         elseif ($tipo == "V") { //Costo variable
           if($costoX == "L") { //costo x lote
@@ -234,20 +227,13 @@ class TramitesController extends Controller
             }else{
               $costo_final = $primer_costo;
             }
-
+            //Validamos si existe un porcentaje configurado
             if($porcentaje != 0 || $porcentaje != null){
 
               $costo_final = $this->porcentaje($porcentaje, $costo_final);
             }
             //Se aplica redondeo al resultado final
             $costo_final = $this->redondeo($costo_final);
-
-            $detalle []= array(
-              'tramite_id' => $tramite_id,
-              'costo_final' => $costo_final,
-            );
-
-            return json_encode($detalle);
           }
           elseif ($costoX == "H") { // costo x hojas
             if(!empty($valor)){
@@ -282,13 +268,6 @@ class TramitesController extends Controller
             }
             //Se aplica redondeo al resultado final
             $costo_final = $this->redondeo($costo_final);
-
-            $detalle []= array(
-              'tramite_id' => $tramite_id,
-              'costo_final' => $costo_final,
-            );
-
-            return json_encode($detalle);
           }
           else{ //costo x millar
             //Se calculan los valores minimos y máximos del trámite
@@ -320,18 +299,76 @@ class TramitesController extends Controller
 
                 $costo_final = $this->porcentaje($porcentaje, $costo_final);
               }
-
             }
 
             $costo_final = $this->redondeo($costo_final);
-
-            $detalle []= array(
-              'tramite_id' => $tramite_id,
-              'costo_final' => $costo_final,
-            );
-            return json_encode($detalle);
           }
         }
+
+        //Se valida si existe un subsidio aplicable
+        $subsidio_data = $this->subsidiotramites->where('tramite_id', $tramite_id)->get();
+        foreach ($subsidio_data as $sub) {
+          $cuotas_sub = $sub->cuotas;
+          $limite_cuotassub = $sub->limite_cuotas;
+          $id_partida = $sub->id_partida;
+          $oficio_sub = $sub->oficio;
+          $tipoPersona = $sub->tipoPersona;
+        }
+
+        $descuentos = array();
+        //Se aplica Validacion para ver si el numero de oficio coincide
+        if($request->subsidio == $oficio_sub){
+          if($request->tipoPersona == $tipoPersona){
+
+            //Se calculan las cuotas elevadas al año configuradas
+            $cuotas_anio = $limite_cuotassub * $annual_uma;
+            //Se compara el valor de operacion utilizado para aplicar subsidio
+            if($operacion < $cuotas_anio){
+              //Se calcula el valor a cobrar en $cuotas
+              $costo = $cuotas_sub * $actual_uma;
+              $total_subsidiado = $costo_final - $costo;
+              $total_subsidiado = $this->redondeo($total_subsidiado);
+              $importe_total = $costo_final;
+              $costo_final = $this->redondeo($costo);
+
+              //Obtengo la informacion de la partida correspondiente
+              $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
+              foreach ($data_partida as $p) {
+                $id_servicio = $p->id_servicio;
+                $descripcion_part = $p->descripcion;
+              }
+              //Se forma el arreglo de descuentos
+              $descuentos []= array(
+                'concepto_descuento' => $descripcion_part,
+                'importe_subsidio' => $total_subsidiado,
+                'partida_descuento' => $id_partida,
+                'importe_total' => $importe_total
+              );
+
+            }
+
+          }else{
+            $descuentos []= array(
+              'concepto_descuento' => 'El tipo de Persona fiscal no es válido para este subsidio',
+            );
+          }
+
+        }else{
+          $descuentos []= array(
+            'concepto_descuento' => 'El numero de oficio no coincide con el trámite',
+          );
+        }
+
+        //Se devuelve el arreglo con el valor del costo
+        $detalle []= array(
+          'tramite_id' => $tramite_id,
+          'costo_final' => $costo_final,
+          'descuentos' => $descuentos,
+        );
+
+        return json_encode($detalle);
+
+
       }catch(\Exception $e){
         Log::info('Error - costo Trámite: '.$e->getMessage());
       }
@@ -339,13 +376,7 @@ class TramitesController extends Controller
 
       // $detalle = array();
       // //Validamos si el tramite tiene subsidio
-      // $subsidio_data = $this->subsidiotramites->where('tramite_id', $tramite_id)->get();
-      // foreach ($subsidio_data as $sub) {
-      //   $cuotas_sub = $sub->cuotas;
-      //   $limite_cuotassub = $sub->limite_cuotas;
-      //   $id_partida = $sub->id_partida;
-      //   $oficio_sub = $sub->oficio;
-      // }
+
       //
       // if (!empty($oficio_sub)){
       //   try{
