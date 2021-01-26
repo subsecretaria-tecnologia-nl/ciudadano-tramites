@@ -44,28 +44,29 @@
             this.campo.valor = formatter.format(number);
             this.$forceUpdate();
           }
-          if( caracteristicas.formato == 'curp'){
-                var self = this;
+          if (this.campo.valor) {
+            if( caracteristicas.formato == 'curp' && this.campo.valor.length  ==  18  ){
+              var self = this;
                 console.log('------');
-                let url = "http://10.153.144.228/consultar-curp/" + campo.valor ;  
-                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                let url = "http://10.153.144.228/consultar-curp/" + this.campo.valor ;  
                 $.ajax({
-                    type: "GET",
+                  type: "GET",
                     dataType: 'json', 
                     url,
                     success:function(data){
-                        // self.rellenarForm(data);
+                      // self.rellenarForm(data);
                         console.log('..se consulto el curp respuesta : ' + data );
                         // this.$data = data.data.nombres;
                         self.$emit('curpSearch', data)
                     },
                     error:function(error){
-                        console.log(error);
+                      console.log('error: ', error);
                     },
                     complete:function(){
-                        console.log('ya quedo');
+                      console.log('ya quedo');
                     }
                 });
+            }
           }
         },
 
@@ -81,7 +82,7 @@
 
         validar(a){
           // let curpValido = true;
-                console.log('------');
+          console.log('------');
           let requeridoValido = true;
           let caracteristicas = {};
           var caracteristicasStr = this.campo.caracteristicas;
@@ -115,7 +116,7 @@
               this.campo.mensajes.push( mensaje );
             }
           }
-          this.campo.valido = curpValido && requeridoValido;
+          this.campo.valido =  requeridoValido;
           this.formatear();
           this.$emit('updateForm', this.campo);
           

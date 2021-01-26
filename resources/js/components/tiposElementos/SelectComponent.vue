@@ -29,7 +29,39 @@
         this.validar();
       },
       methods: {
-
+        opcionesEstado(){
+          let caracteristicas = {};
+          // estado  {"required":"true","opciones":[]}
+            try{
+                caracteristicas = JSON.parse(this.campo.caracteristicas + '');
+            }catch(err){
+            console.log(err);
+            }
+            if( this.campo.nombre == 'Municipio'){
+                var self = this;
+                    let url = "http://10.153.144.228/obtener-estados" ;  
+                    $.ajax({
+                        type: "GET",
+                        dataType: 'json', 
+                        url,
+                        success:function(data){
+                          // self.rellenarForm(data);
+                          var aux = [];
+                          aux.push({"required":"true","opciones": data})
+                          aux =  JSON.stringify(aux[0]);
+                          self.campo.caracteristicas = aux;
+                          console.log(self.campo);
+                          // self.$emit('estados', data)
+                        },
+                        error:function(error){
+                          console.log(error);
+                        },
+                        complete:function(){
+                          console.log('ya quedo');
+                        }
+                    });
+            }
+        },
         validar(){
           let requeridoValido = true;
           let caracteristicas = {};
@@ -41,30 +73,6 @@
           }catch(err){
             console.log(err);
           }
-
-           if( caracteristicas.formato == 'estado'){
-                var self = this;
-                let url = "http://10.153.144.228/obtener-estados" ;  
-                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
-                $.ajax({
-                    type: "GET",
-                    dataType: 'json', 
-                    url,
-                    success:function(data){
-                        // self.rellenarForm(data);
-                        console.log('..se consulto el curp respuesta : ' + data );
-                        // this.$data = data.data.nombres;
-                        self.$emit('estados', data)
-                        JSON.parse(self.campo.caracteristicas).opciones(data)
-                    },
-                    error:function(error){
-                        console.log(error);
-                    },
-                    complete:function(){
-                        console.log('ya quedo');
-                    }
-                });
-          }
           if( caracteristicas.formato == 'municipio'){
                 var self = this;
                 let url = "http://10.153.144.228/consultar-curp/" + campo.valor ;  
@@ -75,7 +83,7 @@
                     url,
                     success:function(data){
                         // self.rellenarForm(data);
-                        console.log('..se consulto el curp respuesta : ' + data );
+                        console.log('..municipios respuesta : ' + data );
                         // this.$data = data.data.nombres;
                         self.$emit('curpSearch', data)
                     },
@@ -101,6 +109,9 @@
           this.campo.valido = requeridoValido;
           this.$emit('updateForm', this.campo);
         }
+      },
+      created() {
+        this.opcionesEstado();
       }
     }
 </script>
