@@ -327,8 +327,9 @@ class TramitesController extends Controller
               //Se calcula el valor a cobrar en $cuotas
               $costo = $cuotas_sub * $actual_uma;
               $total_subsidiado = $costo_final - $costo;
+              $total_subsidiado = $this->redondeo($total_subsidiado);
               $importe_total = $costo_final;
-              $costo_final = $costo;
+              $costo_final = $this->redondeo($costo);
 
               //Obtengo la informacion de la partida correspondiente
               $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
