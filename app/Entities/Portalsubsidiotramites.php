@@ -22,7 +22,7 @@ class Portalsubsidiotramites extends Model implements Transformable
      */
     protected $connection = "db_operacion";
 
-    protected $fillable = ['id','tramite_id','costo_id','cuotas','limite_cuotas'];
+    protected $fillable = ['id','tramite_id','costo_id','cuotas','limite_cuotas','id_partida', 'oficio','tipoPersona'];
 
     protected $table = "portal_sub_tramites";
 }
