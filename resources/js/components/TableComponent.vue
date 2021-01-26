@@ -493,7 +493,6 @@ export default {
                     };
                     
                 }else{
-
                     if(this.validado == true){
                             let porcentajeProp = this.modalx.porcentajePropiedad/100;
                             let aux =  this.progress + (this.modalx.porcentajeVenta * porcentajeProp);
@@ -655,7 +654,7 @@ export default {
     watch: {
         progress: function() {
             console.log('-----');
-            if (this.progress != 0) {
+            if (this.progress != 0 && this.propietario == 1) {
                 console.log('-----', this.progress);
                 this.campo.valido = true;
                 this.$emit('updateForm', this.campo);
