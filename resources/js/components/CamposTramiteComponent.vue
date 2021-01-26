@@ -59,7 +59,10 @@
 													:campo="campo" 
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
-													@updateForm="updateForm">
+													@updateForm="updateForm"
+													v-on:estadoSelected="estadoSelected($event)"
+													:estado="estado"
+													>
 												</select-component>
 												<option-component 
 													v-else-if="campo.tipo === 'option'"
@@ -150,6 +153,9 @@
  					</div>
  				</div>
 			</form>
+			<code>
+				{{estado}}
+			</code>
 		</div>
     </div>
 </template>
@@ -158,7 +164,7 @@
         props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0'],
         data() {
             return {
-                campos: [], agrupaciones:[],
+				campos: [], agrupaciones:[], estado: '',
                 mostrar:false,
                 errors: {},
                 showMensajes:false,
@@ -217,6 +223,9 @@
 			}
         },
         methods: {
+			estadoSelected(estado){
+				this.estado = estado
+			},
         	setDeclararEn0(){
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
         		if(agrupacionDatosImpuesto){
