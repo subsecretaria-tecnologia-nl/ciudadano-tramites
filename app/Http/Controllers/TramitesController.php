@@ -174,6 +174,7 @@ class TramitesController extends Controller
           $costoX = "H";
           $min = $var_minimo;
           $valor = $var_valor;
+          $hojas = $request->hojaInput;
         }
         elseif($request->tipoCostoRadio == "millar"){ //cuando el costo en el radio seleccionado sea millar
           $costoX = "M";
@@ -182,6 +183,7 @@ class TramitesController extends Controller
           $costoX = "L";
           $min = $var_minimo;
           $valor = $var_valor;
+          $lotes = $request->hojaInput;
         }
       }
 
@@ -314,51 +316,56 @@ class TramitesController extends Controller
           $oficio_sub = $sub->oficio;
           $tipoPersona = $sub->tipoPersona;
         }
-
         $descuentos = array();
-        //Se aplica Validacion para ver si el numero de oficio coincide
-        if($request->subsidio == $oficio_sub){
-          if($request->tipoPersona == $tipoPersona){
+        if(!empty($oficio_sub)){
 
-            //Se calculan las cuotas elevadas al año configuradas
-            $cuotas_anio = $limite_cuotassub * $annual_uma;
-            //Se compara el valor de operacion utilizado para aplicar subsidio
-            if($operacion < $cuotas_anio){
-              //Se calcula el valor a cobrar en $cuotas
-              $costo = $cuotas_sub * $actual_uma;
-              $total_subsidiado = $costo_final - $costo;
-              $total_subsidiado = $this->redondeo($total_subsidiado);
-              $importe_total = $costo_final;
-              $costo_final = $this->redondeo($costo);
+          //Se aplica Validacion para ver si el numero de oficio coincide
+          if($request->subsidio == $oficio_sub){
+            if($request->tipoPersona == $tipoPersona){
 
-              //Obtengo la informacion de la partida correspondiente
-              $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
-              foreach ($data_partida as $p) {
-                $id_servicio = $p->id_servicio;
-                $descripcion_part = $p->descripcion;
+              //Se calculan las cuotas elevadas al año configuradas
+              $cuotas_anio = $limite_cuotassub * $annual_uma;
+              //Se compara el valor de operacion utilizado para aplicar subsidio
+              if($operacion < $cuotas_anio){
+                //Se calcula el valor a cobrar en $cuotas
+                $costo = $cuotas_sub * $actual_uma;
+                $total_subsidiado = $costo_final - $costo;
+                $total_subsidiado = $this->redondeo($total_subsidiado);
+                $importe_total = $costo_final;
+                $costo_final = $this->redondeo($costo);
+
+                //Obtengo la informacion de la partida correspondiente
+                $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
+                foreach ($data_partida as $p) {
+                  $id_servicio = $p->id_servicio;
+                  $descripcion_part = $p->descripcion;
+                }
+                //Se forma el arreglo de descuentos
+                $descuentos []= array(
+                  'concepto_descuento' => $descripcion_part,
+                  'importe_subsidio' => $total_subsidiado,
+                  'partida_descuento' => $id_partida,
+                  'importe_total' => $importe_total
+                );
+
+              }else{
+                $descuentos []= array(
+                  'concepto_descuento' => 'El valor de operación excede el monto válido para subsidio',
+                );
               }
-              //Se forma el arreglo de descuentos
-              $descuentos []= array(
-                'concepto_descuento' => $descripcion_part,
-                'importe_subsidio' => $total_subsidiado,
-                'partida_descuento' => $id_partida,
-                'importe_total' => $importe_total
-              );
 
+            }else{
+              $descuentos []= array(
+                'concepto_descuento' => 'El tipo de Persona fiscal no es válido para este subsidio',
+              );
             }
 
           }else{
             $descuentos []= array(
-              'concepto_descuento' => 'El tipo de Persona fiscal no es válido para este subsidio',
+              'concepto_descuento' => 'El numero de oficio no coincide con el trámite',
             );
           }
-
-        }else{
-          $descuentos []= array(
-            'concepto_descuento' => 'El numero de oficio no coincide con el trámite',
-          );
         }
-
         //Se devuelve el arreglo con el valor del costo
         $detalle []= array(
           'tramite_id' => $tramite_id,
