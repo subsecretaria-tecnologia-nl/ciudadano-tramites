@@ -28,7 +28,7 @@
                 		<div class="row">
                 			<?php
                 				foreach($tramite->info->campos as $campo => $value){
-                					while(gettype($value) != "string"){ $value = $value[0]; }
+                					while(gettype($value) == "array"){ $value = $value[0]; }
                 					echo "
                 						<div class=\"col-md-6\">
                 							<span class=\"text-muted\">$campo</span>
