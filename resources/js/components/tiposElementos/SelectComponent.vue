@@ -44,26 +44,6 @@
             if( this.campo.nombre == 'Estado'){
                 var self = this;
                     let url = process.env.TESORERIA_HOSTNAME + "/obtener-estados" ;  
-                    // $.ajax({
-                    //     type: "GET",
-                    //     dataType: 'json', 
-                    //     url,
-                    //     success:function(data){
-                    //       // self.rellenarForm(data);
-                    //       var aux = [];
-                    //       aux.push({"required":"true","opciones": data})
-                    //       aux =  JSON.stringify(aux[0]);
-                    //       self.campo.caracteristicas = aux;
-                    //       console.log(self.campo);
-                    //       // self.$emit('estados', data)
-                    //     },
-                    //     error:function(error){
-                    //       console.log(error);
-                    //     },
-                    //     complete:function(){
-                    //       console.log('ya quedo');
-                    //     }
-                    // });
                      axios
                       .get(url)
                       .then(data => {
