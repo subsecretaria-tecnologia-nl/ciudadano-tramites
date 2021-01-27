@@ -42,7 +42,7 @@
               minimumFractionDigits: 0
             });
             this.campo.valor = formatter.format(number);
-            this.$forceUpdate();
+            
           }
           if (this.campo.valor) {
             if( caracteristicas.formato == 'curp' && this.campo.valor.length  ==  18  ){
@@ -68,6 +68,7 @@
                 });
             }
           }
+          this.$forceUpdate();
         },
 
         getCaracteristicas(){

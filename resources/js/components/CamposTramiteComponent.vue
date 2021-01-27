@@ -45,7 +45,7 @@
 												</div>
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
-			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results', 'question'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
 												<input-component
 													v-if="campo.tipo === 'input'" 
@@ -133,18 +133,41 @@
 														      		Hoja
 														      	</label>
 														    </div>
-														      <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'" >
+														    <div class="custom-control custom-radio custom-control-inline">
+														      	<input type="radio" value="lote" name="radioInline" class="custom-control-input" id="lote1" v-model="tipo_costo_obj.tipoCostoRadio" key="lote" @change="cambioModelo">
+
+														      	<label class="custom-control-label" for="lote1">
+														      		Lote
+														      	</label>
+														    </div>
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'" >
 															    <label>
 															        Hoja
 															    </label>
 															    <span class="currencyinput">
 															      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" placeholder="Hoja" id="hojaInput" v-model="tipo_costo_obj.hojaInput"  @change="cambioModelo"/>
 															    </span>
-															  </div>
+															</div>
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'lote'" >
+															    <label>
+															        Lote
+															    </label>
+															    <span class="currencyinput">
+															      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" placeholder="Lote" id="lojaInput" v-model="tipo_costo_obj.hojaInput"  @change="cambioModelo"/>
+															    </span>
+															</div>
 														</div>
 													</div>
 												</div>
 			 								</div>
+		 									<div v-if="agrupacion.tieneSeccionDocumentos" class="col-md-12 col-lg-12">
+		 										<div class="text-right">
+													<strong>Nota:</strong>
+													<small class="">
+														Los documentos no se solicitan de forma obligatoria, sin embargo usted no podrá imprimir o descargar su declaración fiscal.
+													</small>
+												</div>
+											</div>
 										</div>
 							      	</v-expansion-panel-content>
 							    </v-expansion-panel>
@@ -180,7 +203,8 @@
 				rows :[],
 				loading : false,
 				infoExtra : {},
-				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' }
+				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' },
+				tieneSeccionDocumentos: false
             }
         },
 		watch: { 
@@ -350,7 +374,7 @@
                 		formularioValido = formularioValido && !!campo.valido;
                 	}
                 });
-                if(this.tipo_costo_obj && this.tipo_costo_obj.tipoCostoRadio == 'hoja'){
+                if(this.tipo_costo_obj && (this.tipo_costo_obj.tipoCostoRadio == 'hoja' || this.tipo_costo_obj.tipoCostoRadio == 'lote ' )){
                 	formularioValido = formularioValido && !!this.tipo_costo_obj.hojaInput;
                 	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
                 	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
@@ -453,6 +477,12 @@
 				  		}
 				  		agrupacionDatosCostos.campos.push( campo );
 				  	}
+
+				  	let agrupacionDocumentacon = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Documentación");
+				  	if(agrupacionDocumentacon){
+				  		agrupacionDocumentacon.tieneSeccionDocumentos =  !!agrupacionDocumentacon;
+				  	}
+
 
 				  	this.datosPersonales = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Datos Personales' );
 					this.razonSocial = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Razón Social' );

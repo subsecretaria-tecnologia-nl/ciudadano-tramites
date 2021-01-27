@@ -40,16 +40,7 @@
                                                   @valueRadio="cambioRadio"
                                                   :disabledDefault='tipoTramiteDisabled'></radio-option-component>
                                               </div>
-                                              <div v-if="tipoTramite == 'normal' && tramite.tramite == '5% de Enajenación de Inmuebles'" class="row">
-                                                <div class="col-md-12 col-lg-12">
-                                                  <input type="checkbox"    
-                                                    id="declarareeN0"
-                                                    name="declarareeN0"
-                                                    v-model="declararEn0"  >
-                                                    <label> Declarar en 0</label>
-                                                </div>
-                                              </div>
-                                              <div v-if="tipoTramite == 'normal' && camposGuardadosObtenidos" >
+                                              <div v-if="(tipoTramite == 'normal' || tipoTramite == 'declaracionEn0') && camposGuardadosObtenidos" >
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
                                                 :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada" :declararEn0="declararEn0">
                                                   
@@ -118,6 +109,11 @@
 
     export default {
         props: ['tramite','idUsuario', 'clave'],
+        computed:{
+            declararEn0(){
+                return this.tipoTramite == 'declaracionEn0';
+            }
+        },
         mounted() {
             this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
@@ -152,24 +148,24 @@
                   state:'current',
                   clickGotTo:1,
                   wizardNumber:1,
-                  wizardTitle:'Datos d',
+                  wizardTitle:'Datos',
                   wizardDesc:'Información sobre el trámite',
                 },{  
                   id:"tab2",
                   state:'pending',
                   clickGotTo:2,
                   wizardNumber:2,
-                  wizardTitle:'Solicitantes d',
+                  wizardTitle:'Solicitantes',
                   wizardDesc:'Solicitantes del trámite',
                 },{  
                   id:"tab3",
                   state:'pending',
                   clickGotTo:3,
                   wizardNumber:3,
-                  wizardTitle:'Finalizar d',
+                  wizardTitle:'Finalizar',
                   wizardDesc:'Revisar y completar',
                 }],
-                declararEn0:false
+                //declararEn0:false
             }
         },
 
@@ -247,8 +243,10 @@
               let formData = new FormData();
               if( this.files && this.files.length > 0 ){
                 this.files.forEach( (file, index) => {
-                    formData.append('file['+  index +']', this.files[index].valor);
-                    formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                    if(this.files[index].valor && this.files[index].valor.name){
+                      formData.append('file['+  index +']', this.files[index].valor);
+                      formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                    }
                 });
               }
               formData.append('user_id', this.idUsuario );
@@ -335,13 +333,14 @@
                 let informacion = {
                   costo_final: tramite &&  tramite.detalle ? tramite.detalle.costo_final: null,
                   partidas: tramite.partidas,
-                  detalle: tramite.detalle
+                  detalle: tramite.detalle,
+                  tipoTramite:this.tipoTramite
                 }
                 if( datosFormulario && datosFormulario.mottivoDeclaracion0 ){
                   informacion.mottivoDeclaracion0 = datosFormulario.motivoDeclaracion0
                 }
                 let camposObj = {};
-                if( this.tipoTramite == 'normal' ){
+                if( this.tipoTramite == 'normal'|| this.tipoTramite == 'declaracionEn0' ){
                   datosFormulario.campos.forEach( campo =>  {
                     if( campo.valido ){
                       camposObj[campo.campo_id] = campo.valor;
@@ -349,7 +348,7 @@
                   });
                   informacion.campos=camposObj;
                   informacion.tipoPersona=datosFormulario.tipoPersona,
-                  informacion.declararEn0 = this.declararEn0,
+                  //informacion.declararEn0 = this.declararEn0,
                   informacion.motivoDeclaracion0 = datosFormulario.motivoDeclaracion0,
                   informacion.tipo_costo_obj = datosFormulario.tipo_costo_obj
                 } else {
@@ -432,12 +431,10 @@
                 if( response.data[0].archivos.length > 0 ){
                   this.infoGuardada.archivosGuardados = response.data[0].archivos;
                 }
-                this.tipoTramite = this.infoGuardada.campos ? 'normal' : 'complementaria';
+
+                this.tipoTramite = this.infoGuardada.tipoTramite;// ? 'normal' : 'complementaria';
                 this.tipoTramiteDisabled = !this.infoGuardada.campos ? 'normal' : 'complementaria';
 
-                if( this.tipoTramite == 'normal' ){
-                  this.declararEn0 = this.infoGuardada && this.infoGuardada.declararEn0 ? this.infoGuardada.declararEn0 : false;
-                }
                 this.camposGuardadosObtenidos = true;
 
                 this.solicitantesGuardados = response.data.map( solicitante => {
