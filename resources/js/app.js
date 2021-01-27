@@ -60,6 +60,9 @@ Vue.component("expediente-excel-component" , () => import ( /* webpackChunkName:
 Vue.component("file-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/file-component" */ './components/tiposElementos/FileComponent.vue' ));
 Vue.component("results-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/results-component" */ './components/tiposElementos/ResultsComponent.vue' ));
 
+
+//Vue.component("fecha-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/fecha-component" */ './components/tiposElementos/FechaComponent.vue' ));
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -70,6 +73,18 @@ Vue.filter("capitalize", function(value) {
         return '';
     value = value.toString();
     return value.charAt(0).toUpperCase() + value.slice(1);
+});
+
+Vue.filter('toCurrency', function (value) {
+    if (typeof value !== "number") {
+        return value;
+    }
+    var formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'MXN',
+        minimumFractionDigits: 2
+    });
+    return formatter.format(value);
 });
 
 const app = new Vue({
