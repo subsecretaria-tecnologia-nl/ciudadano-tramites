@@ -111,6 +111,8 @@
 													@updateForm="updateForm" :files="files"
 													@validarFormulario="validarFormulario">
 												</expediente-excel-component>
+												<firma-electronica-component v-if="1==1"></firma-electronica-component>
+
 												<div v-else-if="campo.tipo == 'question'">
 													¿Desea realizar el cobro por ?
 													<div class="col-md-12 col-lg-12">
