@@ -5,7 +5,11 @@
 			:multiple="campo.tipo == 'multiple'"
 			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
 			v-model="campo.valor" @change="validar" @focus="validar">
-			<option v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+			<option v-if="campo.nombre == 'Estado' ||  'Municipio'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+				:value="opcion.clave">
+					{{ opcion.nombre }}
+			</option>
+			<option v-else-if="campo.nombre != 'Estado' || 'Municipio'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="[[Object.keys(opcion)[0] ]]">
 					{{ opcion[ Object.keys(opcion)[0] ] }}
 			</option>
@@ -20,7 +24,7 @@
 
 <script>
     export default {
-      props: ['campo', 'estadoFormulario', 'showMensajes'],
+      props: ['campo', 'estadoFormulario', 'showMensajes', 'estado'],
 
       created(){
         if(this.campo.tipo == 'multiple'){
@@ -29,7 +33,39 @@
         this.validar();
       },
       methods: {
-
+        opcionesEstado(){
+          let caracteristicas = {};
+          // estado  {"required":"true","opciones":[]}
+            try{
+                caracteristicas = JSON.parse(this.campo.caracteristicas + '');
+            }catch(err){
+            console.log(err);
+            }
+            if( this.campo.nombre == 'Estado'){
+                var self = this;
+                    let url = "http://10.153.144.228/obtener-estados" ;  
+                    $.ajax({
+                        type: "GET",
+                        dataType: 'json', 
+                        url,
+                        success:function(data){
+                          // self.rellenarForm(data);
+                          var aux = [];
+                          aux.push({"required":"true","opciones": data})
+                          aux =  JSON.stringify(aux[0]);
+                          self.campo.caracteristicas = aux;
+                          console.log(self.campo);
+                          // self.$emit('estados', data)
+                        },
+                        error:function(error){
+                          console.log(error);
+                        },
+                        complete:function(){
+                          console.log('ya quedo');
+                        }
+                    });
+            }
+        },
         validar(){
           let requeridoValido = true;
           let caracteristicas = {};
@@ -41,7 +77,6 @@
           }catch(err){
             console.log(err);
           }
-
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
             requeridoValido =  this.campo.valor && this.campo.valor.length > 0;
             if( !requeridoValido ){
@@ -53,7 +88,47 @@
             }
           }
           this.campo.valido = requeridoValido;
+
           this.$emit('updateForm', this.campo);
+          if (this.campo.nombre == 'Estado') {
+            this.$emit('estadoSelected', this.campo.valor);
+          }
+          if (this.estado == '') {
+            this.$emit('estadoSelected', 19);
+          }
+        }
+      },
+      created() {
+        this.opcionesEstado();
+      },
+      watch: {
+        estado: function() {
+              if( this.campo.nombre == 'Municipio'){
+                var self = this;
+                let url = "http://10.153.144.228/obtener-municipios/" + this.estado ;  
+                console.log(url);
+                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                        // self.rellenarForm(data);
+                          var aux = [];
+                          aux.push({"required":"true","opciones": data})
+                          aux =  JSON.stringify(aux[0]);
+                          self.campo.caracteristicas = aux;
+                          console.log('campo municipio actualizado? : ',self.campo);
+                        // this.$data = data.data.nombres;
+                    },
+                    error:function(error){
+                        console.log(error);
+                    },
+                    complete:function(){
+                        console.log('ya quedo');
+                    }
+                });
+          }
         }
       }
     }
