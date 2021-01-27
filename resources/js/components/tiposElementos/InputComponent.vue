@@ -63,8 +63,33 @@
                 });
           }
             this.campo.valor = formatter.format(number);
-            this.$forceUpdate();
+            
           }
+          if (this.campo.valor) {
+            if( caracteristicas.formato == 'curp' && this.campo.valor.length  ==  18  ){
+              var self = this;
+                console.log('------');
+                let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp/" + this.campo.valor ;  
+                $.ajax({
+                  type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                      // self.rellenarForm(data);
+                        console.log('..se consulto el curp respuesta : ' + data );
+                        // this.$data = data.data.nombres;
+                        self.$emit('curpSearch', data)
+                    },
+                    error:function(error){
+                      console.log('error: ', error);
+                    },
+                    complete:function(){
+                      console.log('ya quedo');
+                    }
+                });
+            }
+          }
+          this.$forceUpdate();
         },
 
         getCaracteristicas(){
@@ -78,7 +103,8 @@
         },
 
         validar(a){
-          let curpValido = true;
+          // let curpValido = true;
+          console.log('------');
           let requeridoValido = true;
           let caracteristicas = {};
           var caracteristicasStr = this.campo.caracteristicas;
@@ -90,17 +116,17 @@
             console.log(err);
           }
 
-          if( caracteristicas.expreg){
-            var re = new RegExp(caracteristicas.expreg, "i");
-            curpValido =  re.test(this.campo.valor) ;
-            if(  !curpValido ){
-              let mensaje = { 
-                tipo:'regex',
-                mensajeStr: "El campo " + this.campo.nombre + " no es válido"
-              }
-              this.campo.mensajes.push( mensaje );
-            }
-          } 
+          // if( caracteristicas.expreg){
+          //   var re = new RegExp(caracteristicas.expreg, "i");
+          //   curpValido =  re.test(this.campo.valor) ;
+          //   if(  !curpValido ){
+          //     let mensaje = { 
+          //       tipo:'regex',
+          //       mensajeStr: "El campo " + this.campo.nombre + " no es válido"
+          //     }
+          //     this.campo.mensajes.push( mensaje );
+          //   }
+          // } 
           // console.log(caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true');
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
             requeridoValido =  !!this.campo.valor && (this.campo.valor+"").length > 0;
@@ -112,7 +138,7 @@
               this.campo.mensajes.push( mensaje );
             }
           }
-          this.campo.valido = curpValido && requeridoValido;
+          this.campo.valido =  requeridoValido;
           this.formatear();
           this.$emit('updateForm', this.campo);
           

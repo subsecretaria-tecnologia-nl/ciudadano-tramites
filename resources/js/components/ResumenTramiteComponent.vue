@@ -7,8 +7,11 @@
                     <div >
                         <strong> {{ tramite.tramite }}</strong>
                     </div>
-                    <div v-if="tramite.detalle && tramite.detalle.Salidas" class="btn btn-link" v-on:click="toggleTabla()" >
-                        <small>Ver detalle </small> <i class="fa fa-angle-down"></i>
+                    <div v-if="tramite.detalle && tramite.detalle.Salidas"  >
+                       
+                        <button href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2" v-on:click="toggleTabla()" >
+                            Ver detalle <i class="fa fa-angle-down"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -23,12 +26,11 @@
                                             </td>
                                             <td class="right" v-if="key != 'H (Importe total)'" >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
-                                                    <span v-if="!obteniendoCosto">  {{ salida }} </span>
-
+                                                    <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal'">
+                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal' ">
                                         <tr>
                                             <td class="left" style="width: 70%">
                                                 <strong>H (Importe total)</strong>
@@ -36,12 +38,13 @@
                                             <td class="right">
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Salidas['H (Importe total)'] }}
+                                                        {{ this.tramite.detalle.Salidas['H (Importe total)'] | toCurrency }}
+
                                                     </span>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody v-else-if="this.tramite.detalle && tramite.detalle.costo_final ">
+                                    <tbody v-else-if="tramite.detalle && tramite.detalle.costo_final >= 0">
                                         <tr >
                                             <td class="left">
                                                 <strong>Total</strong>
@@ -110,15 +113,25 @@
     const CAMPO_FECHA_DE_ESCRITURA_O_MINUTA                     = "FECHA DE ESCRITURA O MINUTA";
     const CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR  = "PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR";
 
-    
+    import Vue from 'vue'
+
     export default {
 
         props: ['datosComplementaria','tipoTramite'],
         mounted() {
-            console.log( this.datosComplementaria );
-            console.log( this.tipoTramite )
             this.obtenerInformacionDelTramite();
-            this.obtenerCosto();
+            console.log(this.tipoTramite)
+            if(this.tipoTramite == 'declaracionEn0'){
+                this.obteniendoCosto= false;
+                this.tramite.detalle = {costo_final:0};
+                const parsed = JSON.stringify(this.tramite);
+                localStorage.setItem('tramite', parsed);  
+                this.$forceUpdate();
+                this.obteniendoCosto = false;
+            } else {
+                this.obtenerCosto();    
+            }
+           
         },
 
         data(){
@@ -172,7 +185,7 @@
                         }
                     } else {
 
-                        if ( tipo_costo_obj.tipo_costo == '1' && tipo_costo_obj.tipoCostoRadio == 'hoja' ){
+                        if ( tipo_costo_obj.tipo_costo == '1' && (tipo_costo_obj.tipoCostoRadio == 'hoja'||tipo_costo_obj.tipoCostoRadio == 'lote') ){
                             paramsCosto.tipo_costo = tipo_costo_obj.tipo_costo;
                             paramsCosto.tipoCostoRadio = tipo_costo_obj.tipoCostoRadio;
                             paramsCosto.hojaInput = tipo_costo_obj.hojaInput;
@@ -221,19 +234,21 @@
                 return valor;
             },
 
-            async obtenerCosto(){
+            async obtenerCosto(){    
                 let url = "";
                 let consulta_api =  this.datosFormulario.consulta_api;
                 let tipo_costo_obj = this.datosFormulario.tipo_costo_obj ;
                 
-                if( this.tipoTramite =='normal' ){
+                if( this.tipoTramite =='normal'  ){
                     url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
-                } else {
+                } else if(this.tipoTramite =='complementaria'){
                     url = process.env.APP_URL + "/getComplementaria"; 
                 }
+
                 let data = {  
                     id_seguimiento: this.tramite.id_seguimiento,
-                    tramite_id: this.tramite.id_tramite
+                    tramite_id: this.tramite.id_tramite,
+                    tipoPersona:this.listaSolicitantes[0].tipoPersona
                 }
                 
                 data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
@@ -258,7 +273,22 @@
                     this.obteniendoCosto = false;
                 }
                 
+            },
+
+            currencyFormat(campoName, salida){
+                let arr = ["A*(Ganancia Obtenida)","B (Monto obtenido conforme al art 127 LISR)",
+                            "C*(Pago provisional conforme al art 126 LISR)","D (Impuesto correspondiente a la entidad federativa)",
+                            "E (Parte actualizada del impuesto)", "F (Recargos)", "G*(Multa corrección fiscal)", "H (Importe total)"];
+                if(arr.includes(campoName)){
+                    let text = Vue.filter('toCurrency')(salida);
+                    console.log(text)
+                    return text;
+                } else{
+                    return salida;
+                }
             }
+
+
 
         }
     }

@@ -29,6 +29,12 @@
                     id:'checkTipoTramiteComp',
                     label:'Complementaria',
                     disabled: 'complementaria' == this.disabledDefault
+                },{
+                    value:'declaracionEn0',
+                    name:'declaracionEn0',
+                    id:'checkTipoTramite0',
+                    label:'Declarar en 0',
+                    disabled: 'declaracionEn0' == this.disabledDefault
                 }],
                 modelo:null
             }

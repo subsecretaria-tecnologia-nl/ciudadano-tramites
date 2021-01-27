@@ -45,7 +45,7 @@
 												</div>
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
-			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results', 'question'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
 												<input-component
 													v-if="campo.tipo === 'input'" 
@@ -59,7 +59,10 @@
 													:campo="campo" 
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
-													@updateForm="updateForm">
+													@updateForm="updateForm"
+													v-on:estadoSelected="estadoSelected($event)"
+													:estado="estado"
+													>
 												</select-component>
 												<option-component 
 													v-else-if="campo.tipo === 'option'"
@@ -140,18 +143,41 @@
 														      		Hoja
 														      	</label>
 														    </div>
-														      <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'" >
+														    <div class="custom-control custom-radio custom-control-inline">
+														      	<input type="radio" value="lote" name="radioInline" class="custom-control-input" id="lote1" v-model="tipo_costo_obj.tipoCostoRadio" key="lote" @change="cambioModelo">
+
+														      	<label class="custom-control-label" for="lote1">
+														      		Lote
+														      	</label>
+														    </div>
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'" >
 															    <label>
 															        Hoja
 															    </label>
 															    <span class="currencyinput">
 															      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" placeholder="Hoja" id="hojaInput" v-model="tipo_costo_obj.hojaInput"  @change="cambioModelo"/>
 															    </span>
-															  </div>
+															</div>
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'lote'" >
+															    <label>
+															        Lote
+															    </label>
+															    <span class="currencyinput">
+															      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" placeholder="Lote" id="lojaInput" v-model="tipo_costo_obj.hojaInput"  @change="cambioModelo"/>
+															    </span>
+															</div>
 														</div>
 													</div>
 												</div>
 			 								</div>
+		 									<div v-if="agrupacion.tieneSeccionDocumentos" class="col-md-12 col-lg-12">
+		 										<div class="text-right">
+													<strong>Nota:</strong>
+													<small class="">
+														Los documentos no se solicitan de forma obligatoria, sin embargo usted no podrá imprimir o descargar su declaración fiscal.
+													</small>
+												</div>
+											</div>
 										</div>
 							      	</v-expansion-panel-content>
 							    </v-expansion-panel>
@@ -160,6 +186,9 @@
  					</div>
  				</div>
 			</form>
+			<code>
+				{{estado}}
+			</code>
 		</div>
     </div>
 </template>
@@ -171,7 +200,9 @@
 				progress: '',
 				expediente: '',
 				selectedId: [],
-                campos: [], agrupaciones:[],
+				campos: [], 
+				agrupaciones:[], 
+				estado: '',
                 mostrar:false,
                 errors: {},
                 showMensajes:false,
@@ -187,7 +218,8 @@
 				rows :[],
 				loading : false,
 				infoExtra : {},
-				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' }
+				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' },
+				tieneSeccionDocumentos: false
             }
         },
 		watch: { 
@@ -237,6 +269,9 @@
 			updateExpedienteSeleccionado(ex){
 				this.expediente = ex;
 			},
+			estadoSelected(estado){
+				this.estado = estado
+			},
         	setDeclararEn0(){
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
         		if(agrupacionDatosImpuesto){
@@ -275,7 +310,7 @@
 
 				if (tramite && tramite.tramite === 'AVISO DE ENAJENACIÓN') {
 					this.fields = ['Expediente Catastral' ,	'Fólio', 	'Días Restantes', 	'Fecha pago informativo',	'Capturista',	'Accion'];
-						 this.rows = [{expediente : 7001002010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001002011 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001001010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
+						//  this.rows = [{expediente : 7001002010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001002011 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001001010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
 					var self = this;
 						let url = "http://10.153.144.228/valor-catastral-notaria/6" // + self.notary;  
 						$.ajax({
@@ -283,9 +318,6 @@
 							dataType: 'json', 
 							url,
 							success:function(data){
-								// self.rellenarForm(data);
-								// console.log('expedientes catastrales lsita:  ' + JSON.stringify(data) );
-								// data.forEach( o => { self.rows.push({ o  } )} )
 								let rows = [];
 								for (let index = 0; index < data.length; index++) {
 									let row = [];
@@ -311,40 +343,48 @@
 					if(value && value.length == 3 && value[0] === '0')
 						campo.valor = value.slice(1)
 				}
+				if(tramite && tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
+					const datosFormulario = localStorage.getItem('datosFormulario') && JSON.parse(localStorage.getItem('datosFormulario')) ;
+					if(campo.nombre.search(/region/i) >= 0){
+						const value = campo.valor && campo.valor.toString();
+						if(value && value.length == 3 && value[0] === '0')
+							campo.valor = value.slice(1)
+					}
 
-				if(tramite && tramite.tramite === 'INFORMATIVO VALOR CATASTRAL' && campo.nombre.search(/tipo de busqueda/i) >= 0){
-					this.fields = [ 'Expediente Catastral', 'Municipio', 'Tipo de predio', 'Tipo de Construcción', 'Ejemplo' ];
-					if(campo.valor){
-						switch(campo.valor.toString()){
-							case 'individual':
-								this.panel = [0, 1];
-								this.disabled = [2,3];
-							break;
-							case 'rango':
-								this.panel = [0, 2];
-								this.disabled = [1,3];
-							break;
-							case 'grupal':
-								this.panel = [0, 3];
-								this.disabled = [1,2];
-							break;
-							default:
-								this.panel = [0];
-							break;
+					if(campo.nombre.search(/tipo de busqueda/i) >= 0){
+						this.fields = [ 'Expediente Catastral', 'Municipio', 'Tipo de predio', 'Tipo de Construcción', 'Ejemplo' ];
+						if(campo.valor){
+							switch(campo.valor.toString()){
+								case 'individual':
+									this.panel = [0, 1];
+									this.disabled = [2,3];
+								break;
+								case 'rango':
+									this.panel = [0, 2];
+									this.disabled = [1,3];
+								break;
+								case 'grupal':
+									this.panel = [0, 3];
+									this.disabled = [1,2];
+								break;
+								default:
+									this.panel = [0];
+								break;
+							}
 						}
 					}
-				}
 
-				switch(campo.nombre_agrupacion){
-					case 'Individual':
-						await this.processIndividual({campo, tramite, datosFormulario})
-					break;
-					case 'Rango':
-						await this.processRango({campo, tramite, datosFormulario})
-					break;
-					case 'Grupal':
-						this.panel = [0, 3];
-					break;
+					switch(campo.nombre_agrupacion){
+						case 'Individual':
+							await this.processIndividual({campo, tramite, datosFormulario})
+						break;
+						case 'Rango':
+							await this.processRango({campo, tramite, datosFormulario})
+						break;
+						case 'Grupal':
+							this.panel = [0, 3];
+						break;
+					}
 				}
 
         		if(campo.tipo == 'file' && campo.valido){
@@ -392,7 +432,7 @@
 						formularioValido = formularioValido && !!campo.valido;
                 	}
                 });
-                if(this.tipo_costo_obj && this.tipo_costo_obj.tipoCostoRadio == 'hoja'){
+                if(this.tipo_costo_obj && (this.tipo_costo_obj.tipoCostoRadio == 'hoja' || this.tipo_costo_obj.tipoCostoRadio == 'lote ' )){
                 	formularioValido = formularioValido && !!this.tipo_costo_obj.hojaInput;
                 	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
                 	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
@@ -498,6 +538,12 @@
 				  		}
 				  		agrupacionDatosCostos.campos.push( campo );
 				  	}
+
+				  	let agrupacionDocumentacon = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Documentación");
+				  	if(agrupacionDocumentacon){
+				  		agrupacionDocumentacon.tieneSeccionDocumentos =  !!agrupacionDocumentacon;
+				  	}
+
 
 				  	this.datosPersonales = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Datos Personales' );
 					this.razonSocial = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == 'Razón Social' );
