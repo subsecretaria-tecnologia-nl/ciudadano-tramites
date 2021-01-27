@@ -44,26 +44,19 @@
             if( this.campo.nombre == 'Estado'){
                 var self = this;
                     let url = process.env.TESORERIA_HOSTNAME + "/obtener-estados" ;  
-                    $.ajax({
-                        type: "GET",
-                        dataType: 'json', 
-                        url,
-                        success:function(data){
-                          // self.rellenarForm(data);
-                          var aux = [];
-                          aux.push({"required":"true","opciones": data})
+                     axios
+                      .get(url)
+                      .then(data => {
+                        var aux = [];
+                          aux.push({"required":"true","opciones": data.data })
                           aux =  JSON.stringify(aux[0]);
                           self.campo.caracteristicas = aux;
                           console.log(self.campo);
-                          // self.$emit('estados', data)
-                        },
-                        error:function(error){
-                          console.log(error);
-                        },
-                        complete:function(){
-                          console.log('ya quedo');
-                        }
-                    });
+                      })
+                      .catch(error => {
+                              console.log(error);
+                      })
+                      .finally(() => console.log('listo'))
             }
         },
         validar(){
@@ -107,26 +100,19 @@
                 var self = this;
                 let url =  process.env.TESORERIA_HOSTNAME + "/obtener-municipios/" + this.estado ;  
                 console.log(url);
-                $.ajax({
-                    type: "GET",
-                    dataType: 'json', 
-                    url,
-                    success:function(data){
-                        // self.rellenarForm(data);
-                          var aux = [];
-                          aux.push({"required":"true","opciones": data})
+                  axios
+                  .get(url)
+                  .then(data => {
+                    var aux = [];
+                          aux.push({"required":"true","opciones": data.data})
                           aux =  JSON.stringify(aux[0]);
                           self.campo.caracteristicas = aux;
                           console.log('campo municipio actualizado? : ',self.campo);
-                        // this.$data = data.data.nombres;
-                    },
-                    error:function(error){
-                        console.log(error);
-                    },
-                    complete:function(){
-                        console.log('ya quedo');
-                    }
-                });
+                  })
+                  .catch(error => {
+                          console.log(error);
+                  })
+                  .finally(() => console.log('listo'))
           }
         }
       }
