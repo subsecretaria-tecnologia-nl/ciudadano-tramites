@@ -43,7 +43,7 @@
             }
             if( this.campo.nombre == 'Estado'){
                 var self = this;
-                    let url = "http://10.153.144.228/obtener-estados" ;  
+                    let url = process.env.TESORERIA_HOSTNAME + "/obtener-estados" ;  
                     $.ajax({
                         type: "GET",
                         dataType: 'json', 
@@ -105,9 +105,8 @@
         estado: function() {
               if( this.campo.nombre == 'Municipio'){
                 var self = this;
-                let url = "http://10.153.144.228/obtener-municipios/" + this.estado ;  
+                let url =  process.env.TESORERIA_HOSTNAME + "/obtener-municipios/" + this.estado ;  
                 console.log(url);
-                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
                 $.ajax({
                     type: "GET",
                     dataType: 'json', 

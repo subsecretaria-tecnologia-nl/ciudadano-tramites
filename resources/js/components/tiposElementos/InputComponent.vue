@@ -48,7 +48,7 @@
             if( caracteristicas.formato == 'curp' && this.campo.valor.length  ==  18  ){
               var self = this;
                 console.log('------');
-                let url = "http://10.153.144.228/consultar-curp/" + this.campo.valor ;  
+                let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp/" + this.campo.valor ;  
                 $.ajax({
                   type: "GET",
                     dataType: 'json', 
