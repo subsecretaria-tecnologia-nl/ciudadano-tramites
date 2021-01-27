@@ -41,6 +41,27 @@
               currency: 'MXN',
               minimumFractionDigits: 0
             });
+          if( caracteristicas.formato == 'curp'){
+                var self = this;
+                let url = "http://10.153.144.228/consultar-curp/" + campo.valor ;  
+                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                        // self.rellenarForm(data);
+                        console.log('..se consulto el curp respuesta : ' + data );
+                        // this.$data = data.data.nombres;
+                    },
+                    error:function(error){
+                        console.log(error);
+                    },
+                    complete:function(){
+                        console.log('ya quedo');
+                    }
+                });
+          }
             this.campo.valor = formatter.format(number);
             
           }

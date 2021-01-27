@@ -108,7 +108,7 @@
     import { uuid } from 'vue-uuid';
 
     export default {
-        props: ['tramite','idUsuario', 'clave'],
+        props: ['tramite','idUsuario', 'clave', 'notary'],
         computed:{
             declararEn0(){
                 return this.tipoTramite == 'declaracionEn0';

@@ -40,7 +40,7 @@
 													      	</label>
 													    </div>
 
-													    <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div>
+													    <!-- <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div> -->
 													</div>
 												</div>
 											</div>
@@ -104,6 +104,7 @@
 													:rows="rows"
 													:loading="loading"
 													:infoExtra="infoExtra"
+													v-on:expedienteSeleccionado="updateExpedienteSeleccionado($event)"
 													>
 												</results-component>
 												<expediente-excel-component  
@@ -114,6 +115,15 @@
 													@updateForm="updateForm" :files="files"
 													@validarFormulario="validarFormulario">
 												</expediente-excel-component>
+												<table-component 
+													:propietario="JSON.parse(campo.caracteristicas).propietario"
+													:campo="campo"
+													:expediente="expediente"
+													v-on:porcentaje="updatePorcentaje($event)"
+													:porcentajeFinal="progress"
+													@updateForm="updateForm"
+													v-else-if="campo.tipo == 'table'">
+												</table-component>
 												<div v-else-if="campo.tipo == 'question'">
 													¿Desea realizar el cobro por ?
 													<div class="col-md-12 col-lg-12">
@@ -184,16 +194,21 @@
 </template>
 <script>
     export default {
-        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0'],
+        props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0', 'notary'],
         data() {
             return {
-				campos: [], agrupaciones:[], estado: '',
+				progress: '',
+				expediente: '',
+				selectedId: [],
+				campos: [], 
+				agrupaciones:[], 
+				estado: '',
                 mostrar:false,
                 errors: {},
                 showMensajes:false,
                 files:[], file:null,
                 tipoPersona:'pf',
-                consulta_api:'',
+				consulta_api:'',
 				panel : [0,1,2,3,4],
 				motivoDeclaracion0:'',
 				disabled : [],
@@ -215,8 +230,9 @@
         created() {
 			if (localStorage.getItem('datosFormulario')) {
               	try {
+					  this.obtenerCampos();
                 	let datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
-                	console.log(datosFormulario.tramite.tramite);
+                	console.log('datosformulario : ' , datosFormulario);
                 	if(datosFormulario.tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
                 		this.panel = [0];
                 		this.disabled = [1,2,3,4,5];
@@ -243,10 +259,16 @@
                 	this.obtenerCampos();
               	}
 	        } else {
-	        	this.obtenerCampos();
+				this.obtenerCampos();
 			}
         },
         methods: {
+			updatePorcentaje(porcentaje){	
+				this.progress = porcentaje;
+			},
+			updateExpedienteSeleccionado(ex){
+				this.expediente = ex;
+			},
 			estadoSelected(estado){
 				this.estado = estado
 			},
@@ -285,6 +307,42 @@
         	},
         	async updateForm(campo){
 				const tramite = localStorage.getItem('tramite') && JSON.parse(localStorage.getItem('tramite')) ;
+
+				if (tramite && tramite.tramite === 'AVISO DE ENAJENACIÓN') {
+					this.fields = ['Expediente Catastral' ,	'Fólio', 	'Días Restantes', 	'Fecha pago informativo',	'Capturista',	'Accion'];
+						//  this.rows = [{expediente : 7001002010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001002011 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'},{expediente : 7001001010 , folio: 123 , dias: 2, fecha: 'nan', capturista: 'jaime'}]
+					var self = this;
+						let url = "http://10.153.144.228/valor-catastral-notaria/6" // + self.notary;  
+						$.ajax({
+							type: "GET",
+							dataType: 'json', 
+							url,
+							success:function(data){
+								let rows = [];
+								for (let index = 0; index < data.length; index++) {
+									let row = [];
+									data[index]
+									self.rows.push(data[index].campos) ; 
+									// console.log(self.rows);
+								}
+								self.rows = data;
+							},
+							error:function(error){
+								console.log(error);
+								console.log('errorrr');
+							},
+							complete:function(){
+								console.log('ya quedo');
+							}
+						});
+				}
+
+				const datosFormulario = localStorage.getItem('datosFormulario') && JSON.parse(localStorage.getItem('datosFormulario')) ;
+				if(campo.nombre.search(/region/i) >= 0){
+					const value = campo.valor && campo.valor.toString();
+					if(value && value.length == 3 && value[0] === '0')
+						campo.valor = value.slice(1)
+				}
 				if(tramite && tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
 					const datosFormulario = localStorage.getItem('datosFormulario') && JSON.parse(localStorage.getItem('datosFormulario')) ;
 					if(campo.nombre.search(/region/i) >= 0){
@@ -343,7 +401,7 @@
         		this.cambioModelo();
         	},
 		    cambioModelo(){
-		    	let formvALID = this.validarFormulario();
+				let formvALID = this.validarFormulario();
             	let datosFormulario = {
             		tramite: this.tramite,
             		campos: this.campos,
@@ -371,14 +429,14 @@
 							this.motivoDeclaracion0 = campo.valor;
                 		} 
 					} else {
-                		formularioValido = formularioValido && !!campo.valido;
+						formularioValido = formularioValido && !!campo.valido;
                 	}
                 });
                 if(this.tipo_costo_obj && (this.tipo_costo_obj.tipoCostoRadio == 'hoja' || this.tipo_costo_obj.tipoCostoRadio == 'lote ' )){
                 	formularioValido = formularioValido && !!this.tipo_costo_obj.hojaInput;
                 	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
                 	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
-                }
+				}
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
 		    },
@@ -404,6 +462,9 @@
 								let infoArchivoGuardado = this.infoGuardada.archivosGuardados.find( archivo => archivo.mensaje == campo.nombre );
 								campo.archivoGuardado = true;
 								campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
+							}
+							if (campo.tipo == 'table' || campo.tipo == 'results') {
+								this.campos[index].valido = true
 							}
 						});
 					}
@@ -648,7 +709,14 @@
 					this.panel = [0, 2];
 				}
 			}
-     	}	
+		 },
+		 updated(){
+			//  console.log('en 0' ,this.declararEn0);
+		 },
+		 mounted(){
+			 console.log('agrupacion ==', this.agrupaciones);
+		 }
 	}
+
 
 </script>
