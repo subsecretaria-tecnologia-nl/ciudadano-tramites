@@ -420,11 +420,9 @@
         		let camposValidables = [];
         		this.agrupaciones.forEach( agrupacion =>{
 					camposValidables = camposValidables.concat( agrupacion.campos );
-					console.log('camposvalidables: ',camposValidables);
         			return agrupacion;
         		});
                 camposValidables.forEach( (campo, indice) => {
-					console.log('campo.nombre indefinido?: ', campo);
                 	if( campo.nombre == 'Motivo'  ){
                 		if(this.declararEn0){
 							formularioValido = formularioValido && !!campo.valido;
