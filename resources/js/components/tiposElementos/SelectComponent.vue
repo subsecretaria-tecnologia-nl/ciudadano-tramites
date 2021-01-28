@@ -5,11 +5,11 @@
 			:multiple="campo.tipo == 'multiple'"
 			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
 			v-model="campo.valor" @change="validar" @focus="validar">
-			<option v-if="campo.nombre == 'Estado' ||  'Municipio'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+			<option v-if="campo.nombre === 'Estado' || campo.nombre === 'Municipio'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="opcion.clave">
 					{{ opcion.nombre }}
 			</option>
-			<option v-else-if="campo.nombre != 'Estado' || 'Municipio'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+			<option v-if="campo.nombre != 'Estado' ||campo.nombre !=   'Municipio'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="[[Object.keys(opcion)[0] ]]">
 					{{ opcion[ Object.keys(opcion)[0] ] }}
 			</option>

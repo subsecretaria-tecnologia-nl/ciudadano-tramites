@@ -186,9 +186,6 @@
  					</div>
  				</div>
 			</form>
-			<code>
-				{{estado}}
-			</code>
 		</div>
     </div>
 </template>
