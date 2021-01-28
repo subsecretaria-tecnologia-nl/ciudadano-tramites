@@ -40,7 +40,7 @@
 													      	</label>
 													    </div>
 
-													    <!-- <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div> -->
+													    <div :set= 'agrupacion.campos = agrupacion.grupos[tipoPersona].campos'> </div>
 													</div>
 												</div>
 											</div>
@@ -419,7 +419,7 @@
 
         		let camposValidables = [];
         		this.agrupaciones.forEach( agrupacion =>{
-        			camposValidables = camposValidables.concat( agrupacion.campos );
+					camposValidables = camposValidables.concat( agrupacion.campos );
         			return agrupacion;
         		});
                 camposValidables.forEach( (campo, indice) => {
