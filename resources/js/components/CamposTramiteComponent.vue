@@ -227,7 +227,6 @@
         created() {
 			if (localStorage.getItem('datosFormulario')) {
               	try {
-					  this.obtenerCampos();
                 	let datosFormulario = JSON.parse(localStorage.getItem('datosFormulario'));
                 	console.log('datosformulario : ' , datosFormulario);
                 	if(datosFormulario.tramite.tramite === 'INFORMATIVO VALOR CATASTRAL'){
