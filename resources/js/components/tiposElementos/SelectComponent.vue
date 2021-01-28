@@ -7,7 +7,7 @@
 			v-model="campo.valor" @change="validar" @focus="validar">
 			<option v-if="campo.nombre === 'Estado' || campo.nombre === 'Municipio'" v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="opcion.clave">
-					1{{ opcion.nombre }}
+					{{ opcion.nombre }}
 			</option>
 			<option v-if="campo.nombre != 'Estado' ||campo.nombre !=   'Municipio'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="[[Object.keys(opcion)[0] ]]">
