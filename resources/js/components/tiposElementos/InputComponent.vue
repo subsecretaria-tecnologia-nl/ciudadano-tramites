@@ -5,6 +5,7 @@
     </label>
     <span class="currencyinput">
       <input
+        :name="campo.nombre"
         type="text"
         class="form-control  form-control-lg "
         style="background-color: #e5f2f5 !important"
@@ -104,11 +105,13 @@
 
         validar(a){
           // let curpValido = true;
-          console.log('------');
           let requeridoValido = true;
           let caracteristicas = {};
           var caracteristicasStr = this.campo.caracteristicas;
           this.campo.mensajes = [];
+
+          if(a && a.target && a.target.name === this.campo.nombre)
+            this.campo.valor = a.target.value;
             
           try {
             caracteristicas = this.getCaracteristicas();
@@ -116,17 +119,18 @@
             console.log(err);
           }
 
-          // if( caracteristicas.expreg){
-          //   var re = new RegExp(caracteristicas.expreg, "i");
-          //   curpValido =  re.test(this.campo.valor) ;
-          //   if(  !curpValido ){
-          //     let mensaje = { 
-          //       tipo:'regex',
-          //       mensajeStr: "El campo " + this.campo.nombre + " no es válido"
-          //     }
-          //     this.campo.mensajes.push( mensaje );
-          //   }
-          // } 
+          if( this.campo.valor && caracteristicas.expreg ){
+            var regex = new RegExp(caracteristicas.expreg, "i");
+            requeridoValido = regex.test(this.campo.valor)
+
+            if( !requeridoValido ){
+              let mensaje = { 
+                tipo: 'regex',
+                mensajeStr: "El campo " + this.campo.nombre + " no cumple con la regla de validación."
+              }
+              this.campo.mensajes.push( mensaje );
+            }
+          } 
           // console.log(caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true');
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
             requeridoValido =  !!this.campo.valor && (this.campo.valor+"").length > 0;
