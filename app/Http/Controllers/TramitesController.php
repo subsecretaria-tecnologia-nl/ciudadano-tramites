@@ -197,7 +197,7 @@ class TramitesController extends Controller
             $costo = $actual_uma * $costo_fijo;
           }
           //Se valida si hay registro de porcentaje a cobrar
-          if($porcentaje != 0 || $pocentaje != null){
+          if($porcentaje != 0 || $porcentaje != null){
 
             $costo = $this->porcentaje($porcentaje, $costo);
           }
@@ -325,8 +325,17 @@ class TramitesController extends Controller
 
               //Se calculan las cuotas elevadas al año configuradas
               $cuotas_anio = $limite_cuotassub * $annual_uma;
+              //Validacion para cuando es un costo al millar y no aplique redondeoalMillar
+              if($costoX == "M"){
+                if( $valor_catastral > $valor_operacion){
+                  $operacion = $valor_catastral;
+                }else{
+                  $operacion = $valor_operacion;
+                }
+              }
+
               //Se compara el valor de operacion utilizado para aplicar subsidio
-              if($operacion < $cuotas_anio){
+              if($operacion <= $cuotas_anio){
                 //Se calcula el valor a cobrar en $cuotas
                 $costo = $cuotas_sub * $actual_uma;
                 $total_subsidiado = $costo_final - $costo;
