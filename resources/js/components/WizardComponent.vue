@@ -79,12 +79,21 @@
                                                           <span class="sr-only">Loading...</span>
                                                       </div>
                                                     </button>
+                                                    <!--
                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar('finalizar')" :disabled="finalizando">
                                                       Finalizar
                                                       <div id="spinner-finalizar" class="spinner-border spinner-border-sm float-right" role="status" v-if="finalizando" style="margin-left: 5px;">
                                                           <span class="sr-only">Loading...</span>
                                                       </div>
-                                                    </button>
+                                                    </button>-->
+                                                    <btn-guardar-tramite-component
+                                                      type="finalizar"
+                                                      :tipoTramite="tipoTramite" 
+                                                      :files="files" 
+                                                      :datosComplementaria="datosComplementaria" 
+                                                      :idUsuario="idUsuario"  
+                                                      :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3"
+                                                      ></btn-guardar-tramite-component>
                                                     <button type="button" id="btnWizard" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
                                                         Next
                                                     </button>
@@ -108,7 +117,7 @@
     import { uuid } from 'vue-uuid';
 
     export default {
-        props: ['tramite','idUsuario', 'clave', 'notary'],
+        props: ['tramite','idUsuario', 'clave'],
         computed:{
             declararEn0(){
                 return this.tipoTramite == 'declaracionEn0';
@@ -238,7 +247,7 @@
                 $("#step" + idStep).attr("data-wizard-state", "current");
                 this.currentStep = idStep;
             },
-
+/*
             buildFormData(informacion, listaSolicitantes, tramite){
               let formData = new FormData();
               if( this.files && this.files.length > 0 ){
@@ -323,12 +332,12 @@
                 }
                 this.enviando = false;
                 this.finalizando = false;
-            },
+            },*/
 
             cambioRadio(valor){
               this.tipoTramite = valor;
             },
-
+/*
             getInformacion(tramite, datosFormulario){
                 let informacion = {
                   costo_final: tramite &&  tramite.detalle ? tramite.detalle.costo_final: null,
@@ -392,7 +401,7 @@
             formatoNumero(numberStr){
                 let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
                 return valor;
-            },
+            },*/
 
             async saveTemp(){
 
