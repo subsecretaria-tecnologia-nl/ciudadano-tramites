@@ -363,6 +363,46 @@ class TramitesController extends Controller
                 );
               }
 
+            }elseif($request->tipoPersona == "a"){
+              //Se calculan las cuotas elevadas al año configuradas
+              $cuotas_anio = $limite_cuotassub * $annual_uma;
+              //Validacion para cuando es un costo al millar y no aplique redondeoalMillar
+              if($costoX == "M"){
+                if( $valor_catastral > $valor_operacion){
+                  $operacion = $valor_catastral;
+                }else{
+                  $operacion = $valor_operacion;
+                }
+              }
+
+              //Se compara el valor de operacion utilizado para aplicar subsidio
+              if($operacion <= $cuotas_anio){
+                //Se calcula el valor a cobrar en $cuotas
+                $costo = $cuotas_sub * $actual_uma;
+                $total_subsidiado = $costo_final - $costo;
+                $total_subsidiado = $this->redondeo($total_subsidiado);
+                $importe_total = $costo_final;
+                $costo_final = $this->redondeo($costo);
+
+                //Obtengo la informacion de la partida correspondiente
+                $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
+                foreach ($data_partida as $p) {
+                  $id_servicio = $p->id_servicio;
+                  $descripcion_part = $p->descripcion;
+                }
+                //Se forma el arreglo de descuentos
+                $descuentos []= array(
+                  'concepto_descuento' => $descripcion_part,
+                  'importe_subsidio' => $total_subsidiado,
+                  'partida_descuento' => $id_partida,
+                  'importe_total' => $importe_total
+                );
+
+              }else{
+                $descuentos []= array(
+                  'concepto_descuento' => 'El valor de operación excede el monto válido para subsidio',
+                );
+              }
             }else{
               $descuentos []= array(
                 'concepto_descuento' => 'El tipo de Persona fiscal no es válido para este subsidio',
