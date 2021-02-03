@@ -22,6 +22,8 @@ use App\Repositories\PortalcamposagrupacionesRepositoryEloquent;
 
 use App\Repositories\PortaltramitecategoriaRepositoryEloquent;
 use App\Repositories\PortaltramitecategoriarelacionRepositoryEloquent;
+use App\Repositories\PortaltramitedivisasRepositoryEloquent;
+use App\Repositories\DivisasRepositoryEloquent;
 
 class SolicitudesController extends Controller
 {
@@ -34,6 +36,8 @@ class SolicitudesController extends Controller
   protected $costo;
   protected $cat_tramite;
   protected $relcat;
+  protected $reldivisas;
+  protected $divisas;
 
 // agregar catalogos
   protected $catalogo_campos;
@@ -50,7 +54,9 @@ class SolicitudesController extends Controller
     PortalcostotramitesRepositoryEloquent $costo,
     PortalcamposagrupacionesRepositoryEloquent $group,
     PortaltramitecategoriaRepositoryEloquent $cat_tramite,
-    PortaltramitecategoriarelacionRepositoryEloquent $relcat
+    PortaltramitecategoriarelacionRepositoryEloquent $relcat,
+    PortaltramitedivisasRepositoryEloquent $reldivisas,
+    DivisasRepositoryEloquent $divisas
     )
     {
       parent::__construct();
@@ -74,6 +80,10 @@ class SolicitudesController extends Controller
       $this->cat_tramite = $cat_tramite;
 
       $this->relcat = $relcat;
+
+      $this->reldivisas = $reldivisas;
+
+      $this->divisas = $divisas;
 
       // creamos los catalogos iniciales
 
@@ -224,6 +234,8 @@ class SolicitudesController extends Controller
       $campos = $this->relationship->findWhere( ['tramite_id' => $id_tramite] );
       //$campos = $this->relationship->where('tramite_id', 100)->get();
 
+      //revisar si el tramite tiene asignado el campo divisas
+
       foreach ($campos as $c) {
 
         $grupo = $this->group->findWhere(['id' => $c->agrupacion_id]);
@@ -245,6 +257,26 @@ class SolicitudesController extends Controller
             'nombre_agrupacion' => $desc,
           );
       }
+
+      $div = $this->reldivisas->where('tramite_id', $id_tramite)->get();
+
+      if($div->count() > 0 ){
+        $div_list = $this->getDivisas();
+
+        $campos_data []=array(
+          'relationship' => '',
+          'tipo' => 'select',
+          'nombre' => 'Cambio de divisas',
+          'caracteristicas' => '{"required": "true","opciones":'.$div_list.'}',
+          'campo_id' => '',
+          'agrupacion_id' => '',
+          'orden_agrupacion' => '100',
+          'orden'=> '1',
+          'nombre_agrupacion' => 'Divisas',
+        );
+      }
+
+
 
       $data = array();
 
@@ -346,6 +378,34 @@ class SolicitudesController extends Controller
         [
           "Code" => "400",
           "Message" => "Error al listar categorias",
+        ]
+      );
+    }
+  }
+
+  public function getDivisas(){
+    try{
+      $divisas_opt = $this->divisas->get();
+      $divisas_options = array();
+
+      foreach ($divisas_opt as $do) {
+        $descripcion = $do->descripcion;
+        $value = $do->parametro;
+
+        $divisas_options []= array(
+          "nombre" => $descripcion,
+          "value" => $value
+        );
+      }
+
+      return json_encode($divisas_options);
+
+    }catch(\Exception $e){
+      Log::info('Error getDivisas '.$e->getMessage());
+      return response()->json(
+        [
+          "Code" => "400",
+          "Message" => "Error al listar divisas",
         ]
       );
     }
