@@ -138,6 +138,23 @@ class TramitesController extends Controller
       //$valor_catastral = 150050;
       //$valor_operacion = 178960;
       $valor_operacion = $request->valor_operacion;
+
+      //Se hace la conversión en caso de mandar un valor de operacion y catastral en otra divisa
+      if(!empty($request->divisa)){
+        $param = $request->divisa;
+
+        $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $valor_catastral]);
+        $res =  $costo_cambio->response;
+        $rest = $res->resultado;
+        $valor_catastral = $rest->precio_final;
+
+
+        $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $valor_operacion]);
+        $res =  $costo_cambio->response;
+        $rest = $res->resultado;
+        $valor_operacion = $rest->precio_final;
+      }
+
       $lotes = $request->lote;
       $hojas =  $request->hoja;
       //$hojas = 5;
@@ -415,26 +432,7 @@ class TramitesController extends Controller
             );
           }
         }
-        //Se hace la conversión en caso de mandar un valor de divisa
-        if(!empty($request->divisa)){
-          $param = $request->divisa;
 
-          $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $costo_final]);
-          $res =  $costo_cambio->response;
-          $rest = $res->resultado;
-          $cambio = $rest->precio_final;
-
-          //Se devuelve el arreglo con el cambio de divisa aplicado
-          $detalle []= array(
-            'tramite_id' => $tramite_id,
-            'costo_final' => $cambio,
-            'descuentos' => $descuentos,
-            'costo_pesos' => $costo_final
-          );
-
-          return json_encode($detalle);
-
-        }
 
         //Se devuelve el arreglo con el valor del costo
         $detalle []= array(
@@ -452,7 +450,7 @@ class TramitesController extends Controller
     }
 
     public function test(){
-      $costo_final = '434';
+      $costo_final = '1';
       $param = 'SF46410';
 
       $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $costo_final]);
