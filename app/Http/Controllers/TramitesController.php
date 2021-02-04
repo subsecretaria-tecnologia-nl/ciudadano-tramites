@@ -415,6 +415,27 @@ class TramitesController extends Controller
             );
           }
         }
+        //Se hace la conversión en caso de mandar un valor de divisa
+        if(!empty($request->divisa)){
+          $param = $request->divisa;
+
+          $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $costo_final]);
+          $res =  $costo_cambio->response;
+          $rest = $res->resultado;
+          $cambio = $rest->precio_final;
+
+          //Se devuelve el arreglo con el cambio de divisa aplicado
+          $detalle []= array(
+            'tramite_id' => $tramite_id,
+            'costo_final' => $cambio,
+            'descuentos' => $descuentos,
+            'costo_pesos' => $costo_final
+          );
+
+          return json_encode($detalle);
+
+        }
+
         //Se devuelve el arreglo con el valor del costo
         $detalle []= array(
           'tramite_id' => $tramite_id,
@@ -428,32 +449,19 @@ class TramitesController extends Controller
       }catch(\Exception $e){
         Log::info('Error - costo Trámite: '.$e->getMessage());
       }
+    }
 
+    public function test(){
+      $costo_final = '434';
+      $param = 'SF46410';
 
-      // $detalle = array();
-      // //Validamos si el tramite tiene subsidio
+      $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $costo_final]);
+      $res =  $costo_cambio->response;
+      $rest = $res->resultado;
+      $cambio = $rest->precio_final;
 
-      //
-      // if (!empty($oficio_sub)){
-      //   try{
-      //     $data_partida = $this->partidas->where('id_partida', $id_partida)->get();
-      //     foreach ($data_partida as $p) {
-      //       $id_servicio = $p->id_servicio;
-      //       $descripcion_part = $p->descripcion;
-      //     }
-      //
-      //     $subsidio = $request->subsidio; //se obtiene el oficio ingresado
-      //     //$subsidio = "";
-      //
-      //     if($subsidio == $oficio_sub) { //se valida que coincida el oficio ingresado con el registro
-      //
-      //       $descuentos = array();
-      //
-      //     }
-      //   }catch(\Exception $e){
-      //     Log::info('Error - costo Trámite subsidio: '.$e->getMessage());
-      //   }
-      // }
+      dd($costo_cambio);
+
     }
 
     public function redondeo($costo_real){
