@@ -655,7 +655,7 @@ class CalculoimpuestosController extends Controller
     							"year"		=> $y,
     							"month"		=> $m,
     							"vencido" 	=> $l->vencido,
-    							"requerido"	=> $l->requerido
+    							"requerido"	=> $l->federal_vencido
     						);
     						break;
     					}

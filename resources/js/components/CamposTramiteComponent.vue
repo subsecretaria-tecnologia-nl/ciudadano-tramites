@@ -266,7 +266,8 @@
 				this.expediente = ex;
 			},
 			estadoSelected(estado){
-				this.estado = estado
+				this.estado = estado;
+				
 			},
         	setDeclararEn0(){
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");

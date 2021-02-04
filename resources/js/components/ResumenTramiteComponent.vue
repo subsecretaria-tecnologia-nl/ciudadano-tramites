@@ -113,6 +113,9 @@
     const CAMPO_FECHA_DE_ESCRITURA_O_MINUTA                     = "FECHA DE ESCRITURA O MINUTA";
     const CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR  = "PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR";
 
+
+    const CAMPO_DIVISAS = "Cambio de divisas";
+
     import Vue from 'vue'
 
     export default {
@@ -222,6 +225,10 @@
                             }
                         }                 
                     }
+                    let campoDivisas              = this.getCampoByName(CAMPO_DIVISAS);
+                    if( campoDivisas ){
+                        paramsCosto.divisa = campoDivisas.valor[0][0];
+                    }
                 } else {
                     return this.datosComplementaria;
                 }
@@ -281,7 +288,6 @@
                             "E (Parte actualizada del impuesto)", "F (Recargos)", "G*(Multa corrección fiscal)", "H (Importe total)"];
                 if(arr.includes(campoName)){
                     let text = Vue.filter('toCurrency')(salida);
-                    console.log(text)
                     return text;
                 } else{
                     return salida;
