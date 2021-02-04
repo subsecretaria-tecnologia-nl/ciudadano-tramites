@@ -1,7 +1,7 @@
 <script>
     export default {
         name: 'BtnGuardarTramiteParent',
-        props: ['tipoTramite', 'files', 'datosComplementaria', 'idUsuario', 'infoGuardadaFull', "type"],
+        props: ['tipoTramite', 'files', 'datosComplementaria', 'idUsuario', 'infoGuardadaFull', "type", "labelBtn"],
         mounted() {
           console.log("montado")
         },
