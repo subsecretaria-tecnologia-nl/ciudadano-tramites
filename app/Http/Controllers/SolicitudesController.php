@@ -393,8 +393,7 @@ class SolicitudesController extends Controller
         $value = $do->parametro;
 
         $divisas_options []= array(
-          "nombre" => $descripcion,
-          "value" => $value
+          $value => $descripcion
         );
       }
 
