@@ -143,16 +143,18 @@ class TramitesController extends Controller
       if(!empty($request->divisa)){
         $param = $request->divisa;
 
-        $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $valor_catastral]);
-        $res =  $costo_cambio->response;
-        $rest = $res->resultado;
-        $valor_catastral = $rest->precio_final;
+        if($param != 'PESOS'){
+          $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $valor_catastral]);
+          $res =  $costo_cambio->response;
+          $rest = $res->resultado;
+          $valor_catastral = $rest->precio_final;
 
 
-        $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $valor_operacion]);
-        $res =  $costo_cambio->response;
-        $rest = $res->resultado;
-        $valor_operacion = $rest->precio_final;
+          $costo_cambio = curlSendRequest("POST", getenv("SESSION_HOSTNAME")."/divisas/getCambioDivisa", ["parametro" => $param, "monto" => $valor_operacion]);
+          $res =  $costo_cambio->response;
+          $rest = $res->resultado;
+          $valor_operacion = $rest->precio_final;
+        }
       }
 
       $lotes = $request->lote;
