@@ -20,6 +20,9 @@
 							</ul>
 						</b-tooltip>
 					</td>
+					<td v-if="JSON.parse(campo.caracteristicas).formato == 'seleccion' ">
+                       <input type="radio" @change="check($event)"  :value="row.expediente" name="checkbox" :id="row.expediente" class="text-center pl-4 radio" >
+                    </td>
 				</tr>
 			</tbody>
 		</table>
@@ -35,8 +38,13 @@
 <script>
 	export default {
 		props: ['campo', 'estadoFormulario', 'showMensajes', 'info', 'table', 'fields', 'rows', 'loading', 'infoExtra'],
+		data(){
+			return{
+				selectedId: '',
+		}},
 		updated () {
 			this.campo.valido = true;
+			// this.$emit('updateForm', this.campo);
 		},
 		watch : {
 			rows: function(newVal, oldVal) {
@@ -50,6 +58,20 @@
 			},
 			infoExtra: function(newVal, oldVal) {
 				this.infoExtra = newVal;
+			}
+		},
+		methods: {
+
+			check: function (e ) {
+				let total = 0;
+                self = this;
+ 					Array.from(document.getElementsByClassName('radio')).forEach(function(row,index){
+						 if(document.getElementsByClassName('radio')[index].checked){
+							console.log('value- ',row.value);
+							self.$emit('expedienteSeleccionado', row.value);
+						}
+					});
+					
 			}
 		}
 	}

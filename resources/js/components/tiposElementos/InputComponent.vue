@@ -5,6 +5,7 @@
     </label>
     <span class="currencyinput">
       <input
+        :name="campo.nombre"
         type="text"
         class="form-control  form-control-lg "
         style="background-color: #e5f2f5 !important"
@@ -41,8 +42,53 @@
               currency: 'MXN',
               minimumFractionDigits: 0
             });
+          if( caracteristicas.formato == 'curp'){
+                var self = this;
+                let url = "http://10.153.144.228/consultar-curp/" + campo.valor ;  
+                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                        // self.rellenarForm(data);
+                        console.log('..se consulto el curp respuesta : ' + data );
+                        // this.$data = data.data.nombres;
+                    },
+                    error:function(error){
+                        console.log(error);
+                    },
+                    complete:function(){
+                        console.log('ya quedo');
+                    }
+                });
+          }
             this.campo.valor = formatter.format(number);
             
+          }
+          if (this.campo.valor) {
+            if( caracteristicas.formato == 'curp' && this.campo.valor.length  ==  18  ){
+              var self = this;
+                console.log('------');
+                let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp/" + this.campo.valor ;  
+                $.ajax({
+                  type: "GET",
+                    dataType: 'json', 
+                    url,
+                    success:function(data){
+                      // self.rellenarForm(data);
+                        console.log('..se consulto el curp respuesta : ' + data );
+                        // this.$data = data.data.nombres;
+                        self.$emit('curpSearch', data)
+                    },
+                    error:function(error){
+                      console.log('error: ', error);
+                    },
+                    complete:function(){
+                      console.log('ya quedo');
+                    }
+                });
+            }
           }
           this.$forceUpdate();
         },
@@ -58,11 +104,14 @@
         },
 
         validar(a){
-          let curpValido = true;
+          // let curpValido = true;
           let requeridoValido = true;
           let caracteristicas = {};
           var caracteristicasStr = this.campo.caracteristicas;
           this.campo.mensajes = [];
+
+          if(a && a.target && a.target.name === this.campo.nombre)
+            this.campo.valor = a.target.value;
             
           try {
             caracteristicas = this.getCaracteristicas();
@@ -70,13 +119,14 @@
             console.log(err);
           }
 
-          if( caracteristicas.expreg){
-            var re = new RegExp(caracteristicas.expreg, "i");
-            curpValido =  re.test(this.campo.valor) ;
-            if(  !curpValido ){
+          if( this.campo.valor && caracteristicas.expreg ){
+            var regex = new RegExp(caracteristicas.expreg, "i");
+            requeridoValido = regex.test(this.campo.valor)
+
+            if( !requeridoValido ){
               let mensaje = { 
-                tipo:'regex',
-                mensajeStr: "El campo " + this.campo.nombre + " no es válido"
+                tipo: 'regex',
+                mensajeStr: "El campo " + this.campo.nombre + " no cumple con la regla de validación."
               }
               this.campo.mensajes.push( mensaje );
             }
@@ -92,7 +142,7 @@
               this.campo.mensajes.push( mensaje );
             }
           }
-          this.campo.valido = curpValido && requeridoValido;
+          this.campo.valido =  requeridoValido;
           this.formatear();
           this.$emit('updateForm', this.campo);
           

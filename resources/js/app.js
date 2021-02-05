@@ -46,6 +46,7 @@ Vue.component("detalle-pago-component", () => import ( /* webpackChunkName: "js/
 Vue.component("usuarios-component", () => import ( /* webpackChunkName: "js/components/usuarios-component" */ './components/Usuarios.vue'));
 Vue.component("listado-tramites", () => import ( /* webpackChunkName: "js/components/listado-tramites" */ './components/listadoTramites.vue' ))
 Vue.component("pagination-component", () => import ( /* webpackChunkName: "js/components/pagination-component" */ './components/paginationComponent.vue' ));
+Vue.component("table-component", () => import ( /* webpackChunkName: "js/components/pagination-component" */ './components/TableComponent.vue' ));
 
 Vue.component("radio-option-component", () => import ( /* webpackChunkName: "js/components/generales/radio-option-component" */ './components/generales/radioOptionComponent.vue' ));
 Vue.component("formulario-complementaria-component" , () => import ( /* webpackChunkName: "js/components/formulario-complementaria-component" */ './components/FormularioComplementariaComponent.vue' ));
@@ -61,6 +62,11 @@ Vue.component("file-component" , () => import ( /* webpackChunkName: "js/compone
 Vue.component("results-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/results-component" */ './components/tiposElementos/ResultsComponent.vue' ));
 Vue.component("firma-electronica-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/results-component" */ './components/tiposElementos/FirmaElectronicaComponent.vue' ));
 
+Vue.component("btn-guardar-tramite-parent" , () => import ( /* webpackChunkName: "js/components/generales/btn-guardar-tramite-parent" */ './components/generales/BtnGuardarTramiteParent.vue' ));
+
+Vue.component("btn-guardar-tramite-component" , () => import ( /* webpackChunkName: "js/components/generales/btn-guardar-tramite-component" */ './components/generales/BtnGuardarTramiteComponent.vue' ));
+//Vue.component("fecha-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/fecha-component" */ './components/tiposElementos/FechaComponent.vue' ));
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -71,6 +77,18 @@ Vue.filter("capitalize", function(value) {
         return '';
     value = value.toString();
     return value.charAt(0).toUpperCase() + value.slice(1);
+});
+
+Vue.filter('toCurrency', function (value) {
+    if (typeof value !== "number") {
+        return value;
+    }
+    var formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'MXN',
+        minimumFractionDigits: 2
+    });
+    return formatter.format(value);
 });
 
 const app = new Vue({

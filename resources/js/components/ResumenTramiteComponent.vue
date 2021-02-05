@@ -26,8 +26,7 @@
                                             </td>
                                             <td class="right" v-if="key != 'H (Importe total)'" >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
-                                                    <span v-if="!obteniendoCosto">  {{ salida }} </span>
-
+                                                    <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -39,7 +38,8 @@
                                             <td class="right">
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Salidas['H (Importe total)']   }}
+                                                        {{ this.tramite.detalle.Salidas['H (Importe total)'] | toCurrency }}
+
                                                     </span>
                                             </td>
                                         </tr>
@@ -113,7 +113,10 @@
     const CAMPO_FECHA_DE_ESCRITURA_O_MINUTA                     = "FECHA DE ESCRITURA O MINUTA";
     const CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR  = "PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR";
 
-    
+
+    const CAMPO_DIVISAS = "Cambio de divisas";
+
+    import Vue from 'vue'
 
     export default {
 
@@ -222,6 +225,10 @@
                             }
                         }                 
                     }
+                    let campoDivisas              = this.getCampoByName(CAMPO_DIVISAS);
+                    if( campoDivisas ){
+                        paramsCosto.divisa = campoDivisas.valor[0][0];
+                    }
                 } else {
                     return this.datosComplementaria;
                 }
@@ -273,7 +280,21 @@
                     this.obteniendoCosto = false;
                 }
                 
+            },
+
+            currencyFormat(campoName, salida){
+                let arr = ["A*(Ganancia Obtenida)","B (Monto obtenido conforme al art 127 LISR)",
+                            "C*(Pago provisional conforme al art 126 LISR)","D (Impuesto correspondiente a la entidad federativa)",
+                            "E (Parte actualizada del impuesto)", "F (Recargos)", "G*(Multa corrección fiscal)", "H (Importe total)"];
+                if(arr.includes(campoName)){
+                    let text = Vue.filter('toCurrency')(salida);
+                    return text;
+                } else{
+                    return salida;
+                }
             }
+
+
 
         }
     }
