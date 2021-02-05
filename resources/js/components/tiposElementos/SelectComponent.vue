@@ -1,7 +1,7 @@
 <template>
 	<div class=" fv-plugins-icon-container">
 		<label>{{ campo.nombre }}</label>
-		<select :id="[[campo.campo_id]]" :name="[[campo.campo_id]]" 
+		<select :id="[[campo.campo_id || campo.nombre.split(' ').join('_')  ]]" :name="[[campo.campo_id]]" 
 			:multiple="campo.tipo == 'multiple'"
 			class="form-control  form-control-lg" style="background-color: #e5f2f5 !important"
 			v-model="campo.valor" @change="validar" @focus="validar">
@@ -9,7 +9,7 @@
 				:value="opcion.clave">
 					{{ opcion.nombre }}
 			</option>
-			<option v-if="campo.nombre != 'Estado' ||campo.nombre !=   'Municipio'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
+			<option v-if="campo.nombre != 'Estado' && campo.nombre !=   'Municipio'"  v-for="opcion in JSON.parse(campo.caracteristicas).opciones" 
 				:value="[[Object.keys(opcion)[0] ]]">
 					{{ opcion[ Object.keys(opcion)[0] ] }}
 			</option>
@@ -30,7 +30,16 @@
         if(this.campo.tipo == 'multiple'){
           this.campo.valor = this.campo.valor || [];  
         }
+      
         this.validar();
+        this.opcionesEstado();
+      },
+      mounted(){
+        if(this.campo.nombre== "Cambio de divisas" && !this.campo.valor){
+          this.campo.valor = [ [ "PESOS" ]]
+          $("#"+ this.campo.nombre.split(' ').join('_') ).val("PESOS");
+          this.validar();
+        }
       },
       methods: {
         opcionesEstado(){
@@ -91,9 +100,7 @@
           }
         }
       },
-      created() {
-        this.opcionesEstado();
-      },
+
       watch: {
         estado: function() {
               if( this.campo.nombre == 'Municipio'){
