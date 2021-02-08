@@ -179,7 +179,7 @@
                         let campoPagoProvisional    = this.getCampoByName(CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR);
                         let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
 
-                        paramsCosto.fecha_escritura = campoFechaMinuta.valor;
+                        paramsCosto.fecha_escritura = campoFechaMinuta.valor.split("-").map(dato => Number(dato)).join("-");
                         paramsCosto.monto_operacion = this.formatoNumero(campoMonto.valor);
                         paramsCosto.ganancia_obtenida = this.formatoNumero(campoGananciaObtenida.valor);    
                         paramsCosto.pago_provisional_lisr = this.formatoNumero(campoPagoProvisional.valor);
