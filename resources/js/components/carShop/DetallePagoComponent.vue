@@ -29,10 +29,6 @@
                     <span class="sr-only">Loading...</span>
                 </div>
             </button>
-<!--
-            <button id="metodoPagoCancBtn" type="button" class="btn btn-danger btn-block" v-on:click="cancelarPago()" v-if="mostrarCancelarPago">
-                Cancelar
-            </button> -->
         </div>
     </div>
 </template>
@@ -105,13 +101,10 @@
                             "Content-type":"application/json"
                         },
                     } ).then(responseTransaccion => {
-
                         let dataMotor = {
-                            "status":5,// stattus 5?
+                            status:5,
                             "id_transaccion": idTRansaccion,
                             "id_transaccion_motor": responseTransaccion.data.response.folio,
-                            //"json_envio": JSON.stringify(data),
-                            //json_recibo:JSON.stringify(responseTransaccion.data)
                             json_envio: data,
                             json_recibo:responseTransaccion.data
                         }
