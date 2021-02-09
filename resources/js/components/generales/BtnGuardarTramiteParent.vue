@@ -69,9 +69,9 @@
                 let camposObj = {};
                 if( this.tipoTramite == 'normal'|| this.tipoTramite == 'declaracionEn0' ){
                   datosFormulario.campos.forEach( campo =>  {
-                    if( campo.valido ){
+                    //if( campo.valido ){
                       camposObj[campo.campo_id] = campo.valor;
-                    }
+                    //}
                   });
                   informacion.campos=camposObj;
                   informacion.tipoPersona=datosFormulario.tipoPersona,
