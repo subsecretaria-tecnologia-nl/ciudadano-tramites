@@ -322,7 +322,8 @@
       },
 
       async buscarCurp(curp, token) {
-        let url = "https://insumos.nl.gob.mx/api/consultacurp" ;   
+        let url = process.env.INSUMOS_HOSTNAME + "/consultacurp";
+
         let data = { 'access_token' : token , 'curp' : curp  };
 
         var self = this;
@@ -355,7 +356,7 @@
       },
 
       async getToken(){
-        let url = "https://insumos.nl.gob.mx/api/auth" ;  
+        let url = process.env.INSUMOS_HOSTNAME + "/auth";
         let data = { 'username' : 'fun1' , 'password': 'prueba123' };
 
         try {
