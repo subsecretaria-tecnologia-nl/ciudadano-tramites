@@ -12,6 +12,7 @@ Vue.use(Vuetify);
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
+
 document.getElementById("close-header").addEventListener("click", () => {
     let sideBar = document.getElementById("kt-header-sidebar");
     let content = document.getElementById("kt_content");
@@ -64,7 +65,10 @@ Vue.component("results-component" , () => import ( /* webpackChunkName: "js/comp
 Vue.component("btn-guardar-tramite-parent" , () => import ( /* webpackChunkName: "js/components/generales/btn-guardar-tramite-parent" */ './components/generales/BtnGuardarTramiteParent.vue' ));
 
 Vue.component("btn-guardar-tramite-component" , () => import ( /* webpackChunkName: "js/components/generales/btn-guardar-tramite-component" */ './components/generales/BtnGuardarTramiteComponent.vue' ));
-//Vue.component("fecha-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/fecha-component" */ './components/tiposElementos/FechaComponent.vue' ));
+Vue.component("fecha-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/fecha-component" */ './components/tiposElementos/FechaComponent.vue' ));
+Vue.component("enajenantes-component" , () => import ( /* webpackChunkName: "js/components/enajenantes-component" */ './components/EnajenantesComponente.vue' ));
+
+Vue.component("modal-component" , () => import ( /* webpackChunkName: "js/components/modal-component" */ './components/ModalComponent.vue' ));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
