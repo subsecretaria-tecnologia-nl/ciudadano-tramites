@@ -2,9 +2,6 @@
         <div class="container">
             <div class="card">
                  <div class="card-header">
-                     <div class="float-right">
-                         <h6 class="mb-3">Folio seguimiento: </h6><strong>{{tramite.id_seguimiento}}</strong>
-                     </div>
                     <div v-if="tramite.detalle && tramite.detalle.Salidas"  class="row">
                        
                         <button href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2" v-on:click="toggleTabla()" >

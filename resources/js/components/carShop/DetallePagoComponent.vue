@@ -3,6 +3,10 @@
         <div class="pt-4">
             <h5 class="mb-3">Total:</h5>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0 pb-0" v-if="idSeguimiento">
+                    Folio Seguimiento
+                    <span id="subTotalTramites">{{idSeguimiento}}</span>
+                </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center px-0 pb-0" v-if="folioMotor">
                     Folio transacción
                     <span id="subTotalTramites">{{folioMotor}}</span>
@@ -42,7 +46,7 @@
 
         data(){
             return {
-                consultandoMetodos:false, mostrarCancelarPago: false, folioMotor:''
+                consultandoMetodos:false, mostrarCancelarPago: false, folioMotor:'', idSeguimiento:''
             }
         },
         computed:{
@@ -82,12 +86,13 @@
                 } ).then(response => {
                     let url = process.env.PAYMENTS_HOSTNAME  + "/v1/pay";
                     let idTRansaccion = response.data.id_transaccion;
+                    this.idSeguimiento = (50000000 +  parseInt(idTRansaccion)) + ''
                     let data = {
                         "token": "DD0FDED2FE302392164520BF7090E1B3BEB7",
                         "referencia": "",
                         "url_retorno": "url",
                         "importe_transaccion":  this.calcularTotal, //"4687",
-                        "id_transaccion":  (50000000 +  parseInt(idTRansaccion)) + '',//uuid.v4(),//"BMU8605134I82915082020",rellenar con 0
+                        "id_transaccion":  this.idSeguimiento,//uuid.v4(),//"BMU8605134I82915082020",rellenar con 0
                         "entidad": 9,
                         "url_confirma_pago": "url",
                         "es_referencia": "1",
