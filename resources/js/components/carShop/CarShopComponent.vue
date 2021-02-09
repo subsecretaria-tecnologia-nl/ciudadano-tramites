@@ -4,7 +4,7 @@
 		    <!--Grid column-->
 		    <div class="col-lg-8">
 		      	<!-- Card -->
-		      	<div v-if="!mostrarMetodos">
+		      	<div v-if="!mostrarMetodos && !mostrarReciboPago0">
 		      		<v-container v-if="obteniendoTramites">
 		                <v-row>
 		                    <v-col cols="12" md="12">
@@ -59,8 +59,12 @@
 		        	</div>
 		      	</div>
 		      	<!-- Card -->
-      			<metodos-pago-component v-if="mostrarMetodos" :infoMetodosPago="infoMetodosPago"></metodos-pago-component>
-
+		      	<b-row v-if="mostrarMetodos" >
+      				<metodos-pago-component :infoMetodosPago="infoMetodosPago"></metodos-pago-component>
+      			</b-row>
+      			<b-row v-if="mostrarReciboPago0" >
+      				<iframe width="100%" height="880" :src="reciboPagoCeroURL"></iframe>
+      			</b-row>
 		    </div>
 		    <!--Grid column-->
 		    <!--Grid column-->
@@ -86,7 +90,9 @@
             	infoMetodosPago:{},
             	porPage : 10, pages:[0], currentPage :1, tramitesPaginados:{},
             	obteniendoTramites:false,
-            	costosObtenidos:false
+            	costosObtenidos:false,
+            	mostrarReciboPago0:false,
+            	reciboPagoCeroURL:''
             }
         },
   
@@ -163,9 +169,32 @@
 
 
 			recibirMetodosPago( response ){
-	            this.infoMetodosPago = response.data.response;
-	            this.mostrarMetodos = true;
+				if(response.data.response.pago_cero){
+					this.mostrarReciboPago0 = true;
+					this.reciboPagoCeroURL = response.data.response.pago_cero;
+					this.cambiarStatusTransaccion(0,response.data.response.folio);
+				} else {
+		            this.infoMetodosPago = response.data.response;
+	            	this.mostrarMetodos = true;					
+				}
+
 			},
+
+			cambiarStatusTransaccion(status, id_transaccion_motor){
+                let data ={
+                    id_transaccion_motor,
+                    status
+                }
+                let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-update-status-tramite";
+                axios.post(url, data, {
+                     headers:{
+                        "Content-type":"application/json"
+                    }
+                } ).then(response => {
+                    console.log("cambiando estatus")
+                    console.log(response)
+                });
+            },
 
             async construirJSONTramites( tramites ){
             	let listadoTramites = [];
@@ -209,8 +238,6 @@
 
 						if( info.camposComplementaria && info.detalle && info.detalle.Complementaria){
 							tramitesJson.importe_tramite = info.detalle.Complementaria['L Cantidad a cargo'] ;
-							console.log("asdasdasdsad")
-							console.log(tramitesJson.importe_tramite)
 						} else {
 							
                 			tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['H (Importe total)'] : info.costo_final ;
