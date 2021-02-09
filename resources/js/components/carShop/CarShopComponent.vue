@@ -59,9 +59,8 @@
 		        	</div>
 		      	</div>
 		      	<!-- Card -->
-		      	<b-row v-if="mostrarMetodos" >
-      				<metodos-pago-component :infoMetodosPago="infoMetodosPago"></metodos-pago-component>
-      			</b-row>
+      				<metodos-pago-component :infoMetodosPago="infoMetodosPago" v-if="mostrarMetodos"></metodos-pago-component>
+
       			<b-row v-if="mostrarReciboPago0" >
       				<iframe width="100%" height="880" :src="reciboPagoCeroURL"></iframe>
       			</b-row>

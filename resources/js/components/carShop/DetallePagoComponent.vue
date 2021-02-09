@@ -3,11 +3,10 @@
         <div class="pt-4">
             <h5 class="mb-3">Total:</h5>
             <ul class="list-group list-group-flush">
-                <!--
-                <li class="list-group-item d-flex justify-content-between align-items-center px-0 pb-0">
-                    Subtotal
-                    <span id="subTotalTramites">$0.00</span>
-                </li>-->
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0 pb-0" v-if="folioMotor">
+                    Folio transacción
+                    <span id="subTotalTramites">{{folioMotor}}</span>
+                </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                     <div>
                         <strong>Total</strong>
@@ -43,7 +42,7 @@
 
         data(){
             return {
-                consultandoMetodos:false, mostrarCancelarPago: false
+                consultandoMetodos:false, mostrarCancelarPago: false, folioMotor:''
             }
         },
         computed:{
@@ -108,7 +107,7 @@
                             json_envio: data,
                             json_recibo:responseTransaccion.data
                         }
-
+                        this.folioMotor = dataMotor.id_transaccion_motor;
                         this.guardarTransaccionMotor( dataMotor );
 
                         this.mostrarCancelarPago = true;

@@ -1,19 +1,17 @@
 <template>
         <div class="container">
             <div class="card">
-                <div class="card-header">
-                    <h6 class="mb-3">Trámite:</h6>
-
-                    <div >
-                        <strong> {{ tramite.tramite }}</strong>
-                    </div>
-                    <div v-if="tramite.detalle && tramite.detalle.Salidas"  >
+                 <div class="card-header">
+                     <div class="float-right">
+                         <h6 class="mb-3">Folio seguimiento: </h6><strong>{{tramite.id_seguimiento}}</strong>
+                     </div>
+                    <div v-if="tramite.detalle && tramite.detalle.Salidas"  class="row">
                        
                         <button href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2" v-on:click="toggleTabla()" >
                             Ver detalle <i class="fa fa-angle-down"></i>
                         </button>
                     </div>
-                </div>
+                 </div>
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="row">
@@ -85,7 +83,7 @@
                                 <tr v-for="(sol, index) in listaSolicitantes" >
                                     <td class="left strong">{{ sol.rfc }}</td>
                                     <td class="center">
-                                        {{ sol.tipoPersona == "pm" ? sol.razonSocial : sol.nombreSolicitante  }} 
+                                        {{ sol.tipoPersona == "pm" ? sol.razonSocial : sol.nombreSolicitante + ' ' + sol.apPat + ' '  + sol.apMat  }} 
                                     </td>
                                 </tr>
                             </tbody>
