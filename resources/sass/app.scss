@@ -1,1 +1,11 @@
-//
+@import "../extras/metronic/assets/css/style.bundle.scss";
+@import "./layout";
+@import "./dashboard";
+@import "./listado";
+@import "./errors";
+@import "./wizard";
+@import "./emails";
+@import "~vuetify/dist/vuetify.min.css";
+@import "./carShop.scss";
+
+@import "../../node_modules/bootstrap-vue/dist/bootstrap-vue.min.css";

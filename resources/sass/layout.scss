@@ -1,0 +1,185 @@
+@import "./_variables.scss";
+
+*, body{
+	font-family: 'Montserrat', sans-serif;
+	color:  #808080;
+	font-weight: 600;
+
+	a{
+		color: $font-link !important;
+	}
+}
+
+.btn-icon{
+	// background-color: $soft-gray;
+}
+
+.header-menu .menu-nav>.menu-item.menu-item-active>.menu-link .menu-text, .header-menu .menu-nav>.menu-item:hover:not(.menu-item-here):not(.menu-item-active)>.menu-link .menu-text, .header-menu .menu-nav>.menu-item.menu-item-hover:not(.menu-item-here):not(.menu-item-active)>.menu-link .menu-text{
+	color: $font-link !important;
+}
+
+.header{
+	.header-top {
+		height: auto;
+		background-color: $soft-gray;
+	}
+}
+
+.footer{
+	background-color: $dark-gray !important;
+	color: $white !important;
+
+	.list-group-item{
+		background-color: transparent !important;
+		font-size: 20px;
+		font-weight: bold;
+		border: none !important;
+	}
+
+	img{
+		width: 300px;
+		margin-left: 50px;
+	}
+
+	i{
+		font-size: 30px;
+		margin: 0px 7px;
+	}
+}
+
+#notifications{
+	.badge{
+		border-radius: 100%;
+		position: absolute;
+		top: -25%;
+		right: -25%;
+	}
+}
+
+.header-menu .menu-nav>.menu-item.menu-item-here>.menu-link, .header-menu .menu-nav>.menu-item.menu-item-active>.menu-link{
+	background-color: rgba(0,0,0,.1);
+
+	span{
+		font-weight: 600;
+	}
+}
+
+.header-menu .menu-nav>.menu-item{
+	@media screen and (max-width: 1200px){
+		.menu-text{
+			display: flex!important;
+			position: absolute;
+			padding: 10px 20px !important;
+			background-color: white;
+			border-radius: 0 .5em .5em 0;
+			box-shadow: 10px 0px 15px rgba(0,0,0,.2);
+			top: 0;
+			left: -100%;
+			opacity: 0;
+			width: max-content!important;
+			transition: all .5s;
+		}
+
+		&:hover{
+			.menu-text{
+				position: absolute;
+				opacity: 1;
+				left: 100%;
+			}
+		}	
+	}
+
+	.menu-link{
+		.menu-icon{
+			justify-content: center;
+		}
+
+		.menu-text{
+			margin-left: 10px;
+		}
+	}
+}
+
+#kt_header{
+	// z-index: 1;
+	flex: initial;
+    width: fit-content;
+	
+	@media screen and (max-width: 992px){
+		.header-sidebar{
+			padding: 0px !important;
+			margin: 0;
+		}
+
+		#close-header{
+			display: none;
+		}
+	}
+
+	.header-sidebar{
+		background-color: white !important;
+		padding: 10px;
+		transition: all .5s;
+		overflow: hidden;
+
+		&.close{
+			width: 20px;
+		}
+	}
+}
+
+.header-top{
+	border-bottom: 2px solid rgb(244, 245, 247);
+}
+
+#busquedaInputGroup:hover {
+	opacity: 1;
+	width: 500px;
+}
+
+#close-header{
+	display: flex;
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    color: white;
+    border-radius: 20px;
+    position: absolute;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+    margin-right: -12px;
+    border: 1px solid lightgray;
+    top: 10px;
+
+    &:hover{
+    	background-color: #3699FF;
+
+    	i{
+    		color:white;
+    	}
+    }
+
+    i{
+    	color: black;
+    	font-size: 10px;
+    }
+}
+
+#kt_content{
+	box-shadow: -5px 0px 7px -5px rgba(0,0,0,.2)!important;
+
+	&.header-closed {
+		max-width: 100%;
+    	flex: inherit;
+	}
+}
+
+#app{
+	width:100%;
+}
+
+.header-fixed[data-header-scroll=on] .content{
+	padding-top: 25px !important;
+}

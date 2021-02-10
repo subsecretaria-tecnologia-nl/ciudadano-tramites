@@ -1,0 +1,205 @@
+<template>
+    <div class="mb-3" id="divMetodoPago" >
+        <div id="containerMetodoPago" > 
+            <div class="card border-secondary shadow p-3 mb-5 bg-white rounded metodopago"" id="idVentanilla" v-if="tieneVentanilla">
+                <div class="pt-4" >
+                    <h6 class="mb-3"><strong>Pago Referenciado</strong></h6>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-success btn-metodopago" id="metodopagoBtnRef"  v-on:click="obtenerReciboPagoVentanilla()"> 
+                            Pago Referenciado  
+                            <div id="spinner-ref" class="spinner-border spinner-border-sm float-right" role="status" v-if="obteniendoRecibo">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-secondary shadow p-3 mb-5 bg-white rounded metodopago"" id="idNetPay" v-if="tienePagoNetPay">
+                <div class="pt-4" >
+                    <h6 class="mb-3"><strong>Pago en linea</strong></h6>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-success btn-metodopago" id="metodopagoBtnNP"  v-on:click="pagoNetPay()"> 
+                            NetPay 
+                            <div id="spinner-ref" class="spinner-border spinner-border-sm float-right" role="status" v-if="obteniendoPagoEnLinea">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
+                        <form v-if="urlNetPay.length > 0" id="formulariosNetPay" :action="urlNetPay" method="post">
+                            <input type="hidden" name="jwt" :value="JWT">
+                            <button type="submit" style="display: none;">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-secondary shadow p-3 mb-5 bg-white rounded metodopago"" id="idBancomer" v-if="tienePagoBancomer">
+                <div class="pt-4" >
+                    <h6 class="mb-3"><strong>Pago en Bnacomer</strong></h6>
+
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-success btn-metodopago" id="metodopagoBtnBancomer"  v-on:click="pagoBancomer()"> 
+                            Bancomer 
+                            <div id="spinner-ref" class="spinner-border spinner-border-sm float-right" role="status" v-if="obteniendoPagoBancomer">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
+                        <form v-if="urlBancomer.length > 0" id="formulariosBancomer" :action="urlBancomer" method="post">
+                            <input type="hidden" v-for="(value,name) in this.datos" :name="name" :value="value" >
+                            <button type="submit" style="display: none;">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>     
+
+    </div>
+
+</template>
+
+<script>
+    export default {
+        props: ['infoMetodosPago'],
+        mounted() {
+            this.cuentas = this.infoMetodosPago.cuentas;
+            this.folio = this.infoMetodosPago.folio;
+            
+
+            this.tienePagoNetPay = this.cuentas.find( cuenta => cuenta.metodopago_id == 1 && cuenta.banco_id == 17 );
+            this.tieneVentanilla =  this.cuentas.find( cuenta => cuenta.metodopago_id == 3 );
+            this.tienePagoBancomer = this.cuentas.find( cuenta => cuenta.metodopago_id == 1 && cuenta.banco_id == 3);
+        },
+
+        data(){
+            return {
+                tieneVentanilla: false,
+                tienePagoNetPay:false,
+                tienePagoBancomer: false,
+                cuentas:[],
+                folio:0,
+                obteniendoRecibo:false,
+                obteniendoPagoEnLinea:false,
+                obteniendoPagoBancomer:false,
+                urlNetPay:"", JWT:"",
+                urlBancomer:""
+            }
+        },
+  
+        methods: {
+
+            cambiarStatusTransaccion(status){
+                let data ={
+                    id_transaccion_motor:this.folio,
+                    status
+                }
+                let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-update-status-tramite";
+                axios.post(url, data, {
+                     headers:{
+                        "Content-type":"application/json"
+                    }
+                } ).then(response => {
+                    console.log("cambiando estatus")
+                    console.log(response)
+                });
+            },
+
+            obtenerReciboPagoVentanilla: function () {
+                $("#idNetPay").hide();
+                $("#idBancomer").hide();
+                this.obteniendoRecibo = true;
+                let url = process.env.PAYMENTS_HOSTNAME +  "/v1/databank";  
+                $.ajax({
+                    type: "POST",
+                    url,
+                    data: JSON.stringify({ folio:this.folio, cuenta_id: this.tieneVentanilla.cuenta_id }),
+                    headers: {
+                        "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+                        "Content-type":"application/json"
+                    }
+                }).done((response) => {
+                    this.cambiarStatusTransaccion( 60 );
+                    if(response.response.datos.recibo.pdf ) {
+                        divContenedorSecundario.append('<div id="pdfContenido"><iframe id="frame" src="http://egobierno.nl.gob.mx/egob/formatoRepositorio.php?Folio=258310" width="100%" height="600"></iframe></div>')
+                    } else {
+                        window.open(response.response.datos.recibo.url);
+                    }
+                }).fail((rror)=> {
+                    console.log( rror)
+                }).always(() => {
+                    $("#spinner-ref").remove();
+                });
+
+            },
+
+            pagoNetPay(){
+                this.obteniendoPagoEnLinea = true;
+                let url = process.env.PAYMENTS_HOSTNAME +  "/v1/databank"; 
+
+                let data = JSON.stringify({ folio:this.folio, cuenta_id: this.tienePagoNetPay.cuenta_id });
+
+                axios.post(url, 
+                    data,
+                    {
+                    headers:{
+                        "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+                        "Content-type":"application/json"
+                    },
+                } )
+                .then(response => {
+                    this.cambiarStatusTransaccion( 70 );
+
+                    this.urlNetPay = response.data.response.url_response;
+                    this.JWT= response.data.response.datos.jwt;
+                    setTimeout(function(){ 
+                        $("#formulariosNetPay").submit();
+                    }, 3000);
+                }).catch((error)=> {
+                    console.log(error)
+                }).finally(() => {
+                    this.obteniendoPagoEnLinea = false;
+                });
+            },
+
+            pagoBancomer(){
+                this.obteniendoPagoBancomer = true;
+                let url = process.env.PAYMENTS_HOSTNAME +  "/v1/databank"; 
+
+                let data = JSON.stringify({ folio:this.folio, cuenta_id: this.tienePagoBancomer.cuenta_id });
+
+                axios.post(url, 
+                    data,
+                    {
+                    headers:{
+                        "Authorization":"Bearer " + process.env.PAYMENTS_KEY,
+                        "Content-type":"application/json"
+                    },
+                } )
+                .then(response => {
+                    this.urlBancomer = response.data.response.url_response;
+                    this.datos = response.data.response.datos;
+                    this.cambiarStatusTransaccion( 70 );
+   
+                    setTimeout(function(){ 
+                        this.obteniendoPagoBancomer = false;
+                        $("#formulariosBancomer").submit();
+
+                    }, 3000);
+
+                    //https://prepro.adquiracloud.mx/clb/endpoint/gnl
+
+                }).catch((error)=> {
+                    console.log(error)
+                    this.obteniendoPagoBancomer = false;
+                }).finally(() => {
+                    
+                });
+            }
+
+
+        }
+    }
+</script>
+

@@ -1,0 +1,224 @@
+<template>
+    <div class="container-fluid">
+        <div v-if="listaSolicitantes.length > 0 && !agregarMas" class="row">
+            <div v-for="(sol, index) in listaSolicitantes" class="col-lg-12" style="padding-bottom: 9px; margin-top: 5px;">
+                <h6 class="font-weight-bolder mb-3">{{ sol.rfc }}</h6>
+                <div class="text-dark-50 line-height-lg">
+                    <div class="float-lg-left">
+                        <div>{{ sol.tipoPersona == "pm" ? sol.razonSocial : sol.nombreSolicitante  }} </div>
+                        <div>{{ sol.apPat }}</div>
+                        <div>{{ sol.apMat }}</div>
+                    </div>
+                    <div class="float-lg-right">
+                            <button type="button"  class="btn btn-danger"  id="btnEliminar" v-on:click="eliminar( index )">
+                                <i class="fa fa-times" id="iconBtnEliminar"></i> 
+                            </button>
+                            <button type="button"  class="btn btn-info"  id="btnEditar" v-on:click="mostrarEditarSolicitante( sol, index )">
+                                <i class="fa fa-edit" id="iconBtnEditar"></i>
+                            </button> 
+                    </div> 
+                </div>
+            </div>
+            <div class="col-lg-12">
+                    <button type="button"  class="btn"  id="btnAddMore" v-on:click="mostrarAgregarSolicitante()">
+                        <i class="fa fa-check" id="iconBtnAddMore"></i> 
+                        Agregar Solicitante
+                    </button>     
+            </div>
+        </div>
+        <div v-else-if="listaSolicitantes.length == 0 || agregarMas">
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" value="pf" name="tipoPersona"  v-model="solicitante.tipoPersona" key="tipoPersona">Persona Física
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" value="pm" name="tipoPersona"  v-model="solicitante.tipoPersona" key="tipoPersona">Persona Moral
+                </label>
+            </div>
+                <div class="row" id="divPF" v-if="solicitante.tipoPersona == 'pf'">
+                    <div class="col-xl-12">
+                        <div class="">
+                            <label>RFC</label>
+                            <input type="text" placeholder="RFC " id="rfc" class="form-control  form-control-lg "  style="background-color: #e5f2f5 !important"  v-model="solicitante.rfc">
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="">
+                            <label>Nombre</label>
+                            <input type="text" placeholder="Nombre " id="nombreSolicitante" class="form-control form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.nombreSolicitante">
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="">
+                            <label>Apellido Paterno</label>
+                            <input type="text" placeholder="Apellido Paterno " id="apPatSolicitante" class="form-control form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.apPat">
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="">
+                            <label>Apellido Materno</label>
+                            <input type="text" placeholder="Apellido Materno " id="apMatSolicitante" class="form-control  form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.apMat">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="divPM" v-else-if="solicitante.tipoPersona == 'pm'">
+                    <div class="col-xl-12">
+                        <div class="">
+                            <label>RFC</label>
+                            <input type="text" placeholder="RFC " id="rfc" class="form-control  form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.rfc">
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="">
+                            <label>Razón Social</label>
+                            <input type="text" placeholder="Razón Social " id="razonSocial" class="form-control  form-control-lg" style="background-color: #e5f2f5 !important" v-model="solicitante.razonSocial">
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button type="button"  class="btn btn-danger pull-rigth"  id="btnAddMoreCancel" v-on:click="agregarMas = false" v-if="listaSolicitantes.length > 0 ">
+                        <i class="fa fa-times" id="iconBtnAddMoreCancel"></i> 
+                        Cancelar
+                    </button>  
+                    <button type="button"  class="btn btn-success green pull-rigth"  id="btnAdd" v-on:click="agregar()" v-if="!editando">
+                        <i class="fa fa-check" id="iconBtnAdd"></i> 
+                        Guardar
+                    </button>
+                    <button type="button"  class="btn btn-success green pull-rigth"  id="btnEditSi" v-on:click="editar(indiceEditando, solicitante)" v-if="editando">
+                        <i class="fa fa-check" id="iconBtnSi"></i> 
+                        Editar
+                    </button>
+                </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: ['tramite', 'solicitantesGuardados'],
+        mounted() {
+            console.log( this.solicitantesGuardados )
+            let solicitantesGuardados = this.solicitantesGuardados.filter( Boolean );
+            if( solicitantesGuardados && solicitantesGuardados.length > 0){
+                this.listaSolicitantes = solicitantesGuardados;
+                this.guardarInStorage();
+            }
+            if (localStorage.getItem('listaSolicitantes')) {
+              try {
+                this.listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
+              } catch(e) {
+                localStorage.removeItem('listaSolicitantes');
+              }
+            }
+            
+            this.$emit('updatingSolicitante', this.listaSolicitantes.length > 0);
+        },
+
+        data(){
+            return {
+                solicitante: { tipoPersona:"pf" },
+                listaSolicitantes:[],
+                agregarMas: false,
+                editando: false,
+                indiceEditando:null
+            }
+        },
+  
+        methods: {
+            agregar: function (event) {
+                this.solicitante.id=0;
+                if( this.solicitante.tipoPersona == 'pf' ){
+                    if(!!this.solicitante.rfc && !!this.solicitante.nombreSolicitante && !!this.solicitante.apPat){
+                        this.listaSolicitantes.push( this.solicitante );
+                        this.solicitante = { tipoPersona:"pf" };
+                        this.agregarMas = false;
+                        this.guardarInStorage();
+                    }  else {
+                        if(!this.solicitante.rfc ){
+                            Command: toastr.warning("Error!", "RFC Requerido");
+                        } else if( !this.solicitante.nombreSolicitante ) {
+                            Command: toastr.warning("Error!", "Nombre Requerido");
+                        } else {
+                            Command: toastr.warning("Error!", "Apellido paterno Requerido");
+                        }
+                    }
+
+                } else {
+                    if(!!this.solicitante.rfc && !!this.solicitante.razonSocial){
+                        this.listaSolicitantes.push( this.solicitante );
+                        this.solicitante = { tipoPersona:"pf" };
+                        this.agregarMas = false;
+                        this.guardarInStorage();
+                    }  else {
+                        if(!this.solicitante.rfc ){
+                            Command: toastr.warning("Error!", "RFC Requerido");
+                        } else if( !this.solicitante.razonSocial ) {
+                            Command: toastr.warning("Error!", "Razón Social Requerido");
+                        }
+                    }
+                }
+
+            },
+
+            eliminar( index ){
+                this.listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
+                this.listaSolicitantes.splice(index, 1);
+                this.guardarInStorage();
+            },
+
+            editar(index, solicitanteNuevo){
+                if(!solicitanteNuevo.rfc ){
+                    Command: toastr.warning("Error!", "RFC Requerido");
+                    return false;
+                } 
+
+                if( solicitanteNuevo.tipoPersona === "pf" ){
+                    delete solicitanteNuevo.razonSocial;
+                    if( !solicitanteNuevo.nombreSolicitante ) {
+                        Command: toastr.warning("Error!", "Nombre Requerido");
+                        return false;
+                    } else if( !solicitanteNuevo.apPat ){
+                        Command: toastr.warning("Error!", "Apellido paterno Requerido");
+                        return false;
+                    }
+                } else {
+                    delete solicitanteNuevo.nombreSolicitante
+                    delete solicitanteNuevo.apPat
+                    delete solicitanteNuevo.apMat;
+                    if( !solicitanteNuevo.razonSocial ) {
+                        Command: toastr.warning("Error!", "Razón Social Requerido");
+                        return false;
+                    } 
+                }
+                    this.listaSolicitantes[index] = solicitanteNuevo;
+                    this.solicitante = { tipoPersona:"pf" };
+                    this.editando = false;
+                    this.indiceEditando = null;
+                    this.agregarMas = false;
+                    this.guardarInStorage();
+
+            },
+
+            guardarInStorage(){
+                this.$emit('updatingSolicitante', this.listaSolicitantes.length > 0);
+                const parsed = JSON.stringify(this.listaSolicitantes);
+                localStorage.setItem('listaSolicitantes', parsed);  
+            },
+
+            mostrarAgregarSolicitante(){
+                this.agregarMas = true;
+                this.solicitante = { tipoPersona:"pf" };
+            },
+
+            mostrarEditarSolicitante( solicitante, index ){
+               this.solicitante = Object.assign({}, solicitante);
+               this.editando = true; 
+               this.agregarMas = true;  
+               this.indiceEditando = index;
+            }
+            
+        }
+    }
+</script>

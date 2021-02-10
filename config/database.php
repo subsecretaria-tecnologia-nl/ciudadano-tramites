@@ -1,5 +1,38 @@
 <?php
 
+$db = [
+    "default" => "",
+    "connections" => []
+];
+
+foreach($_ENV as $var => $val){
+    preg_match("/^DB_CONNECTION(_[_A-Z]+)?$/", $var, $matches, PREG_OFFSET_CAPTURE);
+    if(!empty($matches)){
+        if(!empty($matches[1])){
+            $conname = strtolower($matches[1][0]);
+        }
+
+        if(empty($conname)){
+            if(isset($db["connections"]["db".($conname ?? "")]))
+                $conname += "_1";
+        }
+
+        if(empty($db["connections"]))
+            $db["default"] = "db".($conname ?? "");
+
+        extract(parse_url(env($var)));
+        $db["connections"]["db".($conname ?? "")] = [
+            "driver" => $scheme,
+            "host" => $host,
+            "database" => str_replace("/", "", $path),
+            "username" => $user,
+            "password" => $pass,
+            "charset"   => 'utf8',
+            "collation" => 'utf8_unicode_ci',
+        ];
+    }
+}
+
 use Illuminate\Support\Str;
 
 return [
@@ -15,7 +48,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => $db["default"],
 
     /*
     |--------------------------------------------------------------------------
@@ -33,65 +66,7 @@ return [
     |
     */
 
-    'connections' => [
-
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-        ],
-
-        'mysql' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
-
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
-
-    ],
+    'connections' => $db["connections"],
 
     /*
     |--------------------------------------------------------------------------

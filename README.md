@@ -1,5 +1,6 @@
 # NL Ciudadano/Notario APP | Lumen PHP Framework
 
+
 ## Install Composer
 #### Composer - [Download](https://getcomposer.org/download/).
 
@@ -29,12 +30,44 @@ Create a file named `.env`. Inside it add the environment variables that will be
 
 **NOTE: Ask your Leader Team for the variables and secret keys.**
 
+
 Example:
 ```
 PORT=8000
 APP_NAME=Example
 APP_DEBUG=true
 ...
+```
+
+### Databases
+To create database connection you only need to add a environment variable with this nomenclature:
+```
+DB_CONNECTION_<DB_NAME>
+```
+where **DB_CONNECTION_** will be the prefix that indicates that this variable is a database connection. And **\<DB_NAME\>** will be the name that will be assigned to the connection, this will be used to indicate within the models which connection is going to be used by adding the **db_** prefix.
+
+**NOTE:** It is important to say that the first connection found within the environment variables, that is, the one that is highest, will be the one that will be taken as the main connection, so if a connection is not indicated in the models will use this.
+
+Example:
+
+**.ENV File**
+``` dotenv
+DB_CONNECTION_FIRST=mysql://username:pa$$w0rd@localhost/database_name
+DB_CONNECTION_SECOND=mysql://username:pa$$w0rd@localhost/other_database
+```
+
+**TestModel.php**
+```php
+<?php
+class TestModel extends Model {
+    /**
+      * The database table used by the model.
+      *
+      * @var string
+      */
+    //here i should call the external database table
+    protected $connection = 'db_second';
+}
 ```
 
 ## Inicialize Project
@@ -47,6 +80,43 @@ This command is equivalent to:
 php -S localhost:8000 -t public
 ```
 
+## Stylesheets with SASS Lang
+To work the style sheets in this project we must do it with **SASS Lang** so, in order to start with the styles, we must first install the **SASS Lang CLI** globally using the following command:
+``` cmd
+## Para Windows
+npm install -g sass
+
+## Para Mac (homebrew)
+brew install sass/sass/sass
+```
+
+### Initialize SASS CLI
+Once the SASS CLI has been installed globally, and before starting to edit the stylesheets, the sass watcher must be run. We do this through the following command:
+``` cmd
+composer sass-dev
+```
+
+This command is equivalent to:
+
+``` cmd
+sass --watch resources/sass:public/css --style compressed
+```
+
+### Work with
+When executing the previous command, the SASS watcher will be initialized, which will always be looking inside the `resources/sass` folder waiting for a change to be made. So each new file with `.scss` extension or each modified file with `.scss` extension will be compiled by the ssas watcher and will create a compressed version with `.css` extension in the `public/css` folder.
+
+# Troubleshooting
+## Call undefined function...
+If you receive an error indicating that one of these functions is not found, what you should do is run this command `composer dump-autoload`
+- to_object()
+- set_layout_arg()
+- layout_view()
+
+## Composer timeout off 300
+If you recive an error indicating that any composer process exceeded the timeout of 300 seconds. You need to run this command on your terminal:
+```
+export COMPOSER_PROCESS_TIMEOUT=0   ( defaults to 300 )
+```
 <!--
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework) 
 [![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)

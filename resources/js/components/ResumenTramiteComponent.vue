@@ -1,0 +1,297 @@
+<template>
+        <div class="container">
+            <div class="card">
+                 <div class="card-header">
+                    <div v-if="tramite.detalle && tramite.detalle.Salidas"  class="row">
+                       
+                        <button href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2" v-on:click="toggleTabla()" >
+                            Ver detalle <i class="fa fa-angle-down"></i>
+                        </button>
+                    </div>
+                 </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 ml-auto" >
+                                <table class="table table-clear" >
+                                    <tbody v-if="tramite.detalle && tramite.detalle.Salidas"  id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion" style="display: none;">
+                                        <tr v-for="(salida, key) in tramite.detalle.Salidas" >
+                                            <td class="left" style="width: 70%"  v-if="key != 'H (Importe total)' ">
+                                                <strong>{{ key }}</strong>
+                                            </td>
+                                            <td class="right" v-if="key != 'H (Importe total)'" >
+                                                    <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
+                                                    <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal' ">
+                                        <tr>
+                                            <td class="left" style="width: 70%">
+                                                <strong>H (Importe total)</strong>
+                                            </td>
+                                            <td class="right">
+                                                    <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
+                                                    <span v-if="!obteniendoCosto"> 
+                                                        {{ this.tramite.detalle.Salidas['H (Importe total)'] | toCurrency }}
+
+                                                    </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else-if="tramite.detalle && tramite.detalle.costo_final >= 0">
+                                        <tr >
+                                            <td class="left">
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td class="right">
+                                                    <span v-if="!obteniendoCosto"> $ {{tramite.detalle.costo_final }} </span>
+                                                    <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else-if="tramite.detalle && tramite.detalle.Complementaria && tipoTramite =='complementaria'">
+                                        <tr >
+                                            <td class="left">
+                                                <strong>L Cantidad a cargo</strong>
+                                            </td>
+                                            <td class="right">
+                                                    <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
+                                                    <span v-if="!obteniendoCosto"> 
+                                                        {{ this.tramite.detalle.Complementaria['L Cantidad a cargo'] }}
+                                                    </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                                        
+                    <div class="table-responsive-sm" v-if="listaSolicitantes.length > 0 && tipoTramite == 'normal'">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="center">RFC</th>
+                                <th>Nombre ó Razon Social</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(sol, index) in listaSolicitantes" >
+                                    <td class="left strong">{{ sol.rfc }}</td>
+                                    <td class="center">
+                                        {{ sol.tipoPersona == "pm" ? sol.razonSocial : sol.nombreSolicitante + ' ' + sol.apPat + ' '  + sol.apMat  }} 
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+</template>
+
+<script>
+    const CAMPO_LOTE            = "Lote";
+    const CAMPO_HOJA            = "Hoja";
+    const CAMPO_SUBSIDIO        = "Subsidio";
+    const CAMPO_VALOR_CATASTRAL = "Valor catastral";
+    const CAMPO_VALOR_OPERACION = "Valor de operacion";
+
+    //CAMPOS CALCULO IMPUESTO
+    const CAMPO_GANANCIA_OBTENIDA                               = "GANANCIA OBTENIDA";
+    const CAMPO_MONTO_DE_OPERACIÓN                              = "MONTO DE OPERACIÓN (reportado en el aviso de enajenación)";
+    const CAMPO_MULTA_POR_CORRECCION_FISCAL                     = "MULTA POR CORRECCION FISCAL";
+    const CAMPO_FECHA_DE_ESCRITURA_O_MINUTA                     = "FECHA DE ESCRITURA O MINUTA";
+    const CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR  = "PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR";
+
+
+    const CAMPO_DIVISAS = "Cambio de divisas";
+
+    import Vue from 'vue'
+
+    export default {
+
+        props: ['datosComplementaria','tipoTramite'],
+        mounted() {
+            this.obtenerInformacionDelTramite();
+            console.log(this.tipoTramite)
+            if(this.tipoTramite == 'declaracionEn0'){
+                this.obteniendoCosto= false;
+                this.tramite.detalle = {costo_final:0};
+                const parsed = JSON.stringify(this.tramite);
+                localStorage.setItem('tramite', parsed);  
+                this.$forceUpdate();
+                this.obteniendoCosto = false;
+            } else {
+                this.obtenerCosto();    
+            }
+           
+        },
+
+        data(){
+            return {
+                tramite: {  },
+                listaSolicitantes:[],
+                datosFormulario:{},
+                obteniendoCosto:true
+            }
+        },
+  
+        methods: {
+            obtenerInformacionDelTramite(){
+                let informacionEnStorage = ["listaSolicitantes", "tramite", "datosFormulario"];
+                informacionEnStorage.forEach( name => {
+                    if (localStorage.getItem(name)) {
+                      try {
+                        this[name] = JSON.parse(localStorage.getItem(name));
+                      } catch(e) {
+                        letocalStorage.removeItem(name);
+                      }
+                    }
+                });
+            },
+
+            toggleTabla(){
+                $( "#collapseOne" ).toggle('slow');
+            },
+
+            getCampoByName( nameCampo ){
+                return this.datosFormulario.campos.find( campo => campo.nombre.toLowerCase()  === nameCampo.toLowerCase() );
+            }, 
+
+            getParamsCalculoCosto( consulta_api , params, tipo_costo_obj){
+                let paramsCosto = {};
+                if(this.tipoTramite =='normal'  ){
+                    if( consulta_api == "/getcostoImpuesto" ){
+                        // CAMPOS CALCULO IMPUESTO
+                        let campoMonto              = this.getCampoByName(CAMPO_MONTO_DE_OPERACIÓN);
+                        let campoMulta              = this.getCampoByName(CAMPO_MULTA_POR_CORRECCION_FISCAL);
+                        let campoFechaMinuta        = this.getCampoByName(CAMPO_FECHA_DE_ESCRITURA_O_MINUTA);
+                        let campoPagoProvisional    = this.getCampoByName(CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR);
+                        let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
+
+                        paramsCosto.fecha_escritura = campoFechaMinuta.valor.split("-").map(dato => Number(dato)).join("-");
+                        paramsCosto.monto_operacion = this.formatoNumero(campoMonto.valor);
+                        paramsCosto.ganancia_obtenida = this.formatoNumero(campoGananciaObtenida.valor);    
+                        paramsCosto.pago_provisional_lisr = this.formatoNumero(campoPagoProvisional.valor);
+                        if( campoMulta ){
+                            paramsCosto.multa_correccion_fiscal = this.formatoNumero(campoMulta.valor);
+                        }
+                    } else {
+
+                        if ( tipo_costo_obj.tipo_costo == '1' && (tipo_costo_obj.tipoCostoRadio == 'hoja'||tipo_costo_obj.tipoCostoRadio == 'lote') ){
+                            paramsCosto.tipo_costo = tipo_costo_obj.tipo_costo;
+                            paramsCosto.tipoCostoRadio = tipo_costo_obj.tipoCostoRadio;
+                            paramsCosto.hojaInput = tipo_costo_obj.hojaInput;
+                        }  else {
+                            let campoLote           = this.getCampoByName(CAMPO_LOTE);
+                            let campoHoja           = this.getCampoByName(CAMPO_HOJA);
+                            let campoSubsidio       = this.getCampoByName(CAMPO_SUBSIDIO);
+                            let campoCatastral      = this.getCampoByName(CAMPO_VALOR_CATASTRAL);
+                            let campoValorOperacion = this.getCampoByName(CAMPO_VALOR_OPERACION);  
+
+                            if( campoCatastral ){
+                                paramsCosto.valor_catastral = this.formatoNumero(campoCatastral.valor);
+                            }
+
+                            if(campoSubsidio){                            
+                                if( campoSubsidio.tipo == 'select'  ){
+                                    paramsCosto.subsidio = campoSubsidio.valor[0][0];//62  
+                                } else {
+                                    paramsCosto.subsidio = campoSubsidio.valor;//62    
+                                }
+                                
+                            }
+
+                            if(campoValorOperacion ){
+                                paramsCosto.valor_operacion = this.formatoNumero(campoValorOperacion.valor);
+                            }
+
+                            if( campoHoja ){
+                                paramsCosto.hoja = campoHoja.valor; 
+                            }
+
+                            if( campoLote ){
+                                paramsCosto.lote = campoLote.valor
+                            }
+                        }                 
+                    }
+                    let campoDivisas              = this.getCampoByName(CAMPO_DIVISAS);
+                    if( campoDivisas ){
+                        paramsCosto.divisa = campoDivisas.valor[0][0];
+                    }
+                } else {
+                    return this.datosComplementaria;
+                }
+
+                return Object.assign(params, paramsCosto);
+            },
+
+            formatoNumero(numberStr){
+                let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+                return valor;
+            },
+
+            async obtenerCosto(){    
+                let url = "";
+                let consulta_api =  this.datosFormulario.consulta_api;
+                let tipo_costo_obj = this.datosFormulario.tipo_costo_obj ;
+                
+                if( this.tipoTramite =='normal'  ){
+                    url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
+                } else if(this.tipoTramite =='complementaria'){
+                    url = process.env.APP_URL + "/getComplementaria"; 
+                }
+
+                let data = {  
+                    id_seguimiento: this.tramite.id_seguimiento,
+                    tramite_id: this.tramite.id_tramite,
+                    tipoPersona:this.listaSolicitantes[0].tipoPersona
+                }
+                
+                data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
+                
+                try {
+                    let response = await axios.post(url, data);
+                    let detalleTramite = response.data;
+
+                    if( consulta_api == "/getcostoImpuesto" || this.tipoTramite =='complementaria'  ){
+                        this.tramite.detalle =  detalleTramite;
+                    } else {
+                        this.tramite.detalle =  detalleTramite[0];
+                
+                    }
+
+                    const parsed = JSON.stringify(this.tramite);
+                    localStorage.setItem('tramite', parsed);  
+                    this.$forceUpdate();
+                    this.obteniendoCosto = false;
+                } catch (error) {
+                    console.log(error);
+                    this.obteniendoCosto = false;
+                }
+                
+            },
+
+            currencyFormat(campoName, salida){
+                let arr = ["A*(Ganancia Obtenida)","B (Monto obtenido conforme al art 127 LISR)",
+                            "C*(Pago provisional conforme al art 126 LISR)","D (Impuesto correspondiente a la entidad federativa)",
+                            "E (Parte actualizada del impuesto)", "F (Recargos)", "G*(Multa corrección fiscal)", "H (Importe total)"];
+                if(arr.includes(campoName)){
+                    let text = Vue.filter('toCurrency')(salida);
+                    return text;
+                } else{
+                    return salida;
+                }
+            }
+
+
+
+        }
+    }
+</script>
+
