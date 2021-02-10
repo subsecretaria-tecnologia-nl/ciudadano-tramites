@@ -18,7 +18,7 @@ export default {
             var urlDataGeneric = 'http://Insumos.test.nl.gob.mx/api/data_generic';
             var url = "http://Insumos.test.nl.gob.mx/api/v2/signature/iframe?id=";
             // var urlDocumento = 'http://www.africau.edu/images/default/sample.pdf'
-            var urlDocumento = process.env.SESSION_HOSTNAME_NO_API + '/formato-declaracion/400'
+            var urlDocumento = process.env.APP_URL +'/formato-declaracion/400';
             var tramite_id = '5637';
             var llave = '999666005';
             var folio = '213333111';
