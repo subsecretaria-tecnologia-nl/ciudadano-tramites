@@ -4,12 +4,6 @@
 	<title>{{ $info->tramite }}</title>
 	<link rel="stylesheet" type="text/css" href="{{ assets("css/app.css") }}">
 	<style type="text/css">
-		table{
-			/* table-layout: fixed;	 */
-			whidth: 100%;
-
-		}
-
 		body{
 			background-color: #f3f3f7;
 			padding: 0;
@@ -67,13 +61,16 @@
 			max-width: 33%;
 			min-width: 33%;
 		}
+		.value{
+			color: grey;
+		}
 	</style>
 </head>
 <body>
-<table>
+<table  style="width: 100%;">
 	<thead align="right">
 		<tr>
-			<th style="" class="columna"></th>
+			<th class="columna"></th>
 			<th class="columna"></th>
 			<th class="columna">
 				<div style="padding:20px"><img src="{{public_path('images/escudo.svg')}}" width="100"></div> 
@@ -89,13 +86,13 @@
 		</tr>
 		<tr>
 			<td class="columna">NÚMERO DE ESCRITURA PÚBLICA O MINUTA</td>
-			<td class="columna" colspan="2"></td>
-			<td class="columna" >FECHA DE ESCRITURA PÚBLICA O MINUTA</td>
+			<td class="columna"  colspan="2"></td>
+			<td class="columna"  >FECHA DE ESCRITURA PÚBLICA O MINUTA</td>
 		</tr>
 		<tr>
-			<td class="columna">{{ $info->solicitudes[0]->info->campos->{'Escritura'} }}</td>
-			<td class="columna"  colspan="2"></td>
-			<td class="columna">{{ $info->solicitudes[0]->info->campos->{'FECHA DE ESCRITURA O MINUTA'} }}</td>
+			<td class="columna value"  style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Escritura'} }}</td>
+			<td class="columna value" style="width: auto;"  colspan="2"></td>
+			<td class="columna value" style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'FECHA DE ESCRITURA O MINUTA'} }}</td>
 		</tr>
 		<tr>
 			<td style="width: 1%">MUNICIPIO</td>
@@ -103,9 +100,9 @@
 			<td style="width: 1%" >DOMICILIO DE UBICACIÓN DEL INMUEBLE</td>
 		</tr>
 		<tr>
-			<td class="columna" >{{ $info->solicitudes[0]->info->campos->Municipio[0] }}</td>
-			<td class="columna" colspan="2">{{ $info->solicitudes[0]->info->campos->{'No. EXP. CATASTRAL'} }}</td>
-			<td class="columna" >{{ $info->solicitudes[0]->info->campos->{'DOMICILO DE UBICACIÓN DEL INNMUEBLE'} }}</td>
+			<td class="columna value" >{{ $info->solicitudes[0]->info->campos->Municipio[0] }}</td>
+			<td class="columna value" colspan="2">{{ $info->solicitudes[0]->info->campos->{'No. EXP. CATASTRAL'} }}</td>
+			<td class="columna value" >{{ $info->solicitudes[0]->info->campos->{'DOMICILO DE UBICACIÓN DEL INNMUEBLE'} }}</td>
 		</tr>
 		<tr>
 			<td class="columna">% DE PROPIEDAD QUE ENAJENA</td>
@@ -113,8 +110,8 @@
 			<td class="columna"></td>
 		</tr>
 		<tr>
-			<td class="columna" >{{-- <p class="mt-0">{{ $info->solicitudes[0]->info->campos->{'Municipio'} }}</p> --}}</td>
-			<td class="columna" colspan="2">{{ $info->solicitudes[0]->info->campos->{'MONTO DE OPERACIÓN (reportado en el aviso de enajenación)'} }}</td>
+			<td class="columna value" >{{-- <p class="mt-0">{{ $info->solicitudes[0]->info->campos->{'Municipio'} }}</p> --}}</td>
+			<td class="columna value" colspan="2">{{ $info->solicitudes[0]->info->campos->{'MONTO DE OPERACIÓN (reportado en el aviso de enajenación)'} }}</td>
 			<td class="columna"></td>
 		</tr>
 		<tr class='row-table '>
@@ -122,12 +119,7 @@
 		</tr>
 		<tr>
 			<td>REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
-			<td>{{ $info->solicitudes[0]->info->campos->{'RFC'} }}</td>
-			<td colspan="2"></td>
-		</tr>
-		<tr>
-			<td>MAVA900222JQ9</td>
-			<td></td>
+			<td class="value">{{ $info->solicitudes[0]->info->campos->{'RFC'} }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
