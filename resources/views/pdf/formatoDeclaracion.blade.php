@@ -62,10 +62,12 @@
 			<th></th>
 			<th></th>
 			<!-- <th><img src="{{ assets("./images/escudo.svg") }}" width="100"></th> -->
-			<th>  <img id="logo_gob" src="{{asset('images/logo.png')}}"> </th>
+			<!-- <th>  <img id="logo_gob" src="{{asset('images/logo.png')}}"> </th> -->
 			<!-- <th><img src="../public/images/escudo.svg" width="100"></th> -->
 			<!-- <th><img src="{{ url('./images/logo.png') }} " width="250"></th> -->
-			<th><img src="{{ public_path('images/logo.png') }} " width="250"></th>
+			<th>
+				<div style="padding:20px"><img src="{{ public_path('images/logo.png') }} " width="250"></div>
+			</th>
 		</tr>
 	</thead>
 	<tbody>

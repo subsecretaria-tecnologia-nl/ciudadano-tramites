@@ -11,7 +11,9 @@ class FormatoDeclaracionController extends Controller
 		$tramite = curlSendRequest("GET", getenv("TESORERIA_HOSTNAME")."/solicitudes-get-tramite-pdf/{$id}");
 		if(isset($tramite->tramite) && count( $tramite->tramite->solicitudes) > 0){
 			$info = $tramite->tramite;
-			$pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('pdf.formatoDeclaracion', compact('info'));
+			$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info'));
+			// setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
+			
         	return $pdf->stream('formatoDeclaracion.blade.pdf');
 			// return view("pdf/formatoDeclaracion5", [ "info" => ($info) ]);
 		}
