@@ -12,10 +12,8 @@ class FormatoDeclaracionController extends Controller
 		if(isset($tramite->tramite) && count( $tramite->tramite->solicitudes) > 0){
 			$info = $tramite->tramite;
 			$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info'));
-			// setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
 			
         	return $pdf->stream('formatoDeclaracion.blade.pdf');
-			// return view("pdf/formatoDeclaracion5", [ "info" => ($info) ]);
 		}
 
 		dd("No existe un trámite con el ID '{$id}' en nuestro registro.");
