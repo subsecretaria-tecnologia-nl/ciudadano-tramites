@@ -4,6 +4,12 @@
 	<title>{{ $info->tramite }}</title>
 	<link rel="stylesheet" type="text/css" href="{{ assets("css/app.css") }}">
 	<style type="text/css">
+		table{
+			/* table-layout: fixed;	 */
+			whidth: 100%;
+
+		}
+
 		body{
 			background-color: #f3f3f7;
 			padding: 0;
@@ -11,7 +17,7 @@
 			font-family: sans-serif;
 			font-size: 14px;
 		}
-
+		
 		.card{
 			width: 95%;
 			max-width: 792px;
@@ -27,6 +33,14 @@
 		h1 {
 			font-size: 1em;
 		}
+		
+		th {
+			height: 120px;
+		}
+
+		td{
+			padding: 8px;
+		}
 
 		.text-uppercase{
 			text-transform: uppercase;
@@ -40,39 +54,38 @@
 			background-color: #f0f9fc !important;
 		}
 		.titulo1{
-			padding-left: 30%;
+			padding-left: 33%;
 		}
 		.titulo2{
 			padding-left: 38%;
 		}
 		.row-table{
 			/* margin: 10px 0px 10px 0px */
-			height: 80px;
+			height: 60px;
 		}
 		.columna{
-			max-width: 250%;
-			min-width: 250%;
+			max-width: 33%;
+			min-width: 33%;
 		}
 	</style>
 </head>
 <body>
 <table>
-	<thead>
+	<thead align="right">
 		<tr>
-			<th></th>
-			<th></th>
-			<!-- <th><img src="{{ assets("./images/escudo.svg") }}" width="100"></th> -->
-			<!-- <th>  <img id="logo_gob" src="{{asset('images/logo.png')}}"> </th> -->
-			<!-- <th><img src="../public/images/escudo.svg" width="100"></th> -->
-			<!-- <th><img src="{{ url('./images/logo.png') }} " width="250"></th> -->
-			<th>
-				<div style="padding:20px"><img src="{{ public_path('images/logo.png') }} " width="250"></div>
+			<th style="" class="columna"></th>
+			<th class="columna"></th>
+			<th class="columna">
+				<div style="padding:20px"><img src="{{public_path('images/escudo.svg')}}" width="100"></div> 
+			</th>
+			<th class="columna">
+				<div style="padding:20px"><img src="{{ public_path('images/logo.png') }} " width="180"></div>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr class='row-table' style="height: 100px">
-			<td class='titulo1' colspan="4">5% DE ENAJENACIÓN DE INMUEBLES</td>
+			<td class='titulo1 text-uppercase  row-table' colspan="4">{{ $info->tramite }}</td>
 		</tr>
 		<tr>
 			<td class="columna">NÚMERO DE ESCRITURA PÚBLICA O MINUTA</td>
@@ -85,9 +98,9 @@
 			<td class="columna">{{ $info->solicitudes[0]->info->campos->{'FECHA DE ESCRITURA O MINUTA'} }}</td>
 		</tr>
 		<tr>
-			<td class="columna">MUNICIPIO</td>
-			<td class="columna" colspan="2">NO. EXP. CATASTRAL</td>
-			<td class="columna" >DOMICILIO DE UBICACIÓN DEL INMUEBLE</td>
+			<td style="width: 1%">MUNICIPIO</td>
+			<td style="width: 1%" colspan="2">NO. EXP. CATASTRAL</td>
+			<td style="width: 1%" >DOMICILIO DE UBICACIÓN DEL INMUEBLE</td>
 		</tr>
 		<tr>
 			<td class="columna" >{{ $info->solicitudes[0]->info->campos->Municipio[0] }}</td>
@@ -104,8 +117,8 @@
 			<td class="columna" colspan="2">{{ $info->solicitudes[0]->info->campos->{'MONTO DE OPERACIÓN (reportado en el aviso de enajenación)'} }}</td>
 			<td class="columna"></td>
 		</tr>
-		<tr class='row-table'>
-			<td class='titulo2' colspan="4">DATOS DEL ENAJENANTE</td>
+		<tr class='row-table '>
+			<td class='row-table titulo2' colspan="4">DATOS DEL ENAJENANTE</td>
 		</tr>
 		<tr>
 			<td>REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
