@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Carbon\Carbon;
 
-use App\Repositories\EgobiernoinpcRepositoryEloquent;
+use App\Repositories\InpcRepositoryEloquent;
 use App\Repositories\EgobiernoporcentajesRepositoryEloquent;
 use App\Repositories\EgobiernodiasferiadosRepositoryEloquent;
 
@@ -50,7 +50,7 @@ class CalculoimpuestosController extends Controller
 
 
     public function __construct(
-    	EgobiernoinpcRepositoryEloquent $inpc,
+    	InpcRepositoryEloquent $inpc,
     	EgobiernoporcentajesRepositoryEloquent $porcentaje,
       EgobiernodiasferiadosRepositoryEloquent $diasferiados,
       PortalsolicitudestramiteRepositoryEloquent $solicitudes_tramite,
@@ -115,7 +115,8 @@ class CalculoimpuestosController extends Controller
     	$this->fecha_escritura		= $fecha_escritura;
 
 
- 		$this->fecha_vencimiento	= $this->getVencimiento();
+ 		// $this->fecha_vencimiento	= $this->getVencimiento();
+    $this->fecha_vencimiento  = $this->prueba();
  		$this->inpc_periodo			= $this->getInpc($this->fecha_escritura); // getInpcperiodo en caso de que sea la fecha acumulada del año vigente
  		$this->fecha_actual			= date("Y-m-d");
  		$this->inpc_reciente		= $this->getInpc($this->fecha_actual);
@@ -258,7 +259,8 @@ class CalculoimpuestosController extends Controller
       $this->fecha_escritura    = $fecha_escritura;
 
 
-      $this->fecha_vencimiento  = $this->getVencimiento();
+      // $this->fecha_vencimiento  = $this->getVencimiento();
+      $this->fecha_vencimiento  = $this->prueba();
       $this->inpc_periodo       = $this->getInpc($this->fecha_escritura); // getInpcperiodo en caso de que sea la fecha acumulada del año vigente
       $this->fecha_actual       = date("Y-m-d");
       $this->inpc_reciente      = $this->getInpc($this->fecha_actual);
@@ -537,7 +539,7 @@ class CalculoimpuestosController extends Controller
     	try
     	{
     		$list = $this->inpc
-    			->orderBy('anio','DESC')
+    			->orderBy('ano','DESC')
     			->orderBy('mes','ASC')
     			->all();
 
@@ -553,9 +555,9 @@ class CalculoimpuestosController extends Controller
     		foreach($list as $l)
     		{
 
-    			if(!in_array((integer)$l->anio,$years))
+    			if(!in_array((integer)$l->ano,$years))
     			{
-    				$years[]= (integer)$l->anio;
+    				$years[]= (integer)$l->ano;
     			}
     		}
 
@@ -569,7 +571,7 @@ class CalculoimpuestosController extends Controller
     				// buscar el valor en list
     				foreach($list as $l)
     				{
-    					if((integer)$l->anio == $y && (integer)$l->mes == $m)
+    					if((integer)$l->ano == $y && (integer)$l->mes == $m)
     					{
     						$valores [$m]= $l->indice;
     						break;
@@ -773,4 +775,32 @@ class CalculoimpuestosController extends Controller
 
       return $costo_real;
     }
+    //Funcion para aplicar días habiles de L-V
+    /**
+     * getVencimiento -> prueba. utilizando la fecha de la escrituracion se obtiene la nueva
+     * fecha, sumando 15 dias
+     * en caso de ser festivo o sabado o domingo se determina el dia habil siguiente
+    */
+    public function prueba(){
+		$fecha = $this->fecha_escritura;
+		$inhabil = $this->inhabiles;
+        $dias=0;
+        $fechaTermino = '';
+        $hora = date("H",strtotime($fecha));
+        $fecha = ($hora>=13) ? date("Y-m-d",strtotime($fecha.' +1 days')) : date("Y-m-d",strtotime($fecha)) ;
+        $comienzo = $fecha;
+        //15 es el numero de dias que calcularemos
+        while ($dias <= 15) {
+            $finDeSemana = date("w",strtotime($comienzo));
+            //Si la fecha es sabado o domingo O la fecha existe en los inhabil
+            if (($finDeSemana == 0 || $finDeSemana == 6) || in_array($comienzo,$inhabil)) {
+                $comienzo = date("Y-m-d",strtotime($comienzo.' +1 days'));
+            }else{
+                $fechaTermino = date("Y-m-d",strtotime($comienzo));
+                $comienzo = date("Y-m-d",strtotime($comienzo.' +1 days'));
+                $dias++;
+            }
+        }
+        return $fechaTermino;
+	}
 }

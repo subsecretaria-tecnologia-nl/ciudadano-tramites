@@ -45,7 +45,7 @@
 												</div>
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
-			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results', 'question'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results', 'question','enajenante'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
 												<input-component
 													v-if="campo.tipo === 'input'" 
@@ -116,6 +116,11 @@
 													@validarFormulario="validarFormulario">
 												</expediente-excel-component>
 												<firma-electronica-component v-if="campo.tipo == 'results'"></firma-electronica-component>
+												<enajenantes-component v-else-if="campo.tipo == 'enajenante'" 
+												:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"> ></enajenantes-component>
 
 												<table-component 
 													:propietario="JSON.parse(campo.caracteristicas).propietario"
@@ -126,6 +131,11 @@
 													@updateForm="updateForm"
 													v-else-if="campo.tipo == 'table'">
 												</table-component>
+												<fecha-component v-if="campo.tipo === 'date'" 
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"></fecha-component>
 												<div v-else-if="campo.tipo == 'question'">
 													¿Desea realizar el cobro por ?
 													<div class="col-md-12 col-lg-12">
@@ -460,11 +470,14 @@
 							if( campo.tipo == 'file' && this.infoGuardada.archivosGuardados){
 								let infoArchivoGuardado = this.infoGuardada.archivosGuardados.find( archivo => archivo.mensaje == campo.nombre );
 								campo.archivoGuardado = true;
-								campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
+								if(infoArchivoGuardado && infoArchivoGuardado.attach){
+									campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
+								}
 							}
 							if (campo.tipo == 'table' || campo.tipo == 'results') {
-								this.campos[index].valido = true
+								this.campos[index].valido = true;
 							}
+
 						});
 					}
 				} catch (error) {
