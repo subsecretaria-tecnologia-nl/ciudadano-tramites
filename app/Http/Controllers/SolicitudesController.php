@@ -296,6 +296,7 @@ class SolicitudesController extends Controller
         if ($data_costo) {
           foreach ($data_costo as $d) {
             $tipo_costo = $d->variable;
+            $val_tipo_costo = $d->var_costo;
 
             if($tipo_costo == null){
               $tipo_costo = 0;
@@ -309,7 +310,8 @@ class SolicitudesController extends Controller
         $data [] = array(
           "campos_data" => $campos_data,
           "consulta_api" => "/getcostoTramite",
-          "tipo_costo" => $tipo_costo
+          "tipo_costo" => $tipo_costo,
+          "val_tipo_costo" => $val_tipo_costo
         );
 
       }
