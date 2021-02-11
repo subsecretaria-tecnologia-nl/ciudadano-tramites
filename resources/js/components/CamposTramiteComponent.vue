@@ -147,21 +147,21 @@
 														    </div>
 
 														    <!-- Default inline 3-->
-														    <div class="custom-control custom-radio custom-control-inline">
+														    <div class="custom-control custom-radio custom-control-inline" v-if="tipo_costo_obj.val_tipo_costo=== 'H'">
 														      	<input type="radio" value="hoja" name="radioInline" class="custom-control-input" id="hoja1" v-model="tipo_costo_obj.tipoCostoRadio" key="millar" @change="cambioModelo">
 
 														      	<label class="custom-control-label" for="hoja1">
 														      		Hoja
 														      	</label>
 														    </div>
-														    <div class="custom-control custom-radio custom-control-inline">
+														    <div class="custom-control custom-radio custom-control-inline" v-if="tipo_costo_obj.val_tipo_costo === 'L'">
 														      	<input type="radio" value="lote" name="radioInline" class="custom-control-input" id="lote1" v-model="tipo_costo_obj.tipoCostoRadio" key="lote" @change="cambioModelo">
 
 														      	<label class="custom-control-label" for="lote1">
 														      		Lote
 														      	</label>
 														    </div>
-														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'" >
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'"  >
 															    <label>
 															        Hoja
 															    </label>
@@ -169,7 +169,7 @@
 															      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" placeholder="Hoja" id="hojaInput" v-model="tipo_costo_obj.hojaInput"  @change="cambioModelo"/>
 															    </span>
 															</div>
-														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'lote'" >
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'lote'">
 															    <label>
 															        Lote
 															    </label>
@@ -226,7 +226,7 @@
 				rows :[],
 				loading : false,
 				infoExtra : {},
-				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' },
+				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'', val_tipo_costo:'' },
 				tieneSeccionDocumentos: false
             }
         },
@@ -278,7 +278,6 @@
 			},
 			estadoSelected(estado){
 				this.estado = estado;
-				
 			},
         	setDeclararEn0(){
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
@@ -313,6 +312,11 @@
 				    }
 				}
         	},
+
+        	gestionarCambioEstado(estado){
+        		this.estado = estado;
+        	},
+
         	async updateForm(campo){
 				const tramite = localStorage.getItem('tramite') && JSON.parse(localStorage.getItem('tramite')) ;
 
@@ -406,6 +410,10 @@
 		    		this.$emit('updatingFiles', this.files);
         		}
 
+        		if(campo.nombre == 'Estado' && campo.valido){
+        			this.gestionarCambioEstado(campo.valor);
+        		}
+
         		this.cambioModelo();
         	},
 		    cambioModelo(){
@@ -458,6 +466,7 @@
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 					this.tipo_costo_obj.tipo_costo = response.data && response.data.length > 0 ? response.data[0].tipo_costo : '';
+					this.tipo_costo_obj.val_tipo_costo = response.data && response.data.length > 0 ? response.data[0].val_tipo_costo : '';
 
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
