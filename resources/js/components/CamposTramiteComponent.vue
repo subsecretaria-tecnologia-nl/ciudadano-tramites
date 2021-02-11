@@ -115,6 +115,9 @@
 													@updateForm="updateForm" :files="files"
 													@validarFormulario="validarFormulario">
 												</expediente-excel-component>
+												<firma-electronica-component 
+													v-if="campo.tipo == 'firma'">
+												</firma-electronica-component>
 												<enajenantes-component v-else-if="campo.tipo == 'enajenante'" 
 												:campo="campo" 
 													:showMensajes="showMensajes" 

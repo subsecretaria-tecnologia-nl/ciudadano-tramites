@@ -128,7 +128,7 @@
           <b-row >
             <b-col>
               <b-form-group label="Porcentaje de compra" label-for="procentaje-compra-input" >
-                <b-form-input  id="procentaje-compra-input" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" type="range" max="100"></b-form-input>
+                <b-form-input  id="procentaje-compra-range" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" type="range" max="100"></b-form-input>
                 <b-form-input  id="procentaje-compra-input" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" ></b-form-input>
                 <b-form-invalid-feedback id="porcentajeCompra-input-feedback">
                   <span v-if="!$v.form.porcentajeCompra.required" class="form-text text-danger">
