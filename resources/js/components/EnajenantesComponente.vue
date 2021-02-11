@@ -4,7 +4,7 @@
         <b-row >
           <b-col>
             <b-form-group label="Porcentaje de venta" label-for="procentaje-venta-input" >
-              <b-form-input  id="procentaje-venta-input" name="procentaje-venta"  v-model="porcentajeVenta" type="range" max="100"></b-form-input>
+              <b-form-input  id="procentaje-venta-range" name="procentaje-venta"  v-model="porcentajeVenta" type="range" max="100"></b-form-input>
               <b-form-input  id="procentaje-venta-input" name="procentaje-venta"  v-model="porcentajeVenta" ></b-form-input>
             </b-form-group>
           </b-col>         
