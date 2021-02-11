@@ -94,7 +94,12 @@
             var self = this;
             if( this.estado &&  this.estado.clave){
               let url =  process.env.TESORERIA_HOSTNAME + "/obtener-municipios/" + this.estado.clave ;  
-                axios.get(url).then(data => { self.options = data.data; })
+                axios.get(url).then(data => { 
+                  self.options = data.data.map( option => {
+                    option.claveEstado = self.estado.clave;
+                    return option;
+                  }); 
+                })
                 .catch(error => {
                   console.log(error);
                 });
