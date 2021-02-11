@@ -9,24 +9,6 @@
 		</small>
 	</div>
 </template>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style type="text/css">
-  .multiselect__tags, .multiselect__single{
-    background: #e5f2f5 !important
-  }
-  .multiselect__tag{
-    background:#3699FF !important;
-    
-  }
-  .multiselect__tag>span{
-    color: white;
-  }
-
-  .multiselect__option--highlight{
-    background:#e5f2f5 !important;
-  }
-  
-</style>
 <script>
   import Multiselect from 'vue-multiselect';
     export default {
