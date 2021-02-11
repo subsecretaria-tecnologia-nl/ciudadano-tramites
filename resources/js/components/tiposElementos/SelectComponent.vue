@@ -28,7 +28,7 @@
   
 </style>
 <script>
-  import Multiselect from 'vue-multiselect'
+  import Multiselect from 'vue-multiselect';
     export default {
       components: { Multiselect },
       data(){
@@ -86,7 +86,7 @@
           }
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
             if(this.campo.tipo == 'multiple'){
-              requeridoValido =  this.campo.valor.length > 0; 
+              requeridoValido =  this.campo.valor && this.campo.valor.length > 0; 
             } else {
               requeridoValido =  !!this.campo.valor; 
             }
