@@ -213,7 +213,7 @@
 				selectedId: [],
 				campos: [], 
 				agrupaciones:[], 
-				estado: '',
+				estado: {clave:19, nombre: "NUEVO LEÓN"},
                 mostrar:false,
                 errors: {},
                 showMensajes:false,
