@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>{{ $info->tramite }}</title>
-	<link rel="stylesheet" type="text/css" href="{{ assets("css/app.css") }}">
 	<style type="text/css">
 		body{
 			background-color: #f3f3f7;
