@@ -200,7 +200,8 @@
 
                             if(campoSubsidio){                            
                                 if( campoSubsidio.tipo == 'select'  ){
-                                    paramsCosto.subsidio = campoSubsidio.valor[0][0];//62  
+                                    //paramsCosto.subsidio = campoSubsidio.valor[0][0];//62 
+                                    paramsCosto.subsidio = campoSubsidio.valor.clave;
                                 } else {
                                     paramsCosto.subsidio = campoSubsidio.valor;//62    
                                 }
@@ -222,7 +223,8 @@
                     }
                     let campoDivisas              = this.getCampoByName(CAMPO_DIVISAS);
                     if( campoDivisas ){
-                        paramsCosto.divisa = campoDivisas.valor[0][0];
+                        paramsCosto.divisa = campoDivisas.valor.clave;
+                        //paramsCosto.divisa = campoDivisas.valor[0][0];
                     }
                 } else {
                     return this.datosComplementaria;

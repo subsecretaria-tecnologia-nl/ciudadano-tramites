@@ -26,17 +26,12 @@
       methods: {
 
         validar(){
-          // console.log("calidando")
+
           let requeridoValido = true;
           let caracteristicas = {};
           var caracteristicasStr = this.campo.caracteristicas;
           this.campo.mensajes = [];
-            
-          // try {
-          //   caracteristicas = JSON.parse(this.campo.caracteristicas + '');
-          // }catch(err){
-          //   console.log(err);
-          // }
+          
 
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
             requeridoValido =  !!this.campo.valor;

@@ -16,10 +16,10 @@
         @focus="validar"
       />
     </span>
-    <small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || estadoFormulario > 0)">
-        <span v-for="mensaje in campo.mensajes" class="form-text text-danger">
+    <small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || estadoFormulario > 0)" class="position-absolute">
+        <p v-for="mensaje in campo.mensajes" class="form-text text-danger">
           {{ mensaje.mensajeStr }}
-        </span>
+        </p>
     </small>
   </div>
 </template>

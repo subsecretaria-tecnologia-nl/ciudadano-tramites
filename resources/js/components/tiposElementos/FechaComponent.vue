@@ -29,7 +29,6 @@
           let requeridoValido = true;
           let caracteristicas= this.getCaracteristicas();
           if( caracteristicas.hasOwnProperty('required') && caracteristicas.required === 'true') {
-          	console.log(this.campo.valor)
             requeridoValido =  !!this.campo.valor && (this.campo.valor+"").length > 0;
             if( !requeridoValido ){
               let mensaje = { 
