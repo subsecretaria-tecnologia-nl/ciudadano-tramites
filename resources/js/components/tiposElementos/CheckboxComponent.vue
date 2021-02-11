@@ -19,30 +19,7 @@
       methods: {
 
         validar(){
-
-          let requeridoValido = true;
-          /*
-          let caracteristicas = {};
-          var caracteristicasStr = this.campo.caracteristicas;
-          this.campo.mensajes = [];
-            
-          try {
-            caracteristicas = JSON.parse(this.campo.caracteristicas + '');
-          }catch(err){
-            console.log(err);
-          }
-
-          if( caracteristicas.hasOwnProperty('required') && caracteristicas.required) {
-            requeridoValido =  this.campo.valor && this.campo.valor.length > 0;
-            if( !requeridoValido ){
-              let mensaje = { 
-                tipo:'required',
-                mensajeStr: "El campo " + this.campo.nombre + " es requerido"
-              }
-              this.campo.mensajes.push( mensaje );
-            }
-          }*/
-          this.campo.valido = requeridoValido;
+          this.campo.valido = true;
           this.$emit('updateForm', this.campo);
         }
       }

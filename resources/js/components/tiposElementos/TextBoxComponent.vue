@@ -6,11 +6,11 @@
       :name="[[campo.campo_id]]" 
       class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" v-model="campo.valor"
       @change="validar" ></textarea>
-      <small  class="form-text text-muted" v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || estadoFormulario > 0)">
-          <span v-for="mensaje in campo.mensajes">
-            {{ mensaje.mensajeStr }}
-          </span>
-        </small>
+      <small   v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || estadoFormulario > 0)" class="position-absolute">
+         <p v-for="mensaje in campo.mensajes" class="form-text text-danger">
+          {{ mensaje.mensajeStr }}
+        </p>
+      </small>
     
   </div>
 </template>
