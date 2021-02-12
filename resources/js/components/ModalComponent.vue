@@ -147,12 +147,6 @@
 
   </div>
 </template>
-
-<style type="text/css">
-    .modal-backdrop {
-        background-color: rgba(0,0,0,0.7);
-    }
-</style>
 <script>
   import { uuid } from 'vue-uuid';
   import { validationMixin } from 'vuelidate'
@@ -313,62 +307,38 @@
         this.$bvModal.show(this.idModa)
       },
       async updateCurp(){
-        console.log("seleccionar")
-        if( !this.$v.form.curp.$invalid ){
-          let response = await this.getToken();
-          console.log(this.$v.form.curp)
-          this.buscarCurp( this.$v.form.curp.$model, response.data.token );
+        if( !this.$v.form.curp.$invalid ){         
+          this.buscarCurp( this.$v.form.curp.$model );
+        } else {
+          this.rellenarForm();
         }
       },
 
-      async buscarCurp(curp, token) {
-        let url = process.env.INSUMOS_HOSTNAME + "/consultacurp";
-
-        let data = { 'access_token' : token , 'curp' : curp  };
-
-        var self = this;
-        $.ajax({
-            type: "GET",
-            data: data,
-            dataType: 'json', 
-            url,
-            success:function(data){
-                self.rellenarForm(data);
-                // this.$data = data.data.nombres;
-            },
-            error:function(error){
-                console.log(error);
-            },
-            complete:function(){
-                console.log('.');
-            }
-        });
+      async buscarCurp(curp) {
+        let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp";
+        let response = await axios.get(url + '/' + curp);
+        if(response.data){
+          this.rellenarForm(response.data);
+        } else {
+          this.rellenarForm();
+        }
       },
 
       rellenarForm(data){
+        if(data){
           this.form.nombre = data.data.nombres;
           this.form.apPat = data.data.apePat;
           this.enajenante.apMat = data.data.apeMat;
-
           this.form.fechaNacimiento =  data.data.fechaNac.split("/").reverse().join("-");
           this.form.genero = data.data.sexo;
           this.form.estado = data.data.entidadNac;
-      },
-
-      async getToken(){
-        let url = process.env.INSUMOS_HOSTNAME + "/auth";
-        let data = { 'username' : 'fun1' , 'password': 'prueba123' };
-
-        try {
-            let response = await axios.post(url, data, {
-               headers:{
-                  "Content-type":"application/json"
-              }
-            });
-            
-            return response;
-        } catch (error) {
-            console.log(error);
+        } else {
+          this.form.nombre = "";
+          this.form.apPat = ""
+          this.enajenante.apMat = "";
+          this.form.fechaNacimiento = "";
+          this.form.genero = "";
+          this.form.estado = "";
         }
       },
     },
