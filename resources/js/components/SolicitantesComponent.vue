@@ -2,13 +2,27 @@
     <div class="container-fluid">
         <div v-if="listaSolicitantes.length > 0 && !agregarMas" class="row">
             <div v-for="(sol, index) in listaSolicitantes" class="col-lg-12" style="padding-bottom: 9px; margin-top: 5px;">
-                <h6 class="font-weight-bolder mb-3">{{ sol.rfc }}</h6>
+                <!--<h6 class="font-weight-bolder mb-3">{{ sol.rfc }}</h6>-->
                 <div class="text-dark-50 line-height-lg">
+                    <!--
                     <div class="float-lg-left">
                         <div>{{ sol.tipoPersona == "pm" ? sol.razonSocial : sol.nombreSolicitante  }} </div>
                         <div>{{ sol.apPat }}</div>
                         <div>{{ sol.apMat }}</div>
+                        <div>{{ sol.curp }}</div>
+                    </div>-->
+                    <div class="text-center">
+                        <h3>
+                          {{sol.nombreSolicitante }} {{ sol.apPat }} {{ sol.apMat }}<span class="font-weight-light">, {{ sol.email }}</span>
+                        </h3>
+                        <div class="h5 font-weight-300">
+                           <strong>RFC:</strong> <i class="ni location_pin mr-2"></i>{{ sol.rfc }}
+                        </div>
+                        <div class="h5 mt-4">
+                          <strong>Curp:</strong> <i class="ni business_briefcase-24 mr-2"></i>{{ sol.curp }}
+                        </div>
                     </div>
+                    <!--
                     <div class="float-lg-right">
                             <button type="button"  class="btn btn-danger"  id="btnEliminar" v-on:click="eliminar( index )">
                                 <i class="fa fa-times" id="iconBtnEliminar"></i> 
@@ -17,13 +31,16 @@
                                 <i class="fa fa-edit" id="iconBtnEditar"></i>
                             </button> 
                     </div> 
+                    -->
                 </div>
             </div>
             <div class="col-lg-12">
+                <!--
                     <button type="button"  class="btn"  id="btnAddMore" v-on:click="mostrarAgregarSolicitante()">
                         <i class="fa fa-check" id="iconBtnAddMore"></i> 
                         Agregar Solicitante
-                    </button>     
+                    </button>  
+                    -->   
             </div>
         </div>
         <div v-else-if="listaSolicitantes.length == 0 || agregarMas">
@@ -77,6 +94,7 @@
                         </div>
                     </div>
                 </div>
+                <!--
                 <div class="text-right">
                     <button type="button"  class="btn btn-danger pull-rigth"  id="btnAddMoreCancel" v-on:click="agregarMas = false" v-if="listaSolicitantes.length > 0 ">
                         <i class="fa fa-times" id="iconBtnAddMoreCancel"></i> 
@@ -90,21 +108,33 @@
                         <i class="fa fa-check" id="iconBtnSi"></i> 
                         Editar
                     </button>
-                </div>
+                </div>-->
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['tramite', 'solicitantesGuardados'],
+        props: ['tramite', 'solicitantesGuardados', 'usuario'],
         mounted() {
-            console.log( this.solicitantesGuardados )
+            this.solicitante = {
+                rfc:this.usuario.rfc,
+                tipoPersona:"pf",
+                nombreSolicitante:this.usuario.name,
+                apPat:this.usuario.fathers_surname,
+                apMat:this.usuario.mothers_surname,
+                curp:this.usuario.curp,
+                email:this.usuario.email,
+                id:this.usuario.id,
+                notary:this.usuario.notary
+            };
+            this.agregar();
+/*
             let solicitantesGuardados = this.solicitantesGuardados.filter( Boolean );
             if( solicitantesGuardados && solicitantesGuardados.length > 0){
                 this.listaSolicitantes = solicitantesGuardados;
                 this.guardarInStorage();
-            }
+            }*/
             if (localStorage.getItem('listaSolicitantes')) {
               try {
                 this.listaSolicitantes = JSON.parse(localStorage.getItem('listaSolicitantes'));
@@ -114,6 +144,7 @@
             }
             
             this.$emit('updatingSolicitante', this.listaSolicitantes.length > 0);
+
         },
 
         data(){
