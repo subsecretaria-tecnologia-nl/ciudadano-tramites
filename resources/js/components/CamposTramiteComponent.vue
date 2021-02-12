@@ -78,6 +78,7 @@
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm">
 												</textbox-component>
+
 												<checkbox-component 
 													v-else-if="campo.tipo === 'checkbox'"
 													:campo="campo" 
@@ -123,7 +124,6 @@
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm"> ></enajenantes-component>
-
 												<table-component 
 													:propietario="JSON.parse(campo.caracteristicas).propietario"
 													:campo="campo"
@@ -138,6 +138,14 @@
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm"></fecha-component>
+
+												<listado-expedientes-5-i-s-r 
+													v-else-if="campo.tipo === 'expedientes'"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"></listado-expedientes-5-i-s-r>
+
 												<div v-else-if="campo.tipo == 'question'">
 													¿Desea realizar el cobro por ?
 													<div class="col-md-12 col-lg-12">
@@ -188,7 +196,7 @@
 		 										<div class="text-right">
 													<strong>Nota:</strong>
 													<small class="">
-														Los documentos no se solicitan de forma obligatoria, sin embargo usted no podrá imprimir o descargar su declaración fiscal.
+														De no anexar los documentos obligatorios, no podrá Imprimir su declaración fiscal, mismos que podrán ser requeridos por la autoridad.
 													</small>
 												</div>
 											</div>
@@ -608,7 +616,7 @@
 
 				if(empty.length == 0){
 					this.panel = [0, 1, 4];
-					const exp = `${all['Municipio'].valor.toString()}${all['Region'].valor}${all['Manzana'].valor}${all['Lote'].valor}`;
+					const exp = `${all['Municipio'].valor.clave.toString()}${all['Region'].valor}${all['Manzana'].valor}${all['Lote'].valor}`;
 					const url = `${process.env.TESORERIA_HOSTNAME}/insumos-catastro-consulta/${exp}`;
 					if(this.ajax !== url){
 						this.ajax = url;

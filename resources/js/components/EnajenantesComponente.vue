@@ -3,7 +3,7 @@
 
         <b-row >
           <b-col>
-            <b-form-group label="Porcentaje de venta" label-for="procentaje-venta-input" >
+            <b-form-group label="Porcentaje que enajena" label-for="procentaje-venta-input" >
               <!--<b-form-input  id="procentaje-venta-rango" name="procentaje-venta"  v-model="porcentajeVenta" type="range" max="100"></b-form-input>-->
               <b-form-input  id="procentaje-venta-input" name="procentaje-venta"  v-model="porcentajeVenta" ></b-form-input>
             </b-form-group>
@@ -29,7 +29,7 @@
                             CURP
                         </th>
                         <th>
-                            % Compra 
+                            % Venta 
                         </th>
                         <th>
                             Acciones
@@ -44,7 +44,7 @@
                             {{ registro.tipoPersona }}
                         </td>	
                         <td>
-                            {{ registro.razonSocial }} {{ registro.nombre + ' ' + registro.apPat + '' + registro.apMat }}
+                            {{ registro.razonSocial }} {{ registro.nombre + ' ' + registro.apPat + ' ' + registro.apMat }}
                         </td>	
                         <td>
                            {{ registro.rfc }}
@@ -64,7 +64,7 @@
                 </tbody>
             </table>
         </div>
-            Porcentaje de compra
+            Porcentaje de venta
             <b-progress :value="porcentajeTotalCompra" max="100" show-value class="mb-3"></b-progress>
     </div>
 	<modal-component 
@@ -75,7 +75,7 @@
 <script>
 	export default {
 		mounted(){
-            if(this.campo.valor && this.campo.valor.enajenantes.length > 0){
+            if(this.campo.valor && this.campo.valor.enajenantes && this.campo.valor.enajenantes.length > 0){
                 this.enajentantes = this.campo.valor.enajenantes;
                 this.porcentajeVenta = this.campo.valor.porcentajeVenta;
                 //this.campo.valor = {enajenantes:this.enajentantes, porcentajeVenta:this.porcentajeVenta};

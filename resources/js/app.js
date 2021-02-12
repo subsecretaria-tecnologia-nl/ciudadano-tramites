@@ -70,6 +70,8 @@ Vue.component("fecha-component" , () => import ( /* webpackChunkName: "js/compon
 Vue.component("enajenantes-component" , () => import ( /* webpackChunkName: "js/components/enajenantes-component" */ './components/EnajenantesComponente.vue' ));
 
 Vue.component("modal-component" , () => import ( /* webpackChunkName: "js/components/modal-component" */ './components/ModalComponent.vue' ));
+Vue.component("listado-expedientes-5-i-s-r" , () => import ( /* webpackChunkName: "js/components/listado-expedientes-5-i-s-r" */ './components/ListadoExpedientes5ISR.vue' ));
+Vue.component("modal-expedientes-component" , () => import ( /* webpackChunkName: "js/components/modal-expedientes-component" */ './components/ModalExpedientesComponent.vue' ));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
