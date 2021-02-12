@@ -60,10 +60,12 @@
 		methods : {
             eliminar( index ){
                 this.expedientes.splice(index, 1);
+                this.validar();
             },
 
            	addExpediente(expediente){
            		this.expedientes.push(expediente);
+                this.validar();
            	},
 
             validar(){

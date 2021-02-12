@@ -23,8 +23,8 @@
             </b-col>
           </b-row>        
         </form>
-        <transition name="bounce">
-          <div class="card" v-if="direccion && direccion.datos_direccion">
+        <transition name="slide-fade">
+          <div class="card" v-if="direccion && direccion.datos_direccion" key="yes">
             <div class="card-body">
                   <div class="row">
                     <h2 class="mb-3">Ubicación:</h2>
@@ -118,7 +118,7 @@
                    </b-container>
             </div>
           </div>
-          <div v-else key="edit">
+          <div v-else-if="$v.form.expediente.$dirty && !$v.form.expediente.$invalid && !(direccion && direccion.datos_direccion)" key="no">
             Ubicación No encontrada
           </div>
         </transition>
@@ -140,7 +140,7 @@
         this.btnOkLabel = "Agregar";
         this.btnIcon = "la la-plus";
         this.textBtnOpenModal = "Agregar enajenante";
-        this.classBtn = "btn bg-success w-80 mb-4";
+        this.classBtn = "btn bg-success w-80 mb-4 btn-block";
     },
     data() {
       return {
