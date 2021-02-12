@@ -36,7 +36,7 @@
         }
         
         this.validar();
-        this.opcionesEstado();
+        this.setOpciones();
       },
       mounted(){
         if(this.campo.nombre== "Cambio de divisas" && !this.campo.valor){
@@ -46,14 +46,25 @@
         }
       },
       methods: {
-        opcionesEstado(){
+        async setOpciones(){
           if( this.campo.nombre == 'Estado'){
-            var self = this;
-            let url = process.env.TESORERIA_HOSTNAME + "/obtener-estados" ;  
-             axios.get(url).then(data => { this.options = data.data;}).catch(error => {
-                 console.log(error);
-            });
+            let url = process.env.TESORERIA_HOSTNAME + "/obtener-estados" ; 
+            let options = await this.obtenerOptions(url);
+            this.options = options; 
           }
+          if( this.campo.nombre == 'Municipio'){
+            let url =  process.env.TESORERIA_HOSTNAME + "/obtener-municipios/" + this.estado.clave ;  
+            let options = await this.obtenerOptions(url);
+            this.options = options.map( option => {
+              option.claveEstado = this.estado.clave;
+              return option;
+            }); ; 
+          }
+        },
+        async obtenerOptions(url){
+          let response = await axios.get(url);
+          let options = response.data ? response.data : [];
+          return options;
         },
         validar(){
           let requeridoValido = true;
@@ -91,18 +102,8 @@
           if( this.campo.nombre == 'Municipio'){
             this.options = [];
             //this.campo.valor = null; //si no se permiten municipios de diferentes estados descomentar esta linea
-            var self = this;
             if( this.estado &&  this.estado.clave){
-              let url =  process.env.TESORERIA_HOSTNAME + "/obtener-municipios/" + this.estado.clave ;  
-                axios.get(url).then(data => { 
-                  self.options = data.data.map( option => {
-                    option.claveEstado = self.estado.clave;
-                    return option;
-                  }); 
-                })
-                .catch(error => {
-                  console.log(error);
-                });
+              this.setOpciones();
             }
           }
         }
