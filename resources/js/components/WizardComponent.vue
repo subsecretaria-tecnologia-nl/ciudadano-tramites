@@ -61,6 +61,9 @@
                                             <!--begin: Wizard Step 3-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
                                                 <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria"></resumen-tramite-component>
+                                                <div class="pt-10 pl-10 pr-10">
+                                                  <firma-electronica-component :datosComplementaria="datosComplementaria" :tipoTramite="tipoTramite" ></firma-electronica-component>
+                                                </div>
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                 <div class="mr-2">
@@ -116,8 +119,10 @@
 
 <script>
     import { uuid } from 'vue-uuid';
+import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponent.vue';
 
     export default {
+  components: { FirmaElectronicaComponent },
         props: ['tramite','idUsuario', 'clave'],
         computed:{
             declararEn0(){

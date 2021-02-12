@@ -1,19 +1,72 @@
 <template>
   <div>
     <iframe id="the_frame" :src="firma" style="width:100%; height:500px;" frameborder="0"> </iframe>
+
+    <div class="tp-15">
+        <code>
+            {{datosComplementaria}} <br>
+            {{tipoTramite}} <br>
+            {{tramite}}
+        </code>
+    </div>
  </div>
 </template>
 
 <script>
 export default {
+    props: ['datosComplementaria', 'tipoTramite'],
     data(){
         return{
+            tramite : {},
             firma: '',
             access_token: '',
             resultId: '',
         }
     },
     methods: {
+
+        async obtenerDatos(){
+                let url = "";
+                let consulta_api =  this.datosFormulario.consulta_api;
+                let tipo_costo_obj = this.datosFormulario.tipo_costo_obj ;
+
+                 if( this.tipoTramite =='normal'  ){
+                    url = process.env.APP_URL + (consulta_api ?  consulta_api :  "/getcostoTramite"); 
+                } else if(this.tipoTramite =='complementaria'){
+                    url = process.env.APP_URL + "/getComplementaria"; 
+                }
+
+                 let data = {  
+                    id_seguimiento: this.tramite.id_seguimiento,
+                    tramite_id: this.tramite.id_tramite,
+                    tipoPersona:this.listaSolicitantes[0].tipoPersona
+                }
+                
+                data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
+                
+                try {
+                    let response = await axios.post(url, data);
+                    let detalleTramite = response.data;
+
+                    if( consulta_api == "/getcostoImpuesto" || this.tipoTramite =='complementaria'  ){
+                        this.tramite.detalle =  detalleTramite;
+                    } else {
+                        this.tramite.detalle =  detalleTramite[0];
+                
+                    }
+
+                    const parsed = JSON.stringify(this.tramite);
+                    localStorage.setItem('tramite', parsed);  
+                    this.$forceUpdate();
+                    this.obteniendoCosto = false;
+                } catch (error) {
+                    console.log(error);
+                    this.obteniendoCosto = false;
+                }
+
+        },
+
+
         encodeData(){
             var urlDataGeneric = 'http://Insumos.test.nl.gob.mx/api/data_generic';
             var url = "http://Insumos.test.nl.gob.mx/api/v2/signature/iframe?id=";
@@ -193,6 +246,18 @@ export default {
         }
     },
     mounted() {
+        //   this.obtenerInformacionDelTramite();
+            if(this.tipoTramite == 'declaracionEn0'){
+                this.obteniendoCosto= false;
+                this.tramite.detalle = {costo_final:0};
+                const parsed = JSON.stringify(this.tramite);
+                localStorage.setItem('tramite', parsed);  
+                this.$forceUpdate();
+                this.obteniendoCosto = false;
+            } else {
+                this.obtenerDatos();    
+            }
+
         this.accesToken();
         this.encodeData();
 
