@@ -60,7 +60,17 @@
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
-                                                <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria"></resumen-tramite-component>
+                                                <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'">
+                                                  <resumen-tramite-5-isr-component v-if="currentStep == 3"
+                                                  :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria" 
+                                                  :files="files" :usuario="usuario">
+                                                    
+                                                  </resumen-tramite-5-isr-component>
+                                                </div>
+                                                <div v-else-if="tramite.tramite != '5% de Enajenación de Inmuebles'">
+                                                  <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria" ></resumen-tramite-component>
+                                                </div>
+                                                
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                 <div class="mr-2">
@@ -125,7 +135,7 @@
             }
         },
         mounted() {
-          console.log(JSON.parse(JSON.stringify(this.usuario)))
+
             this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
