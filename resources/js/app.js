@@ -72,7 +72,11 @@ Vue.component("enajenantes-component" , () => import ( /* webpackChunkName: "js/
 Vue.component("modal-component" , () => import ( /* webpackChunkName: "js/components/modal-component" */ './components/ModalComponent.vue' ));
 Vue.component("listado-expedientes-5-i-s-r" , () => import ( /* webpackChunkName: "js/components/listado-expedientes-5-i-s-r" */ './components/ListadoExpedientes5ISR.vue' ));
 Vue.component("modal-expedientes-component" , () => import ( /* webpackChunkName: "js/components/modal-expedientes-component" */ './components/ModalExpedientesComponent.vue' ));
+Vue.component('resumen-tramite-5-isr-component', () => import(/* webpackChunkName: "js/components/resumen-tramite-5-isr-component" */ './components/ResumenTramite5ISR.vue'));
 
+Vue.component('calculo-costo-tramite-5-isr-component', () => import(/* webpackChunkName: "js/components/calculo-costo-tramite-5-isr-component" */ './components/costos/CalculoCosto5ISRComponent.vue'));
+
+Vue.component('template-datos-personales-component', () => import(/* webpackChunkName: "js/components/template-datos-personales-component" */ './components/generales/TemplateDatosPersonalesComponent.vue'))
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
