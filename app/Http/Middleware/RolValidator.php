@@ -23,7 +23,7 @@ class RolValidator
             return !empty($var);
         });
         $path = implode("/", $path);
-        if(!isset($session->role) && preg_match("/logout/", $path)) return redirect((getenv("APP_PREFIX") ?? "") ."/logout");
+        if(!isset($session->role) && preg_match("/logout/", $path) == 0) return redirect((getenv("APP_PREFIX") ?? "") ."/logout");
 
         // $validator = [
         //     "notary_titular" => ["*"],
