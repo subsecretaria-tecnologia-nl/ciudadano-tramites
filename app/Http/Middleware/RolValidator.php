@@ -34,7 +34,6 @@ class RolValidator
         // ];
 
         $session_whitelist = $session->role->paths ? explode('|', $session->role->paths) : ["*"];
-        array_push($session_whitelist, '/tramites/(.+)/(.+)');
         $pass = array_map(function($a) use ($path){
             if($a == "*") return $a;
             $whitePath = ((getenv("APP_PREFIX") ? explode("/", getenv("APP_PREFIX"))[1]."" : "").$a);
