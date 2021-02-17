@@ -16,7 +16,6 @@ class RolValidator
     public function handle($request, Closure $next)
     {
         $session = to_object(session()->get("user"));
-        if(!$session || preg_match("/logout/", $path)) return $next($request);
         
         $path = explode("/", $request->getPathInfo());
         $path = array_filter($path, function($var){
@@ -24,6 +23,7 @@ class RolValidator
         });
         $path = implode("/", $path);
         if(!isset($session->role) && preg_match("/logout/", $path) == 0) return redirect((getenv("APP_PREFIX") ?? "") ."/logout");
+        if(!$session || preg_match("/logout/", $path)) return $next($request);
 
         // $validator = [
         //     "notary_titular" => ["*"],
