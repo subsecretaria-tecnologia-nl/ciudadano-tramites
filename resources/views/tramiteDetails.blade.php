@@ -29,6 +29,7 @@
                 			<?php
                 				foreach($tramite->info->campos as $campo => $value){
                 					while(gettype($value) == "array"){ $value = $value[0]; }
+                                    if(gettype($value) == "object") $value = $value->nombre;
                 					echo "
                 						<div class=\"col-md-6\">
                 							<span class=\"text-muted\">$campo</span>

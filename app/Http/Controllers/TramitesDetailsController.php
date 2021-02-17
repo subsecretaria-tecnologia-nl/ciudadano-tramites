@@ -12,7 +12,6 @@ class TramitesDetailsController extends Controller
 			"fluid_container"=> true
 		]);
 		$tramite = curlSendRequest("POST", getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", ["id_solicitud" => (int)$id], ["Content-Type" => "application/json"]);
-		$tramite[0]->info = json_decode($tramite[0]->info);
 		$mensajes = $tramite[0]->mensajes;
 		if(count($tramite[0]->mensajes) > 0)
 			krsort($tramite[0]->mensajes);

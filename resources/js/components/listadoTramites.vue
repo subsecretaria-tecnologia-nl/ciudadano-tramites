@@ -83,11 +83,9 @@
             async obtenerTramites(){
                 let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-filtrar";
                 try {
-                    let statusses = {"hold" : 3, "open" : 1, "pending-payment" : 99, "close" : 2};
-
-                    // let estatus = this.type == "pendientes" ? 1 : (this.type == "finalizados" ? 2 : (this.type == "por-pagar" ? 99 : 1))
                     let estatus = this.type;
-                    let response = await axios.post(url, { estatus });
+                    let notary_id = this.notary;
+                    let response = await axios.post(url, { estatus, notary_id });
                     this.tramites = response.data;
                     // this.tramitesFiltrados = this.tramites;
                     this.tramitesFiltrados = this.tramites.filter( tramite => tramite.titulo.toLocaleLowerCase().includes(this.strBusqueda.toLocaleLowerCase()) ) ;

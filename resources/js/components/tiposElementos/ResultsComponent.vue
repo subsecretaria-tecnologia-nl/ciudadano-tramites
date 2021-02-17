@@ -10,7 +10,7 @@
 			<tbody>
 				<tr v-if="loading"><td :colspan="fields.length" class="text-center"><i class="fas fa-spinner fa-spin mr-2"></i></td></tr>
 				<tr v-if="!loading && row.length != 0" v-for="(row, ind) in rows">
-					<td v-for="(item, ind) in row" :colspan=" row.length !== fields.length && ind === row.length - 1 && (fields.length - (row.length - 1)) " :class="row.length !== fields.length && 'text-center'">
+					<td v-for="(item, ind) in row" :colspan=" row.length !== fields.length && ind === row.length - 1 && (fields.length - (row.length - 1)) " class="text-center">
 						{{ typeof item == 'object' ? item.label :item }}
 						<span class="text-muted ml-2 cursor-pointer" v-if="item.tooltip" v-b-tooltip.hover :id="`tooltip-${ind}`">(+ {{item.tooltip.listItems.length-1}})</span>
 						<b-tooltip :target="`tooltip-${ind}`" triggers="hover" v-if="item.tooltip">
@@ -44,10 +44,11 @@
 		}},
 		updated () {
 			this.campo.valido = true;
-			// this.$emit('updateForm', this.campo);
+			this.$emit('updateForm', this.campo);
 		},
 		watch : {
 			rows: function(newVal, oldVal) {
+				console.log('newVal', newVal);
 				this.rows = newVal;
 			},
 			info: function(newVal, oldVal) {

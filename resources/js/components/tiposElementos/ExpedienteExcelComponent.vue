@@ -103,15 +103,24 @@
                   var rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
                   var json_object = JSON.stringify(rowObject);    
 
-                  rowObject.map(item => {
+                  rowObject.map(async item => {
                     let exp = `${item.Municipio}${item.Region}${item.Manzana}${item.Lote}`;
-                    $.ajax({
-                      url : `http://10.153.144.228/insumos-catastro-consulta/${exp}`,
-                      type: 'get',
-                      success : (res) => {
-                        console.log(res)
-                      }
-                    });
+                    const url = `${process.env.TESORERIA_HOSTNAME}/insumos-catastro-consulta/${exp}`;
+                    try{
+                      const response = await axios.get(url);
+                      this.$emit('processGrupal', {response, exp});
+                    }catch(err){
+                      this.$emit('processGrupal', {response:null, exp});
+                    }
+                    // $.ajax({
+                    //   url : `http://10.153.144.228/insumos-catastro-consulta/${exp}`,
+                    //   type: 'get',
+                    //   success : (res) => {
+                    //   },
+                    //   error : (err) => {
+
+                    //   }
+                    // });
 
                   })
 
@@ -204,7 +213,7 @@
           var fileInput = document.getElementById(this.campo.campo_id );
           if( fileInput && fileInput.files.length > 0  ){
             requeridoValido = true;
-            $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '') + '-namefile' ).text(  fileInput.files[0].name );
+            $("#"+ this.campo.campo_id + '-' + this.campo.nombre.replace('*', '').replace(/\ /g, '') + '-namefile' ).text(  fileInput.files[0].name );
           } else {
             requeridoValido = false;
           }

@@ -294,6 +294,8 @@
                   this.enviando = true;
                 }
 
+                // CON ESTE SE GUARDA EL REGISTRO DEL TRAMITE
+                // CREAR RUTA PARA GUARDAR EN BATCH
                 let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register";
                 try {
                   let response = await axios.post(url, formData, {
