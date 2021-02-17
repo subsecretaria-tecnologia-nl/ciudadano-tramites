@@ -16,7 +16,7 @@ class RolValidator
     public function handle($request, Closure $next)
     {
         $session = to_object(session()->get("user"));
-        if(!$session) return $next($request);
+        if(!$session || preg_match("/logout/", $path)) return $next($request);
         
         $path = explode("/", $request->getPathInfo());
         $path = array_filter($path, function($var){
