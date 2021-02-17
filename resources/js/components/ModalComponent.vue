@@ -147,6 +147,7 @@
 
   </div>
 </template>
+
 <script>
   import { uuid } from 'vue-uuid';
   import { validationMixin } from 'vuelidate'
@@ -197,7 +198,7 @@
         this.titleModal = "Agregar";
         this.btnOkLabel = "Agregar";
         this.btnIcon = "la la-plus";
-        this.textBtnOpenModal = "Agregar enajentante";
+        this.textBtnOpenModal = "Agregar enajenante";
         this.classBtn = "btn bg-success w-80 mb-4";
 
          

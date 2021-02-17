@@ -55,7 +55,7 @@
                                             <!--end: Wizard Step 1-->
                                             <!--begin: Wizard Step 2-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step2" >
-                                              <solicitantes-component v-if="currentStep == 2 && camposGuardadosObtenidos" @updatingSolicitante="updateSolicitante" :solicitantesGuardados="solicitantesGuardados"></solicitantes-component>
+                                              <solicitantes-component v-if="currentStep == 2 && camposGuardadosObtenidos" @updatingSolicitante="updateSolicitante" :solicitantesGuardados="solicitantesGuardados" :usuario="usuario"></solicitantes-component>
                                             </div>
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
@@ -122,14 +122,14 @@
 import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponent.vue';
 
     export default {
-  components: { FirmaElectronicaComponent },
-        props: ['tramite','idUsuario', 'clave'],
+        props: ['tramite','idUsuario', 'clave', 'usuario'],
         computed:{
             declararEn0(){
                 return this.tipoTramite == 'declaracionEn0';
             }
         },
         mounted() {
+          console.log(JSON.parse(JSON.stringify(this.usuario)))
             this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
@@ -170,8 +170,8 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
                   state:'pending',
                   clickGotTo:2,
                   wizardNumber:2,
-                  wizardTitle:'Solicitantes',
-                  wizardDesc:'Solicitantes del trámite',
+                  wizardTitle:'Solicitante',
+                  wizardDesc:'Solicitante del trámite',
                 },{  
                   id:"tab3",
                   state:'pending',

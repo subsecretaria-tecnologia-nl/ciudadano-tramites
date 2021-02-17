@@ -17,8 +17,9 @@
                     <section id="detalleTrammite">
                       @php
                         $jsonTramite = json_encode($detalle[0]);
+                        $usuario = json_encode($user);
                       @endphp
-                      <wizard-component :tramite="{{$jsonTramite}}" id-usuario="{{ $id }}" clave="{{$clave}}"></wizard-component>
+                      <wizard-component :tramite="{{$jsonTramite}}" id-usuario="{{ $id }}" clave="{{$clave}}" :usuario="{{$usuario}}"></wizard-component>
                     </section>
                 </div>
             </div>
