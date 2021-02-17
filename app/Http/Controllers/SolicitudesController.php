@@ -268,7 +268,7 @@ class SolicitudesController extends Controller
           'tipo' => 'select',
           'nombre' => 'Cambio de divisas',
           'caracteristicas' => '{"required": "true","opciones":'.$div_list.'}',
-          'campo_id' => '',
+          'campo_id' => '190',
           'agrupacion_id' => '',
           'orden_agrupacion' => '100',
           'orden'=> '1',
