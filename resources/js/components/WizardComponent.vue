@@ -55,36 +55,49 @@
                                             <!--end: Wizard Step 1-->
                                             <!--begin: Wizard Step 2-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step2" >
-                                              <solicitantes-component v-if="currentStep == 2 && camposGuardadosObtenidos" @updatingSolicitante="updateSolicitante" :solicitantesGuardados="solicitantesGuardados"></solicitantes-component>
+                                              <solicitantes-component v-if="currentStep == 2 && camposGuardadosObtenidos" @updatingSolicitante="updateSolicitante" :solicitantesGuardados="solicitantesGuardados" :usuario="usuario"></solicitantes-component>
                                             </div>
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
                                                 <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria"></resumen-tramite-component>
+                                                <div class="pt-10 pl-10 pr-10">
+                                                  <firma-electronica-component :datosComplementaria="datosComplementaria" :tipoTramite="tipoTramite" ></firma-electronica-component>
+                                                </div>
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                 <div class="mr-2">
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
                                                 </div>
                                                 <div >
-                                                  <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <button type="button" class="btn btn-default font-weight-bolder text-uppercase px-9 py-4"  v-on:click="saveTemp()" :disabled="enviando" v-if="currentStep != 3">
-                                                      Guardar y Continuar después                                                                         
-                                                      <div id="spinner-guardaContinuaDespues" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
-                                                          <span class="sr-only">Loading...</span>
-                                                      </div>
-                                                    </button>
-                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar('guardaContinua')" :disabled="enviando">
-                                                      Guardar y Continuar                                                                          <div id="spinner-guardaFina" class="spinner-border spinner-border-sm float-right" role="status" v-if="enviando" style="margin-left: 5px;">
-                                                          <span class="sr-only">Loading...</span>
-                                                      </div>
-                                                    </button>
-                                                   <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"  v-if="currentStep == 3" v-on:click="agregar('finalizar')" :disabled="finalizando">
-                                                      Finalizar
-                                                      <div id="spinner-finalizar" class="spinner-border spinner-border-sm float-right" role="status" v-if="finalizando" style="margin-left: 5px;">
-                                                          <span class="sr-only">Loading...</span>
-                                                      </div>
-                                                    </button>
+                                                  <div class="btn-group" role="group" aria-label="Basic example"> 
+                                                     <btn-guardar-tramite-component
+                                                      type="temporal"
+                                                      :tipoTramite="tipoTramite" 
+                                                      :files="files" 
+                                                      :datosComplementaria="datosComplementaria" 
+                                                      :idUsuario="idUsuario"  
+                                                      :infoGuardadaFull="infoGuardadaFull" v-if="currentStep != 3" labelBtn="Guardar y Continuar después "
+                                                      @tramiteAgregadoEvent="tramiteAgregadoEvent"
+                                                      ></btn-guardar-tramite-component>
+
+                                                    <btn-guardar-tramite-component
+                                                      :tipoTramite="tipoTramite" 
+                                                      :files="files" 
+                                                      :datosComplementaria="datosComplementaria" 
+                                                      :idUsuario="idUsuario" 
+                                                      :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Guardar y Continuar"
+                                                      @tramiteAgregadoEvent="tramiteAgregadoEvent"
+                                                      ></btn-guardar-tramite-component>
+                                                    <btn-guardar-tramite-component
+                                                      type="finalizar"
+                                                      :tipoTramite="tipoTramite" 
+                                                      :files="files" 
+                                                      :datosComplementaria="datosComplementaria" 
+                                                      :idUsuario="idUsuario"  
+                                                      :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Finalizar"
+                                                      @tramiteAgregadoEvent="tramiteAgregadoEvent"
+                                                      ></btn-guardar-tramite-component>
                                                     <button type="button" id="btnWizard" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
                                                         Next
                                                     </button>
@@ -106,15 +119,17 @@
 
 <script>
     import { uuid } from 'vue-uuid';
+import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponent.vue';
 
     export default {
-        props: ['tramite','idUsuario', 'clave', 'notary'],
+        props: ['tramite','idUsuario', 'clave', 'usuario'],
         computed:{
             declararEn0(){
                 return this.tipoTramite == 'declaracionEn0';
             }
         },
         mounted() {
+          console.log(JSON.parse(JSON.stringify(this.usuario)))
             this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
@@ -155,8 +170,8 @@
                   state:'pending',
                   clickGotTo:2,
                   wizardNumber:2,
-                  wizardTitle:'Solicitantes',
-                  wizardDesc:'Solicitantes del trámite',
+                  wizardTitle:'Solicitante',
+                  wizardDesc:'Solicitante del trámite',
                 },{  
                   id:"tab3",
                   state:'pending',
@@ -170,14 +185,39 @@
         },
 
         methods: {
-            updateScore(formularioValido) {
-              $("#btnWizard").attr("disabled", true);
-              if( formularioValido ){
-                $("#btnWizard").attr("disabled", false);
+          tramiteAgregadoEvent(data){
+            if(data.respuesta){
+              let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
+              $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
+              if(data.response.data.Message){
+                Command: toastr.success("Listo!", data.response.data.Message);
+              } else {
+                Command: toastr.success("Listo !", "El trámite ha sido agregado");
               }
-              this.formularioValido = formularioValido;
-              this.$forceUpdate()
-            },
+              if( data.type == "finalizar" ){
+                redirect("/nuevo-tramite");
+              } if(data.type="temporal"){
+                redirect("/nuevo-tramite");
+              }else {
+                localStorage.removeItem('listaSolicitantes');
+                localStorage.removeItem('datosFormulario');
+                delete this.tramite.detalle;
+                const parsed = JSON.stringify(this.tramite);
+                localStorage.setItem('tramite', parsed);
+                this.goTo(1);
+              }
+
+            }
+            
+          },
+          updateScore(formularioValido) {
+            $("#btnWizard").attr("disabled", true);
+            if( formularioValido ){
+              $("#btnWizard").attr("disabled", false);
+            }
+            this.formularioValido = formularioValido;
+            this.$forceUpdate()
+          },
 
             setDatosComplementaria(datos){
               this.datosComplementaria = datos;
@@ -239,6 +279,7 @@
                 this.currentStep = idStep;
             },
 
+            // INICIA CONFLICTO
             buildFormData(informacion, listaSolicitantes, tramite){
               let formData = new FormData();
               if( this.files && this.files.length > 0 ){
@@ -326,99 +367,12 @@
                 this.enviando = false;
                 this.finalizando = false;
             },
-
+            // TERMINA CONFLICTO
+            
             cambioRadio(valor){
               this.tipoTramite = valor;
             },
 
-            getInformacion(tramite, datosFormulario){
-                let informacion = {
-                  costo_final: tramite &&  tramite.detalle ? tramite.detalle.costo_final: null,
-                  partidas: tramite.partidas,
-                  detalle: tramite.detalle,
-                  tipoTramite:this.tipoTramite
-                }
-                if( datosFormulario && datosFormulario.mottivoDeclaracion0 ){
-                  informacion.mottivoDeclaracion0 = datosFormulario.motivoDeclaracion0
-                }
-                let camposObj = {};
-                if( this.tipoTramite == 'normal'|| this.tipoTramite == 'declaracionEn0' ){
-                  datosFormulario.campos.forEach( campo =>  {
-                    if( campo.valido ){
-                      camposObj[campo.campo_id] = campo.valor;
-                    }
-                  });
-                  informacion.campos=camposObj;
-                  informacion.tipoPersona=datosFormulario.tipoPersona,
-                  //informacion.declararEn0 = this.declararEn0,
-                  informacion.motivoDeclaracion0 = datosFormulario.motivoDeclaracion0,
-                  informacion.tipo_costo_obj = datosFormulario.tipo_costo_obj
-                } else {
-                  informacion.camposComplementaria = this.datosComplementaria;
-                }
-                return informacion;
-            },
-
-            getFormData(){
-              let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
-              let listaSolicitantes = datosTabs[0];
-              let tramite = datosTabs[1];
-              let datosFormulario = datosTabs[2];
-
-              datosFormulario.campos = this.formatearCampos(datosFormulario.campos);
-              let informacion = this.getInformacion( tramite, datosFormulario );
-
-
-              return this.buildFormData( informacion, listaSolicitantes, tramite );
-            },
-
-            formatearCampos(campos){
-              let camposFormateados = campos.map(campo =>{
-                let caracteristicas = this.getCaracteristicas(campo);
-                if(caracteristicas.formato == 'moneda'){
-                  campo.valor = this.formatoNumero( campo.valor );
-                }
-                return campo;
-              })
-              return camposFormateados;
-            },
-            getCaracteristicas(campo){
-              let caracteristicas = {};
-              try {
-                caracteristicas = JSON.parse(campo.caracteristicas + '');
-              }catch(err){
-                console.log(err);
-              }
-              return caracteristicas;
-            },
-            formatoNumero(numberStr){
-                let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
-                return valor;
-            },
-
-            async saveTemp(){
-
-              let guardandoTemporarmente = true;
-              let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register-temporal";
-              let formData = this.getFormData();
-                 
-              try {
-                let response = await axios.post(url, formData, {
-                  headers:{
-                      'Content-Type': 'application/json',
-                  },
-                });
-                Command: toastr.success("Listo!", response.data.Message);
-                redirect("/nuevo-tramite");
-
-              } catch (error) {
-                console.log(error);
-                Command: toastr.warning("Error!", "No fue posible registrar intente de nuevo");
-
-              }
-              this.enviando = false;
-              this.finalizando = false;
-            },
 
             async obtenerCamposTemporales(){
 
@@ -434,7 +388,7 @@
                   this.infoGuardada.archivosGuardados = response.data[0].archivos;
                 }
 
-                this.tipoTramite = this.infoGuardada.tipoTramite;// ? 'normal' : 'complementaria';
+                this.tipoTramite = this.infoGuardada.tipoTramite;
                 this.tipoTramiteDisabled = !this.infoGuardada.campos ? 'normal' : 'complementaria';
 
                 this.camposGuardadosObtenidos = true;

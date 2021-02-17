@@ -45,7 +45,7 @@
 												</div>
 											</div>
 			 								<div v-for="(campo, j) in agrupacion.campos" :key="j" class="col-md-6 col-sm-6 col-xs-6"
-			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results', 'question'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
+			 								:class="j == agrupacion.campos.length - 1 && agrupacion.campos.length % 2 != 0 || ['file', 'results', 'question','enajenante'].includes(campo.tipo) ? 'col-md-12 col-sm-12 col-xs-12' : 'col-md-6 col-sm-6 col-xs-6'">
 
 												<input-component
 													v-if="campo.tipo === 'input'" 
@@ -78,6 +78,7 @@
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm">
 												</textbox-component>
+
 												<checkbox-component 
 													v-else-if="campo.tipo === 'checkbox'"
 													:campo="campo" 
@@ -117,6 +118,14 @@
 													@processGrupal="processGrupal"
 													>
 												</expediente-excel-component>
+												<firma-electronica-component 
+													v-if="campo.tipo == 'firma'">
+												</firma-electronica-component>
+												<enajenantes-component v-else-if="campo.tipo == 'enajenante'" 
+												:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"> ></enajenantes-component>
 												<table-component 
 													:propietario="JSON.parse(campo.caracteristicas).propietario"
 													:campo="campo"
@@ -126,6 +135,19 @@
 													@updateForm="updateForm"
 													v-else-if="campo.tipo == 'table'">
 												</table-component>
+												<fecha-component v-if="campo.tipo === 'date'" 
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"></fecha-component>
+
+												<listado-expedientes-5-i-s-r 
+													v-else-if="campo.tipo === 'expedientes'"
+													:campo="campo" 
+													:showMensajes="showMensajes" 
+													:estadoFormulario="comprobarEstadoFormularioCount"
+													@updateForm="updateForm"></listado-expedientes-5-i-s-r>
+
 												<div v-else-if="campo.tipo == 'question'">
 													¿Desea realizar el cobro por ?
 													<div class="col-md-12 col-lg-12">
@@ -138,21 +160,21 @@
 														    </div>
 
 														    <!-- Default inline 3-->
-														    <div class="custom-control custom-radio custom-control-inline">
+														    <div class="custom-control custom-radio custom-control-inline" v-if="tipo_costo_obj.val_tipo_costo=== 'H'">
 														      	<input type="radio" value="hoja" name="radioInline" class="custom-control-input" id="hoja1" v-model="tipo_costo_obj.tipoCostoRadio" key="millar" @change="cambioModelo">
 
 														      	<label class="custom-control-label" for="hoja1">
 														      		Hoja
 														      	</label>
 														    </div>
-														    <div class="custom-control custom-radio custom-control-inline">
+														    <div class="custom-control custom-radio custom-control-inline" v-if="tipo_costo_obj.val_tipo_costo === 'L'">
 														      	<input type="radio" value="lote" name="radioInline" class="custom-control-input" id="lote1" v-model="tipo_costo_obj.tipoCostoRadio" key="lote" @change="cambioModelo">
 
 														      	<label class="custom-control-label" for="lote1">
 														      		Lote
 														      	</label>
 														    </div>
-														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'" >
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'hoja'"  >
 															    <label>
 															        Hoja
 															    </label>
@@ -160,7 +182,7 @@
 															      <input type="text" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" placeholder="Hoja" id="hojaInput" v-model="tipo_costo_obj.hojaInput"  @change="cambioModelo"/>
 															    </span>
 															</div>
-														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'lote'" >
+														    <div class=" fv-plugins-icon-container" v-if="tipo_costo_obj.tipoCostoRadio=== 'lote'">
 															    <label>
 															        Lote
 															    </label>
@@ -176,7 +198,7 @@
 		 										<div class="text-right">
 													<strong>Nota:</strong>
 													<small class="">
-														Los documentos no se solicitan de forma obligatoria, sin embargo usted no podrá imprimir o descargar su declaración fiscal.
+														De no anexar los documentos obligatorios, no podrá Imprimir su declaración fiscal, mismos que podrán ser requeridos por la autoridad.
 													</small>
 												</div>
 											</div>
@@ -201,7 +223,7 @@
 				selectedId: [],
 				campos: [], 
 				agrupaciones:[], 
-				estado: '',
+				estado: {clave:19, nombre: "NUEVO LEÓN"},
                 mostrar:false,
                 errors: {},
                 showMensajes:false,
@@ -217,7 +239,7 @@
 				rows :[],
 				loading : false,
 				infoExtra : {},
-				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'' },
+				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'', val_tipo_costo:'' },
 				tieneSeccionDocumentos: false
             }
         },
@@ -268,7 +290,7 @@
 				this.expediente = ex;
 			},
 			estadoSelected(estado){
-				this.estado = estado
+				this.estado = estado;
 			},
         	setDeclararEn0(){
         		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
@@ -303,6 +325,11 @@
 				    }
 				}
         	},
+
+        	gestionarCambioEstado(estado){
+        		this.estado = estado;
+        	},
+
         	async updateForm(campo){
 				const tramite = localStorage.getItem('tramite') && JSON.parse(localStorage.getItem('tramite')) ;
 
@@ -396,6 +423,10 @@
 		    		this.$emit('updatingFiles', this.files);
         		}
 
+        		if(campo.nombre == 'Estado' && campo.valido){
+        			this.gestionarCambioEstado(campo.valor);
+        		}
+
         		this.cambioModelo();
         	},
 		    cambioModelo(){
@@ -448,6 +479,7 @@
 				  	this.consulta_api = response.data && response.data.length > 0 ? response.data[0].consulta_api : '';
 					this.campos = response.data && response.data.length > 0 ? response.data[0].campos_data : [];
 					this.tipo_costo_obj.tipo_costo = response.data && response.data.length > 0 ? response.data[0].tipo_costo : '';
+					this.tipo_costo_obj.val_tipo_costo = response.data && response.data.length > 0 ? response.data[0].val_tipo_costo : '';
 
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
@@ -459,11 +491,14 @@
 							if( campo.tipo == 'file' && this.infoGuardada.archivosGuardados){
 								let infoArchivoGuardado = this.infoGuardada.archivosGuardados.find( archivo => archivo.mensaje == campo.nombre );
 								campo.archivoGuardado = true;
-								campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
+								if(infoArchivoGuardado && infoArchivoGuardado.attach){
+									campo.nombreArchivoGuardado = infoArchivoGuardado.attach;
+								}
 							}
 							if (campo.tipo == 'table' || campo.tipo == 'results') {
-								this.campos[index].valido = true
+								this.campos[index].valido = true;
 							}
+
 						});
 					}
 				} catch (error) {
@@ -583,7 +618,7 @@
 
 				if(empty.length == 0){
 					this.panel = [0, 1, 4];
-					const exp = `${all['Municipio'].valor.toString()}${all['Region'].valor}${all['Manzana'].valor}${all['Lote'].valor}`;
+					const exp = `${all['Municipio'].valor.clave.toString()}${all['Region'].valor}${all['Manzana'].valor}${all['Lote'].valor}`;
 					const url = `${process.env.TESORERIA_HOSTNAME}/insumos-catastro-consulta/${exp}`;
 					if(this.ajax !== url){
 						this.ajax = url;

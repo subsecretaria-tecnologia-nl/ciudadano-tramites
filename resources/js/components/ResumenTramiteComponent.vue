@@ -1,19 +1,14 @@
 <template>
         <div class="container">
             <div class="card">
-                <div class="card-header">
-                    <h6 class="mb-3">Trámite:</h6>
-
-                    <div >
-                        <strong> {{ tramite.tramite }}</strong>
-                    </div>
-                    <div v-if="tramite.detalle && tramite.detalle.Salidas"  >
+                 <div class="card-header">
+                    <div v-if="tramite.detalle && tramite.detalle.Salidas"  class="row">
                        
                         <button href="#" class="btn btn-sm btn-light-primary font-weight-bolder text-uppercase mr-2" v-on:click="toggleTabla()" >
                             Ver detalle <i class="fa fa-angle-down"></i>
                         </button>
                     </div>
-                </div>
+                 </div>
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="row">
@@ -85,13 +80,16 @@
                                 <tr v-for="(sol, index) in listaSolicitantes" >
                                     <td class="left strong">{{ sol.rfc }}</td>
                                     <td class="center">
-                                        {{ sol.tipoPersona == "pm" ? sol.razonSocial : sol.nombreSolicitante  }} 
+                                        {{ sol.tipoPersona == "pm" ? sol.razonSocial : sol.nombreSolicitante + ' ' + sol.apPat + ' '  + sol.apMat  }} 
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
+                <code>
+                    {{tramite}}
+                </code>
 
                 </div>
             </div>
@@ -112,6 +110,9 @@
     const CAMPO_MULTA_POR_CORRECCION_FISCAL                     = "MULTA POR CORRECCION FISCAL";
     const CAMPO_FECHA_DE_ESCRITURA_O_MINUTA                     = "FECHA DE ESCRITURA O MINUTA";
     const CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR  = "PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR";
+
+
+    const CAMPO_DIVISAS = "Cambio de divisas";
 
     import Vue from 'vue'
 
@@ -176,7 +177,7 @@
                         let campoPagoProvisional    = this.getCampoByName(CAMPO_PAGO_PROVISIONAL_CONFORME_AL_ARTICULO_126_LISR);
                         let campoGananciaObtenida   = this.getCampoByName(CAMPO_GANANCIA_OBTENIDA);
 
-                        paramsCosto.fecha_escritura = campoFechaMinuta.valor;
+                        paramsCosto.fecha_escritura = campoFechaMinuta.valor.split("-").map(dato => Number(dato)).join("-");
                         paramsCosto.monto_operacion = this.formatoNumero(campoMonto.valor);
                         paramsCosto.ganancia_obtenida = this.formatoNumero(campoGananciaObtenida.valor);    
                         paramsCosto.pago_provisional_lisr = this.formatoNumero(campoPagoProvisional.valor);
@@ -202,7 +203,8 @@
 
                             if(campoSubsidio){                            
                                 if( campoSubsidio.tipo == 'select'  ){
-                                    paramsCosto.subsidio = campoSubsidio.valor[0][0];//62  
+                                    //paramsCosto.subsidio = campoSubsidio.valor[0][0];//62 
+                                    paramsCosto.subsidio = campoSubsidio.valor.clave;
                                 } else {
                                     paramsCosto.subsidio = campoSubsidio.valor;//62    
                                 }
@@ -221,6 +223,11 @@
                                 paramsCosto.lote = campoLote.valor
                             }
                         }                 
+                    }
+                    let campoDivisas              = this.getCampoByName(CAMPO_DIVISAS);
+                    if( campoDivisas ){
+                        paramsCosto.divisa = campoDivisas.valor.clave;
+                        //paramsCosto.divisa = campoDivisas.valor[0][0];
                     }
                 } else {
                     return this.datosComplementaria;
@@ -282,7 +289,6 @@
                             "E (Parte actualizada del impuesto)", "F (Recargos)", "G*(Multa corrección fiscal)", "H (Importe total)"];
                 if(arr.includes(campoName)){
                     let text = Vue.filter('toCurrency')(salida);
-                    console.log(text)
                     return text;
                 } else{
                     return salida;

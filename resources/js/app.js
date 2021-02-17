@@ -12,6 +12,7 @@ Vue.use(Vuetify);
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
+
 document.getElementById("close-header").addEventListener("click", () => {
     let sideBar = document.getElementById("kt-header-sidebar");
     let content = document.getElementById("kt_content");
@@ -60,9 +61,17 @@ Vue.component("checkbox-component" , () => import ( /* webpackChunkName: "js/com
 Vue.component("expediente-excel-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/expediente-excel-component" */ './components/tiposElementos/ExpedienteExcelComponent.vue' ));
 Vue.component("file-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/file-component" */ './components/tiposElementos/FileComponent.vue' ));
 Vue.component("results-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/results-component" */ './components/tiposElementos/ResultsComponent.vue' ));
+Vue.component("firma-electronica-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/results-component" */ './components/tiposElementos/FirmaElectronicaComponent.vue' ));
 
+Vue.component("btn-guardar-tramite-parent" , () => import ( /* webpackChunkName: "js/components/generales/btn-guardar-tramite-parent" */ './components/generales/BtnGuardarTramiteParent.vue' ));
 
-//Vue.component("fecha-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/fecha-component" */ './components/tiposElementos/FechaComponent.vue' ));
+Vue.component("btn-guardar-tramite-component" , () => import ( /* webpackChunkName: "js/components/generales/btn-guardar-tramite-component" */ './components/generales/BtnGuardarTramiteComponent.vue' ));
+Vue.component("fecha-component" , () => import ( /* webpackChunkName: "js/components/tiposElementos/fecha-component" */ './components/tiposElementos/FechaComponent.vue' ));
+Vue.component("enajenantes-component" , () => import ( /* webpackChunkName: "js/components/enajenantes-component" */ './components/EnajenantesComponente.vue' ));
+
+Vue.component("modal-component" , () => import ( /* webpackChunkName: "js/components/modal-component" */ './components/ModalComponent.vue' ));
+Vue.component("listado-expedientes-5-i-s-r" , () => import ( /* webpackChunkName: "js/components/listado-expedientes-5-i-s-r" */ './components/ListadoExpedientes5ISR.vue' ));
+Vue.component("modal-expedientes-component" , () => import ( /* webpackChunkName: "js/components/modal-expedientes-component" */ './components/ModalExpedientesComponent.vue' ));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -21,7 +21,7 @@
 						</b-tooltip>
 					</td>
 					<td v-if="JSON.parse(campo.caracteristicas).formato == 'seleccion' ">
-                       <input type="radio" @change="check($event)"  :value="row.expediente" name="checkbox" :id="row.expediente" class="text-center pl-4 radio" >
+                       <input type="radio" @change="check($event)"  :value="row" name="checkbox" :id="row.expediente" class="text-center pl-4 radio" >
                     </td>
 				</tr>
 			</tbody>
@@ -68,8 +68,9 @@
                 self = this;
  					Array.from(document.getElementsByClassName('radio')).forEach(function(row,index){
 						 if(document.getElementsByClassName('radio')[index].checked){
-							console.log('value- ',row.value);
-							self.$emit('expedienteSeleccionado', row.value);
+							//_value.costo_final no es el expediente catastral pero menciono ray que el armaria este para mostrarlo mas facil en la tabla
+							self.campo.valor= row._value.costo_final;
+							self.$emit('updateForm', self.campo);
 						}
 					});
 					
