@@ -154,7 +154,7 @@
             </v-expansion-panel>
             <v-expansion-panel>
               <v-expansion-panel-header >
-                Datos para determinar el impuestto
+                Datos para determinar el impuesto
                  <template v-slot:actions >
                   <i class="fa fa-angle-down" />
               </template>
@@ -456,7 +456,11 @@ this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
         let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp";
         let response = await axios.get(url + '/' + curp);
         if(response.data){
-          this.rellenarForm(response.data);
+          if(response.data.status == 'error'){
+            Command: toastr.error("Error!", response.data.msg);
+          } else{
+            this.rellenarForm(response.data);
+          }
         } else {
           this.rellenarForm();
         }
