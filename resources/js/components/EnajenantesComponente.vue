@@ -4,8 +4,11 @@
         <b-row >
           <b-col>
             <b-form-group label="Porcentaje que enajena" label-for="procentaje-venta-input" >
-              <!--<b-form-input  id="procentaje-venta-rango" name="procentaje-venta"  v-model="porcentajeVenta" type="range" max="100"></b-form-input>-->
-              <b-form-input  id="procentaje-venta-input" name="procentaje-venta"  v-model="porcentajeVenta" ></b-form-input>
+                <b-form-input  id="procentaje-venta-input" name="procentaje-venta"  v-model="porcentajeVenta" @input="validar"></b-form-input>
+                <b-input-group prepend="0" append="100" >
+                    <b-form-input  id="procentaje-venta-rango" name="procentaje-venta"  v-model="porcentajeVenta" type="range" max="100" @input="validar"></b-form-input>
+                    
+                </b-input-group>
             </b-form-group>
           </b-col>         
         </b-row>
@@ -37,23 +40,23 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     <tr  v-for="(registro, key) in enajentantes"  >
                         <td class="text-center">
                             <i class="fa fa-times" id="iconBtnEliminar"  @click="eliminar(key)" style="cursor: pointer; color: red;" title="Quitar"></i> 
                             {{ registro.tipoPersona }}
                         </td>	
                         <td>
-                            {{ registro.razonSocial }} {{ registro.nombre + ' ' + registro.apPat + ' ' + registro.apMat }}
+                            {{ registro.tipoPersona == 'pm' ? registro.datosPersonales.razonSocial : (registro.datosPersonales.nombre + ' ' + registro.datosPersonales.apPat + ' ' + registro.datosPersonales.apMat) }}
                         </td>	
                         <td>
-                           {{ registro.rfc }}
+                           {{ registro.datosPersonales.rfc }}
                         </td>	
                         <td>
-                            {{ registro.curp }}
+                            {{ registro.datosPersonales.curp }}
                         </td>	
                         <td>
-                            {{ registro.porcentajeCompra }}
+                             
+                             {{ Number.parseFloat(porcentajeVenta * ( registro.porcentajeCompra / 100 )).toFixed(2) }}
                         </td>		
                         <td>
                             <modal-component 
@@ -117,6 +120,18 @@
            	},
 
             editaEnajentante(response){
+                if( response.enajenante.tipoPersona === "pf" ){
+                    delete response.enajenante.datosPersonales.razonSocial;
+                } else {
+                    delete response.enajenante.datosPersonales.nombre
+                    delete response.enajenante.datosPersonales.apPat
+                    delete response.enajenante.apMat;
+                    delete response.enajenante.datosPersonales.curp;
+                    delete response.enajenante.datosPersonales.estado;
+                    delete response.enajenante.datosPersonales.fechaNacimiento;
+                    delete response.enajenante.datosPersonales.genero;
+                    delete response.enajenante.ife;
+                }
             	this.enajentantes[response.index] = response.enajenante;
                 this.$forceUpdate();
                 this.calcularTotalPorcentaje();

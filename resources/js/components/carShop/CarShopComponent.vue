@@ -212,7 +212,13 @@
 						tramitesJson.auxiliar_2 = "";
 						tramitesJson.auxiliar_3 = "";
 						tramitesJson.importe_tramite = '';
-						let info = JSON.parse(soliciante.info);
+						console.log("sadsada#################")
+						let info = {};
+						if( (typeof soliciante.info) == 'string'){
+							info = JSON.parse(soliciante.info);
+						} else {
+							info = soliciante.info;
+						}
 
 						if(info.solicitante){
 							let solicianteInfo = info.solicitante;

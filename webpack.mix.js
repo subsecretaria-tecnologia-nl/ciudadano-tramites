@@ -1,4 +1,6 @@
 const mix = require('laravel-mix');
+let options = mix.options({})
+let hmr = options.config.hmr
 let webpack = require('webpack')
 /*
  |--------------------------------------------------------------------------
@@ -54,4 +56,4 @@ mix.copy('resources/js/popper.min.js', 'public/js/popper.min.js');
 mix.copy('resources/js/jquery.dataTables.min.js', 'public/js/jquery.dataTables.min.js');
 mix.copy('resources/js/dataTables.bootstrap4.min.js', 'public/js/dataTables.bootstrap4.min.js');
 
-// mix.browserSync(process.env.APP_URL);
+// mix.browserSync('localhost:8081');

@@ -21,7 +21,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                                 <!--end::Wizard StepS Nav-->
                             </div>
                         </div>
@@ -35,19 +35,19 @@
                                             <!--begin: Wizard Step 1 Campos tramite-->
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
                                               <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles' && camposGuardadosObtenidos">
-                                                <radio-option-component 
-                                                  :default="tipoTramite" 
+                                                <radio-option-component
+                                                  :default="tipoTramite"
                                                   @valueRadio="cambioRadio"
                                                   :disabledDefault='tipoTramiteDisabled'></radio-option-component>
                                               </div>
                                               <div v-if="(tipoTramite == 'normal' || tipoTramite == 'declaracionEn0') && camposGuardadosObtenidos" >
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
                                                 :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada" :declararEn0="declararEn0">
-                                                  
+
                                                 </campos-tramite-component>
                                               </div>
                                               <div v-else-if="tipoTramite == 'complementaria' && camposGuardadosObtenidos">
-                                                  <formulario-complementaria-component @updatingScore="updateScore" 
+                                                  <formulario-complementaria-component @updatingScore="updateScore"
                                                   @sendData="setDatosComplementaria" :infoGuardada="infoGuardada">
                                                   </formulario-complementaria-component>
                                               </div>
@@ -60,41 +60,54 @@
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
-                                                <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria"></resumen-tramite-component>
-                                                <div class="pt-10 pl-10 pr-10">
-                                                  <firma-electronica-component v-if="tramite.id_tramite == 399" :datosComplementaria="datosComplementaria" :tipoTramite="tipoTramite" ></firma-electronica-component>
+                                                <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'">
+                                                  <resumen-tramite-5-isr-component v-if="currentStep == 3"
+                                                  :tipoTramite="tipoTramite" 
+                                                  :datosComplementaria="datosComplementaria" 
+                                                  :files="files" 
+                                                  :usuario="usuario" :errors="errors">
+                                                  </resumen-tramite-5-isr-component>
                                                 </div>
+                                                <div v-else-if="tramite.tramite != '5% de Enajenación de Inmuebles'">
+                                                  <resumen-tramite-component v-if="currentStep == 3" 
+                                                  :tipoTramite="tipoTramite" 
+                                                  :datosComplementaria="datosComplementaria" 
+                                                  ></resumen-tramite-component>
+                                                </div>
+                                                  <div class="pt-10 pl-10 pr-10">
+                                                    <firma-electronica-component v-if="tramite.id_tramite == 399" :datosComplementaria="datosComplementaria" :tipoTramite="tipoTramite" ></firma-electronica-component>
+                                                  </div>
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                 <div class="mr-2">
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
                                                 </div>
                                                 <div >
-                                                  <div class="btn-group" role="group" aria-label="Basic example"> 
+                                                  <div class="btn-group" role="group" aria-label="Basic example">
                                                      <btn-guardar-tramite-component
                                                       type="temporal"
-                                                      :tipoTramite="tipoTramite" 
-                                                      :files="files" 
-                                                      :datosComplementaria="datosComplementaria" 
-                                                      :idUsuario="idUsuario"  
+                                                      :tipoTramite="tipoTramite"
+                                                      :files="files"
+                                                      :datosComplementaria="datosComplementaria"
+                                                      :idUsuario="idUsuario"
                                                       :infoGuardadaFull="infoGuardadaFull" v-if="currentStep != 3" labelBtn="Guardar y Continuar después "
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
 
                                                     <btn-guardar-tramite-component
-                                                      :tipoTramite="tipoTramite" 
-                                                      :files="files" 
-                                                      :datosComplementaria="datosComplementaria" 
-                                                      :idUsuario="idUsuario" 
+                                                      :tipoTramite="tipoTramite"
+                                                      :files="files"
+                                                      :datosComplementaria="datosComplementaria"
+                                                      :idUsuario="idUsuario"
                                                       :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Guardar y Continuar"
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
                                                     <btn-guardar-tramite-component
                                                       type="finalizar"
-                                                      :tipoTramite="tipoTramite" 
-                                                      :files="files" 
-                                                      :datosComplementaria="datosComplementaria" 
-                                                      :idUsuario="idUsuario"  
+                                                      :tipoTramite="tipoTramite"
+                                                      :files="files"
+                                                      :datosComplementaria="datosComplementaria"
+                                                      :idUsuario="idUsuario"
                                                       :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Finalizar"
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
@@ -129,14 +142,14 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
             }
         },
         mounted() {
-          console.log(JSON.parse(JSON.stringify(this.usuario)))
+
             this.tramite.id_seguimiento = this.clave ? this.clave : uuid.v4();
             $("#tramite-name span").text(this.tramite.tramite.toUpperCase())
             const parsed = JSON.stringify(this.tramite);
             localStorage.setItem('tramite', parsed);
 
             if( this.clave ){
-               this.obtenerCamposTemporales(); 
+               this.obtenerCamposTemporales();
             } else {
               this.camposGuardadosObtenidos = true;
             }
@@ -155,24 +168,24 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
                 tipoTramite:'normal',
                 datosComplementaria:[],
                 infoGuardada:{}, camposGuardadosObtenidos: false,
-                infoGuardadaFull:{}, 
+                infoGuardadaFull:{},
                 solicitantesGuardados:[],
                 tipoTramiteDisabled:'',
-                steps:[{  
+                steps:[{
                   id:"tab1",
                   state:'current',
                   clickGotTo:1,
                   wizardNumber:1,
                   wizardTitle:'Datos',
                   wizardDesc:'Información sobre el trámite',
-                },{  
+                },{
                   id:"tab2",
                   state:'pending',
                   clickGotTo:2,
                   wizardNumber:2,
                   wizardTitle:'Solicitante',
                   wizardDesc:'Solicitante del trámite',
-                },{  
+                },{
                   id:"tab3",
                   state:'pending',
                   clickGotTo:3,
@@ -180,23 +193,26 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
                   wizardTitle:'Finalizar',
                   wizardDesc:'Revisar y completar',
                 }],
+                errors:[]
                 //declararEn0:false
             }
         },
 
         methods: {
           tramiteAgregadoEvent(data){
+            this.errors = [];
             if(data.respuesta){
+              let totalAgregados = data.response ? 1 : data.responses.length;
               let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
-              $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
-              if(data.response.data.Message){
-                Command: toastr.success("Listo!", data.response.data.Message);
-              } else {
+              $("#totalTramitesCarrito" ).text( totalCarritoActual + totalAgregados  );
+
+           
                 Command: toastr.success("Listo !", "El trámite ha sido agregado");
-              }
+              
               if( data.type == "finalizar" ){
+                console.log("redirigir")
                 redirect("/nuevo-tramite");
-              } if(data.type="temporal"){
+              } if(data.type=="temporal"){
                 redirect("/nuevo-tramite");
               }else {
                 localStorage.removeItem('listaSolicitantes');
@@ -206,9 +222,13 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
                 localStorage.setItem('tramite', parsed);
                 this.goTo(1);
               }
+            } else {
 
+              if(data.err && data.err.config && data.err.config.headers.indiceEnajenante){
+                this.errors = data.err.config;
+              }
             }
-            
+
           },
           updateScore(formularioValido) {
             $("#btnWizard").attr("disabled", true);
@@ -279,6 +299,96 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
                 this.currentStep = idStep;
             },
 
+            // INICIA CONFLICTO
+            buildFormData(informacion, listaSolicitantes, tramite){
+              let formData = new FormData();
+              if( this.files && this.files.length > 0 ){
+                this.files.forEach( (file, index) => {
+                    if(this.files[index].valor && this.files[index].valor.name){
+                      formData.append('file['+  index +']', this.files[index].valor);
+                      formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                    }
+                });
+              }
+              formData.append('user_id', this.idUsuario );
+              formData.append('info', JSON.stringify(informacion) );
+              if( listaSolicitantes && listaSolicitantes.length > 0 ){
+                formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
+              }
+              formData.append('clave', tramite.id_seguimiento );
+              formData.append('catalogo_id', tramite.id_tramite );
+              if(  this.infoGuardadaFull && this.infoGuardadaFull.id  ){
+                formData.append('id', this.infoGuardadaFull.id );
+                //formData.append('status', 80 );
+              }
+              return formData;
+            },
+
+            getStorage(key, goTab){
+                if (localStorage.getItem(key)) {
+                  try {
+                    return JSON.parse(localStorage.getItem(key));
+                  } catch(e) {
+                    localStorage.removeItem(key);
+                    if(  goTab ){
+                      goTo(goTab);
+                      return false;
+                    }
+                    
+                  }
+                }
+            },
+
+            obtenerDatosTabs(){
+                let listaSolicitantes = this.getStorage( 'listaSolicitantes', 2 );
+                let tramite = this.getStorage( 'tramite' );
+                let datosFormulario = this.getStorage( 'datosFormulario', 1);
+                return [listaSolicitantes, tramite, datosFormulario];
+            },
+
+            async agregar( type){
+                let formData = this.getFormData();
+
+                if( type == "finalizar" ){
+                  this.finalizando = true;
+                } else {
+                  this.enviando = true;
+                }
+
+                // CON ESTE SE GUARDA EL REGISTRO DEL TRAMITE
+                // CREAR RUTA PARA GUARDAR EN BATCH
+                let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-register";
+                try {
+                  let response = await axios.post(url, formData, {
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                  });
+
+                  let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
+                  $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
+                  Command: toastr.success("Listo!", response.data.Message);
+                  this.registrado = true;
+                  if( type == "finalizar" ){
+                    redirect("/nuevo-tramite");
+                  } else {
+                    localStorage.removeItem('listaSolicitantes');
+                    localStorage.removeItem('datosFormulario');
+                    delete this.tramite.detalle;
+                    const parsed = JSON.stringify(this.tramite);
+                    localStorage.setItem('tramite', parsed);
+                    this.goTo(1);
+                  }
+                } catch (error) {
+                  console.log(error);
+                  Command: toastr.warning("Error!", "No fue posible registrar intente de nuevo");
+
+                }
+                this.enviando = false;
+                this.finalizando = false;
+            },
+            // TERMINA CONFLICTO
+            
             cambioRadio(valor){
               this.tipoTramite = valor;
             },
@@ -307,13 +417,13 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
                   let solicitanteNuevo = JSON.parse(solicitante.info).solicitante;
                   if( solicitanteNuevo ){
                     solicitanteNuevo.id = solicitante.id;
-                  } 
+                  }
                   return solicitanteNuevo;
                 });
-  
+
               } catch (error) {
                   console.log(error);
-              }   
+              }
             },
 
         }
