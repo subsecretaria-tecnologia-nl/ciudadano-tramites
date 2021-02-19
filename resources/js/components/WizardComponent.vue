@@ -21,7 +21,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                                 <!--end::Wizard StepS Nav-->
                             </div>
                         </div>
@@ -35,19 +35,19 @@
                                             <!--begin: Wizard Step 1 Campos tramite-->
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
                                               <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles' && camposGuardadosObtenidos">
-                                                <radio-option-component 
-                                                  :default="tipoTramite" 
+                                                <radio-option-component
+                                                  :default="tipoTramite"
                                                   @valueRadio="cambioRadio"
                                                   :disabledDefault='tipoTramiteDisabled'></radio-option-component>
                                               </div>
                                               <div v-if="(tipoTramite == 'normal' || tipoTramite == 'declaracionEn0') && camposGuardadosObtenidos" >
                                                 <campos-tramite-component :tramite="tramite" v-if="currentStep == 1"
                                                 :formularioValido="formularioValido" @updatingScore="updateScore" :comprobarEstadoFormularioCount="comprobarEstadoFormularioCount" @updatingFiles="updatingFiles" :infoGuardada="infoGuardada" :declararEn0="declararEn0">
-                                                  
+
                                                 </campos-tramite-component>
                                               </div>
                                               <div v-else-if="tipoTramite == 'complementaria' && camposGuardadosObtenidos">
-                                                  <formulario-complementaria-component @updatingScore="updateScore" 
+                                                  <formulario-complementaria-component @updatingScore="updateScore"
                                                   @sendData="setDatosComplementaria" :infoGuardada="infoGuardada">
                                                   </formulario-complementaria-component>
                                               </div>
@@ -66,7 +66,6 @@
                                                   :datosComplementaria="datosComplementaria" 
                                                   :files="files" 
                                                   :usuario="usuario" :errors="errors">
-                                                    
                                                   </resumen-tramite-5-isr-component>
                                                 </div>
                                                 <div v-else-if="tramite.tramite != '5% de Enajenación de Inmuebles'">
@@ -75,38 +74,38 @@
                                                   :datosComplementaria="datosComplementaria" 
                                                   ></resumen-tramite-component>
                                                 </div>
-                                                
+
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                 <div class="mr-2">
                                                     <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Previous</button>
                                                 </div>
                                                 <div >
-                                                  <div class="btn-group" role="group" aria-label="Basic example"> 
+                                                  <div class="btn-group" role="group" aria-label="Basic example">
                                                      <btn-guardar-tramite-component
                                                       type="temporal"
-                                                      :tipoTramite="tipoTramite" 
-                                                      :files="files" 
-                                                      :datosComplementaria="datosComplementaria" 
-                                                      :idUsuario="idUsuario"  
+                                                      :tipoTramite="tipoTramite"
+                                                      :files="files"
+                                                      :datosComplementaria="datosComplementaria"
+                                                      :idUsuario="idUsuario"
                                                       :infoGuardadaFull="infoGuardadaFull" v-if="currentStep != 3" labelBtn="Guardar y Continuar después "
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
 
                                                     <btn-guardar-tramite-component
-                                                      :tipoTramite="tipoTramite" 
-                                                      :files="files" 
-                                                      :datosComplementaria="datosComplementaria" 
-                                                      :idUsuario="idUsuario" 
+                                                      :tipoTramite="tipoTramite"
+                                                      :files="files"
+                                                      :datosComplementaria="datosComplementaria"
+                                                      :idUsuario="idUsuario"
                                                       :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Guardar y Continuar"
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
                                                     <btn-guardar-tramite-component
                                                       type="finalizar"
-                                                      :tipoTramite="tipoTramite" 
-                                                      :files="files" 
-                                                      :datosComplementaria="datosComplementaria" 
-                                                      :idUsuario="idUsuario"  
+                                                      :tipoTramite="tipoTramite"
+                                                      :files="files"
+                                                      :datosComplementaria="datosComplementaria"
+                                                      :idUsuario="idUsuario"
                                                       :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Finalizar"
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
@@ -131,6 +130,7 @@
 
 <script>
     import { uuid } from 'vue-uuid';
+import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponent.vue';
 
     export default {
         props: ['tramite','idUsuario', 'clave', 'usuario'],
@@ -147,7 +147,7 @@
             localStorage.setItem('tramite', parsed);
 
             if( this.clave ){
-               this.obtenerCamposTemporales(); 
+               this.obtenerCamposTemporales();
             } else {
               this.camposGuardadosObtenidos = true;
             }
@@ -166,24 +166,24 @@
                 tipoTramite:'normal',
                 datosComplementaria:[],
                 infoGuardada:{}, camposGuardadosObtenidos: false,
-                infoGuardadaFull:{}, 
+                infoGuardadaFull:{},
                 solicitantesGuardados:[],
                 tipoTramiteDisabled:'',
-                steps:[{  
+                steps:[{
                   id:"tab1",
                   state:'current',
                   clickGotTo:1,
                   wizardNumber:1,
                   wizardTitle:'Datos',
                   wizardDesc:'Información sobre el trámite',
-                },{  
+                },{
                   id:"tab2",
                   state:'pending',
                   clickGotTo:2,
                   wizardNumber:2,
                   wizardTitle:'Solicitante',
                   wizardDesc:'Solicitante del trámite',
-                },{  
+                },{
                   id:"tab3",
                   state:'pending',
                   clickGotTo:3,
@@ -226,7 +226,7 @@
                 this.errors = data.err.config;
               }
             }
-            
+
           },
           updateScore(formularioValido) {
             $("#btnWizard").attr("disabled", true);
@@ -325,13 +325,13 @@
                   let solicitanteNuevo = JSON.parse(solicitante.info).solicitante;
                   if( solicitanteNuevo ){
                     solicitanteNuevo.id = solicitante.id;
-                  } 
+                  }
                   return solicitanteNuevo;
                 });
-  
+
               } catch (error) {
                   console.log(error);
-              }   
+              }
             },
 
         }
