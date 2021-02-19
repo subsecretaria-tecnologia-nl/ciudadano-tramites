@@ -7,7 +7,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 
 class FormatoDeclaracionController extends Controller
 {
-    public function index ($info) {
+    public function index ($id) {
 		// dd( json_decode($info) );
 		$tramite = curlSendRequest("GET", getenv("TESORERIA_HOSTNAME")."/solicitudes-get-tramite-pdf/{$id}");
 		if(isset($tramite->tramite) && count( $tramite->tramite->solicitudes) > 0){
