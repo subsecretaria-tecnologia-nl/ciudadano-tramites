@@ -261,6 +261,7 @@
                 data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
                 
                 try {
+                    // CONSULTA EL COSTO
                     let response = await axios.post(url, data);
                     let detalleTramite = response.data;
 

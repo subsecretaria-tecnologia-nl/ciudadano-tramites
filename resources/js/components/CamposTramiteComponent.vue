@@ -114,7 +114,9 @@
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
 													@updateForm="updateForm" :files="files"
-													@validarFormulario="validarFormulario">
+													@validarFormulario="validarFormulario"
+													@processGrupal="processGrupal"
+													>
 												</expediente-excel-component>
 												<firma-electronica-component 
 													v-if="campo.tipo == 'firma'">
@@ -375,7 +377,7 @@
 					}
 
 					if(campo.nombre.search(/tipo de busqueda/i) >= 0){
-						this.fields = [ 'Expediente Catastral', 'Municipio', 'Tipo de predio', 'Tipo de Construcción', 'Ejemplo' ];
+						this.fields = [ 'Expediente Catastral', 'Municipio', 'Tipo de predio', 'Tipo de Construcción', 'Propietarios' ];
 						if(campo.valor){
 							switch(campo.valor.toString()){
 								case 'individual':
@@ -636,6 +638,8 @@
 							])
 						}
 
+						console.log(rows);
+
 						const noValido = this.response.filter(ele => ele.cta_valida === '0');
 						const bloqueados = this.response.filter(ele => ele.bloqueado && ele.bloqueado !== '0');
 						const fallidos = this.response.filter(ele => ele.resultado === 'NO ENCONTRADO');
@@ -673,7 +677,7 @@
 							listItems : infoExtra
 						};
 
-						this.rows = rows;
+						// this.rows = rows;
 						this.loading = false;
 					}
 				}else{
@@ -739,6 +743,61 @@
 				}else{
 					this.panel = [0, 2];
 				}
+			},
+			async processGrupal({response, exp}){
+				console.log('hello');
+				let rows = [];
+				this.response.push(response.data);
+				if(response.data.resultado) rows = [exp, response.data.resultado]
+				else if(response.data.datos_catastrales){
+					const propietarios = response.data.datos_propietarios.length > 1 ? { label : response.data.datos_propietarios[0].nombrePro, tooltip : { title : 'Propietarios', listItems : response.data.datos_propietarios.map(e => e.nombrePro) } } : response.data.datos_propietarios[0].nombrePro;
+					rows = [
+						response.data.datos_catastrales[0].expediente_catastral,
+						response.data.nombre_municipio,
+						response.data.tipo_predio,
+						response.data.uso_suelo,
+						propietarios
+					]
+				}else{
+					rows = [exp, 'Error al consultar WS. Por favor, intenta de nuevo.']
+				}
+				
+				const noValido = this.response.filter(ele => ele.cta_valida === '0');
+				const bloqueados = this.response.filter(ele => ele.bloqueado && ele.bloqueado !== '0');
+				const fallidos = this.response.filter(ele => ele.resultado === 'NO ENCONTRADO');
+				const autorizados = this.response.filter(ele => ele.datos_propietarios);
+
+				const infoExtra = [
+					{
+						label : 'Registros Consultados',
+						value : this.response.length
+					},
+					{
+						label : 'No Validos',
+						value : noValido ? noValido.length : 0
+					},
+					{
+						label : 'Bloqueados',
+						value : bloqueados ? bloqueados.length : 0
+					},
+					{
+						label : 'Fallidos',
+						value : fallidos ? fallidos.length : 0
+					},
+					{
+						label : 'Autorizados',
+						value : autorizados ? autorizados.length : 0
+					}
+				];
+
+				this.infoExtra = {
+					title : 'Resultados de la búsqueda',
+					listItems : infoExtra
+				};
+
+				this.rows.push(rows);
+				this.loading = false;
+				this.panel = [0, 3, 4];
 			}
 		 },
 		 updated(){
