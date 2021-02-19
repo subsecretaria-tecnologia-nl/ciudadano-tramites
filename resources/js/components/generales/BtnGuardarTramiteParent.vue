@@ -84,7 +84,7 @@
                 return informacion;
             },
 
-            buildFormData(informacion, listaSolicitantes, tramite){
+            buildFormData(informacion, listaSolicitantes, tramite, idEdicion){
               let formData = new FormData();
               if( this.files && this.files.length > 0 ){
               this.files.forEach( (file, index) => {
@@ -99,10 +99,12 @@
               if( listaSolicitantes && listaSolicitantes.length > 0 ){
               formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
               }
-              formData.append('clave', tramite.id_seguimiento );
-              formData.append('catalogo_id', tramite.id_tramite );
-              if(  this.infoGuardadaFull && this.infoGuardadaFull.id  ){
-                formData.append('id', this.infoGuardadaFull.id );
+              if(tramite){
+                formData.append('clave', tramite.id_seguimiento );
+                formData.append('catalogo_id', tramite.id_tramite );
+              }
+              if(  idEdicion  ){
+                formData.append('id', idEdicion );
               }
               return formData;
             },
@@ -115,10 +117,14 @@
 
                 datosFormulario.campos = this.formatearCampos(datosFormulario.campos);
                 let informacion = this.getInformacion( tramite, datosFormulario );
-
-
-                return this.buildFormData( informacion, listaSolicitantes, tramite );
+                let idEdicion = null;
+                if(  this.infoGuardadaFull && this.infoGuardadaFull.id  ){
+                  idEdicion = this.infoGuardadaFull.id ;
+                }
+                return this.buildFormData( informacion, listaSolicitantes, tramite, idEdicion );
             },
+
+            
 
 
 
