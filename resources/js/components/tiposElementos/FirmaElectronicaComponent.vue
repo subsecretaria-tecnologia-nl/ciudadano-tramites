@@ -9,7 +9,7 @@
 
 
 export default {
-    props: ['datosComplementaria', 'tipoTramite'],
+    props: ['datosComplementaria', 'tipoTramite','usuario'],
     data(){
         return{
             tramite : {},
@@ -53,6 +53,8 @@ export default {
             var folio =[ '213333116' , '213333117'];
             // var folio ='213333112';
             var rfc = 'GOFF951130TJ0';
+            // var rfc = this.usuario.rfc;
+            
             console.log('documentoa consultar: ', urlDocumento);
 
             var data = {

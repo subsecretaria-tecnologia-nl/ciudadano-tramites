@@ -16,7 +16,7 @@ class FormatoDeclaracionController extends Controller
 			//  dd(gettype($info));
 			$pdf = PDF::loadView('pdf.formatoDeclaracion5', compact('info'));
         	return $pdf->stream('formatoDeclaracion5.blade.pdf');
-		// }
+		}
 
 		dd("No existe un trámite con el ID '{$id}' en nuestro registro.");
     }
