@@ -62,7 +62,7 @@
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
                                                 <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria"></resumen-tramite-component>
                                                 <div class="pt-10 pl-10 pr-10">
-                                                  <firma-electronica-component :datosComplementaria="datosComplementaria" :tipoTramite="tipoTramite" ></firma-electronica-component>
+                                                  <firma-electronica-component v-if="tramite.id_tramite == 399" :datosComplementaria="datosComplementaria" :tipoTramite="tipoTramite" ></firma-electronica-component>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
