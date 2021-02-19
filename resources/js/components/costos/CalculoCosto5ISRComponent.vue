@@ -14,8 +14,7 @@
 
             let paramsCosto = {};
             let multaCorreccion            = this.datosParaDeterminarImpuesto.multaCorreccion;
-console.log("datos para detterminar");
-console.log(JSON.parse(JSON.stringify(this.datosParaDeterminarImpuesto)))
+
 
             paramsCosto.monto_operacion     = this.formatoNumero(this.datosParaDeterminarImpuesto.montoOperacion);
             paramsCosto.pago_provisional_lisr    = this.formatoNumero(this.datosParaDeterminarImpuesto.pagoProvisional);
@@ -55,22 +54,13 @@ console.log(JSON.parse(JSON.stringify(this.datosParaDeterminarImpuesto)))
                 try {
                     let url = process.env.APP_URL + "/getcostoImpuesto";
                     let response = await axios.post(url, params);
-                   
+                    
+                    this.$emit('costosObtenidos', {respuestaCosto:response.data, indice:this.index, success:true});
 
-                    //let detalleTramite = response.data;
-
-
-                    //this.tramite.detalle =  detalleTramite;
-
-
-                    //const parsed = JSON.stringify(this.tramite);
-                    //localStorage.setItem('tramite', parsed);  
-                    this.$emit('costosObtenidos', {respuestaCosto:response.data, indice:this.index});
-                    //this.obteniendoCosto = false;
                 } catch (error) {
                     console.log(error);
+                    this.$emit('costosObtenidos', {respuestaCosto:error, indice:this.index, success:false});
                 }
-                //data = this.getParamsCalculoCosto(consulta_api, data, tipo_costo_obj);
             },
         }
     }

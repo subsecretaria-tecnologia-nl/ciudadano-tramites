@@ -36,7 +36,7 @@
                                         :tramite="tramite" :tipoPersona="data.item.tipoPersona" @costosObtenidos="costosObtenidos" :index="data.index">
                                         </calculo-costo-tramite-5-isr-component>                                    
                                     </div>
-                                    <div v-else-if="data.item.detalle">
+                                    <div v-else-if="data.item.detalle && data.item.detalle.Salidas">
                                         
                                         <div class="text-center">
                                           <b-button :id="'popover-button-variant' + data.index" href="#" tabindex="0" title="Click para ver detalles">
@@ -66,10 +66,12 @@
                                 <template #cell(status)="data">
                                     <div v-if="data.item.status">
                                         <div v-if="data.item.status.error">
-                                            No fue posible guardar los datos del enajenante, intente de nuevo
+                                            {{ data.item.status.msj }}
+
+                                            
                                         </div>
                                         <div v-else-if="!data.item.status.error">
-                                            Palomita
+                                            Ok
                                         </div>
                                     </div>
                                 </template>                                
@@ -176,17 +178,25 @@
             },
 
             costosObtenidos(data){
-                console.log("salidas")
-                console.log( JSON.parse( JSON.stringify(data) ) )
-                this.listaEnajentantes[data.indice].detalle = data.respuestaCosto;
+                let detalle =  data.success ? data.respuestaCosto : true;
+
+                if(!data.success){
+                    this.listaEnajentantes[data.indice].status  =  {
+                        error:true,
+                        indice:data.indice,
+                        msj :"No fue posible obtener los costos"
+                    };
+                }
+
+                this.listaEnajentantes[data.indice].detalle = detalle;
                 this.$refs.table.refresh();
 
                 let campos = this.datosFormulario.campos;
                 let indexCampoEnajenantes = campos.findIndex( campo =>  campo.tipo == 'enajenante');
-                this.datosFormulario.campos[indexCampoEnajenantes].valor.enajenantes[data.indice].detalle  = data.respuestaCosto;
 
                 const parsed = JSON.stringify(this.datosFormulario);
                 localStorage.setItem('datosFormulario', parsed);  
+
             },
 
 
@@ -224,7 +234,8 @@
                         this.datosFormulario.campos[indexCampoEnajenantes].valor.enajenantes[val.headers.indiceEnajenante].status = {
                             guardado:false,
                             error:true,
-                            indice:val.headers.indiceEnajenante
+                            indice:val.headers.indiceEnajenante,
+                            msj:"No fue posible guardar los datos del enajenante, intente de nuevo"
                         };
                         this.datosFormulario.errorAlguardar = true;             
                         const parsed = JSON.stringify(this.datosFormulario);
