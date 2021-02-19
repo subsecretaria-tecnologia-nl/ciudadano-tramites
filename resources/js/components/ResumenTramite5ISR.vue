@@ -19,64 +19,86 @@
                         </div>
                     </b-row>                                      
                     <b-row>
-                        <h2>Enajenantes</h2>
-                        <b-table responsive striped hover :items="listaEnajentantes" :fields="camposEnajenantes" ref="table">
-                            <template #cell(datosPersonales)="data">
-                                <template-datos-personales-component :datosPersonales="data.item.datosPersonales"></template-datos-personales-component>
-                            </template>
-                            <template #cell(datosParaDeterminarImpuesto)="data" >
-                                <div v-if="!data.item.detalle"  class="text-center">
-                                    <b-spinner type="grow" label="Spinning"></b-spinner>
-                                    <calculo-costo-tramite-5-isr-component 
-                                    :datosParaDeterminarImpuesto="data.item.datosParaDeterminarImpuesto" 
-                                    :campos="camposGenerales"
-                                    :tramite="tramite" :tipoPersona="data.item.tipoPersona" @costosObtenidos="costosObtenidos" :index="data.index">
-                                    </calculo-costo-tramite-5-isr-component>                                    
-                                </div>
-                                <div v-else-if="data.item.detalle">
+                        <div class="col-sm-12">
+                            <h2 class="border-bottom my-3">Enajenantes</h2>
+                        </div>
+                        <div class="col-sm-12">
+                            <b-table responsive striped hover :items="listaEnajentantes" :fields="camposEnajenantes" ref="table">
+                                <template #cell(datosPersonales)="data">
+                                    <template-datos-personales-component :datosPersonales="data.item.datosPersonales"></template-datos-personales-component>
+                                </template>
+                                <template #cell(datosParaDeterminarImpuesto)="data" >
+                                    <div v-if="!data.item.detalle"  class="text-center">
+                                        <b-spinner type="grow" label="Spinning"></b-spinner>
+                                        <calculo-costo-tramite-5-isr-component 
+                                        :datosParaDeterminarImpuesto="data.item.datosParaDeterminarImpuesto" 
+                                        :campos="camposGenerales"
+                                        :tramite="tramite" :tipoPersona="data.item.tipoPersona" @costosObtenidos="costosObtenidos" :index="data.index">
+                                        </calculo-costo-tramite-5-isr-component>                                    
+                                    </div>
+                                    <div v-else-if="data.item.detalle">
+                                        
+                                        <div class="text-center">
+                                          <b-button :id="'popover-button-variant' + data.index" href="#" tabindex="0" title="Click para ver detalles">
+                                            {{currencyFormat('H (Importe total)', data.item.detalle.Salidas['H (Importe total)'])}}
+                                          </b-button>
+                                          <b-popover :target="'popover-button-variant' + data.index"  triggers="focus">
+                                            <template #title>Detalle</template>
+                                            
+                                                <b-card no-body>
+                                                    <b-card-body id="nav-scroller"ref="content"style="position:relative; height:400px; overflow-y:scroll;">
+                                                        <b-row v-for="(salida, key) in data.item.detalle.Salidas" :key="key">
+                                                            <b-col class="left" style="width: 70%" >
+                                                                <strong>{{ key }}</strong>
+                                                            </b-col>
+                                                            <b-col class="right" >
+                                                                <span class="text-muted">   {{ currencyFormat(key, salida) }} </span>
+                                                            </b-col>
+                                                        </b-row>
+                                                    </b-card-body> 
+                                                </b-card>
+                                            
+                                          </b-popover>
+                                        </div>                          
+                                    </div>
                                     
-                                    <div class="text-center">
-                                      <b-button :id="'popover-button-variant' + data.index" href="#" tabindex="0" title="Click para ver detalles">
-                                        {{currencyFormat('H (Importe total)', data.item.detalle.Salidas['H (Importe total)'])}}
-                                      </b-button>
-                                      <b-popover :target="'popover-button-variant' + data.index"  triggers="focus">
-                                        <template #title>Detalle</template>
-                                        
-                                            <b-card no-body>
-                                                <b-card-body id="nav-scroller"ref="content"style="position:relative; height:400px; overflow-y:scroll;">
-                                                    <b-row v-for="(salida, key) in data.item.detalle.Salidas" :key="key">
-                                                        <b-col class="left" style="width: 70%" >
-                                                            <strong>{{ key }}</strong>
-                                                        </b-col>
-                                                        <b-col class="right" >
-                                                            <span class="text-muted">   {{ currencyFormat(key, salida) }} </span>
-                                                        </b-col>
-                                                    </b-row>
-                                                </b-card-body> 
-                                            </b-card>
-                                        
-                                      </b-popover>
-                                    </div>                          
-                                </div>
-                                
-                            </template>
-                        </b-table>
+                                </template>
+                                <template #cell(status)="data">
+                                    <div v-if="data.item.status">
+                                        <div v-if="data.item.status.error">
+                                            No fue posible guardar los datos del enajenante, intente de nuevo
+                                        </div>
+                                        <div v-else-if="!data.item.status.error">
+                                            Palomita
+                                        </div>
+                                    </div>
+                                </template>                                
+                            </b-table>
+                        </div>
                     </b-row>      
                     <b-row>
-                        <h2>Expedientes</h2>
-                        <b-table responsive  hover :items="listaExpedientes" :fields="camposExpedientes">
-                            <template #cell(direccion)="data">
-                                {{ data.item.direccion.datos_direccion[0].calle }}
-                            </template>
-                        </b-table>
+                        <div class="col-sm-12">
+                            <h2 class="border-bottom my-3">Expedientes</h2>
+                        </div>
+                        <div class="col-sm-12">
+                            <b-table responsive  hover :items="listaExpedientes" :fields="camposExpedientes">
+                                <template #cell(direccion)="data">
+                                    {{ data.item.direccion.datos_direccion[0].calle }}
+                                </template>
+                            </b-table>
+                        </div>
                     </b-row>   
                     <b-row>
-                        <h2>Archivos</h2>
-                        <b-table responsive striped hover :items="files" :fields="camposArchivos">
-                            <template #cell(nombrreFile)="data">
-                                {{ data.item.nombrreFile}}
-                            </template>
-                        </b-table>
+                        <div class="col-sm-12">
+                            <h2 class="border-bottom my-3">Archivos</h2>
+                        </div>
+                        <div class="col-sm-12">
+                            <b-table responsive striped hover :items="files" :fields="camposArchivos">
+                                <template #cell(nombrreFile)="data">
+                                    {{ data.item.nombrreFile|| "No se selecciono ninguno"}}
+                                </template>
+                            </b-table>
+                        </div>
                     </b-row> 
                 </div>
             </div>
@@ -89,7 +111,7 @@
 
     export default {
 
-        props: ['datosComplementaria','tipoTramite', 'files', 'usuario'],
+        props: ['datosComplementaria','tipoTramite', 'files', 'usuario','errors'],
         mounted() {
             this.obtenerInformacionDelTramite();
             
@@ -111,6 +133,7 @@
                     { key: 'datosPersonales', label: 'Datos Personales' },
                     { key: 'tipoPersona', label: 'Tipo Persona' },
                     { key: 'datosParaDeterminarImpuesto', label: 'Total' },
+                    'status'
 
             ];
         },
@@ -157,6 +180,13 @@
                 console.log( JSON.parse( JSON.stringify(data) ) )
                 this.listaEnajentantes[data.indice].detalle = data.respuestaCosto;
                 this.$refs.table.refresh();
+
+                let campos = this.datosFormulario.campos;
+                let indexCampoEnajenantes = campos.findIndex( campo =>  campo.tipo == 'enajenante');
+                this.datosFormulario.campos[indexCampoEnajenantes].valor.enajenantes[data.indice].detalle  = data.respuestaCosto;
+
+                const parsed = JSON.stringify(this.datosFormulario);
+                localStorage.setItem('datosFormulario', parsed);  
             },
 
 
@@ -172,7 +202,39 @@
                 }
             }
 
-        }
+        },
+          watch: {
+            'errors': {
+                handler: function (val, oldVal) {
+                    this.listaEnajentantes =  this.listaEnajentantes.map( enajenante => {
+                        delete enajenante.status;
+                        return enajenante;
+                    } );
+                    this.$refs.table.refresh();
+                    if(val.headers.indiceEnajenante){
+                   
+                        this.listaEnajentantes[val.headers.indiceEnajenante].status = {
+                            guardado:false,
+                            error:true
+                        };
+                        this.$refs.table.refresh();
+                        
+                        let campos = this.datosFormulario.campos;
+                        let indexCampoEnajenantes = campos.findIndex( campo =>  campo.tipo == 'enajenante');
+                        this.datosFormulario.campos[indexCampoEnajenantes].valor.enajenantes[val.headers.indiceEnajenante].status = {
+                            guardado:false,
+                            error:true,
+                            indice:val.headers.indiceEnajenante
+                        };
+                        this.datosFormulario.errorAlguardar = true;             
+                        const parsed = JSON.stringify(this.datosFormulario);
+                        localStorage.setItem('datosFormulario', parsed);  
+                    }
+                    
+                },
+                deep: true
+            }
+          }
     }
 </script>
 
