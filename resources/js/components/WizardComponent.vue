@@ -62,13 +62,18 @@
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
                                                 <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'">
                                                   <resumen-tramite-5-isr-component v-if="currentStep == 3"
-                                                  :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria" 
-                                                  :files="files" :usuario="usuario">
+                                                  :tipoTramite="tipoTramite" 
+                                                  :datosComplementaria="datosComplementaria" 
+                                                  :files="files" 
+                                                  :usuario="usuario" :errors="errors">
                                                     
                                                   </resumen-tramite-5-isr-component>
                                                 </div>
                                                 <div v-else-if="tramite.tramite != '5% de Enajenación de Inmuebles'">
-                                                  <resumen-tramite-component v-if="currentStep == 3" :tipoTramite="tipoTramite" :datosComplementaria="datosComplementaria" ></resumen-tramite-component>
+                                                  <resumen-tramite-component v-if="currentStep == 3" 
+                                                  :tipoTramite="tipoTramite" 
+                                                  :datosComplementaria="datosComplementaria" 
+                                                  ></resumen-tramite-component>
                                                 </div>
                                                 
                                             </div>
@@ -186,23 +191,26 @@
                   wizardTitle:'Finalizar',
                   wizardDesc:'Revisar y completar',
                 }],
+                errors:[]
                 //declararEn0:false
             }
         },
 
         methods: {
           tramiteAgregadoEvent(data){
+            this.errors = [];
             if(data.respuesta){
+              let totalAgregados = data.response ? 1 : data.responses.length;
               let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
-              $("#totalTramitesCarrito" ).text( totalCarritoActual + 1  );
-              if(data.response.data.Message){
-                Command: toastr.success("Listo!", data.response.data.Message);
-              } else {
+              $("#totalTramitesCarrito" ).text( totalCarritoActual + totalAgregados  );
+
+           
                 Command: toastr.success("Listo !", "El trámite ha sido agregado");
-              }
+              
               if( data.type == "finalizar" ){
+                console.log("redirigir")
                 redirect("/nuevo-tramite");
-              } if(data.type="temporal"){
+              } if(data.type=="temporal"){
                 redirect("/nuevo-tramite");
               }else {
                 localStorage.removeItem('listaSolicitantes');
@@ -212,7 +220,11 @@
                 localStorage.setItem('tramite', parsed);
                 this.goTo(1);
               }
+            } else {
 
+              if(data.err && data.err.config && data.err.config.headers.indiceEnajenante){
+                this.errors = data.err.config;
+              }
             }
             
           },
