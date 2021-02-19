@@ -25,13 +25,13 @@ export default {
     },
     mounted() {
         this.datosFormulario = localStorage.getItem('datosFormulario')
-        for (let i = 0; i < this.datosFormulario.campos; i++) {
-            if(this.datosFormulario.campos[i].tipo == 'enajenante'){
-                if( count(this.datosFormulario.campos[i].valor.enajenantes) < 0 ){
-                    this.multiple = true;
-                }
-            }   
-        }
+        // for (let i = 0; i < this.datosFormulario.campos; i++) {
+        //     if(this.datosFormulario.campos[i].tipo == 'enajenante'){
+        //         if( count(this.datosFormulario.campos[i].valor.enajenantes) < 0 ){
+        //             this.multiple = true;
+        //         }
+        //     }   
+        // }
          
         console.log( '122312' , typeof(this.datosFormulario));
         this.accesToken();
