@@ -9,7 +9,7 @@
 
 
 export default {
-    props: ['datosComplementaria', 'tipoTramite'],
+    props: ['datosComplementaria', 'tipoTramite','usuario'],
     data(){
         return{
             tramite : {},
@@ -48,11 +48,13 @@ export default {
             var urlDocumento2 = process.env.APP_URL +'/formato-declaracion/149';
             var doc = [ urlDocumento, urlDocumento2 ];
             var tramite_id = '5637';
-            var llave = ['999666008' ,'999666009'];
+            var llave = ['9996660081' ,'9996660091'];
             // var llave = '999666006';
-            var folio =[ '213333116' , '213333117'];
+            var folio =[ '2133331161' , '2133331171'];
             // var folio ='213333112';
             var rfc = 'GOFF951130TJ0';
+            // var rfc = this.usuario.rfc;
+            
             console.log('documentoa consultar: ', urlDocumento);
 
             var data = {
