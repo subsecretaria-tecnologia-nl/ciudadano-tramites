@@ -74,9 +74,9 @@
                                                   :datosComplementaria="datosComplementaria" 
                                                   ></resumen-tramite-component>
                                                 </div>
-                                                  <div class="pt-10 pl-10 pr-10">
+                                                  <!-- <div class="pt-10 pl-10 pr-10">
                                                     <firma-electronica-component  :usuario="usuario" v-if="tramite.id_tramite == 399 && currentStep == 3" :datosComplementaria="datosComplementaria" :tipoTramite="tipoTramite" ></firma-electronica-component>
-                                                  </div>
+                                                  </div> -->
                                             </div>
                                             <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                                 <div class="mr-2">

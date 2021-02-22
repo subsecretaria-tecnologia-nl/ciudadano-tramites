@@ -21,19 +21,27 @@ export default {
             obteniendoCosto:true,
             datosFormulario: '',
             multiple: '',
+            doc: '',
         }
     },
     mounted() {
-        this.datosFormulario = localStorage.getItem('datosFormulario')
-        // for (let i = 0; i < this.datosFormulario.campos; i++) {
-        //     if(this.datosFormulario.campos[i].tipo == 'enajenante'){
-        //         if( count(this.datosFormulario.campos[i].valor.enajenantes) < 0 ){
-        //             this.multiple = true;
-        //         }
-        //     }   
-        // }
-         
-        console.log( '122312' , typeof(this.datosFormulario));
+        var path = window.location.pathname;
+        var id = path.split("/")  
+		tramite = axios.get( process.env.APP_URL+ "/solicitudes-get-tramite-pdf/" + id[2]);
+        tramite = tramite.tramite.solicitudes[0].info.campos;
+        self = this;
+        if(  tramite.length > 0  ){
+            self.doc = [];
+            for (let i = 0; i <= tramite.length; i++) {
+                self.doc.push( process.env.APP_URL +'/formato-declaracion/' + id + '/' + i );
+            }
+        }else{
+            self.doc= 0; 
+        }
+
+
+
+        console.log( 'documento: ' , this.doc);
         this.accesToken();
         this.encodeData();
 
@@ -44,14 +52,14 @@ export default {
         encodeData(){
             var urlDataGeneric = 'http://Insumos.test.nl.gob.mx/api/data_generic';
             var url = "http://Insumos.test.nl.gob.mx/api/v2/signature/iframe?id=";
-            var urlDocumento = process.env.APP_URL +'/formato-declaracion/148';
+            var urlDocumento = process.env.APP_URL +'/?formato-declaracion/400/1';
             var urlDocumento2 = process.env.APP_URL +'/formato-declaracion/149';
             var doc = [ urlDocumento, urlDocumento2 ];
             var tramite_id = '5637';
-            var llave = ['9996660081' ,'9996660091'];
-            // var llave = '999666006';
-            var folio =[ '2133331161' , '2133331171'];
-            // var folio ='213333112';
+            // var llave = ['9996660081' ,'9996660091'];
+            var llave = '999666006';
+            // var folio =[ '2133331161' , '2133331171'];
+            var folio ='213333112';
             var rfc = 'GOFF951130TJ0';
             // var rfc = this.usuario.rfc;
             
@@ -62,7 +70,7 @@ export default {
                 'multiple' : true,
                 'tramite' : tramite_id,
                 'llave' : llave,
-                'doc' : doc,
+                'doc' : urlDocumento,
                 'folio' : folio,
                 'rfc' : rfc,
                 'pagado' : 1,

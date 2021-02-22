@@ -83,6 +83,7 @@
 		<tr class='row-table' style="height: 100px">
 			<td class='titulo1 text-uppercase  row-table' colspan="4">{{ $info->tramite }}</td>
 		</tr>
+			<td class='titulo1 text-uppercase  row-table' colspan="4">asda: {{ $campoIndex}}</td>
 		<tr>
 			<td class="columna">NÚMERO DE ESCRITURA PÚBLICA O MINUTA</td>
 			<td class="columna"  colspan="2"></td>

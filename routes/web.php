@@ -21,7 +21,7 @@ Route::get("/", function(){
 
 
 Route::group(["prefix" => getenv("APP_PREFIX") ?? "/"], function(){
-	Route::get("/formato-declaracion/{id}", "FormatoDeclaracionController@index");
+	Route::get("/formato-declaracion/{id}/{x}", "FormatoDeclaracionController@index");
 	Route::get("/email/template", "EmailController@index");
 	Route::middleware(["validate_session", "validate_rol"])->group(function(){
 		Route::get('/', function () {

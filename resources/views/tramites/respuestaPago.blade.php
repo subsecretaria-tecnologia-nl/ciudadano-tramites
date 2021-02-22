@@ -30,6 +30,10 @@
 	  									</span>
 									@endif
 								</div>
+
+								<div class="pt-10 pl-10 pr-10">
+                                	<firma-electronica-component  :usuario="{{$respuestabanco}}"  ></firma-electronica-component>
+                                </div>
 								<div class="card-body">
 									<div class="row" >
 										<div class="col-lg-12 col-sm-12">
