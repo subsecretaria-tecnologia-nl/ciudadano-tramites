@@ -77,6 +77,8 @@ Vue.component('resumen-tramite-5-isr-component', () => import(/* webpackChunkNam
 Vue.component('calculo-costo-tramite-5-isr-component', () => import(/* webpackChunkName: "js/components/calculo-costo-tramite-5-isr-component" */ './components/costos/CalculoCosto5ISRComponent.vue'));
 
 Vue.component('template-datos-personales-component', () => import(/* webpackChunkName: "js/components/template-datos-personales-component" */ './components/generales/TemplateDatosPersonalesComponent.vue'))
+Vue.component('tree-component', () => import(/* webpackChunkName: "js/components/generales/tree-component" */ './components/generales/TreeComponent.vue'));
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

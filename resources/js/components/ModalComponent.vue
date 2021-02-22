@@ -135,8 +135,11 @@
                 <b-row >
                   <b-col>
                     <b-form-group label="Porcentaje de venta" label-for="procentaje-compra-input" >
-                      <b-input-group prepend="0" append="100" >
-                        <b-form-input  id="procentaje-compra-range" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" type="range" max="100"></b-form-input>
+                      <b-input-group prepend="0" >
+                        <template #append>
+                          <b-input-group-text >{{porcentajeVenta}}</b-input-group-text>
+                        </template>
+                        <b-form-input  id="procentaje-compra-range" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" type="range" :max="porcentajeVenta"></b-form-input>
                       </b-input-group>
                       <b-form-input  id="procentaje-compra-input" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" ></b-form-input>
                       <b-form-invalid-feedback id="porcentajeCompra-input-feedback">
@@ -274,6 +277,9 @@
       indexEnajenanteEditado:{
         default: null,
         type: Number
+      },
+      porcentajeVenta:{
+         type: [Number, String],
       }
     },
 
@@ -286,7 +292,7 @@
         
         this.enajenante.ife = oldEnajentanteEditado.ife;
 
-this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
+        this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
         this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
         this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
         this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
@@ -438,9 +444,9 @@ this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
 
        if(this.enajenanteEditado){
 
-            this.maxProcentajePermitido = 100  - (parseFloat(porcentajeAsignado) - parseFloat(this.form.porcentajeCompra) )  ;
+            this.maxProcentajePermitido = parseFloat(this.porcentajeVenta)  - (parseFloat(porcentajeAsignado) - parseFloat(this.form.porcentajeCompra) )  ;
           } else {
-            this.maxProcentajePermitido = 100 - porcentajeAsignado ;
+            this.maxProcentajePermitido = parseFloat(this.porcentajeVenta) - porcentajeAsignado ;
           }
         this.$bvModal.show(this.idModa)
       },
