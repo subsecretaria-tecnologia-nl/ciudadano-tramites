@@ -17,7 +17,7 @@
                     <tr  v-for="(registro, key) in expedientes"  >
                         <td class="text-center">
                             <i class="fa fa-times" id="iconBtnEliminar"  @click="eliminar(key)" style="cursor: pointer; color: red;" title="Quitar"></i> 
-                            {{ registro.expediente }}
+                            {{ registro.municipio.clave }}-{{ registro.expediente }}
                         </td>	
                         <td>
                             {{ registro.direccion.datos_direccion[0].calle }}

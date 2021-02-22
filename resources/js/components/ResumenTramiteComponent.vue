@@ -86,11 +86,6 @@
                             </tbody>
                         </table>
                     </div>
-
-                <code>
-                    {{tramite}}
-                </code>
-
                 </div>
             </div>
         </div>

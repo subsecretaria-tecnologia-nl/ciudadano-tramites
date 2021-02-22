@@ -5,142 +5,249 @@
       {{textBtnOpenModal}}
     </b-button>
 
-    <b-modal size="lg" :id="idModa" ref="modal" :title="titleModal" @show="resetModal" @hidden="resetModal" @ok="handleOk" 
+    <b-modal size="xl" :id="idModa" ref="modal" :title="titleModal" @show="resetModal" @hidden="resetModal" @ok="handleOk" 
     :ok-title = "btnOkLabel">
       <b-container fluid>
         <form ref="form" @submit.stop.prevent="handleSubmit">
-          <b-form-group label="Seleccione tipo de persona" v-slot="{ ariaDescribedby }" v-if="enajenante.nacionalidad == 'mexicano'">
-            <b-form-radio-group id="tipoPersona" v-model="enajenante.tipoPersona" :aria-describedby="ariaDescribedby" name="radio-options-tipoPersona">
-              <template #first>
-                <b-form-radio value="pf">Física</b-form-radio>
+            <v-expansion-panel>
+              <v-expansion-panel-header >
+                Datos Personales
+                 <template v-slot:actions >
+                  <i class="fa fa-angle-down" />
               </template>
-              <b-form-radio value="pm">Moral</b-form-radio>
-            </b-form-radio-group>
-          </b-form-group>
-          
-          <b-row>
-            <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
-              <b-form-group label="Curp" label-for="curp-input" >
-                <b-form-input id="curp-input" name="curp" v-model="$v.form.curp.$model" aria-describedby="curp-input-feedback" 
-                   :state="$v.form.curp.$dirty ? !$v.form.curp.$error : null" @change="updateCurp">></b-form-input>
-                <b-form-invalid-feedback id="curp-input-feedback">
-                  <span v-if="!$v.form.curp.required"  class="form-text text-danger">
-                    Curp es requerida.
-                  </span>
-                  <span v-if="!$v.form.curp.curpPattern"  class="form-text text-danger">
-                    La Curp no cumple con la regla de validación.
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>
-            <b-col cols="12" md="6">
-              <b-form-group label="RFC" label-for="rfc-input" >
-                <b-form-input
-                  id="rfc-input" name="rfc" v-model="$v.form.rfc.$model"  :state="$v.form.rfc.$dirty ? !$v.form.rfc.$error : null"  aria-describedby="rfc-input-feedback" 
-                ></b-form-input>
-                <b-form-invalid-feedback id="rfc-input-feedback">
-                  <span v-if="!$v.form.rfc.required"  class="form-text text-danger">
-                    El RFC es requerido.
-                  </span>
-                  <span v-if="!$v.form.rfc.rfcPattern"  class="form-text text-danger">
-                    El RFC no cumple con la regla de validación.
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>
-            <b-col v-if="enajenante.tipoPersona == 'pm'" cols="12" md="6">
-              <b-form-group label="Razón Social" label-for="razon-social-input" >
-                <b-form-input id="razon-social-input" name="razonSocial" v-model="$v.form.razonSocial.$model" aria-describedby="razonSocial-input-feedback" 
-                   :state="$v.form.razonSocial.$dirty ? !$v.form.razonSocial.$error : null" ></b-form-input>
-                <b-form-invalid-feedback id="razonSocial-input-feedback">
-                  <span v-if="!$v.form.razonSocial.required"  class="form-text text-danger">
-                    Campo requerido
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>
-            <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
-              <b-form-group label="Nombre(s)" label-for="nombre-input" >
-                <b-form-input id="nombre-input" name="nombre" v-model="$v.form.nombre.$model" aria-describedby="nombre-input-feedback" 
-                   :state="$v.form.nombre.$dirty ? !$v.form.nombre.$error : null" ></b-form-input>
-                <b-form-invalid-feedback id="nombre-input-feedback">
-                  <span v-if="!$v.form.nombre.required"  class="form-text text-danger">
-                    El Nombre es requerido.
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>
-            <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
-              <b-form-group label="Apellido Paterno" label-for="apPat-input" >
-                <b-form-input id="apPat-input" name="apPat" v-model="$v.form.apPat.$model"  :state="$v.form.apPat.$dirty ? !$v.form.apPat.$error : null"  aria-describedby="apPat-input-feedback" 
-                ></b-form-input>
-                <b-form-invalid-feedback id="apPat-input-feedback">
-                  <span v-if="!$v.form.apPat.required" class="form-text text-danger">
-                    El Apellido Paterno es requerido.
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>          
-          </b-row>
-          <b-row v-if="enajenante.tipoPersona == 'pf'"  >
-            <b-col cols="12" md="6">
-              <b-form-group label="Apellido Materno" label-for="apmaterno-input" >
-                <b-form-input  id="apmaterno-input" name="apmaterno"  v-model="enajenante.apMat"></b-form-input>
-              </b-form-group>
-            </b-col> 
-            <b-col  cols="12" md="6">
-              <b-form-group label="Fecha de Nacimiento" label-for="fechaNacimiento-input" >
-                <b-form-datepicker  class="mb-2" id="fechaNacimiento-input" name="fechaNacimiento"  v-model="$v.form.fechaNacimiento.$model" :state="$v.form.fechaNacimiento.$dirty ? !$v.form.fechaNacimiento.$error : null" aria-describedby="fechaNacimiento-input-feedback" ></b-form-datepicker>
-                <b-form-invalid-feedback id="fechaNacimiento-input-feedback">
-                  <span v-if="!$v.form.fechaNacimiento.required" class="form-text text-danger">
-                    La fecha de nacimiento es requerida
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>          
-            <b-col cols="12" md="4">
-              <b-form-group label="Género" label-for="genero-input" >
-                <b-form-input  id="genero-input" name="genero"  v-model="$v.form.genero.$model" :state="$v.form.genero.$dirty ? !$v.form.genero.$error : null" aria-describedby="genero-input-feedback"></b-form-input>
-                <b-form-invalid-feedback id="genero-input-feedback">
-                  <span v-if="!$v.form.genero.required" class="form-text text-danger">
-                    El género es requerido
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col> 
-            <b-col cols="12" md="4">
-              <b-form-group label="Estado de Nacimiento" label-for="estado-input" >
-                <b-form-input  id="estado-input" name="estado"  v-model="$v.form.estado.$model" :state="$v.form.estado.$dirty ? !$v.form.estado.$error : null" aria-describedby="estado-input-feedback"></b-form-input>
-                <b-form-invalid-feedback id="estado-input-feedback">
-                  <span v-if="!$v.form.estado.required" class="form-text text-danger">
-                    El estado es requerido
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>         
-            <b-col cols="12" md="4">
-              <b-form-group label="IFE" label-for="ife-input" >
-                <b-form-input  id="ife-input" name="ife"  v-model="enajenante.ife" ></b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col></b-col>
-            </b-row>
-          <b-row >
-            <b-col>
-              <b-form-group label="Porcentaje de compra" label-for="procentaje-compra-input" >
-                <b-form-input  id="procentaje-compra-range" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" type="range" max="100"></b-form-input>
-                <b-form-input  id="procentaje-compra-input" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" ></b-form-input>
-                <b-form-invalid-feedback id="porcentajeCompra-input-feedback">
-                  <span v-if="!$v.form.porcentajeCompra.required" class="form-text text-danger">
-                    Valor requerido
-                  </span>
-                  <span v-if="!$v.form.porcentajeCompra.between" class="form-text text-danger">
-                    El valor debe de estar en un rando de 1 a {{maxProcentajePermitido}};
-                  </span>
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </b-col>         
-          </b-row>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <b-form-group label="Seleccione tipo de persona" v-slot="{ ariaDescribedby }" v-if="enajenante.nacionalidad == 'mexicano'">
+                  <b-form-radio-group id="tipoPersona" v-model="enajenante.tipoPersona" :aria-describedby="ariaDescribedby" name="radio-options-tipoPersona">
+                    <template #first>
+                      <b-form-radio value="pf">Física</b-form-radio>
+                    </template>
+                    <b-form-radio value="pm">Moral</b-form-radio>
+                  </b-form-radio-group>
+                </b-form-group>
+                <b-row>
+                  <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
+                    <b-form-group label="Curp" label-for="curp-input" >
+                      <b-form-input id="curp-input" name="curp" v-model="$v.form.datosPersonales.curp.$model" aria-describedby="curp-input-feedback" 
+                         :state="$v.form.datosPersonales.curp.$dirty ? !$v.form.datosPersonales.curp.$error : null" @change="updateCurp">></b-form-input>
+                      <b-form-invalid-feedback id="curp-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.curp.required"  class="form-text text-danger">
+                          Curp es requerida.
+                        </span>
+                        <span v-if="!$v.form.datosPersonales.curp.curpPattern"  class="form-text text-danger">
+                          La Curp no cumple con la regla de validación.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>
+                  <b-col cols="12" md="6">
+                    <b-form-group label="RFC" label-for="rfc-input" >
+                      <b-form-input
+                        id="rfc-input" name="rfc" v-model="$v.form.datosPersonales.rfc.$model"  :state="$v.form.datosPersonales.rfc.$dirty ? !$v.form.datosPersonales.rfc.$error : null"  aria-describedby="rfc-input-feedback" 
+                      ></b-form-input>
+                      <b-form-invalid-feedback id="rfc-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.rfc.required"  class="form-text text-danger">
+                          El RFC es requerido.
+                        </span>
+                        <span v-if="!$v.form.datosPersonales.rfc.rfcPattern"  class="form-text text-danger">
+                          El RFC no cumple con la regla de validación.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>
+                  <b-col v-if="enajenante.tipoPersona == 'pm'" cols="12" md="6">
+                    <b-form-group label="Razón Social" label-for="razon-social-input" >
+                      <b-form-input id="razon-social-input" name="razonSocial" v-model="$v.form.datosPersonales.razonSocial.$model" aria-describedby="razonSocial-input-feedback" 
+                         :state="$v.form.datosPersonales.razonSocial.$dirty ? !$v.form.datosPersonales.razonSocial.$error : null" ></b-form-input>
+                      <b-form-invalid-feedback id="razonSocial-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.razonSocial.required"  class="form-text text-danger">
+                          Campo requerido
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>
+                  <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
+                    <b-form-group label="Nombre(s)" label-for="nombre-input" >
+                      <b-form-input id="nombre-input" name="nombre" v-model="$v.form.datosPersonales.nombre.$model" aria-describedby="nombre-input-feedback" 
+                         :state="$v.form.datosPersonales.nombre.$dirty ? !$v.form.datosPersonales.nombre.$error : null" ></b-form-input>
+                      <b-form-invalid-feedback id="nombre-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.nombre.required"  class="form-text text-danger">
+                          El Nombre es requerido.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>
+                  <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
+                    <b-form-group label="Apellido Paterno" label-for="apPat-input" >
+                      <b-form-input id="apPat-input" name="apPat" v-model="$v.form.datosPersonales.apPat.$model"  :state="$v.form.datosPersonales.apPat.$dirty ? !$v.form.datosPersonales.apPat.$error : null"  aria-describedby="apPat-input-feedback" 
+                      ></b-form-input>
+                      <b-form-invalid-feedback id="apPat-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.apPat.required" class="form-text text-danger">
+                          El Apellido Paterno es requerido.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>          
+                </b-row>
+                <b-row v-if="enajenante.tipoPersona == 'pf'"  >
+                  <b-col cols="12" md="6">
+                    <b-form-group label="Apellido Materno" label-for="apmaterno-input" >
+                      <b-form-input  id="apmaterno-input" name="apmaterno"  v-model="$v.form.datosPersonales.apMat.$model"></b-form-input>
+                    </b-form-group>
+                  </b-col> 
+                  <b-col  cols="12" md="6">
+                    <b-form-group label="Fecha de Nacimiento" label-for="fechaNacimiento-input" >
+                      <b-form-datepicker  class="mb-2" id="fechaNacimiento-input" name="fechaNacimiento"  v-model="$v.form.datosPersonales.fechaNacimiento.$model" :state="$v.form.datosPersonales.fechaNacimiento.$dirty ? !$v.form.datosPersonales.fechaNacimiento.$error : null" aria-describedby="fechaNacimiento-input-feedback" ></b-form-datepicker>
+                      <b-form-invalid-feedback id="fechaNacimiento-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.fechaNacimiento.required" class="form-text text-danger">
+                          La fecha de nacimiento es requerida
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>          
+                  <b-col cols="12" md="4">
+                    <b-form-group label="Género" label-for="genero-input" >
+                      <b-form-input  id="genero-input" name="genero"  v-model="$v.form.datosPersonales.genero.$model" :state="$v.form.datosPersonales.genero.$dirty ? !$v.form.datosPersonales.genero.$error : null" aria-describedby="genero-input-feedback"></b-form-input>
+                      <b-form-invalid-feedback id="genero-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.genero.required" class="form-text text-danger">
+                          El género es requerido
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col> 
+                  <b-col cols="12" md="4">
+                    <b-form-group label="Estado de Nacimiento" label-for="estado-input" >
+                      <b-form-input  id="estado-input" name="estado"  v-model="$v.form.datosPersonales.estado.$model" :state="$v.form.datosPersonales.estado.$dirty ? !$v.form.datosPersonales.estado.$error : null" aria-describedby="estado-input-feedback"></b-form-input>
+                      <b-form-invalid-feedback id="estado-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.estado.required" class="form-text text-danger">
+                          El estado es requerido
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>         
+                  <b-col cols="12" md="4">
+                    <b-form-group label="IFE" label-for="ife-input" >
+                      <b-form-input  id="ife-input" name="ife"  v-model="enajenante.ife" ></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <b-col></b-col>
+                  </b-row>
+                <b-row >
+                  <b-col>
+                    <b-form-group label="Porcentaje de venta" label-for="procentaje-compra-input" >
+                      <b-input-group prepend="0" >
+                        <template #append>
+                          <b-input-group-text >{{porcentajeVenta}}</b-input-group-text>
+                        </template>
+                        <b-form-input  id="procentaje-compra-range" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" type="range" :max="porcentajeVenta"></b-form-input>
+                      </b-input-group>
+                      <b-form-input  id="procentaje-compra-input" name="procentaje-compra"  v-model="$v.form.porcentajeCompra.$model" :state="$v.form.porcentajeCompra.$dirty ? !$v.form.porcentajeCompra.$error : null" aria-describedby="porcentajeCompra-input-feedback" ></b-form-input>
+                      <b-form-invalid-feedback id="porcentajeCompra-input-feedback">
+                        <span v-if="!$v.form.porcentajeCompra.required" class="form-text text-danger">
+                          Valor requerido
+                        </span>
+                        <span v-if="!$v.form.porcentajeCompra.between" class="form-text text-danger">
+                          El valor debe de estar en un rando de 1 a {{maxProcentajePermitido}};
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>         
+                </b-row>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header >
+                Datos para determinar el impuesto
+                 <template v-slot:actions >
+                  <i class="fa fa-angle-down" />
+              </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+
+
+
+
+
+
+                <b-row>
+                  <b-col cols="12" md="6">
+                    <b-form-group label="GANANCIA OBTENIDA" label-for="ganancia-obtenida-input" >
+                      <b-input-group  >
+                        <template #prepend>
+                          <b-input-group-text >$</b-input-group-text>
+                        </template>
+                        <b-form-input
+                        id="ganancia-obtenida-input" name="gananciaObtenida" v-model="$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$model"  :state="$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$dirty ? !$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$error : null"  aria-describedby="gananciaObtenida-input-feedback" @change="formatoMoneda('gananciaObtenida')"
+                      ></b-form-input>
+                      </b-input-group>
+                      <b-form-invalid-feedback id="gananciaObtenida-input-feedback">
+                        <span v-if="!$v.form.datosParaDeterminarImpuesto.gananciaObtenida.required"  class="form-text text-danger">
+                          Campo requerido.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>
+                  <b-col cols="12" md="6">
+                    <b-form-group label="PAGO PROVISIONAL CONFORME AL ARTICULO 126 LISR" label-for="pago-provisional-input" >
+                      <b-input-group  >
+                        <template #prepend>
+                          <b-input-group-text >$</b-input-group-text>
+                        </template>
+                        <b-form-input
+                          id="pago-provisional-input" name="pagoProvisional" v-model="$v.form.datosParaDeterminarImpuesto.pagoProvisional.$model"  :state="$v.form.datosParaDeterminarImpuesto.pagoProvisional.$dirty ? !$v.form.datosParaDeterminarImpuesto.pagoProvisional.$error : null"  aria-describedby="pagoProvisional-input-feedback" @change="formatoMoneda('pagoProvisional')"
+                        ></b-form-input>
+                      </b-input-group>
+                      <b-form-invalid-feedback id="pagoProvisional-input-feedback">
+                        <span v-if="!$v.form.datosParaDeterminarImpuesto.pagoProvisional.required"  class="form-text text-danger">
+                          Campo requerido.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>          
+                </b-row>
+
+                <b-row>
+                  <b-col cols="12" md="6">
+                    <b-form-group label="MULTA POR CORRECCION FISCAL" label-for="multa-correccion-fiscal-input" >
+                      
+                      <b-input-group  > 
+                        <template #prepend>
+                          <b-input-group-text >$</b-input-group-text>
+                        </template>
+                        <b-form-input id="multa-correccion-fiscal-input" name="multaCorreccion" v-model="$v.form.datosParaDeterminarImpuesto.multaCorreccion.$model"  :state="$v.form.datosParaDeterminarImpuesto.multaCorreccion.$dirty ? !$v.form.datosParaDeterminarImpuesto.multaCorreccion.$error : null"  aria-describedby="multaCorreccion-input-feedback" 
+                          @change="formatoMoneda('multaCorreccion')"></b-form-input>
+                      </b-input-group>
+                      <b-form-invalid-feedback id="multaCorreccion-input-feedback">
+                        <span v-if="!$v.form.datosParaDeterminarImpuesto.multaCorreccion.required"  class="form-text text-danger">
+                          Campo requerido.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>
+                  <b-col cols="12" md="6">
+                    <b-form-group label="MONTO DE OPERACIÓN (reportado en el aviso de enajenación)" label-for="monto-operacion-input" >
+                      <b-input-group  >
+                        <template #prepend>
+                          <b-input-group-text >$</b-input-group-text>
+                        </template>
+                        <b-form-input
+                          id="monto-operacion-input" name="montoOperacion" v-model="$v.form.datosParaDeterminarImpuesto.montoOperacion.$model"  
+                          @change="formatoMoneda('montoOperacion')"
+                          :state="$v.form.datosParaDeterminarImpuesto.montoOperacion.$dirty ? !$v.form.datosParaDeterminarImpuesto.montoOperacion.$error : null"  
+                          aria-describedby="montoOperacion-input-feedback" 
+                        ></b-form-input>
+                      </b-input-group>
+                      <b-form-invalid-feedback id="montoOperacion-input-feedback">
+                        <span v-if="!$v.form.datosParaDeterminarImpuesto.montoOperacion.required"  class="form-text text-danger">
+                          Campo requerido.
+                        </span>
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </b-col>          
+                </b-row>
+
+              </v-expansion-panel-content>
+            </v-expansion-panel>
         </form>
       </b-container>
     </b-modal>
@@ -170,25 +277,37 @@
       indexEnajenanteEditado:{
         default: null,
         type: Number
+      },
+      porcentajeVenta:{
+         type: [Number, String],
       }
     },
+
     mounted(){
               
       if(this.enajenanteEditado){
         let oldEnajentanteEditado = Object.assign({}, this.enajenanteEditado);
         this.enajenante.nacionalidad = oldEnajentanteEditado.nacionalidad;
         this.enajenante.tipoPersona = oldEnajentanteEditado.tipoPersona;
-        this.enajenante.apMat = oldEnajentanteEditado.apMat;
+        
         this.enajenante.ife = oldEnajentanteEditado.ife;
-        this.form.rfc = oldEnajentanteEditado.rfc;
-        this.form.curp = oldEnajentanteEditado.curp;
-        this.form.nombre = oldEnajentanteEditado.nombre;
-        this.form.apPat = oldEnajentanteEditado.apPat;
-        this.form.fechaNacimiento = oldEnajentanteEditado.fechaNacimiento;
-        this.form.genero = oldEnajentanteEditado.genero;
-        this.form.estado = oldEnajentanteEditado.estado;
-        this.form.razonSocial = oldEnajentanteEditado.razonSocial;
+
+        this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
+        this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
+        this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
+        this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
+        this.form.datosPersonales.apPat = oldEnajentanteEditado.datosPersonales.apPat;
+        this.form.datosPersonales.fechaNacimiento = oldEnajentanteEditado.datosPersonales.fechaNacimiento;
+        this.form.datosPersonales.genero = oldEnajentanteEditado.datosPersonales.genero;
+        this.form.datosPersonales.estado = oldEnajentanteEditado.datosPersonales.estado;
+        this.form.datosPersonales.razonSocial = oldEnajentanteEditado.datosPersonales.razonSocial;
         this.form.porcentajeCompra= oldEnajentanteEditado.porcentajeCompra;
+
+        this.form.datosParaDeterminarImpuesto.gananciaObtenida = oldEnajentanteEditado.datosParaDeterminarImpuesto.gananciaObtenida;
+        this.form.datosParaDeterminarImpuesto.montoOperacion = oldEnajentanteEditado.datosParaDeterminarImpuesto.montoOperacion;
+        this.form.datosParaDeterminarImpuesto.multaCorreccion = oldEnajentanteEditado.datosParaDeterminarImpuesto.multaCorreccion;
+        this.form.datosParaDeterminarImpuesto.pagoProvisional= oldEnajentanteEditado.datosParaDeterminarImpuesto.pagoProvisional;
+
         this.titleModal = "Editar";
         this.btnOkLabel = "Editar";
         this.btnIcon = "la la-pencil";
@@ -209,12 +328,17 @@
         enajenante: {
             nacionalidad:'mexicano',
             tipoPersona:'pf',
-            apMat:'',
+            //apMat:'',
             ife:''
         },
         form: {
-          rfc:'', curp:'', nombre:'', apPat:'', fechaNacimiento:'', genero:'', estado: '', porcentajeCompra:1,
-          razonSocial:''
+          porcentajeCompra:1,
+          datosPersonales:{
+            curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', genero:'', estado: '',razonSocial:'',apMat:''
+          },
+          datosParaDeterminarImpuesto:{
+            gananciaObtenida:'',pagoProvisional:'', multaCorreccion:'', montoOperacion:'',
+          }
         },
         idModa:  uuid.v4(),
         btnIcon:'',titleModal:'', btnOkLabel:'', textBtnOpenModal:'',classBtn:'',
@@ -226,27 +350,39 @@
         rules(){
             if(this.enajenante.nacionalidad == 'mexicano' && this.enajenante.tipoPersona == 'pf'){
               return {
-                rfc: { required, rfcPattern },
-                curp: { required, curpPattern },
-                nombre: { required },
-                apPat: { required },
-                fechaNacimiento:{ required }, 
-                genero:{ required },
-                estado:{ required },
-                porcentajeCompra:{ required,  between: between(1, this.maxProcentajePermitido) }
+                porcentajeCompra:{ required,  between: between(1, this.maxProcentajePermitido) },
+                datosPersonales:{
+                  curp: { required, curpPattern },
+                  rfc: { required, rfcPattern },
+                  nombre: { required },
+                  apPat: { required },
+                  fechaNacimiento:{ required }, 
+                  genero:{ required },
+                  estado:{ required },
+                  apMat: { required:false },
+                },
+                datosParaDeterminarImpuesto: {
+                  gananciaObtenida:{ required },
+                  pagoProvisional:{ required },
+                  multaCorreccion:{ required }, 
+                  montoOperacion:{ required }
+                }
 
               }
             } else if(this.enajenante.nacionalidad == 'mexicano' && this.enajenante.tipoPersona == 'pm'){
               return {
-                rfc: { required, rfcPattern },
-                razonSocial:{ required },
-                porcentajeCompra:{ required,  between: between(1, this.maxProcentajePermitido) }
 
-              }
-            }else {
-              return {
-                rfc: {required,rfcPattern},
-                porcentajeCompra:{ required,  between: between(1, this.maxProcentajePermitido) }
+                porcentajeCompra:{ required,  between: between(1, this.maxProcentajePermitido) },
+                datosPersonales:{
+                  rfc: { required, rfcPattern },
+                  razonSocial:{ required }
+                },
+                datosParaDeterminarImpuesto: {
+                  gananciaObtenida:{ required },
+                  pagoProvisional:{ required },
+                  multaCorreccion:{ required }, 
+                  montoOperacion:{ required }
+                }
               }
             }
         }
@@ -259,7 +395,14 @@
     methods: {
       resetModal() {
         if(!this.enajenanteEditado){
-          this.form = { rfc:'', curp:'', nombre:'', apPat:'', fechaNacimiento:'', genero:'', estado: '', porcentajeCompra:1, razonSocial:'' }
+          this.form = { porcentajeCompra:1,
+            datosPersonales:{
+              curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', genero:'', estado: '',razonSocial:'',apMat:''
+            },                
+            datosParaDeterminarImpuesto:{
+              gananciaObtenida:'',pagoProvisional:'', multaCorreccion:'', montoOperacion:'',
+            }
+          }
         }
       },
       handleOk(bvModalEvt) {
@@ -280,7 +423,7 @@
         let enajenante = this.form;
         enajenante.nacionalidad =  this.enajenante.nacionalidad;
         enajenante.tipoPersona =  this.enajenante.tipoPersona;
-        enajenante.apMat = this.enajenante.apMat;
+        //enajenante.apMat = this.enajenante.apMat;
         enajenante.ife = this.enajenante.ife;
         if(this.enajenanteEditado){
           let response = {
@@ -301,25 +444,29 @@
 
        if(this.enajenanteEditado){
 
-            this.maxProcentajePermitido = 100  - (parseFloat(porcentajeAsignado) - parseFloat(this.form.porcentajeCompra) )  ;
+            this.maxProcentajePermitido = parseFloat(this.porcentajeVenta)  - (parseFloat(porcentajeAsignado) - parseFloat(this.form.porcentajeCompra) )  ;
           } else {
-            this.maxProcentajePermitido = 100 - porcentajeAsignado ;
+            this.maxProcentajePermitido = parseFloat(this.porcentajeVenta) - porcentajeAsignado ;
           }
         this.$bvModal.show(this.idModa)
       },
       async updateCurp(){
-        if( !this.$v.form.curp.$invalid ){         
-          this.buscarCurp( this.$v.form.curp.$model );
+        if( !this.$v.form.datosPersonales.curp.$invalid ){         
+          this.buscarCurp( this.$v.form.datosPersonales.curp.$model );
         } else {
           this.rellenarForm();
         }
       },
-
+          
       async buscarCurp(curp) {
         let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp";
         let response = await axios.get(url + '/' + curp);
         if(response.data){
-          this.rellenarForm(response.data);
+          if(response.data.status == 'error'){
+            Command: toastr.error("Error!", response.data.msg);
+          } else{
+            this.rellenarForm(response.data);
+          }
         } else {
           this.rellenarForm();
         }
@@ -327,21 +474,35 @@
 
       rellenarForm(data){
         if(data){
-          this.form.nombre = data.data.nombres;
-          this.form.apPat = data.data.apePat;
-          this.enajenante.apMat = data.data.apeMat;
-          this.form.fechaNacimiento =  data.data.fechaNac.split("/").reverse().join("-");
-          this.form.genero = data.data.sexo;
-          this.form.estado = data.data.entidadNac;
+          this.form.datosPersonales.nombre = data.data.nombres;
+          this.form.datosPersonales.apPat = data.data.apePat;
+          this.form.datosPersonales.apMat = data.data.apeMat;
+          this.form.datosPersonales.fechaNacimiento =  data.data.fechaNac.split("/").reverse().join("-");
+          this.form.datosPersonales.genero = data.data.sexo;
+          this.form.datosPersonales.estado = data.data.entidadNac;
         } else {
-          this.form.nombre = "";
-          this.form.apPat = ""
-          this.enajenante.apMat = "";
-          this.form.fechaNacimiento = "";
-          this.form.genero = "";
-          this.form.estado = "";
+          this.form.datosPersonales.nombre = "";
+          this.form.datosPersonales.apPat = ""
+          this.form.datosPersonales.apMat = "";
+          this.form.datosPersonales.fechaNacimiento = "";
+          this.form.datosPersonales.genero = "";
+          this.form.datosPersonales.estado = "";
         }
       },
+
+      formatoMoneda(name){
+        const formatter  = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'MXN',
+          minimumFractionDigits: 2
+        });
+        if(this.$v.form.datosParaDeterminarImpuesto[name].$model){
+          this.$v.form.datosParaDeterminarImpuesto[name].$model =  formatter.format(this.$v.form.datosParaDeterminarImpuesto[name].$model);  
+        } else{
+          return null;
+        }
+        
+      }
     },
     watch: {
       enajenante:{

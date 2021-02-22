@@ -80,7 +80,7 @@
 				<div style="padding:20px"><img src="{{public_path('images/escudo.svg')}}" width="100"></div> 
 			</th>
 			<th class="columna">
-				<div style="padding:20px"><img src="{{ public_path('images/logo.svg') }} " width="180"></div>
+				<div style="padding:20px"><img src="{{public_path('images/logo.svg')}} " width="180"></div>
 			</th>
 		</tr>
 	</thead>
