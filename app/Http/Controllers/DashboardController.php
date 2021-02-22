@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index () {
-    	$notary = \Session::get('user')->notary->id;
-    	$draft = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 80, "notary_id" => (int)$notary ]);
-    	$pendingPayment = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 99, "notary_id" => (int)$notary ]);
-    	$waiting = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 3, "notary_id" => (int)$notary ]);
-    	$progress = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 1, "notary_id" => (int)$notary ]);
+    	$user = \Session::get('user');
+    	if(isset($user->notary)) $notary = $user->notary->id;
+    	$draft = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 80, (isset($notary) ? "notary_id" : "id_usuario") => (int)(isset($notary) ? $notary : $user->id) ]);
+    	$pendingPayment = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 99, (isset($notary) ? "notary_id" : "id_usuario") => (int)(isset($notary) ? $notary : $user->id) ]);
+    	$waiting = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 3, (isset($notary) ? "notary_id" : "id_usuario") => (int)(isset($notary) ? $notary : $user->id) ]);
+    	$progress = curlSendRequest('POST', getenv("TESORERIA_HOSTNAME")."/solicitudes-filtrar", [ "estatus" => 1, (isset($notary) ? "notary_id" : "id_usuario") => (int)(isset($notary) ? $notary : $user->id) ]);
     	$total = 5;
 
 		set_layout_arg([

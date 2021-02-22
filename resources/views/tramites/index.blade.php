@@ -11,7 +11,7 @@
             <div  style="min-height: 600px;" class="content d-flex flex-column flex-column-fluid pt-0">
                 <div>
                     <section id="listaTramites" >
-                        <listado-tramites :notary="{{session()->get("user")->notary->id}}" :type="{{ $id }}"></listado-tramites>
+                        <listado-tramites :notary="{{isset(session()->get("user")->notary) ? session()->get("user")->notary->id : 0}}" :user="{{ session()->get("user")->id }}" :type="{{ $id }}"></listado-tramites>
                     </section>
                 </div>
             </div>

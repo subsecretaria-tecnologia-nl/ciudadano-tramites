@@ -1,7 +1,12 @@
+@php
+	// dd($info);
+@endphp
+
 <!DOCTYPE html>
 <html>
 <head>
 	<title>{{ $info->tramite }}</title>
+	<link href="{{ asset("css/app.css") }}" rel="stylesheet" type="text/css" />
 	<style type="text/css">
 		body{
 			background-color: #f3f3f7;
@@ -118,7 +123,7 @@
 		</tr>
 		<tr>
 			<td>REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
-			<td class="value">{{ $info->solicitudes[0]->info->campos->{'RFC'} }}</td>
+			<td class="value">{{ $info->solicitudes[0]->info->campos->{'RFC'} ?? $info->solicitudes[0]->info->solicitante->{'rfc'} }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
