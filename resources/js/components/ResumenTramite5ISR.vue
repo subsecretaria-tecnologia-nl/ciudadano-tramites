@@ -23,7 +23,15 @@
                             <h2 class="border-bottom my-3">Enajenantes</h2>
                         </div>
                         <div class="col-sm-12">
-                            <b-table responsive striped hover :items="listaEnajentantes" :fields="camposEnajenantes" ref="table">
+                            <b-table responsive striped hover :items="listaEnajentantes" :fields="camposEnajenantes" ref="table"  class="text-center">
+                                <template #cell(p)="data">
+                                    {{ data.item.tipoPersona == 'pf' ? 'Persona Física' : 'Persona Moral' }}
+                                </template>
+                                <template #cell(porcentajeCompra)="data">
+                                    <span class="badge badge-pill badge-success">
+                                        {{data.item.porcentajeCompra}}
+                                    </span>
+                                </template>
                                 <template #cell(datosPersonales)="data">
                                     <template-datos-personales-component :datosPersonales="data.item.datosPersonales"></template-datos-personales-component>
                                 </template>
@@ -38,23 +46,17 @@
                                     </div>
                                     <div v-else-if="data.item.detalle && data.item.detalle.Salidas">
                                         <div class="text-center">
-                                          <b-button tabindex="0" title="Click para ver detalles" variant="primary" @click="data.toggleDetails" class="mr-2">
                                             {{currencyFormat('H (Importe total)', data.item.detalle.Salidas['H (Importe total)'])}}
-                                          </b-button>
                                         </div>                          
                                     </div>
                                     
                                 </template>
                                 <template #cell(status)="data">
-                                    <div v-if="data.item.status">
-                                        <div v-if="data.item.status.error">
-                                            {{ data.item.status.msj }}
-
+                                    <div>
+                                        <b-link title="Click para ver detalles" @click="data.toggleDetails" class="mr-2 btn btn-link">
+                                            {{!data.detailsShowing ? "Ver detalle " : "Ocultar detalle "}}
                                             
-                                        </div>
-                                        <div v-else-if="!data.item.status.error">
-                                            Ok
-                                        </div>
+                                        </b-link>
                                     </div>
                                 </template> 
                                 <template #row-details="data" #title="Detalle">
@@ -127,11 +129,11 @@
 
             this.camposArchivos = ['nombre',{ key: 'nombrreFile', label: 'Archivo' }];
             this.camposEnajenantes =[
-                    { key: 'porcentajeCompra', label: '% Compra' },
+                    { key: 'porcentajeCompra', label: '% Venta' },
                     { key: 'datosPersonales', label: 'Datos Personales' },
                     { key: 'tipoPersona', label: 'Tipo Persona' },
                     { key: 'datosParaDeterminarImpuesto', label: 'Total' },
-                    'status'
+                    { key: 'status', label:"Acciones" }
 
             ];
         },
