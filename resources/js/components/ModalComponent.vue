@@ -292,7 +292,7 @@
         
         this.enajenante.ife = oldEnajentanteEditado.ife;
 
-this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
+        this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
         this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
         this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
         this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
