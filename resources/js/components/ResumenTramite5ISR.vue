@@ -37,28 +37,10 @@
                                         </calculo-costo-tramite-5-isr-component>                                    
                                     </div>
                                     <div v-else-if="data.item.detalle && data.item.detalle.Salidas">
-                                        
                                         <div class="text-center">
-                                          <b-button :id="'popover-button-variant' + data.index" href="#" tabindex="0" title="Click para ver detalles">
+                                          <b-button tabindex="0" title="Click para ver detalles" variant="primary" @click="data.toggleDetails" class="mr-2">
                                             {{currencyFormat('H (Importe total)', data.item.detalle.Salidas['H (Importe total)'])}}
                                           </b-button>
-                                          <b-popover :target="'popover-button-variant' + data.index"  triggers="focus">
-                                            <template #title>Detalle</template>
-                                            
-                                                <b-card no-body>
-                                                    <b-card-body id="nav-scroller"ref="content"style="position:relative; height:400px; overflow-y:scroll;">
-                                                        <b-row v-for="(salida, key) in data.item.detalle.Salidas" :key="key">
-                                                            <b-col class="left" style="width: 70%" >
-                                                                <strong>{{ key }}</strong>
-                                                            </b-col>
-                                                            <b-col class="right" >
-                                                                <span class="text-muted">   {{ currencyFormat(key, salida) }} </span>
-                                                            </b-col>
-                                                        </b-row>
-                                                    </b-card-body> 
-                                                </b-card>
-                                            
-                                          </b-popover>
                                         </div>                          
                                     </div>
                                     
@@ -74,7 +56,21 @@
                                             Ok
                                         </div>
                                     </div>
-                                </template>                                
+                                </template> 
+                                <template #row-details="data" #title="Detalle">
+                                    <b-card no-body v-if="data">
+                                        <b-card-body id="nav-scroller"ref="content"style="position:relative; height:400px; overflow-y:scroll;">
+                                            <b-row v-for="(salida, key) in data.item.detalle.Salidas" :key="key">
+                                                <b-col class="left" style="width: 70%" >
+                                                    <strong>{{ key }}</strong>
+                                                </b-col>
+                                                <b-col class="right" >
+                                                    <span class="text-muted">   {{ currencyFormat(key, salida) }} </span>
+                                                </b-col>
+                                            </b-row>
+                                        </b-card-body> 
+                                    </b-card>
+                                </template>                                                          
                             </b-table>
                         </div>
                     </b-row>      

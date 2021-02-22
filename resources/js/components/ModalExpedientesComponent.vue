@@ -5,12 +5,12 @@
       Agregar expediente
     </b-button>
 
-    <b-modal size="md" :id="idModa" ref="modal" :title="titleModal" @show="resetModal" @hidden="resetModal" @ok="handleOk" 
+    <b-modal size="xl" :id="idModa" ref="modal" :title="titleModal" @show="resetModal" @hidden="resetModal" @ok="handleOk" 
     :ok-title = "btnOkLabel" :ok-disabled="!direccion.datos_direccion">
       <b-container fluid>
         <form ref="form" @submit.stop.prevent="handleSubmit">
           <b-row>
-            <b-col cols="12" md="12">
+            <b-col cols="12" md="4" >
               <b-form-group label="Estado" label-for="estado-select" >
                 <multiselect id="estado-select" v-model="$v.form.estado.$model" :options="estados" label="nombre" track-by="clave" 
                 :searchable="true" @input="getMunicipios" :state="$v.form.estado.$dirty ? !$v.form.estado.$error : null"  aria-describedby="estado-select-feedback"  ></multiselect>
@@ -20,6 +20,8 @@
                   </span>
                 </b-form-invalid-feedback>
               </b-form-group>
+            </b-col>
+            <b-col cols="12" md="4" >
               <b-form-group label="Municippio" label-for="municipio-select" >
                 <multiselect id="municipio-select" v-model="$v.form.municipio.$model" :options="municipios" label="nombre" track-by="clave" 
                 :searchable="true" :state="$v.form.municipio.$dirty ? !$v.form.municipio.$error : null"  aria-describedby="municipio-select-feedback"  @input="setValMunicipio"></multiselect>
@@ -30,7 +32,7 @@
                 </b-form-invalid-feedback>
               </b-form-group>
             </b-col>
-            <b-col cols="12" md="12">
+            <b-col cols="12" md="4" >
               <b-form-group label="No. EXP. CATASTRAL" label-for="expediente-input" >
                 <b-input-group size="lg"> 
                   <template #prepend>
@@ -52,6 +54,16 @@
         <transition name="slide-fade">
           <div class="card" v-if="direccion && direccion.datos_direccion" key="yes">
             <div class="card-body">
+                
+                  <h6 class="pt-3 pl-3">Datos</h6>
+                  <hr>
+                  <div class="overflow-auto" style="height:350px;">
+                      <tree-component
+                        class="item"
+                        :item="direccion"
+                      ></tree-component>
+                  </div>
+<!--
                   <div class="row">
                     <h2 class="mb-3">Ubicación:</h2>
                   </div>
@@ -141,7 +153,7 @@
                         </span>
                       </p>
                   </div>
-                   </b-container>
+                   </b-container>-->
             </div>
           </div>
           <div v-else-if="$v.form.expediente.$dirty && !$v.form.expediente.$invalid && !(direccion && direccion.datos_direccion)" key="no">

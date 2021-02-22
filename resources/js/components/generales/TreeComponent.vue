@@ -1,0 +1,46 @@
+<template>
+    <div >
+        <div v-for="(dato, key) in item" style="list-style-type: none; margin-left: 10%;" >
+            <i class="fas fa-angle-right rotate" v-if="typeof dato == 'object'" @click="toggle(key)"></i>
+            <span v-if="key" >
+                <span class="text-muted" v-if="(typeof key) == 'string'"> 
+                    {{key.split('_').map( ele => ele.toUpperCase() ).join(" ")}}: 
+                </span>
+            </span>
+            <span :id="key">  
+                <div v-if="Array.isArray(dato)" style="margin-left: 10%;">
+                    <b-table :small="true" responsive  striped hover :items="dato" ></b-table>
+                    <hr>
+                </div>
+                <span v-else-if="(typeof dato) == 'string'">
+                    {{dato}}
+                </span>
+                <span v-else-if="(typeof dato) == 'object'">
+                    <ul class="nested" >
+                        <tree-component  class="item" :item="dato"></tree-component>
+                    </ul>
+                </span>
+            </span>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props:['item'],
+    mounted(){
+        console.log(JSON.parse(JSON.stringify( this.item )))
+    },
+    data: function () {
+        return {
+            isOpen: false
+        }
+  },
+    computed:{},
+    methods: {
+        toggle: function (key) {
+            $("#" + key).toggle(200)
+        },
+    }
+  }
+</script>
