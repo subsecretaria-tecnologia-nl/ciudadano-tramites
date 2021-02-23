@@ -186,6 +186,13 @@
 			        "razon_social": enajenante.tipoPersona == "pm" ? enajenante.datosPersonales.razonSocial : "",
 			        "rfc": enajenante.datosPersonales.rfc,
 			        "curp": enajenante.tipoPersona == "pm" ? "" : enajenante.datosPersonales.curp  || "",
+			        "email": "-",
+			        "calle": "-",
+			        "colonia": "-",
+			        "numexterior": "-",
+			        "numinterior": "-",
+			        "municipio":  "-",
+			        "codigopostal":"-",
 			    }
 			    return datos_solicitante;
             },
@@ -217,8 +224,13 @@
 						tramitesJson.id_tramite = soliciante.id;//soliciante.clave;
 
 						let info = (typeof soliciante.info) == 'string' ? JSON.parse(soliciante.info) : soliciante.info;
-
-						tramitesJson.auxiliar_1 =  "";//enviar como auxiliar el solicitante
+						if(soliciante.info.hasOwnProperty('enajenante') && (soliciante.info.hasOwnProperty('solicitante') ) ){
+							let solicitanteInfo = soliciante.info.solicitante;
+							tramitesJson.auxiliar_1  = (solicitanteInfo.nombreSolicitante || '') + " " + (solicitanteInfo.apPat || '' )+ " " + (solicitanteInfo.apMat || '');
+						} else {
+							tramitesJson.auxiliar_1 =  "";//enviar como auxiliar el solicitante
+						}
+							
 						tramitesJson.auxiliar_2 = "";
 						tramitesJson.auxiliar_3 = "";
 						tramitesJson.importe_tramite = '';

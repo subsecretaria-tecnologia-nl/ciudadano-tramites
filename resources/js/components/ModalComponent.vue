@@ -9,6 +9,7 @@
     :ok-title = "btnOkLabel">
       <b-container fluid>
         <form ref="form" @submit.stop.prevent="handleSubmit">
+          <v-expansion-panels v-model="panel" multiple>
             <v-expansion-panel>
               <v-expansion-panel-header >
                 Datos Personales
@@ -104,29 +105,9 @@
                         </span>
                       </b-form-invalid-feedback>
                     </b-form-group>
-                  </b-col>          
+                  </b-col>        
                   <b-col cols="12" md="4">
-                    <b-form-group label="Género" label-for="genero-input" >
-                      <b-form-input  id="genero-input" name="genero"  v-model="$v.form.datosPersonales.genero.$model" :state="$v.form.datosPersonales.genero.$dirty ? !$v.form.datosPersonales.genero.$error : null" aria-describedby="genero-input-feedback"></b-form-input>
-                      <b-form-invalid-feedback id="genero-input-feedback">
-                        <span v-if="!$v.form.datosPersonales.genero.required" class="form-text text-danger">
-                          El género es requerido
-                        </span>
-                      </b-form-invalid-feedback>
-                    </b-form-group>
-                  </b-col> 
-                  <b-col cols="12" md="4">
-                    <b-form-group label="Estado de Nacimiento" label-for="estado-input" >
-                      <b-form-input  id="estado-input" name="estado"  v-model="$v.form.datosPersonales.estado.$model" :state="$v.form.datosPersonales.estado.$dirty ? !$v.form.datosPersonales.estado.$error : null" aria-describedby="estado-input-feedback"></b-form-input>
-                      <b-form-invalid-feedback id="estado-input-feedback">
-                        <span v-if="!$v.form.datosPersonales.estado.required" class="form-text text-danger">
-                          El estado es requerido
-                        </span>
-                      </b-form-invalid-feedback>
-                    </b-form-group>
-                  </b-col>         
-                  <b-col cols="12" md="4">
-                    <b-form-group label="IFE" label-for="ife-input" >
+                    <b-form-group label="Clave de INE" label-for="ife-input" >
                       <b-form-input  id="ife-input" name="ife"  v-model="enajenante.ife" ></b-form-input>
                     </b-form-group>
                   </b-col>
@@ -163,12 +144,6 @@
               </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-
-
-
-
-
-
                 <b-row>
                   <b-col cols="12" md="6">
                     <b-form-group label="GANANCIA OBTENIDA" label-for="ganancia-obtenida-input" >
@@ -248,6 +223,7 @@
 
               </v-expansion-panel-content>
             </v-expansion-panel>
+          </v-expansion-panels>
         </form>
       </b-container>
     </b-modal>
@@ -260,6 +236,7 @@
   import { validationMixin } from 'vuelidate'
   import { required, helpers, between  } from 'vuelidate/lib/validators';
   const rfcPattern = helpers.regex("mob", /^[A-ZÑ&]{3,4}\d{6}(?:[A-Z\d]{3})?$/);
+  const rfcMoralPattern = helpers.regex("mob", /^[A-ZÑ&]{3,4}\d{6}(?:[A-Z\d]{3})?$/);
 
   const curpPattern = helpers.regex("mob", /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$/);
 
@@ -298,8 +275,6 @@
         this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
         this.form.datosPersonales.apPat = oldEnajentanteEditado.datosPersonales.apPat;
         this.form.datosPersonales.fechaNacimiento = oldEnajentanteEditado.datosPersonales.fechaNacimiento;
-        this.form.datosPersonales.genero = oldEnajentanteEditado.datosPersonales.genero;
-        this.form.datosPersonales.estado = oldEnajentanteEditado.datosPersonales.estado;
         this.form.datosPersonales.razonSocial = oldEnajentanteEditado.datosPersonales.razonSocial;
         this.form.porcentajeCompra= oldEnajentanteEditado.porcentajeCompra;
 
@@ -334,15 +309,16 @@
         form: {
           porcentajeCompra:1,
           datosPersonales:{
-            curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', genero:'', estado: '',razonSocial:'',apMat:''
+            curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', /*genero:'', estado: '',*/razonSocial:'',apMat:''
           },
           datosParaDeterminarImpuesto:{
-            gananciaObtenida:'',pagoProvisional:'', multaCorreccion:'', montoOperacion:'',
+            gananciaObtenida:'',pagoProvisional:'', multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
           }
         },
         idModa:  uuid.v4(),
         btnIcon:'',titleModal:'', btnOkLabel:'', textBtnOpenModal:'',classBtn:'',
-        maxProcentajePermitido:100
+        maxProcentajePermitido:100,
+        panel: [0,1]
 
       }
     },
@@ -357,8 +333,6 @@
                   nombre: { required },
                   apPat: { required },
                   fechaNacimiento:{ required }, 
-                  genero:{ required },
-                  estado:{ required },
                   apMat: { required:false },
                 },
                 datosParaDeterminarImpuesto: {
@@ -397,10 +371,10 @@
         if(!this.enajenanteEditado){
           this.form = { porcentajeCompra:1,
             datosPersonales:{
-              curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', genero:'', estado: '',razonSocial:'',apMat:''
+              curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', /*genero:'', estado: '',*/razonSocial:'',apMat:''
             },                
             datosParaDeterminarImpuesto:{
-              gananciaObtenida:'',pagoProvisional:'', multaCorreccion:'', montoOperacion:'',
+              gananciaObtenida:'',pagoProvisional:'', multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
             }
           }
         }
@@ -478,31 +452,37 @@
           this.form.datosPersonales.apPat = data.data.apePat;
           this.form.datosPersonales.apMat = data.data.apeMat;
           this.form.datosPersonales.fechaNacimiento =  data.data.fechaNac.split("/").reverse().join("-");
-          this.form.datosPersonales.genero = data.data.sexo;
-          this.form.datosPersonales.estado = data.data.entidadNac;
         } else {
           this.form.datosPersonales.nombre = "";
           this.form.datosPersonales.apPat = ""
           this.form.datosPersonales.apMat = "";
           this.form.datosPersonales.fechaNacimiento = "";
-          this.form.datosPersonales.genero = "";
-          this.form.datosPersonales.estado = "";
         }
       },
 
-      formatoMoneda(name){
+      formatter(value){
         const formatter  = new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'MXN',
           minimumFractionDigits: 2
         });
+        return formatter.format(value);
+      },
+
+      formatoMoneda(name){
+
         if(this.$v.form.datosParaDeterminarImpuesto[name].$model){
-          this.$v.form.datosParaDeterminarImpuesto[name].$model =  formatter.format(this.$v.form.datosParaDeterminarImpuesto[name].$model);  
+          let numero = this.formatoNumero(this.$v.form.datosParaDeterminarImpuesto[name].$model);
+          this.$v.form.datosParaDeterminarImpuesto[name].$model =  this.formatter(numero); 
         } else{
           return null;
         }
-        
-      }
+      },
+
+      formatoNumero(numberStr){
+          let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+          return valor;
+      },
     },
     watch: {
       enajenante:{
