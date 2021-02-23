@@ -33,6 +33,7 @@
                 <p class="mb-0">
                     <span>
                         <strong v-if="!isNaN(solicitud.importe_tramite)"> 
+                            <!-- {{solicitud.importe_tramite| toCurrency}}-->
                             $<span v-html="solicitud.importe_tramite"> </span>
                         </strong>
                         <strong v-if="isNaN(solicitud.importe_tramite)"> 

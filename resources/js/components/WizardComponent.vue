@@ -60,7 +60,7 @@
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
-                                                <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'">
+                                                <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'  && tipoTramite != 'complementaria'">
                                                   <resumen-tramite-5-isr-component v-if="currentStep == 3"
                                                   :tipoTramite="tipoTramite" 
                                                   :datosComplementaria="datosComplementaria" 
@@ -68,7 +68,7 @@
                                                   :usuario="usuario" :errors="errors">
                                                   </resumen-tramite-5-isr-component>
                                                 </div>
-                                                <div v-else-if="tramite.tramite != '5% de Enajenación de Inmuebles'">
+                                                <div v-else>
                                                   <resumen-tramite-component v-if="currentStep == 3" 
                                                   :tipoTramite="tipoTramite" 
                                                   :datosComplementaria="datosComplementaria" 
