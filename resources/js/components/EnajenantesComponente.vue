@@ -54,7 +54,7 @@
                     <tr  v-for="(registro, key) in enajentantes"  >
                         <td class="text-center">
                             <i class="fa fa-times" id="iconBtnEliminar"  @click="eliminar(key)" style="cursor: pointer; color: red;" title="Quitar"></i> 
-                            {{ registro.tipoPersona }}
+                            {{ registro.tipoPersona == 'pf' ? 'Persona Física' : 'Persona Moral' }}
                         </td>	
                         <td>
                             {{ registro.tipoPersona == 'pm' ? registro.datosPersonales.razonSocial : (registro.datosPersonales.nombre + ' ' + registro.datosPersonales.apPat + ' ' + registro.datosPersonales.apMat) }}
