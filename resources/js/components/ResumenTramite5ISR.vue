@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-sm-12">
                             <b-table responsive striped hover :items="listaEnajentantes" :fields="camposEnajenantes" ref="table"  class="text-center">
-                                <template #cell(p)="data">
+                                <template #cell(tipoPersona)="data">
                                     {{ data.item.tipoPersona == 'pf' ? 'Persona Física' : 'Persona Moral' }}
                                 </template>
                                 <template #cell(porcentajeCompra)="data">
@@ -60,6 +60,7 @@
                                     </div>
                                 </template> 
                                 <template #row-details="data" #title="Detalle">
+                                    <transition name="slide-fade">
                                     <b-card no-body v-if="data">
                                         <b-card-body id="nav-scroller"ref="content"style="position:relative; height:400px; overflow-y:scroll;">
                                             <b-row v-for="(salida, key) in data.item.detalle.Salidas" :key="key">
@@ -72,6 +73,7 @@
                                             </b-row>
                                         </b-card-body> 
                                     </b-card>
+                                    </transition>
                                 </template>                                                          
                             </b-table>
                         </div>
