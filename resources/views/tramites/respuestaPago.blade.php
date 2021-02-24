@@ -5,7 +5,7 @@
     <div class="d-flex flex-column-fluid">
 	    <div class="container">              
             <div>
-                <san > inicio->Tramites en curso-> Pago </span>
+                <span> inicio->Tramites en curso-> Pago </span>
             </div>
             <div  style="padding-top: 10px; min-height: 600px;" class="content d-flex flex-column flex-column-fluid">
                 <div>
