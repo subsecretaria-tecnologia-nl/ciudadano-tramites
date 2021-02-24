@@ -11,9 +11,9 @@ class FormatoDeclaracionController extends Controller
 		$tramite = curlSendRequest("GET", getenv("TESORERIA_HOSTNAME")."/solicitudes-get-tramite-pdf/{$id}");
 		if(isset($tramite->tramite) && count( $tramite->tramite->solicitudes) > 0){
 			$info = $tramite->tramite;
- 			// $info =json_decode($info[0]);
-			//  dd($info);
-			$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info', 'campoIndex'));
+			$enajenante = (array)  $info->solicitudes[0]->info->campos;
+			$enajenante = $enajenante['Listado de enajenantes'];
+			$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info', 'campoIndex', 'enajenante'));
         	return $pdf->stream('formatoDeclaracion.blade.pdf');
 		}
 
