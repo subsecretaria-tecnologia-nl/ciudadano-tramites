@@ -41,7 +41,7 @@
               let informacion = this.getInformacion( tramite, datosFormulario );
 
 
-              if(tramite.tramite ==  "5% de Enajenación de Inmuebles" && this.type != 'temporal'){
+              if(tramite.tramite ==  "5% de Enajenación de Inmuebles" && this.type != 'temporal' && this.tipoTramite != 'complementaria' ){
                 this.guardarMultiplesTramites( datosFormulario, listaSolicitantes, tramite, informacion, url )
               } else {
                 formData = this.getFormData();
