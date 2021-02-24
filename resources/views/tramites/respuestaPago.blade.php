@@ -5,7 +5,9 @@
     <div class="d-flex flex-column-fluid">
 	    <div class="container">              
             <div>
-                <span > inicio->Tramites en curso-> Pago </span>
+                <san > inicio->Tramites en curso-> Pago </span>
+                <san >{{  json_encode( $respuestabanco)  }} </span>
+                <san >{{  json_encode( $user)  }} </span>
             </div>
             <div  style="padding-top: 10px; min-height: 600px;" class="content d-flex flex-column flex-column-fluid">
                 <div>
@@ -31,9 +33,7 @@
 									@endif
 								</div>
 
-								<div class="pt-10 pl-10 pr-10">
-                                	<firma-electronica-component  :usuario="{{$respuestabanco}}"  ></firma-electronica-component>
-                                </div>
+							
 								<div class="card-body">
 									<div class="row" >
 										<div class="col-lg-12 col-sm-12">
@@ -54,6 +54,9 @@
 										</div>
 									</div>
 								</div>
+								<div class="pt-10 pl-10 pr-10">
+                                	<firma-electronica-component  :usuario="{{  json_encode( $respuestabanco['response']['datos']['tramites'][0]['id_tramite'])  }}"  ></firma-electronica-component>
+                                </div>
 							</div>
 						</div>
 					</section>
