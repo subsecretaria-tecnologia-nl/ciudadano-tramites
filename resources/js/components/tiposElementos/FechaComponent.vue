@@ -1,11 +1,13 @@
 <template>
-    <div class=" fv-plugins-icon-container">
-        <b-form-group :label="campo.nombre" :labelFor="campo.campo_id + ''" >
-              <b-form-datepicker   :id="campo.campo_id + ''" :name="campo.nombre"  v-model="campo.valor"        
+    <div class=" fv-plugins-icon-container" id="fechaElement">
+        <label>
+         {{ campo.nombre }}
+        </label>
+        <b-form-datepicker   :id="campo.campo_id + ''" :name="campo.nombre"  v-model="campo.valor"        
               @change="validar" style="background-color: #e5f2f5 !important"
-        @focus="validar" @input="validar"  class="form-control  form-control-lg ">
+        @focus="validar" @input="validar" >
               	</b-form-datepicker>
-        </b-form-group>
+       
         <small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || estadoFormulario > 0)">
 	        <span v-for="mensaje in campo.mensajes" class="form-text text-danger">
 	          {{ mensaje.mensajeStr }}
@@ -13,7 +15,7 @@
     	</small>
     </div>
 </template>
-  
+
 <script>
 
     export default {

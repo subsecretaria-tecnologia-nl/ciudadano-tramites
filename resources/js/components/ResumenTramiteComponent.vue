@@ -116,7 +116,6 @@
         props: ['datosComplementaria','tipoTramite'],
         mounted() {
             this.obtenerInformacionDelTramite();
-            console.log(this.tipoTramite)
             if(this.tipoTramite == 'declaracionEn0'){
                 this.obteniendoCosto= false;
                 this.tramite.detalle = {costo_final:0};

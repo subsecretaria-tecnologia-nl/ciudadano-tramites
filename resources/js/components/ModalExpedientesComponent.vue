@@ -13,7 +13,8 @@
             <b-col cols="12" md="4" >
               <b-form-group label="Estado" label-for="estado-select" >
                 <multiselect id="estado-select" v-model="$v.form.estado.$model" :options="estados" label="nombre" track-by="clave" 
-                :searchable="true" @input="getMunicipios" :state="$v.form.estado.$dirty ? !$v.form.estado.$error : null"  aria-describedby="estado-select-feedback"  ></multiselect>
+                :searchable="true" @input="getMunicipios" :state="$v.form.estado.$dirty ? !$v.form.estado.$error : null"  aria-describedby="estado-select-feedback" 
+                :disabled="desabilitarSelecEstados" ></multiselect>
                 <b-form-invalid-feedback id="estado-select-feedback">
                   <span v-if="!$v.form.estado.required"  class="form-text text-danger">
                     Estado requerido.
@@ -53,107 +54,15 @@
         </form>
         <transition name="slide-fade">
           <div class="card" v-if="direccion && direccion.datos_direccion" key="yes">
-            <div class="card-body">
-                
-                  <h6 class="pt-3 pl-3">Datos</h6>
-                  <hr>
-                  <div class="overflow-auto" style="height:350px;">
-                      <tree-component
-                        class="item"
-                        :item="direccion"
-                      ></tree-component>
-                  </div>
-<!--
-                  <div class="row">
-                    <h2 class="mb-3">Ubicación:</h2>
-                  </div>
-                  <hr>
-                  <b-container class="bv-example-row">
-                    <div>
-                      <p v-if="direccion.datos_direccion[0].calle">
-                        <strong>Calle</strong>: 
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].calle}}
-                        </span>  
-                      </p>
-                    </div>
-                    <div>
-                        <p v-if="direccion.datos_direccion[0].num_ext">
-                          <strong>N° ext</strong>: 
-                          <span class="text-muted">
-                            {{direccion.datos_direccion[0].num_ext}}
-                          </span>
-                        </p>
-                        <p v-if="direccion.datos_direccion[0].num_int">
-                          <strong>N° int</strong>: 
-                          <span class="text-muted">
-                            {{direccion.datos_direccion[0].num_int}}
-                          </span>
-                        </p>
-                    </div>
-                    <div>
-                      <p v-if="direccion.datos_direccion[0].manzana">
-                        <strong>Manzana</strong>: {{direccion.datos_direccion[0].manzana}}.
-                      </p> 
-                      <p v-if="direccion.datos_direccion[0].lote">
-                        Lote:{{direccion.datos_direccion[0].lote}}.
-                      </p> 
-                    </div>
-                     <div v-if="direccion.datos_direccion[0].edificio">
-                      <p>
-                        <strong>Edificio</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].edificio}}.
-                        </span>
-                      </p> 
-                      <p v-if="direccion.datos_direccion[0].cp">
-                        <strong>CP</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].cp}}.
-                        </span>
-                      </p>
-                    </div>                       
-                    <div>
-                      <p v-if="direccion.datos_direccion[0].colonia">
-                        <strong>Colonia</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].colonia}}.
-                        </span>
-                      </p> 
-                      <p v-if="direccion.datos_direccion[0].nombre_loc">
-                        <strong>Nombre Localidad</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].nombre_loc}}.
-                        </span>
-                      </p>
-                    </div>
-                    <div>
-                      <p v-if="direccion.datos_direccion[0].cruzamiento1">
-                        <strong>Cruzamiento</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].cruzamiento1}}.
-                        </span>
-                      </p>
-                      <p v-if="direccion.datos_direccion[0].clave_loc">
-                        <strong>Clave Localidad</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].clave_loc}}.
-                        </span>
-                      </p> 
-                      <p v-if="direccion.datos_direccion[0].cruzamiento2">
-                        <strong>Cruzamiento 2</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].cruzamiento2}}.
-                        </span>
-                      </p>
-                      <p v-if="direccion.datos_direccion[0].tipo_vialidad">
-                        <strong>Vialidad</strong>:  
-                        <span class="text-muted">
-                          {{direccion.datos_direccion[0].tipo_vialidad}}.
-                        </span>
-                      </p>
-                  </div>
-                   </b-container>-->
+            <div class="card-body">           
+              <h6 class="pt-3 pl-3">Datos</h6>
+              <hr>
+              <div class="overflow-auto" style="height:350px;">
+                  <tree-component
+                    class="item"
+                    :item="direccion"
+                  ></tree-component>
+              </div>
             </div>
           </div>
           <div v-else-if="$v.form.expediente.$dirty && !$v.form.expediente.$invalid && !(direccion && direccion.datos_direccion)" key="no">
@@ -195,7 +104,8 @@
         },
         idModa:  uuid.v4(),
         btnIcon:'',titleModal:'', btnOkLabel:'', textBtnOpenModal:'',classBtn:'',
-        estados:[], municipios:[], clave: "70"
+        estados:[], municipios:[], clave: "70",
+        desabilitarSelecEstados:true
       }
     },
     computed:{
@@ -214,9 +124,11 @@
     },
     methods: {
       resetModal() {
-          this.form = { 
+        
+        this.form = { 
             expediente:'', estado:{ "clave": "19", "nombre": "NUEVO LEÓN" }, municipio:{ "clave": "70", "nombre": "Monterrey", "claveEstado": "19" }
         }
+        this.clave = this.$v.form.municipio.$model.clave;
       },
       handleOk(bvModalEvt) {
         // Prevent modal from closing
@@ -240,6 +152,7 @@
 
         // Hide the modal manually
         this.$nextTick(() => {
+          this.resetModal();
           this.$v.$reset();
           this.$bvModal.hide(this.idModa)
         })

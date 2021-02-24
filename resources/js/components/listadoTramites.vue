@@ -84,8 +84,14 @@
                 let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-filtrar";
                 try {
                     let estatus = this.type;
-                    let notary_id = this.notary;
-                    let response = await axios.post(url, { estatus, notary_id });
+                    let notary_id = this.notary || null;
+                    let id_usuario = this.user || null;
+
+                    let data = { estatus }
+                    if(this.notary) data.notary_id = this.notary;
+                    if(this.user) data.id_usuario = this.user;
+
+                    let response = await axios.post(url, data);
                     this.tramites = response.data;
                     // this.tramitesFiltrados = this.tramites;
                     this.tramitesFiltrados = this.tramites.filter( tramite => tramite.titulo.toLocaleLowerCase().includes(this.strBusqueda.toLocaleLowerCase()) ) ;
