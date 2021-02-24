@@ -5,7 +5,7 @@
     <div class="d-flex flex-column-fluid">
 	    <div class="container">              
             <div>
-                <span > inicio->Tramites en curso-> Pago </span>
+                <span> inicio->Tramites en curso-> Pago </span>
             </div>
             <div  style="padding-top: 10px; min-height: 600px;" class="content d-flex flex-column flex-column-fluid">
                 <div>
@@ -30,6 +30,8 @@
 	  									</span>
 									@endif
 								</div>
+
+							
 								<div class="card-body">
 									<div class="row" >
 										<div class="col-lg-12 col-sm-12">
@@ -50,6 +52,20 @@
 										</div>
 									</div>
 								</div>
+								<div class="pt-10 pl-10 pr-10">
+									@if($respuestabanco['response']['datos']['mensaje'] == 'Aprobada')
+                                	<firma-electronica-component  :usuario="{{  json_encode( $respuestabanco['response']['datos']['tramites'][0]['id_tramite'])  }}" :pago=" {{ json_encode( $respuestabanco['response']['datos']) }}"  ></firma-electronica-component>
+									@else
+										           	<div class="text-center">
+										           		<h1>  Lo sentimos, No se ha podido procesar el pago</h1>
+										           		<hr>
+										           		<a class="btn btn-danger" href="{{ url()->route('tramite.cart') }}" >
+										           			Ir al carrito
+										           		</a>
+										           	</div>
+										         
+									@endif
+                                </div>
 							</div>
 						</div>
 					</section>

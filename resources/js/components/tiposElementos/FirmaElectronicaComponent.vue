@@ -9,31 +9,50 @@
 
 
 export default {
-    props: ['datosComplementaria', 'tipoTramite','usuario'],
+    props: ['datosComplementaria', 'tipoTramite','usuario', 'pago'],
     data(){
         return{
             tramite : {},
+            tramiteInfo: '',
             firma: '',
             access_token: '',
             resultId: '',
-            listaSolicitantes:[],
-            datosFormulario:{},
-            obteniendoCosto:true,
-            datosFormulario: '',
             multiple: '',
+            doc: '',
+            rfc: '',
+            id:'',
+            folio:'',
+            llave:'',
         }
     },
-    mounted() {
-        this.datosFormulario = localStorage.getItem('datosFormulario')
-        // for (let i = 0; i < this.datosFormulario.campos; i++) {
-        //     if(this.datosFormulario.campos[i].tipo == 'enajenante'){
-        //         if( count(this.datosFormulario.campos[i].valor.enajenantes) < 0 ){
-        //             this.multiple = true;
-        //         }
-        //     }   
-        // }
-         
-        console.log( '122312' , typeof(this.datosFormulario));
+    async mounted() {
+        console.log('usuario: '+ this.usuario)
+		this.tramiteInfo = await axios.get( process.env.TESORERIA_HOSTNAME+ "/solicitudes-get-tramite-pdf/" + this.usuario );
+        var enajenantes = this.tramiteInfo.data.tramite.solicitudes[0].info.campos['Listado de enajenantes'].enajenantes;
+        if(  enajenantes.length > 1  ){
+            this.multiple = true;
+            this.doc = [];
+            this.folio = [];
+            this.llave = [];
+            for (let i = 0; i < enajenantes.length; i++) {
+                this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/' + i );
+                this.folio.push(enajenantes[i].datosPersonales.rfc);
+                this.llave.push(i);
+            }
+        }else{
+            this.doc ='';
+            this.multiple = false;
+            this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/0'; 
+            this.folio = enajenantes[0].datosPersonales.curp;
+            this.llave = "0";
+        }
+        this.rfc = this.tramiteInfo.data.tramite.solicitudes[0].info.solicitante.rfc;
+        this.id = this.tramiteInfo.data.tramite.solicitudes[0].clave;
+
+
+        console.log( 'documento: ' , this.doc);
+        console.log( 'documento: ' , this.folio);
+        console.log( 'documento: ' , this.llave);
         this.accesToken();
         this.encodeData();
 
@@ -44,27 +63,18 @@ export default {
         encodeData(){
             var urlDataGeneric = 'http://Insumos.test.nl.gob.mx/api/data_generic';
             var url = "http://Insumos.test.nl.gob.mx/api/v2/signature/iframe?id=";
-            var urlDocumento = process.env.APP_URL +'/formato-declaracion/148';
-            var urlDocumento2 = process.env.APP_URL +'/formato-declaracion/149';
-            var doc = [ urlDocumento, urlDocumento2 ];
-            var tramite_id = '5637';
-            var llave = ['9996660081' ,'9996660091'];
-            // var llave = '999666006';
-            var folio =[ '2133331161' , '2133331171'];
-            // var folio ='213333112';
             var rfc = 'GOFF951130TJ0';
-            // var rfc = this.usuario.rfc;
             
-            console.log('documentoa consultar: ', urlDocumento);
 
             var data = {
                 'perfil' : 'EI',
-                'multiple' : true,
-                'tramite' : tramite_id,
-                'llave' : llave,
-                'doc' : doc,
-                'folio' : folio,
+                'multiple' : this.multiple,
+                'tramite' : this.id,
+                'llave' : this.llave,
+                'doc' : this.doc,
+                'folio' : this.folio,
                 'rfc' : rfc,
+                // 'rfc' : this.rfc,
                 'pagado' : 1,
               
             };
@@ -86,7 +96,7 @@ export default {
            
                 $.ajax({
                     type: "POST",
-                    data: {"tramite_id" : tramite_id, "value": JSON.stringify(data), "access_token" : this.access_token},
+                    data: {"tramite_id" : this.id, "value": JSON.stringify(data), "access_token" : this.access_token},
                     dataType: 'json', 
                     url: urlDataGeneric,
                     async: false,
@@ -97,102 +107,15 @@ export default {
                         console.log('error: ', error);
                     },
                     complete:function(){
-                        console.log('id a consultar: ', self.resultId);
-                        console.log('access: ', self.access_token);
+                        console.log('id a consultar en insumos: ', self.resultId);
                     }
                 });
          
-            // var encodedData = btoa(encodeURIComponent(serialize(data)));
             var encodedId = btoa(self.resultId); 
             var urlFinal = url+encodedId;
             this.firma = urlFinal;
 
            
-            function serialize (mixedValue) {
-                let val, key, okey
-                let ktype = ''
-                let vals = ''
-                let count = 0
-
-                const _utf8Size = function (str) {
-                    return ~-encodeURI(str).split(/%..|./).length
-                }
-
-                const _getType = function (inp) {
-                    let match
-                    let key
-                    let cons
-                    let types
-                    let type = typeof inp
-
-                    if (type === 'object' && !inp) {
-                    return 'null'
-                    }
-
-                    if (type === 'object') {
-                    if (!inp.constructor) {
-                        return 'object'
-                    }
-                    cons = inp.constructor.toString()
-                    match = cons.match(/(\w+)\(/)
-                    if (match) {
-                        cons = match[1].toLowerCase()
-                    }
-                    types = ['boolean', 'number', 'string', 'array']
-                    for (key in types) {
-                        if (cons === types[key]) {
-                        type = types[key]
-                        break
-                        }
-                    }
-                    }
-                    return type
-                }
-
-                const type = _getType(mixedValue)
-
-                switch (type) {
-                    case 'function':
-                    val = ''
-                    break
-                    case 'boolean':
-                    val = 'b:' + (mixedValue ? '1' : '0')
-                    break
-                    case 'number':
-                    val = (Math.round(mixedValue) === mixedValue ? 'i' : 'd') + ':' + mixedValue
-                    break
-                    case 'string':
-                    val = 's:' + _utf8Size(mixedValue) + ':"' + mixedValue + '"'
-                    break
-                    case 'array':
-                    case 'object':
-                    val = 'a'
-
-                    for (key in mixedValue) {
-                        if (mixedValue.hasOwnProperty(key)) {
-                        ktype = _getType(mixedValue[key])
-                        if (ktype === 'function') {
-                            continue
-                        }
-
-                        okey = (key.match(/^[0-9]+$/) ? parseInt(key, 10) : key)
-                        vals += serialize(okey) + serialize(mixedValue[key])
-                        count++
-                        }
-                    }
-                    val += ':' + count + ':{' + vals + '}'
-                    break
-                    case 'undefined':
-                    default:
-                    val = 'N'
-                    break
-                }
-                if (type !== 'object' && type !== 'array') {
-                    val += ';'
-                }
-
-                return val
-            }
 
         },
 

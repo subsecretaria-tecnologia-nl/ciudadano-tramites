@@ -6,7 +6,6 @@
 <html>
 <head>
 	<title>{{ $info->tramite }}</title>
-	<link href="{{ asset("css/app.css") }}" rel="stylesheet" type="text/css" />
 	<style type="text/css">
 		body{
 			background-color: #f3f3f7;
@@ -96,7 +95,7 @@
 		<tr>
 			<td class="columna value"  style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Escritura'} }}</td>
 			<td class="columna value" style="width: auto;"  colspan="2"></td>
-			<td class="columna value" style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'FECHA DE ESCRITURA O MINUTA'} }}</td>
+			<td class="columna value" style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Fecha de Escritura o Minuta'} }}</td>
 		</tr>
 		<tr>
 			<td style="width: 1%">MUNICIPIO</td>
@@ -104,9 +103,9 @@
 			<td style="width: 1%" >DOMICILIO DE UBICACIÓN DEL INMUEBLE</td>
 		</tr>
 		<tr>
-			<td class="columna value" >{{ $info->solicitudes[0]->info->campos->Municipio[0] }}</td>
-			<td class="columna value" colspan="2">{{ $info->solicitudes[0]->info->campos->{'No. EXP. CATASTRAL'} }}</td>
-			<td class="columna value" >{{ $info->solicitudes[0]->info->campos->{'DOMICILO DE UBICACIÓN DEL INNMUEBLE'} }}</td>
+			<td class="columna value" >{{ $info->solicitudes[0]->info->campos->Expedientes->expedientes[0]->municipio->{'nombre'} }}</td>
+			<td class="columna value" colspan="2">{{ $info->solicitudes[0]->info->campos->Expedientes->expedientes[0]->{'expediente'} }}</td>
+			<td class="columna value" >{{ $info->solicitudes[0]->info->campos->Expedientes->expedientes[0]->direccion->datos_direccion[0]->{'calle'} }}  </td>
 		</tr>
 		<tr>
 			<td class="columna">% DE PROPIEDAD QUE ENAJENA</td>
@@ -114,8 +113,8 @@
 			<td class="columna"></td>
 		</tr>
 		<tr>
-			<td class="columna value" >{{-- <p class="mt-0">{{ $info->solicitudes[0]->info->campos->{'Municipio'} }}</p> --}}</td>
-			<td class="columna value" colspan="2">{{ $info->solicitudes[0]->info->campos->{'MONTO DE OPERACIÓN (reportado en el aviso de enajenación)'} }}</td>
+			<td class="columna value" >{{-- <p class="mt-0">{{ $enajenante->enajenantes[$campoIndex]->{'porcentajeCompra'} }}</p> --}}</td>
+			<td class="columna value" colspan="2">{{$enajenante->enajenantes[$campoIndex]->datosParaDeterminarImpuesto->{'montoOperacion'} }}</td>
 			<td class="columna"></td>
 		</tr>
 		<tr class='row-table '>
@@ -123,32 +122,32 @@
 		</tr>
 		<tr>
 			<td>REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
-			<td class="value">{{ $info->solicitudes[0]->info->campos->{'RFC'} ?? $info->solicitudes[0]->info->solicitante->{'rfc'} }}</td>
+			<td class="value">{{ $enajenante->enajenantes[$campoIndex]->datosPersonales->{'rfc'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>CLAVE ÚNICA DE REGISTRO DE POBLACIÓN:</td>
-			<td></td>
+			<td class="value"> {{ $enajenante->enajenantes[$campoIndex]->datosPersonales->{'curp'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>CLAVE DE ELECTOR (INE):</td>
-			<td></td>
+			<td class="value">{{ $enajenante->enajenantes[$campoIndex]->{'ife'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>NOMBRE:</td>
-			<td></td>
+			<td class="value">{{ $enajenante->enajenantes[$campoIndex]->datosPersonales->{'nombre'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>APELLIDO PATERNO:</td>
-			<td></td>
+			<td class="value">{{  $enajenante->enajenantes[$campoIndex]->datosPersonales->{'apPat'}  }} </td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>APELLIDO MATERNO:</td>
-			<td></td>
+			<td class="value">{{  $enajenante->enajenantes[$campoIndex]->datosPersonales->{'apMat'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 	</tbody>
