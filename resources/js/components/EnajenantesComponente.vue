@@ -71,8 +71,8 @@
                         <td>
                             <modal-component 
                         		@editaEnajentante="editaEnajentante"  :enajenanteEditado="registro" :porcentajeAsignado="porcentajeTotalCompra" :indexEnajenanteEditado="key"
-                                :porcentajeVenta="$v.porcentajeVenta.$model">
-                        	</modal-component>                        	
+                                :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps">
+                        	</modal-component>                    	
                         </td>
                     </tr>
                 </tbody>
@@ -84,29 +84,34 @@
 	<modal-component 
 		@addEnajentante="addEnajentante" v-if="porcentajeTotalCompra < $v.porcentajeVenta.$model" 
             :porcentajeAsignado="porcentajeTotalCompra" 
-            :porcentajeVenta="$v.porcentajeVenta.$model">
+            :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" >
 	</modal-component>
     </div>
 </template>
 <script>
+    import Vue from 'vue';
     import { validationMixin } from 'vuelidate'
     import { maxValue } from 'vuelidate/lib/validators';
 	export default {
         mixins: [validationMixin],
-            validations() {
-              return {
-                  porcentajeVenta:{
-                    isMayorQuePorcentajeAsignado(value) {
-                        return this.porcentajeTotalCompra <= value
-                    },
-                    isPorcentajeComplete(value){
-                        return this.porcentajeTotalCompra == value;
-                    },
-                    maxValue: maxValue(100)
-                  }
+        validations() {
+          return {
+              porcentajeVenta:{
+                isMayorQuePorcentajeAsignado(value) {
+                    return this.porcentajeTotalCompra <= value
+                },
+                isPorcentajeComplete(value){
+                    return this.porcentajeTotalCompra == value;
+                },
+                maxValue: maxValue(100)
               }
+          }
+        },
+        computed:{
+            listaCurps(){
+                return this.enajentantes.map( enajentante => enajentante.datosPersonales.curp );
             },
-
+        },
 		mounted(){
             if(this.campo.valor && this.campo.valor.enajenantes && this.campo.valor.enajenantes.length > 0){
                 this.enajentantes = this.campo.valor.enajenantes;
@@ -184,7 +189,7 @@
                 this.campo.valor = {enajenantes:this.enajentantes, porcentajeVenta:this.$v.porcentajeVenta.$model};
                 this.$emit('updateForm', this.campo);
           
-            }
+            },
 		},
 
 	};

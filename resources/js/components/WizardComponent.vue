@@ -34,7 +34,7 @@
                                         <!--begin: Wizard Form-->
                                             <!--begin: Wizard Step 1 Campos tramite-->
                                             <div class="pb-5 c" data-wizard-type="step-content" data-wizard-state="current" id="step1">
-                                              <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles' && camposGuardadosObtenidos">
+                                              <div v-if="tramite.tramite == nombtreTamite5IS5 && camposGuardadosObtenidos">
                                                 <radio-option-component
                                                   :default="tipoTramite"
                                                   @valueRadio="cambioRadio"
@@ -60,7 +60,7 @@
                                             <!--end: Wizard Step 2-->
                                             <!--begin: Wizard Step 3-->
                                             <div class="pb-5" data-wizard-type="step-content" id="step3" >
-                                                <div v-if="tramite.tramite == '5% de Enajenación de Inmuebles'  && tipoTramite != 'complementaria'">
+                                                <div v-if="tramite.tramite == nombtreTamite5IS5  && tipoTramite != 'complementaria'">
                                                   <resumen-tramite-5-isr-component v-if="currentStep == 3"
                                                   :tipoTramite="tipoTramite" 
                                                   :datosComplementaria="datosComplementaria" 
@@ -131,8 +131,8 @@
 </template>
 
 <script>
-    import { uuid } from 'vue-uuid';
-import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponent.vue';
+  import { uuid } from 'vue-uuid';
+  import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponent.vue';
 
     export default {
         props: ['tramite','idUsuario', 'clave', 'usuario'],
@@ -193,7 +193,8 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
                   wizardTitle:'Finalizar',
                   wizardDesc:'Revisar y completar',
                 }],
-                errors:[]
+                errors:[],
+                nombtreTamite5IS5:'ISR 5% por enajenación de inmuebles'
                 //declararEn0:false
             }
         },

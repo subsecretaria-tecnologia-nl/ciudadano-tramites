@@ -84,20 +84,25 @@
                 return informacion;
             },
 
-            buildFormData(informacion, listaSolicitantes, tramite, idEdicion){
+            buildFormData(informacion, listaSolicitantes, tramite, idEdicion, enajenantes){
               let formData = new FormData();
               if( this.files && this.files.length > 0 ){
-              this.files.forEach( (file, index) => {
-                  if(this.files[index].valor && this.files[index].valor.name){
-                    formData.append('file['+  index +']', this.files[index].valor);
-                    formData.append('descripcion['+  index +']',  this.files[index].nombre );
-                  }
-              });
+                this.files.forEach( (file, index) => {
+                    if(this.files[index].valor && this.files[index].valor.name){
+                      formData.append('file['+  index +']', this.files[index].valor);
+                      formData.append('descripcion['+  index +']',  this.files[index].nombre );
+                    }
+                });
               }
               formData.append('user_id', this.idUsuario );
-              formData.append('info', JSON.stringify(informacion) );
+              if(!enajenantes){
+                formData.append('info', JSON.stringify(informacion) );
+              } else {
+                formData.append('info', JSON.stringify({}) );
+                formData.append("enajenantes", JSON.stringify(enajenantes));
+              }
               if( listaSolicitantes && listaSolicitantes.length > 0 ){
-              formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
+                formData.append('solicitantes', JSON.stringify(listaSolicitantes) );
               }
               if(tramite){
                 formData.append('clave', tramite.id_seguimiento );
@@ -109,7 +114,9 @@
               return formData;
             },
 
-            getFormData(){
+
+
+            getFormData(enajenantes){
                 let datosTabs = JSON.parse( JSON.stringify(this.obtenerDatosTabs() ) );
                 let listaSolicitantes = datosTabs[0];
                 let tramite = datosTabs[1];
@@ -121,7 +128,7 @@
                 if(  this.infoGuardadaFull && this.infoGuardadaFull.id  ){
                   idEdicion = this.infoGuardadaFull.id ;
                 }
-                return this.buildFormData( informacion, listaSolicitantes, tramite, idEdicion );
+                return this.buildFormData( informacion, listaSolicitantes, tramite, idEdicion,enajenantes );
             },
 
             

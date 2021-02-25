@@ -40,9 +40,13 @@
 
               let informacion = this.getInformacion( tramite, datosFormulario );
 
-
-              if(tramite.tramite ==  "5% de Enajenación de Inmuebles" && this.type != 'temporal' && this.tipoTramite != 'complementaria' ){
-                this.guardarMultiplesTramites( datosFormulario, listaSolicitantes, tramite, informacion, url )
+              if(!!this.tieneEnajentantes(datosFormulario) && this.type != 'temporal' && this.tipoTramite != 'complementaria' ){
+                //this.guardarMultiplesTramites( datosFormulario, listaSolicitantes, tramite, informacion, url );
+                let enajenantes = this.extraerEnajentantes(datosFormulario, tramite, informacion );
+                
+                console.log(JSON.parse(JSON.stringify(enajenantes)))
+                formData = this.getFormData(enajenantes);
+                this.guardarTramiteUnico(formData, url )
               } else {
                 formData = this.getFormData();
                 this.guardarTramiteUnico(formData, url); 
@@ -65,45 +69,29 @@
               this.enviando = false;
             },
 
-            async guardarMultiplesTramites(datosFormulario, listaSolicitantes, tramite, informacion,url){
-                let camposEnajenantes = datosFormulario.campos.find( (campo) => campo.tipo == 'enajenante');
+            tieneEnajentantes(datosFormulario){
+              return datosFormulario.campos.find( (campo) => campo.tipo == 'enajenante');
+            },
+
+                
+            extraerEnajentantes(datosFormulario, tramite, informacion){
+                let camposEnajenantes = this.tieneEnajentantes(datosFormulario);
                 let id_seguimiento = tramite.id_seguimiento;
-                if(camposEnajenantes && camposEnajenantes.valor && camposEnajenantes.valor.enajenantes){
+                if( !!camposEnajenantes && camposEnajenantes.valor && camposEnajenantes.valor.enajenantes){
                   let requests = [];
-                  let enajenantes = [];
-                  if(datosFormulario.errorAlguardar ){
-                    enajenantes = camposEnajenantes.valor.enajenantes.filter(  enajenante => enajenante.status && !enajenante.status.guardado)
-                  }  else{
-                    enajenantes = camposEnajenantes.valor.enajenantes;
-                  }
+                  let enajenantes = enajenantes = camposEnajenantes.valor.enajenantes;
+                  let listaEnajentantes = [];
                   enajenantes.forEach( (enajenante, indice) => {
-                    
-
-                      informacion.detalle = enajenante.detalle;
-                      informacion.enajenante = enajenante;
-                      delete enajenante.detalle;
-                      tramite.id_seguimiento = id_seguimiento + "-" + indice;
-                      let idEdicion = null;
-                      if(  this.infoGuardadaFull && this.infoGuardadaFull.id && indice == 0 ){//solo editamo el primer enajenant si es edicion, el segundo sera un registro nuevo
-                        idEdicion = this.infoGuardadaFull.id ;
-                        tramite.id_seguimiento = id_seguimiento ;
-                      }
-
-                      let formData = this.buildFormData(informacion, listaSolicitantes, tramite, idEdicion);
-                      let indiceEnajenante = enajenante.indice || indice;
-                      let request = axios.post(url, formData, {headers:{'Content-Type': 'application/json', indiceEnajenante:indiceEnajenante}})
-                      requests.push(request);
+                    let inf = Object.assign({} , informacion);
+                      inf.detalle = enajenante.detalle;
+                      inf.enajenante = enajenante;
+                      inf.id = 0;
+                      listaEnajentantes.push(inf);
+                      /*listaEnajentantes.push({
+                        info: inf, id:0
+                      })*/
                   });
-
-                  axios.all(requests).then(axios.spread((...responses) => {
-                    this.$emit('tramiteAgregadoEvent', {
-                      type:this.type, respuesta:true, responses
-                    });
-                  })).catch((err)=>{
-                    this.$emit('tramiteAgregadoEvent', {type:this.type, respuesta:false, err});
-                  }).finally(()=>{
-                    this.enviando = false;
-                  });
+                  return listaEnajentantes;
                 }
             }
 
