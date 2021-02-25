@@ -44,8 +44,8 @@
             });
           if( caracteristicas.formato == 'curp'){
                 var self = this;
-                let url = "http://10.153.144.228/consultar-curp/" + campo.valor ;  
-                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp/" + campo.valor ;  
+                // let url = process.env.TESORERIA_HOSTNAME + "/insumos-catastro-consulta/7090036008";  
                 $.ajax({
                     type: "GET",
                     dataType: 'json', 

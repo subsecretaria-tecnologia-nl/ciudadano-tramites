@@ -113,7 +113,7 @@
                       this.$emit('processGrupal', {response:null, exp});
                     }
                     // $.ajax({
-                    //   url : `http://10.153.144.228/insumos-catastro-consulta/${exp}`,
+                    //   url : `${process.env.TESORERIA_HOSTNAME}/insumos-catastro-consulta/${exp}`,
                     //   type: 'get',
                     //   success : (res) => {
                     //   },

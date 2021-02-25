@@ -597,7 +597,7 @@ export default {
             buscarCurp(curp) {
                 var self = this;
                 let url = "https://insumos.nl.gob.mx/api/consultacurp" ;  
-                // let url = "http://10.153.144.228/insumos-catastro-consulta/7090036008";  
+                // let url = process.env.TESORERIA_HOSTNAME + "/insumos-catastro-consulta/7090036008";  
                 var data = { 'access_token' : self.access_token , 'curp' : curp  };
                 $.ajax({
                     type: "GET",
@@ -617,7 +617,7 @@ export default {
                 });
             },
             Vendedores() {
-                let url = "http://10.153.144.228/insumos-catastro-consulta/" + this.expediente;  
+                let url = process.env.TESORERIA_HOSTNAME + "/insumos-catastro-consulta/" + this.expediente;  
                 if (this.propietario == 1) {
                     
                     $.ajax({
@@ -665,7 +665,7 @@ export default {
             }
         },
         expediente: function () {
-            let url = "http://10.153.144.228/insumos-catastro-consulta/" + this.expediente;  
+            let url = process.env.TESORERIA_HOSTNAME + "/insumos-catastro-consulta/" + this.expediente;  
                 if (this.propietario == 1) {
                     
                     $.ajax({

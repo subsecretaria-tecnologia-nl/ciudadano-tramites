@@ -211,7 +211,7 @@ import FirmaElectronicaComponent from './tiposElementos/FirmaElectronicaComponen
               
               if( data.type == "finalizar" ){
                 console.log("redirigir")
-                redirect("/cart");
+                redirect("/tramites/pendiente-de-pago/99");
               } if(data.type=="temporal"){
                 redirect("/nuevo-tramite");
               }else {

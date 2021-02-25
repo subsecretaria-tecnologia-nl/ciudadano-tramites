@@ -183,3 +183,27 @@
 .header-fixed[data-header-scroll=on] .content{
 	padding-top: 25px !important;
 }
+
+.btn{
+	&.btn-outline-primary, &.btn-primary{
+		&:hover{
+			color: white;
+			span{
+				color: white;
+			}
+		}
+		&:active{
+			color: white;
+			span{
+				color: white;
+			}
+		}
+	}
+
+	&.btn-primary{
+		color: white;
+		span{
+			color: white;
+		}
+	}
+}

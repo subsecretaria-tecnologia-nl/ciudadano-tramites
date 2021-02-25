@@ -66,6 +66,7 @@
                 let elItem = this;
                 axios.put(url, {tipo:"u"}).then(response => {
                     let data = { response, index: elItem.index };
+                    console.log(data);
                     this.$emit('updatingParent', data);
                     let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
                     $("#totalTramitesCarrito" ).text( totalCarritoActual - 1  );
