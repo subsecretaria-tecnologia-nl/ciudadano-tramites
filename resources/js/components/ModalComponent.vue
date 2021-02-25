@@ -457,6 +457,16 @@
         let enajenante = this.form;
         enajenante.nacionalidad =  this.enajenante.nacionalidad;
         enajenante.tipoPersona =  this.enajenante.tipoPersona;
+        if(enajenante.tipoPersona == 'pf'){
+          delete enajenante.datosPersonales.razonSocial;
+        } else {
+          delete enajenante.datosPersonales.curp;
+          delete enajenante.datosPersonales.nombre;
+          delete enajenante.datosPersonales.apPat;
+          delete enajenante.datosPersonales.fechaNacimiento;
+          delete enajenante.datosPersonales.apMat;
+          delete enajenante.datosPersonales.claveIne;
+        }
         if(this.enajenanteEditado){
           let response = {
             enajenante:enajenante, 
