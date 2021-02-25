@@ -38,6 +38,10 @@
                         <span v-if="!$v.form.datosPersonales.curp.curpPattern"  class="form-text text-danger">
                           La Curp no cumple con la regla de validación.
                         </span>
+                        <span v-if="!$v.form.datosPersonales.curp.isUnique"  class="form-text text-danger">
+                          Esta curp ya se encuentra agregada
+                        </span>
+
                       </b-form-invalid-feedback>
                     </b-form-group>
                   </b-col>
@@ -236,7 +240,7 @@
   import { validationMixin } from 'vuelidate'
   import { required, helpers, between  } from 'vuelidate/lib/validators';
   const rfcPattern = helpers.regex("mob", /^[A-ZÑ&]{3,4}\d{6}(?:[A-Z\d]{3})?$/);
-  const rfcMoralPattern = helpers.regex("mob", /^[A-ZÑ&]{3,4}\d{6}(?:[A-Z\d]{3})?$/);
+  const rfcMoralPattern = helpers.regex("mob", /^[A-ZÑ&]{3,4}\d{6}$/);
 
   const curpPattern = helpers.regex("mob", /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$/);
 
@@ -257,6 +261,8 @@
       },
       porcentajeVenta:{
          type: [Number, String],
+      },listaCurps:{
+        type: Array
       }
     },
 
@@ -328,7 +334,18 @@
               return {
                 porcentajeCompra:{ required,  between: between(1, this.maxProcentajePermitido) },
                 datosPersonales:{
-                  curp: { required, curpPattern },
+                  curp: { 
+                    required, 
+                    curpPattern,
+                    isUnique(value) {
+                      if(this.enajenanteEditado){
+                        return this.listaCurps.indexOf(value) < 0 || this.enajenanteEditado.datosPersonales.curp == value;  
+                      } else {
+                        return this.listaCurps.indexOf(value) < 0;
+                      }
+                      
+                    },
+                  },
                   rfc: { required, rfcPattern },
                   nombre: { required },
                   apPat: { required },
@@ -348,7 +365,7 @@
 
                 porcentajeCompra:{ required,  between: between(1, this.maxProcentajePermitido) },
                 datosPersonales:{
-                  rfc: { required, rfcPattern },
+                  rfc: { required, rfcMoralPattern },
                   razonSocial:{ required }
                 },
                 datosParaDeterminarImpuesto: {
@@ -371,7 +388,7 @@
         if(!this.enajenanteEditado){
           this.form = { porcentajeCompra:1,
             datosPersonales:{
-              curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', /*genero:'', estado: '',*/razonSocial:'',apMat:''
+              curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', razonSocial:'',apMat:''
             },                
             datosParaDeterminarImpuesto:{
               gananciaObtenida:'',pagoProvisional:'', multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
