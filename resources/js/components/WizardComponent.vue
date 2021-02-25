@@ -194,7 +194,7 @@
                   wizardDesc:'Revisar y completar',
                 }],
                 errors:[],
-                nombtreTamite5IS5:'ISR 5% por enajenación de inmuebles'
+                nombtreTamite5IS5:'ISR 5% POR ENAJENACIÓN DE INMUEBLES'
                 //declararEn0:false
             }
         },
