@@ -67,8 +67,7 @@ class CalculoimpuestosController extends Controller
       $this->solicitudes_ticket   = $solicitudes_ticket;
 
 
-    	// obtener los dias inhabiles del año en curso
-    	$this->inhabiles	= $this->getInhabiles(date('Y'));
+
 
     	$this->inpc_values			= $this->getInpcValues();
     	$this->porcentajes_values	= $this->getPorcentejesvalues();
@@ -114,7 +113,8 @@ class CalculoimpuestosController extends Controller
     	$this->g 					= $multa_correccion_fiscal;
     	$this->fecha_escritura		= $fecha_escritura;
 
-
+      // obtener los dias inhabiles del año en curso
+      $this->inhabiles	= $this->getInhabiles(date('Y'));
  		// $this->fecha_vencimiento	= $this->getVencimiento();
     $this->fecha_vencimiento  = $this->prueba();
  		$this->inpc_periodo			= $this->getInpc($this->fecha_escritura); // getInpcperiodo en caso de que sea la fecha acumulada del año vigente
@@ -359,7 +359,7 @@ class CalculoimpuestosController extends Controller
     private function getFA()
     {
     	// obtener el indice de la fecha de vencimiento
-    	$factor = (round(($this->inpc_reciente/$this->inpc_periodo),4) < 1 ) ? 1 : round(($this->inpc_reciente/$this->inpc_periodo),4);
+    	$factor = (bcdiv(($this->inpc_reciente/$this->inpc_periodo),1,4) < 1 ) ? 1 : bcdiv(($this->inpc_reciente/$this->inpc_periodo),1,4);
 
 		return $factor;
 
@@ -441,20 +441,39 @@ class CalculoimpuestosController extends Controller
     {
     	try
     	{
+        $fe = explode("-",$this->fecha_escritura);
+   			$yf = $fe[0];  // año de inicio
 
-    		$fechas = $this->diasferiados->findWhere( [ "Ano" => $year ] );
-    		if($fechas->count() > 0)
-    		{
-    			$dates = array();
-    			foreach($fechas as $f)
-	    		{
-	    			$dates []= $f->Ano."-".$f->Mes."-".$f->Dia;
-	    		}
+        if($yf != $year){//Si son diferentes se obtienen los días inhabiles desde el año de escritura hasta el actual
+          $fechas = $this->diasferiados->findWhereBetween('Ano', [ $yf,$year ] );
+      		if($fechas->count() > 0)
+      		{
+      			$dates = array();
+      			foreach($fechas as $f)
+  	    		{
+  	    			$dates []= $f->Ano."-".$f->Mes."-".$f->Dia;
+  	    		}
 
-    		}else{
-    			dd("CalculoimpuestosController::getInhabiles-No existen dias inhabiles en " . $year);
-    		}
+      		}else{
+      			dd("CalculoimpuestosController::getInhabiles-No existen dias inhabiles en " . $year);
+      		}
 
+        }else{ //Si son el mismo año se obtienen solo los del año en curso
+
+      		$fechas = $this->diasferiados->findWhere( [ "Ano" => $year ] );
+      		if($fechas->count() > 0)
+      		{
+      			$dates = array();
+      			foreach($fechas as $f)
+  	    		{
+  	    			$dates []= $f->Ano."-".$f->Mes."-".$f->Dia;
+  	    		}
+
+      		}else{
+      			dd("CalculoimpuestosController::getInhabiles-No existen dias inhabiles en " . $year);
+      		}
+
+        }
 
     		return $dates;
 
