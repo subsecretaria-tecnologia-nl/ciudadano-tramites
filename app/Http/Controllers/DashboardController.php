@@ -20,6 +20,11 @@ class DashboardController extends Controller
 			"fluid_container"=> true
 		]);
 
+		$draft = $draft ?? [];
+		$pendingPayment = $pendingPayment ?? [];
+		$waiting = $waiting ?? [];
+		$progress = $progress ?? [];
+
 		return layout_view("dashboard", [
 			"totals" => [
 				"draft" => count($draft),
