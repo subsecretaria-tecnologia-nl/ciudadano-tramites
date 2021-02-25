@@ -41,7 +41,7 @@
               let informacion = this.getInformacion( tramite, datosFormulario );
 
 
-              if(tramite.tramite ==  "5% de Enajenación de Inmuebles" && this.type != 'temporal' && this.tipoTramite != 'complementaria' ){
+              if(!!this.tieneEnajentantes(datosFormulario) && this.type != 'temporal' && this.tipoTramite != 'complementaria' ){
                 this.guardarMultiplesTramites( datosFormulario, listaSolicitantes, tramite, informacion, url )
               } else {
                 formData = this.getFormData();
@@ -65,10 +65,14 @@
               this.enviando = false;
             },
 
+            tieneEnajentantes(datosFormulario){
+              return datosFormulario.campos.find( (campo) => campo.tipo == 'enajenante');
+            },
+
             async guardarMultiplesTramites(datosFormulario, listaSolicitantes, tramite, informacion,url){
-                let camposEnajenantes = datosFormulario.campos.find( (campo) => campo.tipo == 'enajenante');
+                let camposEnajenantes = this.tieneEnajentantes(datosFormulario);
                 let id_seguimiento = tramite.id_seguimiento;
-                if(camposEnajenantes && camposEnajenantes.valor && camposEnajenantes.valor.enajenantes){
+                if( !!camposEnajenantes && camposEnajenantes.valor && camposEnajenantes.valor.enajenantes){
                   let requests = [];
                   let enajenantes = [];
                   if(datosFormulario.errorAlguardar ){
