@@ -211,7 +211,6 @@
                 Command: toastr.success("Listo !", "El trámite ha sido agregado");
               
               if( data.type == "finalizar" ){
-                console.log("redirigir")
                 redirect("/tramites/pendiente-de-pago/99");
               } if(data.type=="temporal"){
                 redirect("/nuevo-tramite");
