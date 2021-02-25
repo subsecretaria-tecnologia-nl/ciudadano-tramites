@@ -73,8 +73,18 @@
                   </b-col>
                   <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
                     <b-form-group label="Nombre(s)" label-for="nombre-input" >
-                      <b-form-input id="nombre-input" name="nombre" v-model="$v.form.datosPersonales.nombre.$model" aria-describedby="nombre-input-feedback" 
-                         :state="$v.form.datosPersonales.nombre.$dirty ? !$v.form.datosPersonales.nombre.$error : null" ></b-form-input>
+                     <b-input-group class="mt-3" id="loadingcurp">
+                        <template #append v-if="buscandoCurp">
+                          <b-input-group-text >
+                            <strong class="loadingcurp">
+                             <b-spinner label="Loading..." small ></b-spinner>
+                            </strong>
+                          </b-input-group-text>
+                        </template>
+                        <b-form-input id="nombre-input" name="nombre" v-model="$v.form.datosPersonales.nombre.$model" aria-describedby="nombre-input-feedback" 
+                                             :state="$v.form.datosPersonales.nombre.$dirty ? !$v.form.datosPersonales.nombre.$error : null" 
+                                              :disabled="curpEncontrada || buscandoCurp"></b-form-input>
+                      </b-input-group>
                       <b-form-invalid-feedback id="nombre-input-feedback">
                         <span v-if="!$v.form.datosPersonales.nombre.required"  class="form-text text-danger">
                           El Nombre es requerido.
@@ -84,8 +94,16 @@
                   </b-col>
                   <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
                     <b-form-group label="Apellido Paterno" label-for="apPat-input" >
-                      <b-form-input id="apPat-input" name="apPat" v-model="$v.form.datosPersonales.apPat.$model"  :state="$v.form.datosPersonales.apPat.$dirty ? !$v.form.datosPersonales.apPat.$error : null"  aria-describedby="apPat-input-feedback" 
-                      ></b-form-input>
+                      <b-input-group class="mt-3" id="loadingcurp">
+                        <template #append v-if="buscandoCurp">
+                          <b-input-group-text >
+                            <strong class="loadingcurp">
+                             <b-spinner label="Loading..." small ></b-spinner>
+                            </strong>
+                          </b-input-group-text>
+                        </template>
+                        <b-form-input id="apPat-input" name="apPat" v-model="$v.form.datosPersonales.apPat.$model"  :state="$v.form.datosPersonales.apPat.$dirty ? !$v.form.datosPersonales.apPat.$error : null"  aria-describedby="apPat-input-feedback"  :disabled="curpEncontrada || buscandoCurp"></b-form-input>
+                      </b-input-group>
                       <b-form-invalid-feedback id="apPat-input-feedback">
                         <span v-if="!$v.form.datosPersonales.apPat.required" class="form-text text-danger">
                           El Apellido Paterno es requerido.
@@ -97,12 +115,31 @@
                 <b-row v-if="enajenante.tipoPersona == 'pf'"  >
                   <b-col cols="12" md="6">
                     <b-form-group label="Apellido Materno" label-for="apmaterno-input" >
-                      <b-form-input  id="apmaterno-input" name="apmaterno"  v-model="$v.form.datosPersonales.apMat.$model"></b-form-input>
+                      <b-input-group class="mt-3" id="loadingcurp">
+                        <template #append v-if="buscandoCurp">
+                          <b-input-group-text >
+                            <strong class="loadingcurp">
+                             <b-spinner label="Loading..." small ></b-spinner>
+                            </strong>
+                          </b-input-group-text>
+                        </template>
+                        <b-form-input  id="apmaterno-input" name="apmaterno"  v-model="$v.form.datosPersonales.apMat.$model" :disabled="curpEncontrada || buscandoCurp"></b-form-input>
+                      </b-input-group>
                     </b-form-group>
                   </b-col> 
                   <b-col  cols="12" md="6">
                     <b-form-group label="Fecha de Nacimiento" label-for="fechaNacimiento-input" >
-                      <b-form-datepicker  class="mb-2" id="fechaNacimiento-input" name="fechaNacimiento"  v-model="$v.form.datosPersonales.fechaNacimiento.$model" :state="$v.form.datosPersonales.fechaNacimiento.$dirty ? !$v.form.datosPersonales.fechaNacimiento.$error : null" aria-describedby="fechaNacimiento-input-feedback" ></b-form-datepicker>
+
+                      <b-input-group class="mt-3" id="loadingcurp">
+                        <template #append v-if="buscandoCurp">
+                          <b-input-group-text >
+                            <strong class="loadingcurp">
+                             <b-spinner label="Loading..." small ></b-spinner>
+                            </strong>
+                          </b-input-group-text>
+                        </template>
+                        <b-form-datepicker  class="mb-2" id="fechaNacimiento-input" name="fechaNacimiento"  v-model="$v.form.datosPersonales.fechaNacimiento.$model" :state="$v.form.datosPersonales.fechaNacimiento.$dirty ? !$v.form.datosPersonales.fechaNacimiento.$error : null" aria-describedby="fechaNacimiento-input-feedback" :disabled="curpEncontrada || buscandoCurp"></b-form-datepicker>
+                      </b-input-group>
                       <b-form-invalid-feedback id="fechaNacimiento-input-feedback">
                         <span v-if="!$v.form.datosPersonales.fechaNacimiento.required" class="form-text text-danger">
                           La fecha de nacimiento es requerida
@@ -111,8 +148,14 @@
                     </b-form-group>
                   </b-col>        
                   <b-col cols="12" md="4">
-                    <b-form-group label="Clave de INE" label-for="ife-input" >
-                      <b-form-input  id="ife-input" name="ife"  v-model="enajenante.ife" ></b-form-input>
+                    <b-form-group label="Clave de INE" label-for="claveIne-input" >
+                      <b-form-input  id="claveIne-input" name="claveIne"  v-model="$v.form.datosPersonales.claveIne.$model" aria-describedby="claveIne-input-feedback" 
+                      :state="$v.form.datosPersonales.claveIne.$dirty ? !$v.form.datosPersonales.claveIne.$error : null" ></b-form-input>
+                      <b-form-invalid-feedback id="claveIne-input-feedback">
+                        <span v-if="!$v.form.datosPersonales.claveIne.inePattern"  class="form-text text-danger">
+                          Clave INE incorrecta.
+                        </span>
+                      </b-form-invalid-feedback>
                     </b-form-group>
                   </b-col>
                   <b-col></b-col>
@@ -244,6 +287,8 @@
 
   const curpPattern = helpers.regex("mob", /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$/);
 
+  const inePattern = helpers.regex("mob", /^[A-Za-z0-9_-]{18,18}$/);  
+
   export default {
     mixins: [validationMixin],
     props:{
@@ -273,8 +318,7 @@
         this.enajenante.nacionalidad = oldEnajentanteEditado.nacionalidad;
         this.enajenante.tipoPersona = oldEnajentanteEditado.tipoPersona;
         
-        this.enajenante.ife = oldEnajentanteEditado.ife;
-
+        this.form.datosPersonales.claveIne = oldEnajentanteEditado.datosPersonales.claveIne;
         this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
         this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
         this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
@@ -309,13 +353,11 @@
         enajenante: {
             nacionalidad:'mexicano',
             tipoPersona:'pf',
-            //apMat:'',
-            ife:''
         },
         form: {
           porcentajeCompra:1,
           datosPersonales:{
-            curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', /*genero:'', estado: '',*/razonSocial:'',apMat:''
+            curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'',razonSocial:'',apMat:'', claveIne:''
           },
           datosParaDeterminarImpuesto:{
             gananciaObtenida:'',pagoProvisional:'', multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
@@ -324,7 +366,7 @@
         idModa:  uuid.v4(),
         btnIcon:'',titleModal:'', btnOkLabel:'', textBtnOpenModal:'',classBtn:'',
         maxProcentajePermitido:100,
-        panel: [0,1]
+        panel: [0,1], curpEncontrada:false, buscandoCurp:false
 
       }
     },
@@ -351,6 +393,7 @@
                   apPat: { required },
                   fechaNacimiento:{ required }, 
                   apMat: { required:false },
+                  claveIne:{inePattern}
                 },
                 datosParaDeterminarImpuesto: {
                   gananciaObtenida:{ required },
@@ -388,7 +431,7 @@
         if(!this.enajenanteEditado){
           this.form = { porcentajeCompra:1,
             datosPersonales:{
-              curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', razonSocial:'',apMat:''
+              curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', razonSocial:'',apMat:'',claveIne:''
             },                
             datosParaDeterminarImpuesto:{
               gananciaObtenida:'',pagoProvisional:'', multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
@@ -414,8 +457,6 @@
         let enajenante = this.form;
         enajenante.nacionalidad =  this.enajenante.nacionalidad;
         enajenante.tipoPersona =  this.enajenante.tipoPersona;
-        //enajenante.apMat = this.enajenante.apMat;
-        enajenante.ife = this.enajenante.ife;
         if(this.enajenanteEditado){
           let response = {
             enajenante:enajenante, 
@@ -450,26 +491,33 @@
       },
           
       async buscarCurp(curp) {
+        this.buscandoCurp = true;
         let url = process.env.TESORERIA_HOSTNAME + "/consultar-curp";
         let response = await axios.get(url + '/' + curp);
+        this.buscandoCurp = false;
         if(response.data){
           if(response.data.status == 'error'){
             Command: toastr.error("Error!", response.data.msg);
+            this.rellenarForm();
           } else{
+            
             this.rellenarForm(response.data);
           }
         } else {
           this.rellenarForm();
         }
+
       },
 
       rellenarForm(data){
         if(data){
+          this.curpEncontrada = true;
           this.form.datosPersonales.nombre = data.data.nombres;
           this.form.datosPersonales.apPat = data.data.apePat;
           this.form.datosPersonales.apMat = data.data.apeMat;
           this.form.datosPersonales.fechaNacimiento =  data.data.fechaNac.split("/").reverse().join("-");
         } else {
+          this.curpEncontrada = false;
           this.form.datosPersonales.nombre = "";
           this.form.datosPersonales.apPat = ""
           this.form.datosPersonales.apMat = "";
