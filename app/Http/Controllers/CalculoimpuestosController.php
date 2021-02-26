@@ -727,10 +727,10 @@ class CalculoimpuestosController extends Controller
   			$fa = explode("-",$this->fecha_actual);
   			$yi = $fa[0];  // año de inicio
   			$mi = $fa[1];  // mes de inicio
-   			$fe = explode("-",$this->fecha_escritura);
+   			$fe = explode("-",$this->fecha_vencimiento);
    			$yf = $fe[0];  // año de inicio
   			$mf = $fe[1];  // mes de inicio
-
+        //Se considera vencido a partir de la fecha de vencimiento
 
   			if(strlen((string)$mi) == 1){
   				$i = $yi."0".$mi;
@@ -751,7 +751,7 @@ class CalculoimpuestosController extends Controller
   			{
   				if($p <= $i && $p >= $f)
   				{
-  					$total += $data["vencido"];
+  					$total += $data["requerido"];
   				}
       /*
   				else{
