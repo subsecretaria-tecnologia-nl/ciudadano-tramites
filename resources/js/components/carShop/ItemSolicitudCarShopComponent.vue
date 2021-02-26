@@ -49,10 +49,11 @@
 </template>
 
 <script>
+    console.log("hello world");
     export default {
         props: ['solicitud', 'index'],
         mounted() {
-
+            console.log("hello world")
         },
 
         data(){

@@ -1,7 +1,7 @@
 <template>
 	<div class="pagination flex-column">
 		<div class="pagination-content">
-			<tramite-component v-for="(tramite, index) in tramitesPaginados" :tramite="tramite" v-bind:key="index" v-if="totalItems != 0"></tramite-component>
+			<tramite-component @processToCart="processToCart" :tramitesCart="tramitesCart" v-for="(tramite, index) in tramitesPaginados" :tramite="tramite" v-bind:key="index" v-if="totalItems != 0"></tramite-component>
             <div class="card mb-4" v-if="totalItems == 0">
                 <div class="card-body">
                     <h3 class="text-center">{{ message || '¡Lo sentimos! No se encuentran registros para mostrar.' }}</h3>
@@ -45,10 +45,16 @@
 </template>
 <script>
 	export default {
+		props: ['tramitesCart'],
 		mounted(){
 			this.calcularPage()
             this.pagination(1);
 		},
+		// watch : {
+		// 	tramitesCart : (val) => {
+		// 		console.log(val);
+		// 	}
+		// },
 		data () {
 			let attrs = this.$attrs;
 			if(!attrs.items) attrs.items = [];
@@ -62,6 +68,9 @@
 			return attrs;
 		},
 		methods : {
+			processToCart(tramite){
+				this.$emit('processToCart', tramite);
+			},
             calcularPage(){
                 let pages = [];
                 let pagesTotal = Math.ceil( this.items.length  / this.limit);

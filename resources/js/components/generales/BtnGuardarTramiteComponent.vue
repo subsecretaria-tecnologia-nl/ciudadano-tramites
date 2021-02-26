@@ -1,7 +1,7 @@
 <template>
-	<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4"   
+	<button type="button" :class="btnClass ? btnClass : 'btn btn-success font-weight-bolder text-uppercase px-9 py-4'"
 		v-on:click="agregar()" :disabled="enviando">
-        {{ labelBtn }}                                                              
+        {{ labelBtn }}
         <div id="spinner-guardaFina" class="spinner-border spinner-border-sm float-right" role="status" 
         	v-if="enviando" style="margin-left: 5px;">
             <span class="sr-only">Loading...</span>
@@ -12,11 +12,13 @@
 <script>
     import BtnGuardarTramiteParent from './BtnGuardarTramiteParent'
     export default {
+        props: ['btnClass'],
         data() {
             return {
-              enviando:false,
+              enviando:false
             }
         },
+        created(){ console.log('btnClass', this.btnClass) },
         extends: BtnGuardarTramiteParent, //heredamos del componente BtnGuardarTramiteParent!
         
         methods:{
@@ -56,6 +58,7 @@
             async guardarTramiteUnico(formData, url){
 
               try {
+                if(this.type === 'finalizar') formData.append('en_carrito', 1);
                 let response = await axios.post(url, formData, {
                   headers:{
                       'Content-Type': 'application/json',

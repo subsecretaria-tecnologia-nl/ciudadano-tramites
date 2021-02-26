@@ -36,6 +36,15 @@
                         </form>
                     </div>
                     <!--end::Search Form-->
+                    <div class="btn-group" v-if="tramitesCart.length > 0">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button v-on:click="addToCart(1)" class="dropdown-item" type="button">Agregar al Carrito</button>
+                            <button v-on:click="addToCart(null)" class="dropdown-item" type="button">Eliminar de Carrito</button>
+                        </div>
+                    </div>
                 </div>
                 <!--end::Details-->
             </div>
@@ -56,7 +65,7 @@
                 </v-row>
             </v-container>
             <div class="w-100" v-if="!loading">
-                <pagination-component :items="tramitesFiltrados"></pagination-component>
+                <pagination-component @processToCart="processToCart" :items="tramitesFiltrados" :tramitesCart="tramitesCart"></pagination-component>
             </div>
         </div>
     </div>
@@ -66,7 +75,7 @@
 
         data() {
             return {
-                tramites: [], loading:true, porPage : 10, pages:[0], currentPage :1, strBusqueda:"", totalTramites:0, tramitesFiltrados:[],
+                tramites: [], loading:true, porPage : 10, pages:[0], currentPage :1, strBusqueda:"", totalTramites:0, tramitesFiltrados:[], tramitesCart : [],
                 ...this.$attrs
             }
         },
@@ -78,8 +87,32 @@
         },
 
         methods: {
+            processToCart (tramite) {
+                let index = this.tramitesCart.findIndex(ele => ele.id == tramite.id)
+                if(index < 0) this.tramitesCart.push(tramite);
+                else this.tramitesCart = this.tramitesCart.filter((ele, ind) => index != ind)
+            },
+            addToCart(status){
+                let ids = this.tramitesCart.map(ele => ele.id);
+                let onCart = parseInt($('#totalTramitesCarrito').text());
+                fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
+                    method : 'POST',
+                    body: JSON.stringify({ ids, status, type : 'en_carrito' })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.code === 200){
+                        this.tramitesCart.map(tramite => {
+                            onCart = status ? onCart+1 : onCart-1;
+                            tramite.en_carrito = status;
+                            $(`input[type=checkbox]#${tramite.id}`).prop('checked', false);
+                        })
 
-
+                        this.tramitesCart = [];
+                        $('#totalTramitesCarrito').text(onCart);
+                    }
+                });
+            },
             async obtenerTramites(){
                 let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-filtrar";
                 try {
