@@ -28,18 +28,18 @@
                 </b-form-group>
                 <b-row>
                   <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
-                    <b-form-group label="Curp" label-for="curp-input" >
+                    <b-form-group label="CURP" label-for="curp-input" >
                       <b-form-input id="curp-input" name="curp" v-model="$v.form.datosPersonales.curp.$model" aria-describedby="curp-input-feedback" 
                          :state="$v.form.datosPersonales.curp.$dirty ? !$v.form.datosPersonales.curp.$error : null" @change="updateCurp">></b-form-input>
                       <b-form-invalid-feedback id="curp-input-feedback">
                         <span v-if="!$v.form.datosPersonales.curp.required"  class="form-text text-danger">
-                          Curp es requerida.
+                          CURP es requerida.
                         </span>
                         <span v-if="!$v.form.datosPersonales.curp.curpPattern"  class="form-text text-danger">
-                          La Curp no cumple con la regla de validación.
+                          La CURP no cumple con la regla de validación.
                         </span>
                         <span v-if="!$v.form.datosPersonales.curp.isUnique"  class="form-text text-danger">
-                          Esta curp ya se encuentra agregada
+                          Esta CURP ya se encuentra agregada
                         </span>
 
                       </b-form-invalid-feedback>
@@ -314,38 +314,17 @@
     mounted(){
               
       if(this.enajenanteEditado){
-        let oldEnajentanteEditado = Object.assign({}, this.enajenanteEditado);
-        this.enajenante.nacionalidad = oldEnajentanteEditado.nacionalidad;
-        this.enajenante.tipoPersona = oldEnajentanteEditado.tipoPersona;
-        
-        this.form.datosPersonales.claveIne = oldEnajentanteEditado.datosPersonales.claveIne;
-        this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
-        this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
-        this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
-        this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
-        this.form.datosPersonales.apPat = oldEnajentanteEditado.datosPersonales.apPat;
-        this.form.datosPersonales.fechaNacimiento = oldEnajentanteEditado.datosPersonales.fechaNacimiento;
-        this.form.datosPersonales.razonSocial = oldEnajentanteEditado.datosPersonales.razonSocial;
-        this.form.porcentajeCompra= oldEnajentanteEditado.porcentajeCompra;
-
-        this.form.datosParaDeterminarImpuesto.gananciaObtenida = oldEnajentanteEditado.datosParaDeterminarImpuesto.gananciaObtenida;
-        this.form.datosParaDeterminarImpuesto.montoOperacion = oldEnajentanteEditado.datosParaDeterminarImpuesto.montoOperacion;
-        this.form.datosParaDeterminarImpuesto.multaCorreccion = oldEnajentanteEditado.datosParaDeterminarImpuesto.multaCorreccion;
-        this.form.datosParaDeterminarImpuesto.pagoProvisional= oldEnajentanteEditado.datosParaDeterminarImpuesto.pagoProvisional;
-
         this.titleModal = "Editar";
-        this.btnOkLabel = "Editar";
+        this.btnOkLabel = "Aceptar";
         this.btnIcon = "la la-pencil";
         this.textBtnOpenModal = " ";
         this.classBtn = "btn-info";
       } else {
         this.titleModal = "Agregar";
-        this.btnOkLabel = "Agregar";
+        this.btnOkLabel = "Aceptar";
         this.btnIcon = "la la-plus";
         this.textBtnOpenModal = "Agregar enajenante";
         this.classBtn = "btn bg-success w-80 mb-4";
-
-         
       }
     },
     data() {
@@ -486,11 +465,32 @@
 
        if(this.enajenanteEditado){
 
+
+            let oldEnajentanteEditado = JSON.parse(JSON.stringify(this.enajenanteEditado));//Object.assign({}, this.enajenanteEditado);
+            this.enajenante.nacionalidad = oldEnajentanteEditado.nacionalidad;
+            this.enajenante.tipoPersona = oldEnajentanteEditado.tipoPersona;
+            
+            this.form.datosPersonales.claveIne = oldEnajentanteEditado.datosPersonales.claveIne;
+            this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
+            this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
+            this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
+            this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
+            this.form.datosPersonales.apPat = oldEnajentanteEditado.datosPersonales.apPat;
+            this.form.datosPersonales.fechaNacimiento = oldEnajentanteEditado.datosPersonales.fechaNacimiento;
+            this.form.datosPersonales.razonSocial = oldEnajentanteEditado.datosPersonales.razonSocial;
+            this.form.porcentajeCompra= oldEnajentanteEditado.porcentajeCompra;
+
+            this.form.datosParaDeterminarImpuesto.gananciaObtenida = oldEnajentanteEditado.datosParaDeterminarImpuesto.gananciaObtenida;
+            this.form.datosParaDeterminarImpuesto.montoOperacion = oldEnajentanteEditado.datosParaDeterminarImpuesto.montoOperacion;
+            this.form.datosParaDeterminarImpuesto.multaCorreccion = oldEnajentanteEditado.datosParaDeterminarImpuesto.multaCorreccion;
+            this.form.datosParaDeterminarImpuesto.pagoProvisional= oldEnajentanteEditado.datosParaDeterminarImpuesto.pagoProvisional;
+
+
             this.maxProcentajePermitido = parseFloat(this.porcentajeVenta)  - (parseFloat(porcentajeAsignado) - parseFloat(this.form.porcentajeCompra) )  ;
           } else {
             this.maxProcentajePermitido = parseFloat(this.porcentajeVenta) - porcentajeAsignado ;
           }
-        this.$bvModal.show(this.idModa)
+        this.$bvModal.show(this.idModa);
       },
       async updateCurp(){
         if( !this.$v.form.datosPersonales.curp.$invalid ){         
