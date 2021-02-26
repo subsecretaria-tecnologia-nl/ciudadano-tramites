@@ -53,7 +53,7 @@
           </b-row>        
         </form>
         <transition name="slide-fade">
-          <div class="card" v-if="direccion && direccion.datos_direccion" key="yes">
+          <div class="card" v-if="direccion" key="yes">
             <div class="card-body">           
               <h6 class="pt-3 pl-3">Datos</h6>
               <hr>
@@ -182,6 +182,13 @@
 
       rellenarForm(data){
         if(data){
+          delete data.cta_valida;
+          delete data.vinculado_rpp;
+          delete data.bloqueado;
+          delete data.datos_propietarios;
+          delete data.datos_informacion_validada;
+          delete data.porcentaje_validacion;
+          delete data.descripcion_del_predio;
           this.direccion = data;
         } else {
           this.direccion = {};
