@@ -9,7 +9,7 @@
 
 
 export default {
-    props: ['datosComplementaria', 'tipoTramite','usuario', 'pago'],
+    props: ['datosComplementaria', 'tipoTramite','usuario', 'pago', 'id', 'user'],
     data(){
         return{
             tramite : {},
@@ -20,34 +20,66 @@ export default {
             multiple: '',
             doc: '',
             rfc: '',
-            id:'',
             folio:'',
             llave:'',
         }
     },
+    // created() {
+    //      window.addEventListener('beforeunload', function(event) {
+    //      event.returnValue = 'Write something';
+    //      console.log('tramite firmado');
+    //   })
+    // },
+    // beforeDestroy(){
+    //     window.removeEventListener('beforeunload');
+    // },
     async mounted() {
         console.log('usuario: '+ this.usuario)
-		this.tramiteInfo = await axios.get( process.env.TESORERIA_HOSTNAME+ "/solicitudes-get-tramite-pdf/" + this.usuario );
-        var enajenantes = this.tramiteInfo.data.tramite.solicitudes[0].info.campos['Listado de enajenantes'].enajenantes;
-        if(  enajenantes.length > 1  ){
-            this.multiple = true;
-            this.doc = [];
-            this.folio = [];
-            this.llave = [];
-            for (let i = 0; i < enajenantes.length; i++) {
-                this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/' + i );
-                this.folio.push(enajenantes[i].datosPersonales.rfc);
-                this.llave.push(i);
-            }
-        }else{
+        console.log('usuario: '+ this.usuario.length)
+        console.log('usuario: '+ this.usuario[1])
+    
+        if (this.usuario.length === 1 ) {
             this.doc ='';
             this.multiple = false;
-            this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/0'; 
+            this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario; 
             this.folio = enajenantes[0].datosPersonales.curp;
             this.llave = "0";
+        }else{
+             for (let i = 0; i < this.usuario.length; i++) {
+            // si es multiple entra por aqui jeje si no ->\
+                    this.multiple = true;
+                    this.doc = [];
+                    this.folio = [];
+                    this.llave = [];
+                    this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario[i] );
+                    this.folio.push( this.usuario[i] );
+                    this.llave.push( i );
+            }
         }
-        this.rfc = this.tramiteInfo.data.tramite.solicitudes[0].info.solicitante.rfc;
-        this.id = this.tramiteInfo.data.tramite.solicitudes[0].clave;
+       
+
+
+
+		// this.tramiteInfo = await axios.get( process.env.TESORERIA_HOSTNAME+ "/solicitudes-get-tramite-pdf/" + 679 );
+        // var enajenantes = this.tramiteInfo.data.tramite.solicitudes[0].info.campos['Listado de enajenantes'].enajenantes;
+        // if(  enajenantes.length > 1  ){
+        //     this.multiple = true;
+        //     this.doc = [];
+        //     this.folio = [];
+        //     this.llave = [];
+        //     for (let i = 0; i < enajenantes.length; i++) {
+        //         this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/' + i );
+        //         this.folio.push(enajenantes[i].datosPersonales.rfc);
+        //         this.llave.push(i);
+        //     }
+        // }else{
+        //     this.doc ='';
+        //     this.multiple = false;
+        //     this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/0'; 
+        //     this.folio = enajenantes[0].datosPersonales.curp;
+        //     this.llave = "0";
+        // }
+        this.rfc = this.user.id;
 
 
         console.log( 'documento: ' , this.doc);
