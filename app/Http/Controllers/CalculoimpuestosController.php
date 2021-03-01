@@ -237,7 +237,7 @@ class CalculoimpuestosController extends Controller
 
           foreach($salidas as $s => $v)
           {
-            if(strcmp($s,"H (Importe total)") == 0)
+            if(strcmp($s,"Importe total") == 0)
             {
               $importe = $v;
             }
@@ -289,7 +289,7 @@ class CalculoimpuestosController extends Controller
             "monto_operacion" => $monto_operacion,
             "ganancia_obtenida" => $ganancia_obtenida,
             "pago provisional conforme al art 127 LISR" => $pago_provisional_lisr,
-            "multa por correccion fiscal (g)" => $this->g,
+            "multa por correccion fiscal" => $this->g,
           ),
         "Salidas" => array(
           "Fecha Actual"        => $this->fecha_actual,
