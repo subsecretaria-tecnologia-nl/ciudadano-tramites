@@ -113,8 +113,8 @@
 			<td class="columna"></td>
 		</tr>
 		<tr>
-			<td class="columna value" >{{-- <p class="mt-0">{{ $enajenante->enajenantes[$campoIndex]->{'porcentajeCompra'} }}</p> --}}</td>
-			<td class="columna value" colspan="2">{{$enajenante->enajenantes[$campoIndex]->datosParaDeterminarImpuesto->{'montoOperacion'} }}</td>
+			<td class="columna value" >{{-- <p class="mt-0">{{ $enajenante->{'porcentajeCompra'} }}</p> --}}</td>
+			<td class="columna value" colspan="2">{{$enajenante->datosParaDeterminarImpuesto->{'montoOperacion'} }}</td>
 			<td class="columna"></td>
 		</tr>
 		<tr class='row-table '>
@@ -122,32 +122,32 @@
 		</tr>
 		<tr>
 			<td>REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
-			<td class="value">{{ $enajenante->enajenantes[$campoIndex]->datosPersonales->{'rfc'}  }}</td>
+			<td class="value">{{ $enajenante->datosPersonales->{'rfc'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>CLAVE ÚNICA DE REGISTRO DE POBLACIÓN:</td>
-			<td class="value"> {{ $enajenante->enajenantes[$campoIndex]->datosPersonales->{'curp'}  }}</td>
+			<td class="value"> {{ $enajenante->datosPersonales->{'curp'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>CLAVE DE ELECTOR (INE):</td>
-			<td class="value">{{ $enajenante->enajenantes[$campoIndex]->{'ife'}  }}</td>
+			<td class="value">{{ $enajenante->datosPersonales->{'claveIne'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>NOMBRE:</td>
-			<td class="value">{{ $enajenante->enajenantes[$campoIndex]->datosPersonales->{'nombre'}  }}</td>
+			<td class="value">{{ $enajenante->datosPersonales->{'nombre'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>APELLIDO PATERNO:</td>
-			<td class="value">{{  $enajenante->enajenantes[$campoIndex]->datosPersonales->{'apPat'}  }} </td>
+			<td class="value">{{  $enajenante->datosPersonales->{'apPat'}  }} </td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>APELLIDO MATERNO:</td>
-			<td class="value">{{  $enajenante->enajenantes[$campoIndex]->datosPersonales->{'apMat'}  }}</td>
+			<td class="value">{{  $enajenante->datosPersonales->{'apMat'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 	</tbody>

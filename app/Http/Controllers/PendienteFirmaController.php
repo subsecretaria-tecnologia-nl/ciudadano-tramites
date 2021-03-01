@@ -15,14 +15,15 @@ class PendienteFirmaController extends Controller
 		]);
 		$user = session()->get("user");
 		$tramites = curlSendRequest("GET", getenv("TESORERIA_HOSTNAME")."/solicitudes-info/{$user->id}/firma");
-        
-        for ($i=0; $i < count($tramites->tramites[0]->solicitudes)  ; $i++) { 
-            # code...
-            array_push($idTramites , $tramites->tramites[0]->solicitudes[$i]->id);
-        }
 
+        // for ($i=0; $i < count($tramites->tramites[0]->solicitudes)  ; $i++) { 
+        //     # code...
+        //     array_push($idTramites , $tramites->tramites[0]->solicitudes[$i]->id);
+        // }
+        // $idProcesso = $tramites->tramites[0]->tramite_id;
 
-		return layout_view("pendienteFirma", ['user' => $user, 'idTramites' => json_encode($idTramites) ]);
+        $idTramites = $tramites->tramites;
+		return layout_view("pendienteFirma", ['user' => json_encode($user), 'idTramites' => json_encode($idTramites)]);
     }
 
 }

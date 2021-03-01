@@ -3,7 +3,7 @@
     <div class="d-flex flex-column-fluid">
 	    <div class="container">              
             <div>
-                <span> inicio->Tramites en curso-> Pago </span>
+                <span> inicio->Tramites por firmar-> Firmar </span>
             </div>
             <div  style="padding-top: 10px; min-height: 600px;" class="content d-flex flex-column flex-column-fluid">
                 <div>
@@ -16,14 +16,13 @@
 								</div>
 
 								<div class="card-body">
-                                {{ $idTramites }}
 									<div class="row" >
 										<div class="col-lg-12 col-sm-12">
 											<div class="container">
                                             <div class="pt-10 pl-10 pr-10">
-                                                 <div v-for="idTramite in {{$idTramites}}">
-                                                    <firma-electronica-component :usuario="idTramite"   ></firma-electronica-component>
-                                                 </div>   
+                                                    <div v-for="idTramite in {{$idTramites}}">
+                                                        <firma-electronica-component :usuario="idTramite"   :user="{{$user}}" ></firma-electronica-component>
+                                                    </div>
                                                 </div>
 									    	</div> 
 										</div>

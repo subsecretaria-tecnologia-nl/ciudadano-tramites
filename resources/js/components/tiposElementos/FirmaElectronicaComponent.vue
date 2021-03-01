@@ -1,7 +1,6 @@
 <template>
   <div>
     <iframe id="the_frame" :src="firma" style="width:100%; height:500px;" frameborder="0"> </iframe>
-
  </div>
 </template>
 
@@ -9,7 +8,7 @@
 
 
 export default {
-    props: ['datosComplementaria', 'tipoTramite','usuario', 'pago'],
+    props: ['datosComplementaria', 'tipoTramite','usuario', 'pago', 'id', 'user'],
     data(){
         return{
             tramite : {},
@@ -20,34 +19,43 @@ export default {
             multiple: '',
             doc: '',
             rfc: '',
-            id:'',
             folio:'',
             llave:'',
         }
     },
+    // created() {
+    //      window.addEventListener('beforeunload', function(event) {
+    //      event.returnValue = 'Write something';
+    //      console.log('tramite firmado');
+    //   })
+    // },
+    // beforeDestroy(){
+    //     window.removeEventListener('beforeunload');
+    // },
     async mounted() {
-        console.log('usuario: '+ this.usuario)
-		this.tramiteInfo = await axios.get( process.env.TESORERIA_HOSTNAME+ "/solicitudes-get-tramite-pdf/" + this.usuario );
-        var enajenantes = this.tramiteInfo.data.tramite.solicitudes[0].info.campos['Listado de enajenantes'].enajenantes;
-        if(  enajenantes.length > 1  ){
-            this.multiple = true;
-            this.doc = [];
-            this.folio = [];
-            this.llave = [];
-            for (let i = 0; i < enajenantes.length; i++) {
-                this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/' + i );
-                this.folio.push(enajenantes[i].datosPersonales.rfc);
-                this.llave.push(i);
-            }
-        }else{
+        console.log('usuario: '+ typeof(this.usuario))
+        console.log('usuario: '+ this.usuario.solicitudes.length)
+        console.log('usuario: '+ this.usuario[1])
+    
+        if (this.usuario.solicitudes.length === 1 ) {
             this.doc ='';
             this.multiple = false;
-            this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario + '/0'; 
+            this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[0].id; 
             this.folio = enajenantes[0].datosPersonales.curp;
             this.llave = "0";
+        }else{
+               this.multiple = true;
+                this.doc = [];
+                this.folio = [];
+                this.llave = [];
+             for (let i = 0; i < this.usuario.solicitudes.length; i++) {
+                // si es multiple entra por aqui jeje si no ->\
+                this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[i].id );
+                this.folio.push( this.usuario.solicitudes[i].id );
+                this.llave.push( i );
+            }
         }
-        this.rfc = this.tramiteInfo.data.tramite.solicitudes[0].info.solicitante.rfc;
-        this.id = this.tramiteInfo.data.tramite.solicitudes[0].clave;
+        this.rfc = this.user.rfc;
 
 
         console.log( 'documento: ' , this.doc);
@@ -69,7 +77,7 @@ export default {
             var data = {
                 'perfil' : 'EI',
                 'multiple' : this.multiple,
-                'tramite' : this.id,
+                'tramite' : this.usuario.tramite_id,
                 'llave' : this.llave,
                 'doc' : this.doc,
                 'folio' : this.folio,
@@ -96,7 +104,7 @@ export default {
            
                 $.ajax({
                     type: "POST",
-                    data: {"tramite_id" : this.id, "value": JSON.stringify(data), "access_token" : this.access_token},
+                    data: {"tramite_id" : this.usuario.tramite_id, "value": JSON.stringify(data), "access_token" : this.access_token},
                     dataType: 'json', 
                     url: urlDataGeneric,
                     async: false,
