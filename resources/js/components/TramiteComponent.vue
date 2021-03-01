@@ -7,15 +7,15 @@
                 <div class="flex-grow-1">
                     <!--begin::Title-->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
-                        <div class="mr-7" v-if="tramite.status && tramite.status == 99"><input type="checkbox" :id="tramite.id" style="width:18px; height:18px;" v-on:change="processToCart(tramite, true)"></div>
+                        <div class="mr-7" v-if="tramite.status && (tramite.status == 99 || tramite.status == 98)"><input type="checkbox" :id="tramite.id" style="width:18px; height:18px;" v-on:change="processToCart(tramite, true)"></div>
                         <!--begin::User-->
-                        <div class="mr-auto">
+                        <div class="mr-auto" style="width: 40%">
                             <!--begin::Name-->
                             <a v-on:click="goTo(tramite)" class="d-flex text-dark over-primary font-size-h5 font-weight-bold mr-3 flex-column">
-                                <strong class="text-uppercase">{{ tramite.nombre_servicio && (tramite.titulo && tramite.nombre_servicio.toLowerCase() != tramite.titulo.toLowerCase()) ? `${tramite.nombre_servicio} - ` : '' }}{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
+                                <strong class="text-uppercase text-truncate">{{ tramite.nombre_servicio && (tramite.titulo && tramite.nombre_servicio.toLowerCase() != tramite.titulo.toLowerCase()) ? `${tramite.nombre_servicio} - ` : '' }}{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.id || '' }} - {{ tramite.clave }}</span>
                                 <span class="text-muted" v-if="tramite.info">{{ tramite.created_at }}</span>
-                                <span class="mt-3" v-if="tramite.info">{{ tramite.info.solicitante ? tramite.info.solicitante.rfc : "" }} - {{ tramite.info.solicitante ? (tramite.info.solicitante.tipoPersona == "pm" ? tramite.info.solicitante.razonSocial : `${tramite.info.solicitante.nombreSolicitante} ${tramite.info.solicitante.apPat} ${tramite.info.solicitante.apMat}`) : '' }}</span>
+                                <span class="mt-3" v-if="solicitante">{{ solicitante.rfc || solicitante.curp || "" }} - {{ solicitante.tipoPersona == "pm" ? solicitante.razonSocial : `${solicitante.nombreSolicitante || solicitante.nombre} ${solicitante.apPat} ${solicitante.apMat}` }}</span>
                             </a>
                             <!--end::Name-->
                         </div>
@@ -25,6 +25,11 @@
                             <button v-on:click="addToCart(tramite)" v-if="tramite.status == 99" type="button" class="btn btn-sm mr-2" :class="tramite.en_carrito ? 'btn-primary' : 'btn-outline-primary'">
                                 <span v-if="tramite.loading"><i class="fas fa-spinner fa-spin"></i></span>
                                 <span v-if="!tramite.loading"><i :class="tramite.en_carrito == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite.en_carrito == 1 ? 'QUITAR DEL CARRITO' : 'AGREGAR AL CARRITO' }}</span>
+                            </button>
+                            {{tramite.status}}
+                            <button v-on:click="addToSign(tramite)" v-if="tramite.firma" type="button" class="btn btn-sm mr-2" :class="tramite.por_firmar ? 'btn-primary' : 'btn-outline-primary'">
+                                <span v-if="tramite.loadingSign"><i class="fas fa-spinner fa-spin"></i></span>
+                                <span v-if="!tramite.loadingSign"><i :class="tramite.por_firmar == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite.por_firmar == 1 ? 'DESELECCIONAR' : 'PREPARAR PARA FIRMAR' }}</span>
                             </button>
                             <span v-if="tramite.info && tramite.descripcion" class="btn btn-secondary mr-2">{{ tramite.descripcion || "CERRADO" }} </span>
                             <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" v-if="!tramite.info">
@@ -64,7 +69,7 @@
         props: ['tramite'],
         mounted() {
             this.files = [];
-            if(this.tramite.info)
+            if(this.tramite.info && typeof this.tramite.info === 'string')
                 this.tramite.info = JSON.parse(this.tramite.info)
             if(this.tramite.mensajes && this.tramite.mensajes.length > 0){
                 this.tramite.mensajes.map(msg => {
@@ -73,6 +78,22 @@
                 })
             }
             this.tramite.loading = false;
+            if(this.tramite.info.enajenante){
+                this.tramite.info = {
+                    ...this.tramite.info,
+                    ...this.tramite.info.enajenante
+                }
+            }
+
+            this.solicitante = {};
+            if(this.tramite.info){
+                if(this.tramite.info.solicitante)
+                    this.solicitante = this.tramite.info.solicitante;
+                else if(this.tramite.info.datosPersonales){
+                    this.solicitante = this.tramite.info.datosPersonales;
+                    this.solicitante.tipoPersona = this.tramite.info.tipoPersona;
+                }
+            }
         },
         methods:{
             goTo(tramite){
@@ -106,6 +127,29 @@
                             $('#totalTramitesCarrito').text(onCart);
                         }
                         tramite.loading = false;
+                    });
+                });
+            },
+
+            addToSign(tramite, multiple=false, status=null){
+                if(!multiple) this.tramites = [ tramite ];
+
+                this.tramites.map(tramite => {
+                    let status = tramite.por_firmar != 1 ? 1 : null;
+                    let onSign = parseInt($('#totalTramitesFirma').text());
+                    onSign = status ? onSign+1 : onSign-1;
+                    tramite.loadingSign = true;
+                    fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
+                        method : 'POST',
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'por_firmar' })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if(res.code === 200){
+                            tramite.por_firmar = status;
+                            $('#totalTramitesFirma').text(onSign);
+                        }
+                        tramite.loadingSign = false;
                     });
                 });
             }

@@ -119,8 +119,16 @@
                     let estatus = this.type;
                     let notary_id = this.notary || null;
                     let id_usuario = this.user || null;
+                    let pendiente_firma = null;
 
-                    let data = { estatus }
+                    if(estatus === 98){
+                        pendiente_firma = true;
+                        estatus = null;
+                    }
+
+                    let data = { };
+                    if(estatus) data.estatus = estatus;
+                    if(pendiente_firma) data.pendiente_firma = pendiente_firma;
                     if(this.notary) data.notary_id = this.notary;
                     else if(this.user) data.id_usuario = this.user;
 
