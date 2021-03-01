@@ -7,8 +7,9 @@
                 <div class="flex-grow-1">
                     <!--begin::Title-->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
+                        <div class="mr-7" v-if="tramite.status && tramite.status == 99"><input type="checkbox" :id="tramite.id" style="width:18px; height:18px;" v-on:change="processToCart(tramite, true)"></div>
                         <!--begin::User-->
-                        <div class="mr-3">
+                        <div class="mr-auto">
                             <!--begin::Name-->
                             <a v-on:click="goTo(tramite)" class="d-flex text-dark over-primary font-size-h5 font-weight-bold mr-3 flex-column">
                                 <strong class="text-uppercase">{{ tramite.nombre_servicio && (tramite.titulo && tramite.nombre_servicio.toLowerCase() != tramite.titulo.toLowerCase()) ? `${tramite.nombre_servicio} - ` : '' }}{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
@@ -73,7 +74,6 @@
             }
             this.tramite.loading = false;
         },
-
         methods:{
             goTo(tramite){
                 if(window.location.href.indexOf("borradores") >= 0){
@@ -83,24 +83,30 @@
                 }
                 
             },
-            addToCart(tramite){
-                let status = tramite.en_carrito != 1 ? 1 : null;
-                let onCart = parseInt($('#totalTramitesCarrito').text());
-                onCart = status ? onCart+1 : onCart-1;
+            processToCart(tramite){
+                this.$emit('processToCart', tramite);
+            },
+            addToCart(tramite, multiple=false, status=null){
+                if(!multiple) this.tramites = [ tramite ];
 
-                tramite.loading = true;
-                fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
-                    method : 'POST',
-                    body: JSON.stringify({ ids : [ tramite.id ], status })
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if(res.code === 200){
-                        tramite.en_carrito = status;
-                        console.log(onCart);
-                        $('#totalTramitesCarrito').text(onCart);
-                    }
-                    tramite.loading = false;
+                this.tramites.map(tramite => {
+                    let status = tramite.en_carrito != 1 ? 1 : null;
+                    let onCart = parseInt($('#totalTramitesCarrito').text());
+                    onCart = status ? onCart+1 : onCart-1;
+                    tramite.loading = true;
+                    fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
+                        method : 'POST',
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'en_carrito' })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if(res.code === 200){
+                            tramite.en_carrito = status;
+                            console.log(onCart);
+                            $('#totalTramitesCarrito').text(onCart);
+                        }
+                        tramite.loading = false;
+                    });
                 });
             }
         }

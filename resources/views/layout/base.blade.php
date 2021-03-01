@@ -1589,11 +1589,11 @@
 			</script>
 			<script>
 				const APP_URL = '{{ getenv("APP_URL") }}';
+				window.user = <?= json_encode(session()->get("user"))?>;
 				function redirect(path) {
 					if (!(new RegExp('^(http(s)?[:]//)','i')).test(path)) {
 						newPath = APP_URL + (path.search(/\//) != 0 ? "/" : "") + path;
 					}
-					console.log(newPath);
 					window.location = newPath;
 				}
 

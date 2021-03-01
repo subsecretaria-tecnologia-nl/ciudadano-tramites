@@ -95,11 +95,14 @@
                                                       ></btn-guardar-tramite-component>
 
                                                     <btn-guardar-tramite-component
+                                                      :btnClass="['notary_titular', 'notary_substitute', 'notary_payments', 'notary_capturist_payments'].includes(user.role_name) ? 'btn btn-secondary font-weight-bolder text-uppercase px-9 py-4' : null"
                                                       :tipoTramite="tipoTramite"
                                                       :files="files"
                                                       :datosComplementaria="datosComplementaria"
                                                       :idUsuario="idUsuario"
-                                                      :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Guardar y Continuar"
+                                                      :infoGuardadaFull="infoGuardadaFull"
+                                                      v-if="currentStep == 3" 
+                                                      :labelBtn="['notary_titular', 'notary_substitute', 'notary_payments', 'notary_capturist_payments'].includes(user.role_name) ? 'Iniciar Nuevo Tramite' : 'Finalizar'"
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
                                                     <btn-guardar-tramite-component
@@ -108,11 +111,13 @@
                                                       :files="files"
                                                       :datosComplementaria="datosComplementaria"
                                                       :idUsuario="idUsuario"
-                                                      :infoGuardadaFull="infoGuardadaFull" v-if="currentStep == 3" labelBtn="Finalizar"
+                                                      :infoGuardadaFull="infoGuardadaFull"
+                                                      v-if="currentStep == 3 && ['notary_titular', 'notary_substitute', 'notary_payments', 'notary_capturist_payments'].includes(user.role_name)"
+                                                      labelBtn="Pagar"
                                                       @tramiteAgregadoEvent="tramiteAgregadoEvent"
                                                       ></btn-guardar-tramite-component>
                                                     <button type="button" id="btnWizard" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next" v-on:click="next()" v-if="currentStep != 3">
-                                                        Next
+                                                        Siguiente
                                                     </button>
                                                   </div>
                                                 </div>
@@ -157,6 +162,7 @@
 
         data() {
             return {
+                user : window.user,
                 currentStep: 1,
                 datosIncompletos: true,
                 enviando:false, finalizando:false,
@@ -211,9 +217,9 @@
                 Command: toastr.success("Listo !", "El trámite ha sido agregado");
               
               if( data.type == "finalizar" ){
-                redirect("/tramites/pendiente-de-pago/99");
+                redirect("/cart");
               } if(data.type=="temporal"){
-                redirect("/nuevo-tramite");
+                redirect("/tramites/borradores/80");
               }else {
                 localStorage.removeItem('listaSolicitantes');
                 localStorage.removeItem('datosFormulario');
@@ -221,7 +227,7 @@
                 this.tramite.id_seguimiento = uuid.v4();
                 const parsed = JSON.stringify(this.tramite);
                 localStorage.setItem('tramite', parsed);
-                this.goTo(1);
+                if(!['finalizar', 'temporal'].includes(data.type)) redirect("/nuevo-tramite");
               }
             } else {
 

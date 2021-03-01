@@ -122,6 +122,8 @@
                     let notary_offices = response.data.notary_offices;
                     let tramites =  response.data.tramites ;
 
+                    console.log('tramites', tramites);
+
                     this.construirJSONTramites( tramites );
                     
                 } catch (error) {
@@ -160,6 +162,7 @@
             },
 
             extraerDatosPersonalesSolicitante(solicitante){
+            	console.log('extraerDatosPersonalesSolicitante')
 				let datos_solicitante = {
 			        "nombre": solicitante.tipoPersona == "pm" ? "" : solicitante.nombreSolicitante || "",
 			        "apellido_paterno": solicitante.tipoPersona == "pm" ? "" : solicitante.apPat || "",
@@ -179,6 +182,8 @@
             },
 
             extraerDatosPersonalesEnajentante(enajenante){
+            	console.log(enajenante);
+            	// if(enajenante.enajenante && enajenante.enajenante.datosPersonales) enajenante.datosPersonales = enajenante.enajenante.datosPersonales;
 				let datos_solicitante = {
 			        "nombre": enajenante.tipoPersona == "pm" ? "" : enajenante.datosPersonales.nombre || "",
 			        "apellido_paterno": enajenante.tipoPersona == "pm" ? "" : enajenante.datosPersonales.apPat || "",
@@ -194,6 +199,7 @@
 			        "municipio":  "-",
 			        "codigopostal":"-",
 			    }
+            	console.log(datos_solicitante)
 			    return datos_solicitante;
             },
 
@@ -212,7 +218,7 @@
             	let requestCostos = [];
 
 			    tramites.forEach(  tramiteInarray => {
-										 
+
 					tramiteInarray.solicitudes.forEach(  soliciante => {
 						
 
@@ -223,6 +229,7 @@
 						tramitesJson.idSolicitante = soliciante.id; 
 						tramitesJson.id_tramite = soliciante.id;//soliciante.clave;
 
+						if(soliciante.info.enajenante) soliciante.info = {...soliciante.info, ...soliciante.info.enajenante}
 						let info = (typeof soliciante.info) == 'string' ? JSON.parse(soliciante.info) : soliciante.info;
 						if(soliciante.info.hasOwnProperty('enajenante') && (soliciante.info.hasOwnProperty('solicitante') ) ){
 							let solicitanteInfo = soliciante.info.solicitante;
@@ -237,7 +244,7 @@
 						
 
 						tramitesJson.datos_solicitante = this.obtenerDatosSolicitante(soliciante);
-					    tramitesJson.datos_factura = tramitesJson.datos_solicitante;
+						tramitesJson.datos_factura = tramitesJson.datos_solicitante;
 
 						if( info.camposComplementaria && info.detalle && info.detalle.Complementaria){
 							tramitesJson.importe_tramite = info.detalle.Complementaria['L Cantidad a cargo'] ;
@@ -279,6 +286,7 @@
 
 			    });
 
+			    console.log('listadoTramites', listadoTramites);
 	    		this.tramites = listadoTramites;
 				this.obteniendoTramites = false;
 				this.costosObtenidos = true;
