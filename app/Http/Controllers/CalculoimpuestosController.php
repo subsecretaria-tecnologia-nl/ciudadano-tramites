@@ -258,7 +258,9 @@ class CalculoimpuestosController extends Controller
       $this->g          = $multa_correccion_fiscal;
       $this->fecha_escritura    = $fecha_escritura;
 
-
+      // obtener los dias inhabiles del año en curso
+      $this->inhabiles	= $this->getInhabiles(date('Y'));
+      
       // $this->fecha_vencimiento  = $this->getVencimiento();
       $this->fecha_vencimiento  = $this->prueba();
       $this->inpc_periodo       = $this->getInpc($this->fecha_escritura); // getInpcperiodo en caso de que sea la fecha acumulada del año vigente
