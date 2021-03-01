@@ -32,7 +32,7 @@ document.getElementById("close-header").addEventListener("click", () => {
 
 Vue.component('listado-tramites-component', () => import ( /* webpackChunkName: "js/components/listado-tramites-component" */ './components/ListadoTramitesComponent.vue'));
 Vue.component('tramite-component', () => import ( /* webpackChunkName: "js/components/tramite-component" */ './components/TramiteComponent.vue'));
-Vue.component('wizard-component', () => import ( /* webpackChunkName: "js/components/wizard-component" */ './components/WizardComponent.vue'));
+Vue.component('wizard-component', () => import ( /* webpackChunkName: "js/components/wizard-component?v=1.0.0" */ './components/WizardComponent.vue?v=1.0.0'));
 
 
 Vue.component('campos-tramite-component', () => import(/* webpackChunkName: "js/components/campos-tramite-component" */ './components/CamposTramiteComponent.vue'));
