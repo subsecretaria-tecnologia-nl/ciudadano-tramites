@@ -144,14 +144,14 @@ class CalculoimpuestosController extends Controller
     			"INPC Periodo reciente" 	=> $this->inpc_reciente,
     			"INPC Periodo" 				=> $this->inpc_periodo,
     			"Porcentaje de recargos"	=> $this->porcentaje_recargos,
-	    		"A*(Ganancia Obtenida)" => $this->a,
-	    		"B (Monto obtenido conforme al art 127 LISR)" => $this->b,
-	    		"C*(Pago provisional conforme al art 126 LISR)" => $this->c,
-	    		"D (Impuesto correspondiente a la entidad federativa)" => $this->d,
-	    		"E (Parte actualizada del impuesto)" => $this->e,
-	    		"F (Recargos)" => $this->f,
-	    		"G*(Multa corrección fiscal)" => $this->g,
-	    		"H (Importe total)" => $this->redondeo($this->h),
+	    		"Ganancia Obtenida" => $this->a,
+	    		"Monto obtenido conforme al art 127 LISR" => $this->b,
+	    		"Pago provisional conforme al art 126 LISR" => $this->c,
+	    		"Impuesto correspondiente a la entidad federativa" => $this->d,
+	    		"Parte actualizada del impuesto" => $this->e,
+	    		"Recargos" => $this->f,
+	    		"Multa corrección fiscal" => $this->g,
+	    		"Importe total" => $this->redondeo($this->h),
     			),
 
     	);
@@ -260,7 +260,7 @@ class CalculoimpuestosController extends Controller
 
       // obtener los dias inhabiles del año en curso
       $this->inhabiles	= $this->getInhabiles(date('Y'));
-      
+
       // $this->fecha_vencimiento  = $this->getVencimiento();
       $this->fecha_vencimiento  = $this->prueba();
       $this->inpc_periodo       = $this->getInpc($this->fecha_escritura); // getInpcperiodo en caso de que sea la fecha acumulada del año vigente
@@ -298,20 +298,20 @@ class CalculoimpuestosController extends Controller
           "INPC Periodo reciente"   => $this->inpc_reciente,
           "INPC Periodo"        => $this->inpc_periodo,
           "Porcentaje de recargos"  => $this->porcentaje_recargos,
-          "A*(Ganancia Obtenida)" => $this->a,
-          "B (Monto obtenido conforme al art 127 LISR)" => $this->b,
-          "C*(Pago provisional conforme al art 126 LISR)" => $this->c,
-          "D (Impuesto correspondiente a la entidad federativa)" => $this->d,
-          "E (Parte actualizada del impuesto)" => $this->e,
-          "F (Recargos)" => $this->f,
-          "G*(Multa corrección fiscal)" => $this->g,
-          "H (Importe total)" => $this->redondeo($this->h),
+          "Ganancia Obtenida" => $this->a,
+          "Monto obtenido conforme al art 127 LISR" => $this->b,
+          "Pago provisional conforme al art 126 LISR" => $this->c,
+          "Impuesto correspondiente a la entidad federativa" => $this->d,
+          "Parte actualizada del impuesto" => $this->e,
+          "Recargos" => $this->f,
+          "Multa corrección fiscal" => $this->g,
+          "Importe total" => $this->redondeo($this->h),
           ),
         "Complementaria"  => array(
-          "I Folio de la declaracion inmediata anterior"  => $normal,
-          "J Monto pagado en la declaracion inmediata anterior" => $importe,
-          "K Pago en exceso"  => $this->k,
-          "L Cantidad a cargo" => $this->l,
+          "Folio de la declaracion inmediata anterior"  => $normal,
+          "Monto pagado en la declaracion inmediata anterior" => $importe,
+          "Pago en exceso"  => $this->k,
+          "Cantidad a cargo" => $this->l,
         )
 
       );
