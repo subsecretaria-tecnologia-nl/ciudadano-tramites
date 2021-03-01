@@ -315,6 +315,7 @@
 </template>
 
 <script>
+  import Vue from 'vue';
   import { uuid } from 'vue-uuid';
   import { validationMixin } from 'vuelidate'
   import { required, helpers, between  } from 'vuelidate/lib/validators';
