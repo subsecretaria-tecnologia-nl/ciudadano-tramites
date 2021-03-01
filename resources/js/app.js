@@ -92,7 +92,7 @@ Vue.filter("capitalize", function(value) {
 });
 
 Vue.filter('toCurrency', function (value) {
-    if (typeof value !== "number") {
+    if (isNaN(Number(value))) {
         return value;
     }
     var formatter = new Intl.NumberFormat('en-US', {

@@ -19,7 +19,7 @@
                                             <td class="left" style="width: 70%"  v-if="key != 'Importe total' ">
                                                 <strong>{{ key }}</strong>
                                             </td>
-                                            <td class="right" v-if="key != 'Importe total'" >
+                                            <td class="text-right" v-if="key != 'Importe total'" >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
                                             </td>
@@ -55,11 +55,11 @@
                                             <td class="left">
                                                 <strong>Cantidad a cargo</strong>
                                             </td>
-                                            <td class="right">
+                                            <td class="text-right">
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
-                                                    <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Complementaria['Cantidad a cargo'] }}
-                                                    </span>
+                                                <span v-if="!obteniendoCosto">  
+                                                    {{ currencyFormat('Cantidad a cargo', this.tramite.detalle.Complementaria['Cantidad a cargo']) }} 
+                                                </span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -280,13 +280,8 @@
             currencyFormat(campoName, salida){
                 let arr = ["Ganancia Obtenida","Monto obtenido conforme al art 127 LISR",
                             "Pago provisional conforme al art 126 LISR","Impuesto correspondiente a la entidad federativa",
-                            "Parte actualizada del impuesto", "Recargos", "Multa corrección fiscal", "Importe total"];
-                if(arr.includes(campoName)){
-                    let text = Vue.filter('toCurrency')(salida);
-                    return text;
-                } else{
-                    return salida;
-                }
+                            "Parte actualizada del impuesto", "Recargos", "Multa corrección fiscal", "Importe total", 'Cantidad a cargo'];
+                return  arr.includes(campoName) ?  Vue.filter('toCurrency')(salida) : salida; 
             }
 
 
