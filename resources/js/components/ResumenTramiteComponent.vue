@@ -53,12 +53,12 @@
                                     <tbody v-else-if="tramite.detalle && tramite.detalle.Complementaria && tipoTramite =='complementaria'">
                                         <tr >
                                             <td class="left">
-                                                <strong>L Cantidad a cargo</strong>
+                                                <strong>Cantidad a cargo</strong>
                                             </td>
                                             <td class="right">
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Complementaria['L Cantidad a cargo'] }}
+                                                        {{ this.tramite.detalle.Complementaria['Cantidad a cargo'] }}
                                                     </span>
                                             </td>
                                         </tr>
