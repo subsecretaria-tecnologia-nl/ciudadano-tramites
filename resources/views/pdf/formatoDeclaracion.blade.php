@@ -132,7 +132,7 @@
 		</tr>
 		<tr>
 			<td>CLAVE DE ELECTOR (INE):</td>
-			<td class="value">{{ $enajenante->{'ife'}  }}</td>
+			<td class="value">{{ $enajenante->datosPersonales->{'claveIne'}  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
