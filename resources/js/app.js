@@ -39,7 +39,7 @@ Vue.component('campos-tramite-component', () => import(/* webpackChunkName: "js/
 Vue.component('solicitantes-component', () => import(/* webpackChunkName: "js/components/solicitantes-component" */ './components/SolicitantesComponent.vue'));
 Vue.component('resumen-tramite-component', () => import(/* webpackChunkName: "js/components/resumen-tramite-component" */ './components/ResumenTramiteComponent.vue'));
 
-Vue.component('car-shop-component', () => import ( /* webpackChunkName: "js/components/car-shop-component" */ './components/carShop/CarShopComponent.vue'));
+Vue.component('car-shop-component', () => import ( /* webpackChunkName: "js/components/car-shop-component?v=1.0.0" */ './components/carShop/CarShopComponent.vue?v=1.0.0'));
 Vue.component('metodos-pago-component', () => import ( /* webpackChunkName: "js/components/metodos-pago-component" */ './components/carShop/MetodosDePagoComponent.vue'));
 
 Vue.component('item-solictud-carshop-component', () => import ( /* webpackChunkName: "js/components/item-solictud-carshop-component" */ './components/carShop/ItemSolicitudCarShopComponent.vue'));
