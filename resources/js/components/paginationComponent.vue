@@ -3,11 +3,26 @@
 		<div class="pagination-content">
 			<div  v-for="(tramite, index) in tramitesPaginados">
 				<div class="card list-item card-custom gutter-b col-lg-12" style="background-color: #d9dee2 !important;" v-if="tramite.length > 1">
-					<h4 class="ml-3"><strong class="text-uppercase text-truncate">{{ tramite[0].nombre_servicio && (tramite[0].titulo && tramite[0].nombre_servicio.toLowerCase() != tramite[0].titulo.toLowerCase()) ? `${tramite[0].nombre_servicio} - ` : '' }}{{ tramite[0].tramite || tramite[0].titulo | capitalize }}</strong></h4>
-					<h5 class="ml-3 mb-4">{{ index }}</h5>
-					<tramite-component v-for="(solicitud, ind) in tramite" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="solicitud" v-bind:key="ind" v-if="totalItems != 0"></tramite-component>
+					<div class="d-flex">
+						<div class="mr-auto" style="width: 40%">
+							<h4 class="ml-3"><strong class="text-uppercase text-truncate">{{ tramite[0].nombre_servicio && (tramite[0].titulo && tramite[0].nombre_servicio.toLowerCase() != tramite[0].titulo.toLowerCase()) ? `${tramite[0].nombre_servicio} - ` : '' }}{{ tramite[0].tramite || tramite[0].titulo | capitalize }}</strong></h4>
+							<h5 class="ml-3 mb-4">{{ index }}</h5>
+						</div>
+						<div class="my-lg-0 my-1">
+							<button v-on:click="addToCart(tramite[0])" v-if="tramite[0].status == 99" type="button" class="btn btn-sm mr-2" :class="tramite[0].en_carrito ? 'btn-primary' : 'btn-outline-primary'">
+                                <span v-if="tramite[0].loading"><i class="fas fa-spinner fa-spin"></i></span>
+                                <span v-if="!tramite[0].loading"><i :class="tramite[0].en_carrito == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite[0].en_carrito == 1 ? 'QUITAR DEL CARRITO' : 'AGREGAR AL CARRITO' }}</span>
+                            </button>
+                            <button v-on:click="addToSign(tramite[0])" v-if="type == 'pendiente_firma'" type="button" class="btn btn-sm mr-2" :class="tramite[0].por_firmar ? 'btn-primary' : 'btn-outline-primary'">
+                                <span v-if="tramite[0].loadingSign"><i class="fas fa-spinner fa-spin"></i></span>
+                                <span v-if="!tramite[0].loadingSign"><i :class="tramite[0].por_firmar == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite[0].por_firmar == 1 ? 'DESELECCIONAR' : 'PREPARAR PARA FIRMAR' }}</span>
+                            </button>
+                            <span v-if="tramite[0].info && tramite[0].descripcion" class="btn btn-secondary mr-2">{{ tramite[0].descripcion || "CERRADO" }} </span>
+						</div>
+					</div>
+					<tramite-component :group="true" :type="type" v-for="(solicitud, ind) in tramite" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="solicitud" v-bind:key="ind" v-if="totalItems != 0"></tramite-component>
 				</div>
-				<tramite-component @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="tramite[0]" v-bind:key="index"  v-if="tramite.length == 1 && totalItems != 0"></tramite-component>
+				<tramite-component :type="type" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="tramite[0]" v-bind:key="index"  v-if="tramite.length == 1 && totalItems != 0"></tramite-component>
 			</div>
             <div class="card mb-4" v-if="totalItems == 0">
                 <div class="card-body">
@@ -52,7 +67,7 @@
 </template>
 <script>
 	export default {
-		props: ['tramitesCart'],
+		props: ['tramitesCart', 'type'],
 		mounted(){
 			this.calcularPage()
             this.pagination(1);
@@ -90,7 +105,6 @@
 
                 this.tramitesPaginados = this.items.slice( indiceInicial,  indiceFinal );
                 this.tramitesPaginados.map(tramite => {
-                	console.log(groups[tramite.clave]);
                 	if(groups[tramite.clave]) groups[tramite.clave].push(tramite);
                 	else groups[tramite.clave] = [tramite];
                 })
@@ -101,6 +115,47 @@
             goto( page ){ 
                 this.pagination( page );
                 this.currentPage = page;
+            },
+            addToCart(tramite, multiple=false, status=null){
+                if(!multiple) this.tramites = [ tramite ];
+
+                this.tramites.map(tramite => {
+                    let status = tramite.en_carrito != 1 ? 1 : null;
+                    tramite.loading = true;
+                    fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
+                        method : 'POST',
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'en_carrito' })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if(res.code === 200){
+                            tramite.en_carrito = status;
+                            console.log(onCart);
+                            $('#totalTramitesCarrito').text(res.count);
+                        }
+                        tramite.loading = false;
+                    });
+                });
+            },
+            addToSign(tramite, multiple=false, status=null){
+                if(!multiple) this.tramites = [ tramite ];
+
+                this.tramites.map(tramite => {
+                    let status = tramite.por_firmar != 1 ? 1 : null;
+                    tramite.loadingSign = true;
+                    fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
+                        method : 'POST',
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'por_firmar' })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if(res.code === 200){
+                            tramite.por_firmar = status;
+                            $('#totalTramitesFirma').text(res.count);
+                        }
+                        tramite.loadingSign = false;
+                    });
+                });
             }
 		}
 	};

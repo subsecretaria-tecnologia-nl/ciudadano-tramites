@@ -22,16 +22,15 @@
                         <!--begin::User-->
                         <!--begin::Actions-->
                         <div class="my-lg-0 my-1">
-                            <button v-on:click="addToCart(tramite)" v-if="tramite.status == 99" type="button" class="btn btn-sm mr-2" :class="tramite.en_carrito ? 'btn-primary' : 'btn-outline-primary'">
+                            <button v-on:click="addToCart(tramite)" v-if="!group && tramite.status == 99" type="button" class="btn btn-sm mr-2" :class="tramite.en_carrito ? 'btn-primary' : 'btn-outline-primary'">
                                 <span v-if="tramite.loading"><i class="fas fa-spinner fa-spin"></i></span>
                                 <span v-if="!tramite.loading"><i :class="tramite.en_carrito == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite.en_carrito == 1 ? 'QUITAR DEL CARRITO' : 'AGREGAR AL CARRITO' }}</span>
                             </button>
-                            {{tramite.status}}
-                            <button v-on:click="addToSign(tramite)" v-if="tramite.firma" type="button" class="btn btn-sm mr-2" :class="tramite.por_firmar ? 'btn-primary' : 'btn-outline-primary'">
+                            <button v-on:click="addToSign(tramite)" v-if="!group && type == 'pendiente_firma'" type="button" class="btn btn-sm mr-2" :class="tramite.por_firmar ? 'btn-primary' : 'btn-outline-primary'">
                                 <span v-if="tramite.loadingSign"><i class="fas fa-spinner fa-spin"></i></span>
                                 <span v-if="!tramite.loadingSign"><i :class="tramite.por_firmar == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite.por_firmar == 1 ? 'DESELECCIONAR' : 'PREPARAR PARA FIRMAR' }}</span>
                             </button>
-                            <span v-if="tramite.info && tramite.descripcion" class="btn btn-secondary mr-2">{{ tramite.descripcion || "CERRADO" }} </span>
+                            <span v-if="!group && tramite.info && tramite.descripcion" class="btn btn-secondary mr-2">{{ tramite.descripcion || "CERRADO" }} </span>
                             <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" v-if="!tramite.info">
                                 INICIAR TRAMITE
                             </a>
@@ -67,8 +66,9 @@
                 solicitante : {}
             }
         },
-        props: ['tramite'],
+        props: ['tramite', 'type', 'group'],
         mounted() {
+            console.log(this.type);
             this.files = [];
             if(this.tramite.info && typeof this.tramite.info === 'string')
                 this.tramite.info = JSON.parse(this.tramite.info)
