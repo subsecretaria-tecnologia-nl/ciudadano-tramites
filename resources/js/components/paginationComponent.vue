@@ -3,10 +3,11 @@
 		<div class="pagination-content">
 			<div  v-for="(tramite, index) in tramitesPaginados">
 				<div class="card list-item card-custom gutter-b col-lg-12" style="background-color: #d9dee2 !important;" v-if="tramite.length > 1">
-					<div class="d-flex">
+					<div class="d-flex mb-3">
+						<div class="mr-3 ml-4" v-if="tramite[0].status && (tramite[0].status == 99 || tramite[0].status == 98)"><input type="checkbox" :id="tramite[0].id" style="width:18px; height:18px;" v-on:change="processToCart(tramite[0], true)"></div>
 						<div class="mr-auto" style="width: 40%">
 							<h4 class="ml-3"><strong class="text-uppercase text-truncate">{{ tramite[0].nombre_servicio && (tramite[0].titulo && tramite[0].nombre_servicio.toLowerCase() != tramite[0].titulo.toLowerCase()) ? `${tramite[0].nombre_servicio} - ` : '' }}{{ tramite[0].tramite || tramite[0].titulo | capitalize }}</strong></h4>
-							<h5 class="ml-3 mb-4">{{ index }}</h5>
+							<h5 class="ml-3">{{ index }}</h5>
 						</div>
 						<div class="my-lg-0 my-1">
 							<button v-on:click="addToCart(tramite[0])" v-if="tramite[0].status == 99" type="button" class="btn btn-sm mr-2" :class="tramite[0].en_carrito ? 'btn-primary' : 'btn-outline-primary'">

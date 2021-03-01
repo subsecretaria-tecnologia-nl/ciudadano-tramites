@@ -7,7 +7,7 @@
                 <div class="flex-grow-1">
                     <!--begin::Title-->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mt-2">
-                        <div class="mr-7" v-if="tramite.status && (tramite.status == 99 || tramite.status == 98)"><input type="checkbox" :id="tramite.id" style="width:18px; height:18px;" v-on:change="processToCart(tramite, true)"></div>
+                        <div class="mr-7" v-if="!group && tramite.status && (tramite.status == 99 || tramite.status == 98)"><input type="checkbox" :id="tramite.id" style="width:18px; height:18px;" v-on:change="processToCart(tramite, true)"></div>
                         <!--begin::User-->
                         <div class="mr-auto" style="width: 40%">
                             <!--begin::Name-->
