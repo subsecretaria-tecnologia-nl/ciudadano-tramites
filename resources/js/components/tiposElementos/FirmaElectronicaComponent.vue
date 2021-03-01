@@ -41,8 +41,8 @@ export default {
             this.doc ='';
             this.multiple = false;
             this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[0].id; 
-            this.folio =  this.usuario.solicitudes[0].id ;
-            this.llave = "0";
+            this.folio = "0"  ;
+            this.llave = this.usuario.solicitudes[0].id;
         }else{
                this.multiple = true;
                 this.doc = [];
@@ -51,8 +51,8 @@ export default {
              for (let i = 0; i < this.usuario.solicitudes.length; i++) {
                 // si es multiple entra por aqui jeje si no ->\
                 this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[i].id );
-                this.folio.push( this.usuario.solicitudes[i].id );
-                this.llave.push( i );
+                this.llave.push( this.usuario.solicitudes[i].id );
+                this.folio.push( i );
             }
         }
         this.rfc = this.user.rfc;
