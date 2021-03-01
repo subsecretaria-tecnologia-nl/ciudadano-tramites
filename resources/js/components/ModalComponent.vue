@@ -267,7 +267,43 @@
                     </b-form-group>
                   </b-col>          
                 </b-row>
+                <b-row>
 
+                  <b-col cols="12" md="12" v-if="!$v.form.$anyError && actualizandoDatos">
+                       <b-spinner type="grow" label="Spinning"></b-spinner>
+                  </b-col>
+                  <b-col cols="12" md="12" v-if="!$v.form.$anyError && !actualizandoDatos"> 
+                    <calculo-costo-tramite-5-isr-component 
+                                          :datosParaDeterminarImpuesto="$v.form.datosParaDeterminarImpuesto.$model" 
+                                          :campos="configCostos.campos"
+                                          :tramite="configCostos.tramite" 
+                                          :tipoPersona="configCostos.tipoPersona" 
+                                          @costosObtenidos="costosObtenidos">
+                                          </calculo-costo-tramite-5-isr-component>
+
+                     <div class="text-center" v-if="datosCostos">
+                         <b-link title="Click para ver detalles" @click="verDetalle =  !verDetalle" class="mr-2 btn btn-link">
+                             {{!verDetalle? "Ver detalle " : "Ocultar detalle "}}            
+                          </b-link>
+                      </div>    
+                      <div>
+                        <b-card no-body v-if="datosCostos && verDetalle">
+                            <b-card-body id="nav-scroller"ref="content "style=" height:300px; overflow-y:scroll;">
+                                <b-row v-for="(salida, key) in datosCostos.Salidas" :key="key">
+                                    <b-col class="text-left" style="width: 100%" >
+                                        <strong>{{ key }}</strong>
+                                    </b-col>
+                                    <b-col class="text-right" >
+                                        <span class="text-muted">   {{ currencyFormat(key, salida) }} </span>
+                                    </b-col>
+                                </b-row>
+                            </b-card-body> 
+                        </b-card>
+
+                      </div>                    
+                  </b-col>
+
+                </b-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -308,6 +344,9 @@
          type: [Number, String],
       },listaCurps:{
         type: Array
+      },
+      configCostos:{
+        type: Object
       }
     },
 
@@ -345,7 +384,8 @@
         idModa:  uuid.v4(),
         btnIcon:'',titleModal:'', btnOkLabel:'', textBtnOpenModal:'',classBtn:'',
         maxProcentajePermitido:100,
-        panel: [0,1], curpEncontrada:false, buscandoCurp:false
+        panel: [0,1], curpEncontrada:false, buscandoCurp:false,
+        datosCostos:false, verDetalle:false, actualizandoDatos:false
 
       }
     },
@@ -545,19 +585,44 @@
       },
 
       formatoMoneda(name){
-
+        this.actualizandoDatos = true;
+        let self = this;
         if(this.$v.form.datosParaDeterminarImpuesto[name].$model){
           let numero = this.formatoNumero(this.$v.form.datosParaDeterminarImpuesto[name].$model);
-          this.$v.form.datosParaDeterminarImpuesto[name].$model =  this.formatter(numero); 
+          this.$v.form.datosParaDeterminarImpuesto[name].$model =  this.formatter(numero);
+          
+          setTimeout(function(){
+            self.actualizandoDatos = false; 
+          }, 1000);
         } else{
           return null;
         }
       },
 
       formatoNumero(numberStr){
-          let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+          let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));          
           return valor;
       },
+
+      costosObtenidos(res){
+        this.datosCostos = false;
+        
+        if(res.success){
+          this.datosCostos = res.respuestaCosto;
+        }
+      },
+
+      currencyFormat(campoName, salida){
+          let arr = ["Ganancia Obtenida","Monto obtenido conforme al art 127 LISR",
+                      "Pago provisional conforme al art 126 LISR","Impuesto correspondiente a la entidad federativa",
+                      "Parte actualizada del impuesto", "Recargos", "Multa corrección fiscal", "Importe total"];
+          if(arr.includes(campoName)){
+              let text = Vue.filter('toCurrency')(salida);
+              return text;
+          } else{
+              return salida;
+          }
+      }
     },
     watch: {
       enajenante:{
