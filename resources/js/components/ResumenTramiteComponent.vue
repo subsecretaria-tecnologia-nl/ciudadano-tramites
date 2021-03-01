@@ -16,10 +16,10 @@
                                 <table class="table table-clear" >
                                     <tbody v-if="tramite.detalle && tramite.detalle.Salidas"  id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion" style="display: none;">
                                         <tr v-for="(salida, key) in tramite.detalle.Salidas" >
-                                            <td class="left" style="width: 70%"  v-if="key != 'H (Importe total)' ">
+                                            <td class="left" style="width: 70%"  v-if="key != 'Importe total' ">
                                                 <strong>{{ key }}</strong>
                                             </td>
-                                            <td class="right" v-if="key != 'H (Importe total)'" >
+                                            <td class="right" v-if="key != 'Importe total'" >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
                                             </td>
@@ -28,12 +28,12 @@
                                     <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal' ">
                                         <tr>
                                             <td class="left" style="width: 70%">
-                                                <strong>H (Importe total)</strong>
+                                                <strong>Importe total</strong>
                                             </td>
                                             <td class="right">
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Salidas['H (Importe total)'] | toCurrency }}
+                                                        {{ this.tramite.detalle.Salidas['Importe total'] | toCurrency }}
 
                                                     </span>
                                             </td>

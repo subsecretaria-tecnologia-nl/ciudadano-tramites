@@ -250,7 +250,7 @@
 							tramitesJson.importe_tramite = info.detalle.Complementaria['L Cantidad a cargo'] ;
 						} else {
 							
-                			tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['H (Importe total)'] : info.costo_final ;
+                			tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['Importe total'] : info.costo_final ;
 						}
 						tramitesJson.detalle = [];
 
