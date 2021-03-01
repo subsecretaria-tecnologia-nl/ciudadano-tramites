@@ -1,6 +1,6 @@
 <template>
   <div class=" fv-plugins-icon-container">
-    <label>{{ campo.nombre }} </label>
+    <label>{{ campo.nombre }}  {{JSON.parse(this.campo.caracteristicas + '').required == 'true' ? '*' : '' }} </label>
     <textarea  
       :id="[[campo.idElemento ? campo.idElemento : campo.campo_id]]"
       :name="[[campo.campo_id]]" 
