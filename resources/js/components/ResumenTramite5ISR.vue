@@ -46,7 +46,7 @@
                                     </div>
                                     <div v-else-if="data.item.detalle && data.item.detalle.Salidas">
                                         <div class="text-center">
-                                            {{currencyFormat('H (Importe total)', data.item.detalle.Salidas['H (Importe total)'])}}
+                                            {{currencyFormat('Importe total', data.item.detalle.Salidas['Importe total'])}}
                                         </div>                          
                                     </div>
                                     
