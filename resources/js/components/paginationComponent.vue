@@ -1,7 +1,14 @@
 <template>
 	<div class="pagination flex-column">
 		<div class="pagination-content">
-			<tramite-component @processToCart="processToCart" :tramitesCart="tramitesCart" v-for="(tramite, index) in tramitesPaginados" :tramite="tramite" v-bind:key="index" v-if="totalItems != 0"></tramite-component>
+			<div  v-for="(tramite, index) in tramitesPaginados">
+				<div class="card list-item card-custom gutter-b col-lg-12" style="background-color: #d9dee2 !important;" v-if="tramite.length > 1">
+					<h4 class="ml-3"><strong class="text-uppercase text-truncate">{{ tramite[0].nombre_servicio && (tramite[0].titulo && tramite[0].nombre_servicio.toLowerCase() != tramite[0].titulo.toLowerCase()) ? `${tramite[0].nombre_servicio} - ` : '' }}{{ tramite[0].tramite || tramite[0].titulo | capitalize }}</strong></h4>
+					<h5 class="ml-3 mb-4">{{ index }}</h5>
+					<tramite-component v-for="(solicitud, ind) in tramite" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="solicitud" v-bind:key="ind" v-if="totalItems != 0"></tramite-component>
+				</div>
+				<tramite-component @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="tramite[0]" v-bind:key="index"  v-if="tramite.length == 1 && totalItems != 0"></tramite-component>
+			</div>
             <div class="card mb-4" v-if="totalItems == 0">
                 <div class="card-body">
                     <h3 class="text-center">{{ message || '¡Lo sentimos! No se encuentran registros para mostrar.' }}</h3>
@@ -50,11 +57,6 @@
 			this.calcularPage()
             this.pagination(1);
 		},
-		// watch : {
-		// 	tramitesCart : (val) => {
-		// 		console.log(val);
-		// 	}
-		// },
 		data () {
 			let attrs = this.$attrs;
 			if(!attrs.items) attrs.items = [];
@@ -81,15 +83,19 @@
                 this.goto(1);
             },
             pagination( page ){
-            	console.log(page)
+            	let groups = {};
                 let limitInt = parseInt(this.limit);
                 let indiceInicial = (page - 1 ) * limitInt;
                 let indiceFinal = ( (page - 1 ) * limitInt  )  + limitInt;
 
-                console.log(indiceInicial,  indiceFinal, this.items.length);
-
                 this.tramitesPaginados = this.items.slice( indiceInicial,  indiceFinal );
-                console.log(this.tramitesPaginados);
+                this.tramitesPaginados.map(tramite => {
+                	console.log(groups[tramite.clave]);
+                	if(groups[tramite.clave]) groups[tramite.clave].push(tramite);
+                	else groups[tramite.clave] = [tramite];
+                })
+
+                this.tramitesPaginados = groups;
                 this.totalItems = this.tramitesPaginados.length;
             },
             goto( page ){ 

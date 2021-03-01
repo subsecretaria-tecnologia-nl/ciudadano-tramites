@@ -63,7 +63,8 @@
     export default {
         data() {
             return {
-                files : []
+                files : [],
+                solicitante : {}
             }
         },
         props: ['tramite'],
