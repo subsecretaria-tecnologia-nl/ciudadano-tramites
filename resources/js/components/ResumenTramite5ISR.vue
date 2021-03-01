@@ -64,10 +64,10 @@
                                     <b-card no-body v-if="data">
                                         <b-card-body id="nav-scroller"ref="content"style="position:relative; height:400px; overflow-y:scroll;">
                                             <b-row v-for="(salida, key) in data.item.detalle.Salidas" :key="key">
-                                                <b-col class="left" style="width: 70%" >
+                                                <b-col class="text-left" style="width: 70%" >
                                                     <strong>{{ key }}</strong>
                                                 </b-col>
-                                                <b-col class="right" >
+                                                <b-col class="text-right" >
                                                     <span class="text-muted">   {{ currencyFormat(key, salida) }} </span>
                                                 </b-col>
                                             </b-row>
@@ -201,9 +201,9 @@
 
 
             currencyFormat(campoName, salida){
-                let arr = ["A*(Ganancia Obtenida)","B (Monto obtenido conforme al art 127 LISR)",
-                            "C*(Pago provisional conforme al art 126 LISR)","D (Impuesto correspondiente a la entidad federativa)",
-                            "E (Parte actualizada del impuesto)", "F (Recargos)", "G*(Multa corrección fiscal)", "H (Importe total)"];
+                let arr = ["Ganancia Obtenida","Monto obtenido conforme al art 127 LISR",
+                            "Pago provisional conforme al art 126 LISR","Impuesto correspondiente a la entidad federativa",
+                            "Parte actualizada del impuesto", "Recargos", "Multa corrección fiscal", "Importe total"];
                 if(arr.includes(campoName)){
                     let text = Vue.filter('toCurrency')(salida);
                     return text;

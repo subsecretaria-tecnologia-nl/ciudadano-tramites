@@ -1,6 +1,5 @@
 <template>
   <div class="col-md-6 col-sm-6 col-xs-6 col-md-12 col-sm-12 col-xs-12">
-
         <b-row >
           <b-col>
             <b-form-group label="Porcentaje que enajena" label-for="procentaje-venta-input" >
@@ -71,7 +70,7 @@
                         <td>
                             <modal-component 
                         		@editaEnajentante="editaEnajentante"  :enajenanteEditado="registro" :porcentajeAsignado="porcentajeTotalCompra" :indexEnajenanteEditado="key"
-                                :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps">
+                                :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" :configCostos="configCostos">
                         	</modal-component>                    	
                         </td>
                     </tr>
@@ -84,7 +83,7 @@
 	<modal-component 
 		@addEnajentante="addEnajentante" v-if="porcentajeTotalCompra < $v.porcentajeVenta.$model" 
             :porcentajeAsignado="porcentajeTotalCompra" 
-            :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" >
+            :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" :configCostos="configCostos">
 	</modal-component>
     </div>
 </template>
@@ -135,6 +134,9 @@
           showMensajes:{
             default: false,
             type: Boolean
+          },
+          configCostos:{
+            type: Object
           }
         },
 	    data(){

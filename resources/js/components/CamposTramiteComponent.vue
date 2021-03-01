@@ -122,7 +122,7 @@
 												:campo="campo" 
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
-													@updateForm="updateForm"> ></enajenantes-component>
+													@updateForm="updateForm" :configCostos="configCostos"> ></enajenantes-component>
 												<table-component 
 													:propietario="JSON.parse(campo.caracteristicas).propietario"
 													:campo="campo"
@@ -212,6 +212,15 @@
 </template>
 <script>
     export default {
+        computed:{
+            configCostos(){
+                return {
+                	campos:this.campos, 
+                	tramite:this.tramite, 
+                	tipoPersona:this.tipoPersona
+                };
+            }
+        },
         props: ['tramite','formularioValido', 'comprobarEstadoFormularioCount', 'infoGuardada', 'declararEn0', 'notary'],
         data() {
             return {
@@ -237,7 +246,7 @@
 				loading : false,
 				infoExtra : {},
 				tipo_costo_obj: { tipo_costo:0 ,tipoCostoRadio:'millar',hojaInput:'', val_tipo_costo:'' },
-				tieneSeccionDocumentos: false
+				tieneSeccionDocumentos: false,
             }
         },
 		watch: { 
@@ -278,6 +287,7 @@
 	        } else {
 				this.obtenerCampos();
 			}
+
         },
         methods: {
 			updatePorcentaje(porcentaje){	

@@ -28,18 +28,18 @@
                 </b-form-group>
                 <b-row>
                   <b-col v-if="enajenante.tipoPersona == 'pf'" cols="12" md="6">
-                    <b-form-group label="Curp" label-for="curp-input" >
+                    <b-form-group label="CURP" label-for="curp-input" >
                       <b-form-input id="curp-input" name="curp" v-model="$v.form.datosPersonales.curp.$model" aria-describedby="curp-input-feedback" 
                          :state="$v.form.datosPersonales.curp.$dirty ? !$v.form.datosPersonales.curp.$error : null" @change="updateCurp">></b-form-input>
                       <b-form-invalid-feedback id="curp-input-feedback">
                         <span v-if="!$v.form.datosPersonales.curp.required"  class="form-text text-danger">
-                          Curp es requerida.
+                          CURP es requerida.
                         </span>
                         <span v-if="!$v.form.datosPersonales.curp.curpPattern"  class="form-text text-danger">
-                          La Curp no cumple con la regla de validación.
+                          La CURP no cumple con la regla de validación.
                         </span>
                         <span v-if="!$v.form.datosPersonales.curp.isUnique"  class="form-text text-danger">
-                          Esta curp ya se encuentra agregada
+                          Esta CURP ya se encuentra agregada
                         </span>
 
                       </b-form-invalid-feedback>
@@ -267,7 +267,43 @@
                     </b-form-group>
                   </b-col>          
                 </b-row>
+                <b-row>
 
+                  <b-col cols="12" md="12" v-if="!$v.form.$anyError && actualizandoDatos">
+                       <b-spinner type="grow" label="Spinning"></b-spinner>
+                  </b-col>
+                  <b-col cols="12" md="12" v-if="!$v.form.$anyError && !actualizandoDatos"> 
+                    <calculo-costo-tramite-5-isr-component 
+                                          :datosParaDeterminarImpuesto="$v.form.datosParaDeterminarImpuesto.$model" 
+                                          :campos="configCostos.campos"
+                                          :tramite="configCostos.tramite" 
+                                          :tipoPersona="configCostos.tipoPersona" 
+                                          @costosObtenidos="costosObtenidos">
+                                          </calculo-costo-tramite-5-isr-component>
+
+                     <div class="text-center" v-if="datosCostos">
+                         <b-link title="Click para ver detalles" @click="verDetalle =  !verDetalle" class="mr-2 btn btn-link">
+                             {{!verDetalle? "Ver detalle " : "Ocultar detalle "}}            
+                          </b-link>
+                      </div>    
+                      <div>
+                        <b-card no-body v-if="datosCostos && verDetalle">
+                            <b-card-body id="nav-scroller"ref="content "style=" height:300px; overflow-y:scroll;">
+                                <b-row v-for="(salida, key) in datosCostos.Salidas" :key="key">
+                                    <b-col class="text-left" style="width: 100%" >
+                                        <strong>{{ key }}</strong>
+                                    </b-col>
+                                    <b-col class="text-right" >
+                                        <span class="text-muted">   {{ currencyFormat(key, salida) }} </span>
+                                    </b-col>
+                                </b-row>
+                            </b-card-body> 
+                        </b-card>
+
+                      </div>                    
+                  </b-col>
+
+                </b-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -308,44 +344,26 @@
          type: [Number, String],
       },listaCurps:{
         type: Array
+      },
+      configCostos:{
+        type: Object
       }
     },
 
     mounted(){
               
       if(this.enajenanteEditado){
-        let oldEnajentanteEditado = Object.assign({}, this.enajenanteEditado);
-        this.enajenante.nacionalidad = oldEnajentanteEditado.nacionalidad;
-        this.enajenante.tipoPersona = oldEnajentanteEditado.tipoPersona;
-        
-        this.form.datosPersonales.claveIne = oldEnajentanteEditado.datosPersonales.claveIne;
-        this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
-        this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
-        this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
-        this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
-        this.form.datosPersonales.apPat = oldEnajentanteEditado.datosPersonales.apPat;
-        this.form.datosPersonales.fechaNacimiento = oldEnajentanteEditado.datosPersonales.fechaNacimiento;
-        this.form.datosPersonales.razonSocial = oldEnajentanteEditado.datosPersonales.razonSocial;
-        this.form.porcentajeCompra= oldEnajentanteEditado.porcentajeCompra;
-
-        this.form.datosParaDeterminarImpuesto.gananciaObtenida = oldEnajentanteEditado.datosParaDeterminarImpuesto.gananciaObtenida;
-        this.form.datosParaDeterminarImpuesto.montoOperacion = oldEnajentanteEditado.datosParaDeterminarImpuesto.montoOperacion;
-        this.form.datosParaDeterminarImpuesto.multaCorreccion = oldEnajentanteEditado.datosParaDeterminarImpuesto.multaCorreccion;
-        this.form.datosParaDeterminarImpuesto.pagoProvisional= oldEnajentanteEditado.datosParaDeterminarImpuesto.pagoProvisional;
-
         this.titleModal = "Editar";
-        this.btnOkLabel = "Editar";
+        this.btnOkLabel = "Aceptar";
         this.btnIcon = "la la-pencil";
         this.textBtnOpenModal = " ";
         this.classBtn = "btn-info";
       } else {
         this.titleModal = "Agregar";
-        this.btnOkLabel = "Agregar";
+        this.btnOkLabel = "Aceptar";
         this.btnIcon = "la la-plus";
         this.textBtnOpenModal = "Agregar enajenante";
         this.classBtn = "btn bg-success w-80 mb-4";
-
-         
       }
     },
     data() {
@@ -366,7 +384,8 @@
         idModa:  uuid.v4(),
         btnIcon:'',titleModal:'', btnOkLabel:'', textBtnOpenModal:'',classBtn:'',
         maxProcentajePermitido:100,
-        panel: [0,1], curpEncontrada:false, buscandoCurp:false
+        panel: [0,1], curpEncontrada:false, buscandoCurp:false,
+        datosCostos:false, verDetalle:false, actualizandoDatos:false
 
       }
     },
@@ -486,11 +505,32 @@
 
        if(this.enajenanteEditado){
 
+
+            let oldEnajentanteEditado = JSON.parse(JSON.stringify(this.enajenanteEditado));//Object.assign({}, this.enajenanteEditado);
+            this.enajenante.nacionalidad = oldEnajentanteEditado.nacionalidad;
+            this.enajenante.tipoPersona = oldEnajentanteEditado.tipoPersona;
+            
+            this.form.datosPersonales.claveIne = oldEnajentanteEditado.datosPersonales.claveIne;
+            this.form.datosPersonales.apMat = oldEnajentanteEditado.datosPersonales.apMat;
+            this.form.datosPersonales.rfc = oldEnajentanteEditado.datosPersonales.rfc;
+            this.form.datosPersonales.curp = oldEnajentanteEditado.datosPersonales.curp;
+            this.form.datosPersonales.nombre = oldEnajentanteEditado.datosPersonales.nombre;
+            this.form.datosPersonales.apPat = oldEnajentanteEditado.datosPersonales.apPat;
+            this.form.datosPersonales.fechaNacimiento = oldEnajentanteEditado.datosPersonales.fechaNacimiento;
+            this.form.datosPersonales.razonSocial = oldEnajentanteEditado.datosPersonales.razonSocial;
+            this.form.porcentajeCompra= oldEnajentanteEditado.porcentajeCompra;
+
+            this.form.datosParaDeterminarImpuesto.gananciaObtenida = oldEnajentanteEditado.datosParaDeterminarImpuesto.gananciaObtenida;
+            this.form.datosParaDeterminarImpuesto.montoOperacion = oldEnajentanteEditado.datosParaDeterminarImpuesto.montoOperacion;
+            this.form.datosParaDeterminarImpuesto.multaCorreccion = oldEnajentanteEditado.datosParaDeterminarImpuesto.multaCorreccion;
+            this.form.datosParaDeterminarImpuesto.pagoProvisional= oldEnajentanteEditado.datosParaDeterminarImpuesto.pagoProvisional;
+
+
             this.maxProcentajePermitido = parseFloat(this.porcentajeVenta)  - (parseFloat(porcentajeAsignado) - parseFloat(this.form.porcentajeCompra) )  ;
           } else {
             this.maxProcentajePermitido = parseFloat(this.porcentajeVenta) - porcentajeAsignado ;
           }
-        this.$bvModal.show(this.idModa)
+        this.$bvModal.show(this.idModa);
       },
       async updateCurp(){
         if( !this.$v.form.datosPersonales.curp.$invalid ){         
@@ -545,19 +585,44 @@
       },
 
       formatoMoneda(name){
-
+        this.actualizandoDatos = true;
+        let self = this;
         if(this.$v.form.datosParaDeterminarImpuesto[name].$model){
           let numero = this.formatoNumero(this.$v.form.datosParaDeterminarImpuesto[name].$model);
-          this.$v.form.datosParaDeterminarImpuesto[name].$model =  this.formatter(numero); 
+          this.$v.form.datosParaDeterminarImpuesto[name].$model =  this.formatter(numero);
+          
+          setTimeout(function(){
+            self.actualizandoDatos = false; 
+          }, 1000);
         } else{
           return null;
         }
       },
 
       formatoNumero(numberStr){
-          let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));
+          let valor =  Number((numberStr+"").replace(/[^0-9.-]+/g,""));          
           return valor;
       },
+
+      costosObtenidos(res){
+        this.datosCostos = false;
+        
+        if(res.success){
+          this.datosCostos = res.respuestaCosto;
+        }
+      },
+
+      currencyFormat(campoName, salida){
+          let arr = ["Ganancia Obtenida","Monto obtenido conforme al art 127 LISR",
+                      "Pago provisional conforme al art 126 LISR","Impuesto correspondiente a la entidad federativa",
+                      "Parte actualizada del impuesto", "Recargos", "Multa corrección fiscal", "Importe total"];
+          if(arr.includes(campoName)){
+              let text = Vue.filter('toCurrency')(salida);
+              return text;
+          } else{
+              return salida;
+          }
+      }
     },
     watch: {
       enajenante:{

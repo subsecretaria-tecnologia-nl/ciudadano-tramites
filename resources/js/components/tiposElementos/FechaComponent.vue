@@ -1,7 +1,7 @@
 <template>
     <div class=" fv-plugins-icon-container" id="fechaElement">
         <label>
-         {{ campo.nombre }}
+         {{ campo.nombre }}  {{JSON.parse(this.campo.caracteristicas + '').required == 'true' ? '*' : '' }}
         </label>
         <b-form-datepicker   :id="campo.campo_id + ''" :name="campo.nombre"  v-model="campo.valor"        
               @change="validar" style="background-color: #e5f2f5 !important"
