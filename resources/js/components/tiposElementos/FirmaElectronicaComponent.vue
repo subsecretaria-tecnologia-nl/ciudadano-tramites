@@ -41,7 +41,7 @@ export default {
             this.doc ='';
             this.multiple = false;
             this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[0].id; 
-            this.folio =  this.usuario.solicitudes[i].id ;
+            this.folio =  this.usuario.solicitudes[0].id ;
             this.llave = "0";
         }else{
                this.multiple = true;
