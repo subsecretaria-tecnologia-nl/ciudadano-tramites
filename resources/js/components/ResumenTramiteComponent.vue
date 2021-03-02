@@ -51,15 +51,18 @@
                                         </tr>
                                     </tbody>
                                     <tbody v-else-if="tramite.detalle && tramite.detalle.Complementaria && tipoTramite =='complementaria'">
-                                        <tr >
-                                            <td class="left">
-                                                <strong>Cantidad a cargo</strong>
+                                        <tr>
+                                            <td colspan="2">
+                                                <strong><h4> Complementaria</h4></strong>
                                             </td>
-                                            <td class="text-right">
+                                        </tr>
+                                        <tr v-for="(salida, key) in tramite.detalle.Complementaria" >
+                                            <td class="left" style="width: 70%" >
+                                                <strong>{{ key }}</strong>
+                                            </td>
+                                            <td class="text-right"  >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
-                                                <span v-if="!obteniendoCosto">  
-                                                    {{ currencyFormat('Cantidad a cargo', this.tramite.detalle.Complementaria['Cantidad a cargo']) }} 
-                                                </span>
+                                                    <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
                                             </td>
                                         </tr>
                                     </tbody>
