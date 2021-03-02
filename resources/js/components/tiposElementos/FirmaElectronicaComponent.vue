@@ -64,7 +64,7 @@ export default {
 
 
         var iframe = document.getElementById('the_frame');
-        iframe.contentDocument.body.addEventListener('beforeunload', function(){
+        iframe.contentDocument.body.addEventListener('onload', function(){
         var guardarInfo = [ this.idFirmado, this.urlFirmado ]
             $.ajax({
                     type: "POST",
