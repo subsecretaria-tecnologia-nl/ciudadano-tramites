@@ -1,3 +1,35 @@
+<?php
+    // function getFields ($campos) {
+        // $fields = "";
+        // foreach($campos as $key => $val){
+            // if(gettype($val) == 'array'){
+                // for($item in $val){
+                    // $fields .= getFields($val);
+                // }
+                // return true;
+            // }
+            // if(gettype($value) == "object"){
+                // if(isset($value->nombre)) $val = $val->nombre;
+                // else{
+                    // $fields .= getFields($val);
+                    // return true;
+                // }
+            // }
+            // $fields .= "
+                // <div class=\"col-md-6\">
+                    // <span class=\"text-muted\">{$key}</span>
+                    // <p><strong>{$val}</strong></p>
+                // </div>
+            // ";
+
+        // }
+
+        // return $fields;
+    // }
+
+     // echo getFields($tramite->info->campos);
+// die();
+?>
 <div class="content d-flex flex-column flex-column-fluid" id="app">
     <div class="d-flex flex-column-fluid">
         <div class="container">              
@@ -29,7 +61,10 @@
                 			<?php
                 				foreach($tramite->info->campos as $campo => $value){
                 					while(gettype($value) == "array"){ $value = $value[0]; }
-                                    if(gettype($value) == "object") $value = $value->nombre;
+                                    if(gettype($value) == "object"){
+                                        if(isset($value->nombre)) $value = $value->nombre;
+                                        else continue;
+                                    }
                 					echo "
                 						<div class=\"col-md-6\">
                 							<span class=\"text-muted\">$campo</span>
@@ -40,6 +75,59 @@
                 			?>
                 		</div>
                 	</div>
+                    @if ($tramite->tramite_id == 399)
+                        <hr>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span class="text-muted">Expediente</span>
+                                    <p><strong>{{ $tramite->info->campos->Expedientes->expedientes[0]->expediente }}</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="text-muted">Estado</span>
+                                    <p><strong>{{ $tramite->info->campos->Expedientes->expedientes[0]->estado->nombre }}</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="text-muted">Municipio</span>
+                                    <p><strong>{{ $tramite->info->campos->Expedientes->expedientes[0]->municipio->nombre }}</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card-header"><strong>Dirección</strong></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <?php
+                                    foreach($tramite->info->campos->Expedientes->expedientes[0]->direccion as $key => $val){
+                                        if(gettype($val) == 'array' && count($val) == 1){
+                                            echo "</div>
+                                            </div>
+                                            <div class=\"card-header\"><strong>".str_replace('_', ' ', $key)."</strong></div>
+                                            <div class=\"card-body\">
+                                                <div class=\"row\">";
+
+                                            foreach($val[0] as $key => $val){
+                                                echo "
+                                                    <div class=\"col-md-6\">
+                                                        <span class=\"text-muted\">".str_replace('_', ' ', $key)."</span>
+                                                        <p><strong>{$val}</strong></p>
+                                                    </div>
+                                                ";
+                                            }
+                                        }else{
+                                            echo "
+                                                <div class=\"col-md-6\">
+                                                    <span class=\"text-muted\">".str_replace('_', ' ', $key)."</span>
+                                                    <p><strong>{$val}</strong></p>
+                                                </div>
+                                            ";
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                        <hr>
+                    @endif
                 </div>
                 <div class="card mt-5 <?= count($tramite->mensajes) == 0 ? "d-none" : ""?>">
                 	<div class="card-header d-flex align-items-center">
