@@ -102,14 +102,14 @@
                                         if(gettype($val) == 'array' && count($val) == 1){
                                             echo "</div>
                                             </div>
-                                            <div class=\"card-header\"><strong>".str_replace('_', ' ', $key)."</strong></div>
+                                            <div class=\"card-header\"><strong>".str_replace('_', ' ', $key)."v</strong></div>
                                             <div class=\"card-body\">
                                                 <div class=\"row\">";
 
                                             foreach($val[0] as $key => $val){
                                                 echo "
                                                     <div class=\"col-md-6\">
-                                                        <span class=\"text-muted\">".str_replace('_', ' ', $key)."</span>
+                                                        <span class=\"text-muted text-capitalize\">".str_replace('_', ' ', $key)."v</span>
                                                         <p><strong>{$val}</strong></p>
                                                     </div>
                                                 ";
@@ -117,7 +117,7 @@
                                         }else{
                                             echo "
                                                 <div class=\"col-md-6\">
-                                                    <span class=\"text-muted\">".str_replace('_', ' ', $key)."</span>
+                                                    <span class=\"text-muted text-capitalize\">".str_replace('_', ' ', $key)."v</span>
                                                     <p><strong>{$val}</strong></p>
                                                 </div>
                                             ";
