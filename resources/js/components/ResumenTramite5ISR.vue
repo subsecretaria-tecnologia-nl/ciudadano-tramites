@@ -221,6 +221,7 @@
                         return enajenante;
                     } );
                     this.$refs.table.refresh();
+                    /*
                     if(val.headers.indiceEnajenante){
                    
                         this.listaEnajentantes[val.headers.indiceEnajenante].status = {
@@ -240,7 +241,7 @@
                         this.datosFormulario.errorAlguardar = true;             
                         const parsed = JSON.stringify(this.datosFormulario);
                         localStorage.setItem('datosFormulario', parsed);  
-                    }
+                    }*/
                     
                 },
                 deep: true
