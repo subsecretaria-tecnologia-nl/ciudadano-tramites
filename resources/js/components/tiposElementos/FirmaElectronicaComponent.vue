@@ -21,21 +21,15 @@ export default {
             rfc: '',
             folio:'',
             llave:'',
+            idFirmado: [],
+            urlFirmado: [],
+            guardado: false,
         }
     },
-    // created() {
-    //      window.addEventListener('beforeunload', function(event) {
-    //      event.returnValue = 'Write something';
-    //      console.log('tramite firmado');
-    //   })
-    // },
-    // beforeDestroy(){
-    //     window.removeEventListener('beforeunload');
-    // },
-    async mounted() {
-        console.log('usuario: '+ typeof(this.usuario))
-        console.log('usuario: '+ this.usuario.solicitudes.length)
-        console.log('usuario: '+ this.usuario[1])
+    beforeDestroy(){
+        window.removeEventListener('beforeunload');
+    },
+    mounted() {
     
         if (this.usuario.solicitudes.length === 1 ) {
             this.doc ='';
@@ -43,6 +37,8 @@ export default {
             this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[0].id; 
             this.folio = "0"  ;
             this.llave = this.usuario.solicitudes[0].id;
+            this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[0].id + "_" +   this.usuario.tramite_id + "_firmado" );
+            this.idFirmado.push(this.usuario.solicitudes[0].id);
         }else{
                this.multiple = true;
                 this.doc = [];
@@ -53,16 +49,41 @@ export default {
                 this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[i].id );
                 this.llave.push( this.usuario.solicitudes[i].id );
                 this.folio.push( i );
+                this.idFirmado.push(this.usuario.solicitudes[i].id);
+                this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[i].id + "_" +   this.usuario.tramite_id + "_firmado" );
             }
         }
         this.rfc = this.user.rfc;
-
-
-        console.log( 'documento: ' , this.doc);
-        console.log( 'documento: ' , this.folio);
-        console.log( 'documento: ' , this.llave);
         this.accesToken();
         this.encodeData();
+
+
+        
+      
+
+
+
+        var iframe = document.getElementById('the_frame');
+        iframe.contentDocument.body.addEventListener('onload', function(){
+        var guardarInfo = [ this.idFirmado, this.urlFirmado ]
+            $.ajax({
+                    type: "POST",
+                    data: { guardarInfo }, 
+                    dataType: 'json', 
+                    url:  process.env.TESORERIA_HOSTNAME +"/solicitudes-guardar-carrito",
+                    async: false,
+                    success:function(data){
+                        console.log(data);
+                        console.log("considerate guardado");
+                    },
+                    error:function(error){
+                        console.log('error: ', error);
+                    },
+                    complete:function(){
+                        console.log('xD' );
+                    }
+            })
+        })
 
     },
     methods: {

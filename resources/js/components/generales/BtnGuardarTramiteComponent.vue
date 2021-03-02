@@ -44,7 +44,7 @@
 
               if(!!this.tieneEnajentantes(datosFormulario) && this.type != 'temporal' && this.tipoTramite != 'complementaria' ){
                 //this.guardarMultiplesTramites( datosFormulario, listaSolicitantes, tramite, informacion, url );
-                let enajenantes = this.extraerEnajentantes(datosFormulario, tramite, informacion );
+                let enajenantes = this.extraerEnajentantes(datosFormulario, tramite, informacion, listaSolicitantes );
                 
                 console.log(JSON.parse(JSON.stringify(enajenantes)))
                 formData = this.getFormData(enajenantes);
@@ -77,7 +77,7 @@
             },
 
                 
-            extraerEnajentantes(datosFormulario, tramite, informacion){
+            extraerEnajentantes(datosFormulario, tramite, informacion, listaSolicitantes){
                 let camposEnajenantes = this.tieneEnajentantes(datosFormulario);
                 let id_seguimiento = tramite.id_seguimiento;
                 if( !!camposEnajenantes && camposEnajenantes.valor && camposEnajenantes.valor.enajenantes){
@@ -89,6 +89,7 @@
                       inf.detalle = enajenante.detalle;
                       inf.enajenante = enajenante;
                       inf.id = 0;
+                      inf.solicitante = listaSolicitantes[0];
                       listaEnajentantes.push(inf);
                       /*listaEnajentantes.push({
                         info: inf, id:0
