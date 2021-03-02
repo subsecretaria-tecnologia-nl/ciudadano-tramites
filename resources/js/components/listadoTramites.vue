@@ -65,7 +65,7 @@
                 </v-row>
             </v-container>
             <div class="w-100" v-if="!loading">
-                <pagination-component @processToCart="processToCart" :items="tramitesFiltrados" :tramitesCart="tramitesCart"></pagination-component>
+                <pagination-component :type="type" @processToCart="processToCart" :items="tramitesFiltrados" :tramitesCart="tramitesCart"></pagination-component>
             </div>
         </div>
     </div>
@@ -75,6 +75,7 @@
 
         data() {
             return {
+                type : null,
                 tramites: [], loading:true, porPage : 10, pages:[0], currentPage :1, strBusqueda:"", totalTramites:0, tramitesFiltrados:[], tramitesCart : [],
                 ...this.$attrs
             }
@@ -119,8 +120,17 @@
                     let estatus = this.type;
                     let notary_id = this.notary || null;
                     let id_usuario = this.user || null;
+                    let pendiente_firma = null;
 
-                    let data = { estatus }
+                    if(estatus === 98){
+                        pendiente_firma = true;
+                        this.type = 'pendiente_firma';
+                        estatus = null;
+                    }
+
+                    let data = { };
+                    if(estatus) data.estatus = estatus;
+                    if(pendiente_firma) data.pendiente_firma = pendiente_firma;
                     if(this.notary) data.notary_id = this.notary;
                     else if(this.user) data.id_usuario = this.user;
 

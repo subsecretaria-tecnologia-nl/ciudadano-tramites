@@ -86,7 +86,7 @@
                 } ).then(response => {
                     let url = process.env.PAYMENTS_HOSTNAME  + "/v1/pay";
                     let idTRansaccion = response.data.id_transaccion;
-                    this.idSeguimiento = (50000000 +  parseInt(idTRansaccion)) + ''
+                    this.idSeguimiento = idTRansaccion;
                     let data = {
                         "token": "DD0FDED2FE302392164520BF7090E1B3BEB7",
                         "referencia": "",

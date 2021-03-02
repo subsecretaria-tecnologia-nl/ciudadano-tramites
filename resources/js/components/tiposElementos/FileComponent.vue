@@ -3,7 +3,7 @@
     <div class="input-group">
       <div class="input-group-prepend">
       <span class="input-group-text" id="inputGroupFileAddon01">
-          {{ campo.nombre}}
+          {{ campo.nombre }}  {{JSON.parse(this.campo.caracteristicas + '').required == 'true' ? '*' : '' }}
       </span>
       </div>
       <div class="custom-file">

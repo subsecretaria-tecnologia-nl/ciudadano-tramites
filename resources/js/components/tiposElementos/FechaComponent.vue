@@ -1,11 +1,11 @@
 <template>
     <div class=" fv-plugins-icon-container" id="fechaElement">
         <label>
-         {{ campo.nombre }}
+         {{ campo.nombre }}  {{JSON.parse(this.campo.caracteristicas + '').required == 'true' ? '*' : '' }}
         </label>
         <b-form-datepicker   :id="campo.campo_id + ''" :name="campo.nombre"  v-model="campo.valor"        
               @change="validar" style="background-color: #e5f2f5 !important"
-        @focus="validar" @input="validar" >
+        @focus="validar" @input="validar" :show-decade-nav="showDecadeNav">
               	</b-form-datepicker>
        
         <small  v-if="campo.mensajes && campo.mensajes.length > 0 && ( showMensajes || estadoFormulario > 0)">
@@ -23,6 +23,11 @@
       props: ['campo', 'estadoFormulario', 'showMensajes'],
       created() {
         this.validar();
+      },
+      data(){
+        return {
+          showDecadeNav: true
+        }
       },
       methods: {
 

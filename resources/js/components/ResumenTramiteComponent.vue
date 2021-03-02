@@ -16,10 +16,10 @@
                                 <table class="table table-clear" >
                                     <tbody v-if="tramite.detalle && tramite.detalle.Salidas"  id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion" style="display: none;">
                                         <tr v-for="(salida, key) in tramite.detalle.Salidas" >
-                                            <td class="left" style="width: 70%"  v-if="key != 'H (Importe total)' ">
+                                            <td class="left" style="width: 70%"  v-if="key != 'Importe total' ">
                                                 <strong>{{ key }}</strong>
                                             </td>
-                                            <td class="right" v-if="key != 'H (Importe total)'" >
+                                            <td class="text-right" v-if="key != 'Importe total'" >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
                                             </td>
@@ -28,12 +28,12 @@
                                     <tbody  v-if="tramite.detalle && tramite.detalle.Salidas && tipoTramite =='normal' ">
                                         <tr>
                                             <td class="left" style="width: 70%">
-                                                <strong>H (Importe total)</strong>
+                                                <strong>Importe total</strong>
                                             </td>
                                             <td class="right">
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
                                                     <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Salidas['H (Importe total)'] | toCurrency }}
+                                                        {{ this.tramite.detalle.Salidas['Importe total'] | toCurrency }}
 
                                                     </span>
                                             </td>
@@ -51,15 +51,18 @@
                                         </tr>
                                     </tbody>
                                     <tbody v-else-if="tramite.detalle && tramite.detalle.Complementaria && tipoTramite =='complementaria'">
-                                        <tr >
-                                            <td class="left">
-                                                <strong>L Cantidad a cargo</strong>
+                                        <tr>
+                                            <td colspan="2">
+                                                <strong><h4> Complementaria</h4></strong>
                                             </td>
-                                            <td class="right">
+                                        </tr>
+                                        <tr v-for="(salida, key) in tramite.detalle.Complementaria" >
+                                            <td class="left" style="width: 70%" >
+                                                <strong>{{ key }}</strong>
+                                            </td>
+                                            <td class="text-right"  >
                                                     <span class="spinner-border spinner-border-sm" v-if="obteniendoCosto"></span>
-                                                    <span v-if="!obteniendoCosto"> 
-                                                        {{ this.tramite.detalle.Complementaria['L Cantidad a cargo'] }}
-                                                    </span>
+                                                    <span v-if="!obteniendoCosto">   {{ currencyFormat(key, salida) }} </span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -224,6 +227,11 @@
                         //paramsCosto.divisa = campoDivisas.valor[0][0];
                     }
                 } else {
+                    this.datosComplementaria.fecha_escritura = this.datosComplementaria.fecha_escritura.split("-").map(dato => Number(dato)).join("-");
+                    this.datosComplementaria.ganancia_obtenida = this.formatoNumero(this.datosComplementaria.ganancia_obtenida);
+                    this.datosComplementaria.monto_operacion = this.formatoNumero(this.datosComplementaria.monto_operacion);
+                    this.datosComplementaria.multa_correccion_fiscal = this.formatoNumero(this.datosComplementaria.multa_correccion_fiscal);
+                    this.datosComplementaria.pago_provisional_lisr = this.formatoNumero(this.datosComplementaria.pago_provisional_lisr);
                     return this.datosComplementaria;
                 }
 
@@ -278,15 +286,10 @@
             },
 
             currencyFormat(campoName, salida){
-                let arr = ["A*(Ganancia Obtenida)","B (Monto obtenido conforme al art 127 LISR)",
-                            "C*(Pago provisional conforme al art 126 LISR)","D (Impuesto correspondiente a la entidad federativa)",
-                            "E (Parte actualizada del impuesto)", "F (Recargos)", "G*(Multa corrección fiscal)", "H (Importe total)"];
-                if(arr.includes(campoName)){
-                    let text = Vue.filter('toCurrency')(salida);
-                    return text;
-                } else{
-                    return salida;
-                }
+                let arr = ["Ganancia Obtenida","Monto obtenido conforme al art 127 LISR",
+                            "Pago provisional conforme al art 126 LISR","Impuesto correspondiente a la entidad federativa",
+                            "Parte actualizada del impuesto", "Recargos", "Multa corrección fiscal", "Importe total", 'Cantidad a cargo'];
+                return  arr.includes(campoName) ?  Vue.filter('toCurrency')(salida) : salida; 
             }
 
 

@@ -237,6 +237,21 @@
 								<!--begin::Notifications-->
 								<div class="dropdown mr-3 ml-2">
 									<!--begin::Toggle-->
+									<div class="btn btn-icon btn-hover-transparent-dark bg-secondary btn-dropdown btn-lg mr-1 pulse pulse-white">
+										<a href="{{ url()->route("pendiente-firma") }}" class="topbar-item" id="notifications">
+											<span class="svg-icon svg-icon-xl">
+												<!--begin::Svg Icon | path:media/svg/icons/Code/Compiling.svg-->
+												<i class="flaticon2-pen"></i>
+												<span id="totalTramitesFirma"  class="badge badge-danger">{{ session()->get("tramitesFirma") }}</span>
+											</span>
+										</a>
+									</div>
+									<!--end::Toggle-->
+								</div>
+								<!--end::Notifications-->
+								<!--begin::Notifications-->
+								<div class="dropdown mr-3 ml-2">
+									<!--begin::Toggle-->
 									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" id="notifications">
 										<div class="btn btn-icon btn-hover-transparent-dark {{ $notifications["total"] > 0 && $notifications["total"] > $notifications["read"] ? "bg-primary" : "" }} btn-dropdown btn-lg mr-1 pulse pulse-white">
 											<span class="svg-icon svg-icon-xl">

@@ -1,7 +1,7 @@
 <template>
   <div class=" fv-plugins-icon-container">
     <label>
-        {{ campo.nombre }}
+        {{ campo.nombre }}  {{JSON.parse(this.campo.caracteristicas + '').required == 'true' ? '*' : '' }}
     </label>
     <span class="currencyinput">
       <input
@@ -104,7 +104,7 @@
         },
 
         validar(a){
-          // let curpValido = true;
+          let exregValida = true;
           let requeridoValido = true;
           let caracteristicas = {};
           var caracteristicasStr = this.campo.caracteristicas;
@@ -121,9 +121,9 @@
 
           if( this.campo.valor && caracteristicas.expreg ){
             var regex = new RegExp(caracteristicas.expreg, "i");
-            requeridoValido = regex.test(this.campo.valor)
+            exregValida = regex.test(this.campo.valor)
 
-            if( !requeridoValido ){
+            if( !exregValida ){
               let mensaje = { 
                 tipo: 'regex',
                 mensajeStr: "El campo " + this.campo.nombre + " no cumple con la regla de validación."
@@ -142,7 +142,7 @@
               this.campo.mensajes.push( mensaje );
             }
           }
-          this.campo.valido =  requeridoValido;
+          this.campo.valido =  requeridoValido && exregValida;
           this.formatear();
           this.$emit('updateForm', this.campo);
           

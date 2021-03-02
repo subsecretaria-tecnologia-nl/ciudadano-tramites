@@ -18,13 +18,21 @@ class CheckSession
         $session = to_object(session()->all());
         if(!empty($session->authenticated)){
             $cart = curlSendRequest("GET", env("TESORERIA_HOSTNAME") . "/solicitudes-info/".session()->get("user")->id, []);
+            $firma = curlSendRequest("GET", env("TESORERIA_HOSTNAME") . "/solicitudes-info/".session()->get("user")->id."/firma", []);
             $cartCount = 0;
+            $firmaCount = 0;
             if(isset($cart->tramites)){
                 foreach($cart->tramites as $tramite){
                     $cartCount += count($tramite->solicitudes);
                 }
             }
+            if(isset($firma->tramites)){
+                foreach($firma->tramites as $tramite){
+                    $firmaCount += count($tramite->solicitudes);
+                }
+            }
             session()->put("tramites", $cartCount);
+            session()->put("tramitesFirma", $firmaCount);
             if(!empty($session->authenticated->until) && $session->authenticated->until <= date()){
                 return self::redirectLogin($request, $next);
             }

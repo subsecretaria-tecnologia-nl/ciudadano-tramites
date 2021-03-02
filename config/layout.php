@@ -75,6 +75,12 @@ return [
 			"options" => ["en-curso", 1]
 		],
 		[
+			"name" => "Pendiente de Firmar",
+			"icon" => "fas fa-file-signature",
+			"path" => "tramites",
+			"options" => ["por-firmar", 98]
+		],
+		[
 			"name" => "Finalizado",
 			"icon" => "fas fa-check-circle",
 			"path" => "tramites",

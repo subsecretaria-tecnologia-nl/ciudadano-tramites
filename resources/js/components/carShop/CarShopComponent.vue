@@ -247,10 +247,10 @@
 						tramitesJson.datos_factura = tramitesJson.datos_solicitante;
 
 						if( info.camposComplementaria && info.detalle && info.detalle.Complementaria){
-							tramitesJson.importe_tramite = info.detalle.Complementaria['L Cantidad a cargo'] ;
+							tramitesJson.importe_tramite = info.detalle.Complementaria['Cantidad a cargo'] ;
 						} else {
 							
-                			tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['H (Importe total)'] : info.costo_final ;
+                			tramitesJson.importe_tramite = info.detalle && info.detalle.Salidas ?  info.detalle.Salidas['Importe total'] : info.costo_final ;
 						}
 						tramitesJson.detalle = [];
 
