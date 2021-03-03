@@ -19,8 +19,13 @@
             paramsCosto.monto_operacion     = this.formatoNumero(this.datosParaDeterminarImpuesto.montoOperacion);
             paramsCosto.pago_provisional_lisr    = this.formatoNumero(this.datosParaDeterminarImpuesto.pagoProvisional);
             paramsCosto.ganancia_obtenida   = this.formatoNumero(this.datosParaDeterminarImpuesto.gananciaObtenida);
-
-            paramsCosto.fecha_escritura   = this.getCampoByName(CAMPO_FECHA_DE_ESCRITURA_O_MINUTA).valor.split("-").map(dato => Number(dato)).join("-");
+            let campoEscritura = this.getCampoByName(CAMPO_FECHA_DE_ESCRITURA_O_MINUTA);
+            if(campoEscritura && campoEscritura.valor){
+                paramsCosto.fecha_escritura   = campoEscritura.valor.split("-").map(dato => Number(dato)).join("-");
+            } else {
+                //alert("seleccione fecha")
+                return false;
+            }
             let campoDivisas               = this.getCampoByName(CAMPO_DIVISAS);
             if( multaCorreccion ){
                 paramsCosto.multa_correccion_fiscal = this.formatoNumero(multaCorreccion);

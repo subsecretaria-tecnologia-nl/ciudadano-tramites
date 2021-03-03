@@ -22,69 +22,79 @@
             </b-form-group>
           </b-col>         
         </b-row>
+         <b-row >
+            <b-col  cols="12" >
+                <div class="table-responsive">
 
-    <div   class="form-group fv-plugins-icon-container">
-        <div class="table-responsive">
-
-            <table class="table  table-striped">
-                <thead style="border-bottom: solid;">
-                    <tr>
-                        <th class="text-center">
-                            Tipo de persona
-                        </th>
-                        <th>
-                            Nombre
-                        </th>
-                        <th>
-                            RFC 
-                        </th>
-                        <th>
-                            CURP
-                        </th>
-                        <th>
-                            % Venta 
-                        </th>
-                        <th>
-                            Acciones
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr  v-for="(registro, key) in enajentantes"  >
-                        <td class="text-center">
-                            <i class="fa fa-times" id="iconBtnEliminar"  @click="eliminar(key)" style="cursor: pointer; color: red;" title="Quitar"></i> 
-                            {{ registro.tipoPersona == 'pf' ? 'Persona Física' : 'Persona Moral' }}
-                        </td>	
-                        <td>
-                            {{ registro.tipoPersona == 'pm' ? registro.datosPersonales.razonSocial : (registro.datosPersonales.nombre + ' ' + registro.datosPersonales.apPat + ' ' + registro.datosPersonales.apMat) }}
-                        </td>	
-                        <td>
-                           {{ registro.datosPersonales.rfc }}
-                        </td>	
-                        <td>
-                            {{ registro.datosPersonales.curp }}
-                        </td>	
-                        <td>
-                            {{  registro.porcentajeCompra }}
-                        </td>		
-                        <td>
-                            <modal-component 
-                        		@editaEnajentante="editaEnajentante"  :enajenanteEditado="registro" :porcentajeAsignado="porcentajeTotalCompra" :indexEnajenanteEditado="key"
-                                :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" :configCostos="configCostos">
-                        	</modal-component>                    	
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-            Porcentaje de venta asignado 
-            <b-progress :value="porcentajeTotalCompra" max="porcentajeVenta" show-value class="mb-3"></b-progress>
-    </div>
-	<modal-component 
-		@addEnajentante="addEnajentante" v-if="porcentajeTotalCompra < $v.porcentajeVenta.$model" 
-            :porcentajeAsignado="porcentajeTotalCompra" 
-            :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" :configCostos="configCostos">
-	</modal-component>
+                    <table class="table  table-striped">
+                        <thead style="border-bottom: solid;">
+                            <tr>
+                                <th class="text-center">
+                                    Tipo de persona
+                                </th>
+                                <th>
+                                    Nombre
+                                </th>
+                                <th>
+                                    RFC 
+                                </th>
+                                <th>
+                                    CURP
+                                </th>
+                                <th>
+                                    % Venta 
+                                </th>
+                                <th>
+                                    Acciones
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr  v-for="(registro, key) in enajentantes"  >
+                                <td class="text-center">
+                                    <i class="fa fa-times" id="iconBtnEliminar"  @click="eliminar(key)" style="cursor: pointer; color: red;" title="Quitar"></i> 
+                                    {{ registro.tipoPersona == 'pf' ? 'Persona Física' : 'Persona Moral' }}
+                                </td>	
+                                <td>
+                                    {{ registro.tipoPersona == 'pm' ? registro.datosPersonales.razonSocial : (registro.datosPersonales.nombre + ' ' + registro.datosPersonales.apPat + ' ' + registro.datosPersonales.apMat) }}
+                                </td>	
+                                <td>
+                                   {{ registro.datosPersonales.rfc }}
+                                </td>	
+                                <td>
+                                    {{ registro.datosPersonales.curp }}
+                                </td>	
+                                <td>
+                                    {{  registro.porcentajeCompra }}
+                                </td>		
+                                <td>
+                                    <modal-component 
+                                		@editaEnajentante="editaEnajentante"  :enajenanteEditado="registro" :porcentajeAsignado="porcentajeTotalCompra" :indexEnajenanteEditado="key"
+                                        :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" :configCostos="configCostos">
+                                	</modal-component>                    	
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                Porcentaje de venta asignado 
+                <b-progress :value="porcentajeTotalCompra" max="porcentajeVenta" show-value class="mb-3"></b-progress>
+            </b-col>
+            <b-col  cols="12" >
+        	    <modal-component 
+        		@addEnajentante="addEnajentante" v-if="porcentajeTotalCompra < $v.porcentajeVenta.$model" 
+                    :porcentajeAsignado="porcentajeTotalCompra" 
+                    :porcentajeVenta="$v.porcentajeVenta.$model" :listaCurps="listaCurps" :configCostos="configCostos">
+        	   </modal-component>
+           </b-col>
+        </b-row> 
+        <b-row v-if="configCostos.declararEn0">
+            <b-col  cols="12" >
+                <label>Motivo</label>
+                <textarea id="motivo" name="motivo" class="form-control  form-control-lg " style="background-color: #e5f2f5 !important" v-model="motivo" @input="validar"></b-form-input>
+                </b-input-group>></textarea>
+            </b-col>
+       </b-row>         
     </div>
 </template>
 <script>
@@ -95,16 +105,16 @@
         mixins: [validationMixin],
         validations() {
           return {
-              porcentajeVenta:{
-                isMayorQuePorcentajeAsignado(value) {
-                    return this.porcentajeTotalCompra <= value
-                },
-                isPorcentajeComplete(value){
-                    return this.porcentajeTotalCompra == value;
-                },
-                maxValue: maxValue(100)
-              }
-          }
+                porcentajeVenta:{
+                    isMayorQuePorcentajeAsignado(value) {
+                        return this.porcentajeTotalCompra <= value
+                    },
+                    isPorcentajeComplete(value){
+                        return this.porcentajeTotalCompra == value;
+                    },
+                    maxValue: maxValue(100)
+                }
+            }
         },
         computed:{
             listaCurps(){
@@ -114,9 +124,8 @@
 		mounted(){
             if(this.campo.valor && this.campo.valor.enajenantes && this.campo.valor.enajenantes.length > 0){
                 this.enajentantes = this.campo.valor.enajenantes;
-                //this.porcentajeVenta = this.campo.valor.porcentajeVenta;
                 this.$v.porcentajeVenta.$model  = this.campo.valor.porcentajeVenta;
-                //this.campo.valor = {enajenantes:this.enajentantes, porcentajeVenta:this.porcentajeVenta};
+                this.valor = this.campo.valor.motivo;
                 this.calcularTotalPorcentaje();
             }
             this.validar();
@@ -143,7 +152,8 @@
 	        return {
 	            enajentantes: [],
                 porcentajeTotalCompra: 0,
-                porcentajeVenta:100
+                porcentajeVenta:100,
+                motivo:''
 	        }
 	    },
 		methods : {
@@ -188,7 +198,11 @@
 
             validar(){
                 this.campo.valido =  this.porcentajeTotalCompra == this.$v.porcentajeVenta.$model;
-                this.campo.valor = {enajenantes:this.enajentantes, porcentajeVenta:this.$v.porcentajeVenta.$model};
+                let valor = {enajenantes:this.enajentantes, porcentajeVenta:this.$v.porcentajeVenta.$model};
+                if(this.configCostos.declararEn0){
+                    valor.motivo = this.motivo;
+                }
+                this.campo.valor = valor;
                 this.$emit('updateForm', this.campo);
           
             },
