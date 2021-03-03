@@ -1,86 +1,82 @@
 <template>
-  <div>
-    <iframe id="the_frame" :src="firma" style="width:100%; height:500px;" frameborder="0"> </iframe>
- </div>
+    <div>
+        <iframe id="the_frame" v-on:load="test(this)" :src="firma" style="width:100%; height:500px;" frameborder="0"> </iframe>
+    </div>
 </template>
 
 <script>
 
 
 export default {
-    props: ['datosComplementaria', 'tipoTramite','usuario', 'pago', 'id', 'user'],
-    data(){
-        return{
-            tramite : {},
-            tramiteInfo: '',
-            firma: '',
-            access_token: '',
-            resultId: '',
-            multiple: '',
-            doc: '',
-            rfc: '',
-            folio:'',
-            llave:'',
-            idFirmado: [],
-            urlFirmado: [],
-            guardado: false,
-        }
-    },
-    beforeDestroy(){
-        window.removeEventListener('beforeunload');
-    },
-    mounted() {
-    
-        if (this.usuario.solicitudes.length === 1 ) {
-            this.doc ='';
-            this.multiple = false;
-            this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[0].id; 
-            this.folio = "0"  ;
-            this.llave = this.usuario.solicitudes[0].id;
-            this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[0].id + "_" +   this.usuario.tramite_id + "_firmado" );
-            this.idFirmado.push(this.usuario.solicitudes[0].id);
-        }else{
-               this.multiple = true;
-                this.doc = [];
-                this.folio = [];
-                this.llave = [];
-             for (let i = 0; i < this.usuario.solicitudes.length; i++) {
-                // si es multiple entra por aqui jeje si no ->\
-                this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[i].id );
-                this.llave.push( this.usuario.solicitudes[i].id );
-                this.folio.push( i );
-                this.idFirmado.push(this.usuario.solicitudes[i].id);
-                this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[i].id + "_" +   this.usuario.tramite_id + "_firmado" );
-            }
-        }
-        this.rfc = this.user.rfc;
-        this.accesToken();
-        this.encodeData();
-        this.eventListenerIframe();
+	props: ['datosComplementaria', 'tipoTramite','usuario', 'pago', 'id', 'user'],
+	data(){
+		return{
+			tramite : {},
+			tramiteInfo: '',
+			firma: '',
+			access_token: '',
+			resultId: '',
+			multiple: '',
+			doc: '',
+			rfc: '',
+			folio:'',
+			llave:'',
+			idFirmado: [],
+			urlFirmado: [],
+			guardado: false,
+		}
+	},
+	mounted() {
+		// let url = process.env.APP_URL;
+		let APP_URL = 'http://10.153.144.218/tramites-ciudadano';
+		if (this.usuario.solicitudes.length === 1 ) {
+			this.doc ='';
+			this.multiple = false;
+			this.doc= APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[0].id; 
+			this.folio = "0"  ;
+			this.llave = this.usuario.solicitudes[0].id;
+			this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[0].id + "_" +   this.usuario.tramite_id + "_firmado" );
+			this.idFirmado.push(this.usuario.solicitudes[0].id);
+		}else{
+			this.multiple = true;
+			this.doc = [];
+			this.folio = [];
+			this.llave = [];
+			for (let i = 0; i < this.usuario.solicitudes.length; i++) {
+				// si es multiple entra por aqui jeje si no ->\
+				this.doc.push( APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[i].id );
+				this.llave.push( this.usuario.solicitudes[i].id );
+				this.folio.push( i );
+				this.idFirmado.push(this.usuario.solicitudes[i].id);
+				this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[i].id + "_" +   this.usuario.tramite_id + "_firmado" );
+			}
+		}
+		this.rfc = this.user.rfc;
+		this.accesToken();
+		this.encodeData();
+		// this.eventListenerIframe();
 
 
-        var myConfObj = {
-            iframeMouseOver : false
-        }
-        window.addEventListener('load',function(){
-        if(myConfObj.iframeMouseOver){
-            console.log('Wow cargo');
-        }
-        });
+		// var myConfObj = {
+		//     iframeMouseOver : false
+		// }
+		// window.addEventListener('load',function(){
+		// if(myConfObj.iframeMouseOver){
+		//     console.log('Wow cargo');
+		// }
+		// });
 
-        document.getElementById('the_frame').addEventListener('mouseover',function(){
-            myConfObj.iframeMouseOver = true;
-        });
-        document.getElementById('the_frame').addEventListener('mouseout',function(){
-            myConfObj.iframeMouseOver = false;
-});
-
-
-       
-
+		// document.getElementById('the_frame').addEventListener('mouseover',function(){
+		//     myConfObj.iframeMouseOver = true;
+		// });
+		// document.getElementById('the_frame').addEventListener('mouseout',function(){
+		//     myConfObj.iframeMouseOver = false;
+		// });
     },
     methods: {
-
+    	test (evt) {
+    		console.log('evt',evt);
+    	},
         eventListenerIframe(){
             var iframe = document.getElementById('the_frame');
             console.log("-------");

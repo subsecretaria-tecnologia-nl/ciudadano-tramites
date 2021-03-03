@@ -95,7 +95,7 @@
 		<tr>
 			<td class="columna value"  style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Escritura'} }}</td>
 			<td class="columna value" style="width: auto;"  colspan="2"></td>
-			<td class="columna value" style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Fecha de Escritura o Minuta'} }}</td>
+			<td class="columna value" style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Fecha de escritura o minuta'} }}</td>
 		</tr>
 		<tr>
 			<td style="width: 1%">MUNICIPIO</td>
