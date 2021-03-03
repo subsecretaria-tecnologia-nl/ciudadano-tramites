@@ -23,7 +23,7 @@
               </b-form-group>
             </b-col>
             <b-col cols="12" md="4" >
-              <b-form-group label="Municippio" label-for="municipio-select" >
+              <b-form-group label="Municipio" label-for="municipio-select" >
                 <multiselect id="municipio-select" v-model="$v.form.municipio.$model" :options="municipios" label="nombre" track-by="clave" 
                 :searchable="true" :state="$v.form.municipio.$dirty ? !$v.form.municipio.$error : null"  aria-describedby="municipio-select-feedback"  @input="setValMunicipio"></multiselect>
                 <b-form-invalid-feedback id="municipio-select-feedback">
@@ -34,7 +34,7 @@
               </b-form-group>
             </b-col>
             <b-col cols="12" md="4" >
-              <b-form-group label="No. EXP. CATASTRAL" label-for="expediente-input" >
+              <b-form-group label="No. Expediente Catastral" label-for="expediente-input" >
                 <b-input-group size="lg"> 
                   <template #prepend>
                     <b-input-group-text >{{clave}}</b-input-group-text>
