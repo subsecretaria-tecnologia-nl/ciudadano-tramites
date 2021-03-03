@@ -125,7 +125,7 @@
             if(this.campo.valor && this.campo.valor.enajenantes && this.campo.valor.enajenantes.length > 0){
                 this.enajentantes = this.campo.valor.enajenantes;
                 this.$v.porcentajeVenta.$model  = this.campo.valor.porcentajeVenta;
-                this.valor = this.campo.valor.motivo;
+                this.motivo = this.campo.valor.motivo;
                 this.calcularTotalPorcentaje();
             }
             this.validar();
