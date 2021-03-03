@@ -56,16 +56,37 @@ export default {
         this.rfc = this.user.rfc;
         this.accesToken();
         this.encodeData();
+        this.eventListenerIframe();
 
 
-        
-      
+        var myConfObj = {
+            iframeMouseOver : false
+        }
+        window.addEventListener('load',function(){
+        if(myConfObj.iframeMouseOver){
+            console.log('Wow cargo');
+        }
+        });
+
+        document.getElementById('the_frame').addEventListener('mouseover',function(){
+            myConfObj.iframeMouseOver = true;
+        });
+        document.getElementById('the_frame').addEventListener('mouseout',function(){
+            myConfObj.iframeMouseOver = false;
+});
 
 
+       
 
-        var iframe = document.getElementById('the_frame');
-        iframe.contentDocument.body.addEventListener('onload', function(){
-        var guardarInfo = [ this.idFirmado, this.urlFirmado ]
+    },
+    methods: {
+
+        eventListenerIframe(){
+            var iframe = document.getElementById('the_frame');
+            console.log("-------");
+            iframe.contentDocument.body.addEventListener('beforeunload', function(){
+            console.log("---.----");
+            var guardarInfo = [ this.idFirmado, this.urlFirmado ]
             $.ajax({
                     type: "POST",
                     data: { guardarInfo }, 
@@ -84,9 +105,7 @@ export default {
                     }
             })
         })
-
-    },
-    methods: {
+        },
 
 
         encodeData(){
@@ -187,9 +206,7 @@ export default {
 
 
 
-          
 
-        
           
            
 
