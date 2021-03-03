@@ -1,71 +1,83 @@
 <template>
-  <div>
-    <iframe id="the_frame" :src="firma" style="width:100%; height:500px;" frameborder="0"> </iframe>
- </div>
+    <div>
+        <iframe id="the_frame" v-on:load="validateSigned()" :src="firma" style="width:100%; height:500px;" frameborder="0"> </iframe>
+    </div>
 </template>
 
 <script>
 
 
 export default {
-    props: ['datosComplementaria', 'tipoTramite','usuario', 'pago', 'id', 'user'],
-    data(){
-        return{
-            tramite : {},
-            tramiteInfo: '',
-            firma: '',
-            access_token: '',
-            resultId: '',
-            multiple: '',
-            doc: '',
-            rfc: '',
-            folio:'',
-            llave:'',
-            idFirmado: [],
-            urlFirmado: [],
-            guardado: false,
-        }
+	props: ['datosComplementaria', 'tipoTramite','usuario', 'pago', 'id', 'user'],
+	data(){
+		return{
+			tramite : {},
+			tramiteInfo: '',
+			firma: '',
+			access_token: '',
+			resultId: '',
+			multiple: '',
+			doc: '',
+			rfc: '',
+			folio:'',
+			llave:'',
+			idFirmado: [],
+			urlFirmado: [],
+			guardado: false,
+			coutnLoad : 0
+		}
+	},
+	mounted() {
+		let APP_URL = 'http://10.153.144.218/tramites-ciudadano';
+		this.usuario.solicitudes.map((solicitud, ind) => {
+			this.multiple = this.usuario.solicitudes.length > 1;
+			let doc = `${APP_URL}/formato-declaracion/${solicitud.id}`;
+			console.log(doc);
+			if(this.multiple){
+				if(typeof this.doc === 'string') this.doc = [];
+				this.doc.push(doc)
+				
+				if(typeof this.llave === 'string') this.llave = [];
+				this.llave.push(`${solicitud.id}`)
+				
+				if(typeof this.folio === 'string') this.folio = [];
+				this.folio.push(`${ind}`)
+			
+			}else{
+				this.doc = doc;
+				this.llave = `${solicitud.id}`;
+				this.folio = `${ind}`;
+			}
+
+			this.idFirmado.push(solicitud.id);
+			this.urlFirmado.push(`http://insumos.test.nl.gob.mx/documentos/firmas/${this.usuario.tramite_id}/${solicitud.id}_${this.usuario.tramite_id}_firmado` );
+		})
+
+		this.rfc = this.user.rfc;
+		this.accesToken();
+		this.encodeData();
     },
-    beforeDestroy(){
-        window.removeEventListener('beforeunload');
-    },
-    mounted() {
-    
-        if (this.usuario.solicitudes.length === 1 ) {
-            this.doc ='';
-            this.multiple = false;
-            this.doc= process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[0].id; 
-            this.folio = "0"  ;
-            this.llave = this.usuario.solicitudes[0].id;
-            this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[0].id + "_" +   this.usuario.tramite_id + "_firmado" );
-            this.idFirmado.push(this.usuario.solicitudes[0].id);
-        }else{
-               this.multiple = true;
-                this.doc = [];
-                this.folio = [];
-                this.llave = [];
-             for (let i = 0; i < this.usuario.solicitudes.length; i++) {
-                // si es multiple entra por aqui jeje si no ->\
-                this.doc.push( process.env.APP_URL +'/formato-declaracion/' + this.usuario.solicitudes[i].id );
-                this.llave.push( this.usuario.solicitudes[i].id );
-                this.folio.push( i );
-                this.idFirmado.push(this.usuario.solicitudes[i].id);
-                this.urlFirmado.push('http://insumos.test.nl.gob.mx/documentos/firmas//' + this.usuario.tramite_id + "/" +  this.usuario.solicitudes[i].id + "_" +   this.usuario.tramite_id + "_firmado" );
-            }
-        }
-        this.rfc = this.user.rfc;
-        this.accesToken();
-        this.encodeData();
-
-
-        
-      
-
-
-
-        var iframe = document.getElementById('the_frame');
-        iframe.contentDocument.body.addEventListener('onload', function(){
-        var guardarInfo = [ this.idFirmado, this.urlFirmado ]
+    methods: {
+    	validateSigned (evt) {
+    		this.coutnLoad++;
+    		if(this.coutnLoad == 2){
+    			fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
+                    method : 'POST',
+                    body: JSON.stringify({ ids : this.idFirmado, status : 1, type : 'firmado', urls : this.urlFirmado })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if(res.code === 200) console.log('Great Job!');
+                    else console.log('Something goes wrong!', res);
+                });
+    		}
+    	},
+        eventListenerIframe(){
+            var iframe = document.getElementById('the_frame');
+            console.log("-------");
+            iframe.contentDocument.body.addEventListener('beforeunload', function(){
+            console.log("---.----");
+            var guardarInfo = [ this.idFirmado, this.urlFirmado ]
             $.ajax({
                     type: "POST",
                     data: { guardarInfo }, 
@@ -84,9 +96,7 @@ export default {
                     }
             })
         })
-
-    },
-    methods: {
+        },
 
 
         encodeData(){
@@ -187,9 +197,7 @@ export default {
 
 
 
-          
 
-        
           
            
 

@@ -95,7 +95,7 @@
 		<tr>
 			<td class="columna value"  style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Escritura'} }}</td>
 			<td class="columna value" style="width: auto;"  colspan="2"></td>
-			<td class="columna value" style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Fecha de Escritura o Minuta'} }}</td>
+			<td class="columna value" style="width: 33%;">{{ $info->solicitudes[0]->info->campos->{'Fecha de escritura o minuta'} }}</td>
 		</tr>
 		<tr>
 			<td style="width: 1%">MUNICIPIO</td>
@@ -122,32 +122,32 @@
 		</tr>
 		<tr>
 			<td>REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
-			<td class="value">{{ $enajenante->datosPersonales->{'rfc'}  }}</td>
+			<td class="value">{{ $enajenante->datosPersonales->{'rfc'} ?? ''  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>CLAVE ÚNICA DE REGISTRO DE POBLACIÓN:</td>
-			<td class="value"> {{ $enajenante->datosPersonales->{'curp'}  }}</td>
+			<td class="value"> {{ $enajenante->datosPersonales->{'curp'} ?? ''  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>CLAVE DE ELECTOR (INE):</td>
-			<td class="value">{{ $enajenante->datosPersonales->{'claveIne'}  }}</td>
+			<td class="value">{{ $enajenante->datosPersonales->{'claveIne'} ?? ''  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>NOMBRE:</td>
-			<td class="value">{{ $enajenante->datosPersonales->{'nombre'}  }}</td>
+			<td class="value">{{ $enajenante->datosPersonales->{'nombre'} ?? ''  }}</td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>APELLIDO PATERNO:</td>
-			<td class="value">{{  $enajenante->datosPersonales->{'apPat'}  }} </td>
+			<td class="value">{{  $enajenante->datosPersonales->{'apPat'} ?? ''  }} </td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td>APELLIDO MATERNO:</td>
-			<td class="value">{{  $enajenante->datosPersonales->{'apMat'}  }}</td>
+			<td class="value">{{  $enajenante->datosPersonales->{'apMat'} ?? ''  }}</td>
 			<td colspan="2"></td>
 		</tr>
 	</tbody>
