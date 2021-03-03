@@ -199,7 +199,7 @@
                           <b-input-group-text >$</b-input-group-text>
                         </template>
                         <b-form-input
-                        id="ganancia-obtenida-input" name="gananciaObtenida" v-model="$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$model"  :state="$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$dirty ? !$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$error : null"  aria-describedby="gananciaObtenida-input-feedback" @change="formatoMoneda('gananciaObtenida')"
+                        id="ganancia-obtenida-input" name="gananciaObtenida" v-model="$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$model"  :state="$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$dirty ? !$v.form.datosParaDeterminarImpuesto.gananciaObtenida.$error : null"  aria-describedby="gananciaObtenida-input-feedback" @change="formatoMoneda('gananciaObtenida')" :disabled="configCostos.declararEn0"
                       ></b-form-input>
                       </b-input-group>
                       <b-form-invalid-feedback id="gananciaObtenida-input-feedback">
@@ -216,7 +216,7 @@
                           <b-input-group-text >$</b-input-group-text>
                         </template>
                         <b-form-input
-                          id="pago-provisional-input" name="pagoProvisional" v-model="$v.form.datosParaDeterminarImpuesto.pagoProvisional.$model"  :state="$v.form.datosParaDeterminarImpuesto.pagoProvisional.$dirty ? !$v.form.datosParaDeterminarImpuesto.pagoProvisional.$error : null"  aria-describedby="pagoProvisional-input-feedback" @change="formatoMoneda('pagoProvisional')"
+                          id="pago-provisional-input" name="pagoProvisional" v-model="$v.form.datosParaDeterminarImpuesto.pagoProvisional.$model"  :state="$v.form.datosParaDeterminarImpuesto.pagoProvisional.$dirty ? !$v.form.datosParaDeterminarImpuesto.pagoProvisional.$error : null"  aria-describedby="pagoProvisional-input-feedback" @change="formatoMoneda('pagoProvisional')" :disabled="configCostos.declararEn0"
                         ></b-form-input>
                       </b-input-group>
                       <b-form-invalid-feedback id="pagoProvisional-input-feedback">
@@ -237,7 +237,7 @@
                           <b-input-group-text >$</b-input-group-text>
                         </template>
                         <b-form-input id="multa-correccion-fiscal-input" name="multaCorreccion" v-model="$v.form.datosParaDeterminarImpuesto.multaCorreccion.$model"  :state="$v.form.datosParaDeterminarImpuesto.multaCorreccion.$dirty ? !$v.form.datosParaDeterminarImpuesto.multaCorreccion.$error : null"  aria-describedby="multaCorreccion-input-feedback" 
-                          @change="formatoMoneda('multaCorreccion')"></b-form-input>
+                          @change="formatoMoneda('multaCorreccion')" :disabled="configCostos.declararEn0"></b-form-input>
                       </b-input-group>
                       <b-form-invalid-feedback id="multaCorreccion-input-feedback">
                         <span v-if="!$v.form.datosParaDeterminarImpuesto.multaCorreccion.required"  class="form-text text-danger">
@@ -256,7 +256,7 @@
                           id="monto-operacion-input" name="montoOperacion" v-model="$v.form.datosParaDeterminarImpuesto.montoOperacion.$model"  
                           @change="formatoMoneda('montoOperacion')"
                           :state="$v.form.datosParaDeterminarImpuesto.montoOperacion.$dirty ? !$v.form.datosParaDeterminarImpuesto.montoOperacion.$error : null"  
-                          aria-describedby="montoOperacion-input-feedback" 
+                          aria-describedby="montoOperacion-input-feedback" :disabled="configCostos.declararEn0"
                         ></b-form-input>
                       </b-input-group>
                       <b-form-invalid-feedback id="montoOperacion-input-feedback">
@@ -379,7 +379,7 @@
             curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'',razonSocial:'',apMat:'', claveIne:''
           },
           datosParaDeterminarImpuesto:{
-            gananciaObtenida:'',pagoProvisional:'', multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
+            gananciaObtenida:this.formatter('0'),pagoProvisional:this.formatter('0'), multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
           }
         },
         idModa:  uuid.v4(),
@@ -454,7 +454,7 @@
               curp:'',rfc:'', nombre:'', apPat:'', fechaNacimiento:'', razonSocial:'',apMat:'',claveIne:''
             },                
             datosParaDeterminarImpuesto:{
-              gananciaObtenida:'',pagoProvisional:'', multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
+              gananciaObtenida:this.formatter('0'),pagoProvisional:this.formatter('0'), multaCorreccion:this.formatter('0'), montoOperacion:this.formatter('0'),
             }
           }
         }

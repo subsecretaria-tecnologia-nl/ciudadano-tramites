@@ -122,7 +122,9 @@
 												:campo="campo" 
 													:showMensajes="showMensajes" 
 													:estadoFormulario="comprobarEstadoFormularioCount"
-													@updateForm="updateForm" :configCostos="configCostos"> ></enajenantes-component>
+													@updateForm="updateForm" :configCostos="configCostos">
+														
+													</enajenantes-component>
 												<table-component 
 													:propietario="JSON.parse(campo.caracteristicas).propietario"
 													:campo="campo"
@@ -217,7 +219,8 @@
                 return {
                 	campos:this.campos, 
                 	tramite:this.tramite, 
-                	tipoPersona:this.tipoPersona
+                	tipoPersona:this.tipoPersona,
+                	declararEn0:this.declararEn0
                 };
             }
         },
@@ -237,7 +240,7 @@
                 tipoPersona:'pf',
 				consulta_api:'',
 				panel : [0,1,2,3,4],
-				motivoDeclaracion0:'',
+				//motivoDeclaracion0:'',
 				disabled : [],
 				ajax : null,
 				response : [],
@@ -249,11 +252,6 @@
 				tieneSeccionDocumentos: false,
             }
         },
-		watch: { 
-		  	declararEn0: function(newVal, oldVal) { // watch it
-		      	this.setDeclararEn0();
-			}
-		},
         created() {
 			if (localStorage.getItem('datosFormulario')) {
               	try {
@@ -299,39 +297,6 @@
 			estadoSelected(estado){
 				this.estado = estado;
 			},
-        	setDeclararEn0(){
-        		let agrupacionDatosImpuesto = this.agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
-        		if(agrupacionDatosImpuesto){
-				    if(this.declararEn0){
-						agrupacionDatosImpuesto.campos.map( campo =>{
-							if(campo.nombre == 'Motivo'){
-								campo.valor = this.motivoDeclaracion0;
-								campo.valido = !!this.motivoDeclaracion0;
-								$("#" + campo.campo_id).val(campo.valor);
-							} else {
-								campo.valor = 0;							
-								campo.valido = true;
-        						$("#" + campo.campo_id).val(campo.valor);
-							}
-							this.$forceUpdate();
-							$("#" + campo.campo_id).attr("disabled", true);
-							campo.mensajes = [];
-							$("#" + campo.campo_id).trigger("change");
-							return campo;
-						});
-						
-				    } else {
-						
-						agrupacionDatosImpuesto.campos.map( campo =>{
-							//campo.valor = '';
-							$("#" + campo.campo_id).removeAttr("disabled")
-							$("#" + campo.campo_id).trigger("change");
-							return campo;
-						});
-						this.$forceUpdate();      	
-				    }
-				}
-        	},
 
         	gestionarCambioEstado(estado){
         		this.estado = estado;
@@ -441,10 +406,9 @@
             	let datosFormulario = {
             		tramite: this.tramite,
             		campos: this.campos,
-            		tipoPersona:this.tipoPersona,
+            		tipoPersona:this.tipoPersona,//quitar?
             		consulta_api: this.consulta_api,
             		formularioValido:formvALID,
-            		motivoDeclaracion0:this.motivoDeclaracion0,
             		tipo_costo_obj:this.tipo_costo_obj
             	}
             	localStorage.setItem('datosFormulario', JSON.stringify(datosFormulario)); 
@@ -459,19 +423,10 @@
         			return agrupacion;
         		});
                 camposValidables.forEach( (campo, indice) => {
-                	if( campo.nombre == 'Motivo'  ){
-                		if(this.declararEn0){
-							formularioValido = formularioValido && !!campo.valido;
-							this.motivoDeclaracion0 = campo.valor;
-                		} 
-					} else {
-						formularioValido = formularioValido && !!campo.valido;
-                	}
+					formularioValido = formularioValido && !!campo.valido;
                 });
                 if(this.tipo_costo_obj && (this.tipo_costo_obj.tipoCostoRadio == 'hoja' || this.tipo_costo_obj.tipoCostoRadio == 'lote ' )){
                 	formularioValido = formularioValido && !!this.tipo_costo_obj.hojaInput;
-                	//let campoValorOperacion = this.campos.find(campo => campo.nombre == "Valor de operacion");
-                	//console.log( JSON.parse( JSON.stringify(campoValorOperacion) ) )
 				}
                 this.$emit('updatingScore', formularioValido);
                 return formularioValido;
@@ -491,7 +446,6 @@
 
 					if( this.infoGuardada && this.infoGuardada.campos ){
 						this.tipoPersona = this.infoGuardada.tipoPersona;
-						this.motivoDeclaracion0 = this.infoGuardada.motivoDeclaracion0;
 						this.tipo_costo_obj = this.infoGuardada.tipo_costo_obj;
 						this.campos.forEach( (campo, index) =>{	
 							campo.valor = this.infoGuardada.campos[ campo.campo_id ];
@@ -532,36 +486,6 @@
 				  		return agrupacion;
 				  	});
 
-				  	let agrupacionDatosImpuesto = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
-				  	let nombreCampoMotivo = 'Motivo';
-				  	if( agrupacionDatosImpuesto ){
-				  		let campo = {
-				  			idElemento:'campo_motivo_declaracion_0',
-							agrupacion_id: agrupacionDatosImpuesto.agrupacion_id,
-							caracteristicas: '{"required":"true"}',
-							nombre: nombreCampoMotivo,
-							valor: this.motivoDeclaracion0 ? this.motivoDeclaracion0 : '',
-							nombre_agrupacion: agrupacionDatosImpuesto.nombre_agrupacion,
-							orden: agrupacionDatosImpuesto.campos[ agrupacionDatosImpuesto.campos.length - 1 ].orden + 1,
-							tipo: "textbox",
-							condition:{
-								view: function(agrupaciones){
-									let agrupacionDatosImpuesto = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Datos para determinar el impuesto");
-									//Obtenemos campos diferentes a Motivo
-									let campos = agrupacionDatosImpuesto.campos.filter( campo => {
-										return campo.nombre != nombreCampoMotivo
-									});
-
-									let isDelacaracion0 = true;
-									campos.forEach( campo => {
-										isDelacaracion0 = isDelacaracion0 && parseFloat(campo.valor ) == 0;
-									});
-									return isDelacaracion0;
-								}
-							}			  			
-				  		}
-				  		agrupacionDatosImpuesto.campos.push( campo );				  		
-				  	}
 				  	let agrupacionDatosCostos = agrupaciones.find( agrupacion => agrupacion.nombre_agrupacion == "Costos"); 
 				  	
 				  	if( agrupacionDatosCostos  && this.tipo_costo_obj.tipo_costo == '1'){
@@ -570,7 +494,6 @@
 							agrupacion_id: agrupacionDatosCostos.agrupacion_id,
 							caracteristicas: '{"required":"true"}',
 							nombre: "",
-							//valor: this.motivoDeclaracion0 ? this.motivoDeclaracion0 : '',
 							nombre_agrupacion: agrupacionDatosCostos.nombre_agrupacion,
 							orden: agrupacionDatosCostos.campos[ agrupacionDatosCostos.campos.length - 1 ].orden + 1,
 							tipo: "question",
@@ -599,9 +522,7 @@
 				  	let segg= this;
 					setTimeout(function(){ 
 						segg.cambioModelo();
-						segg.setDeclararEn0(); 
 					}, 1000);
-					//setTimeout(function(){  }, 1000);
 		    },
 
 		    onlyUnique(value, index, self) { 
@@ -806,9 +727,6 @@
 				this.loading = false;
 				this.panel = [0, 3, 4];
 			}
-		 },
-		 updated(){
-			//  console.log('en 0' ,this.declararEn0);
 		 },
 		 mounted(){
 			 console.log('agrupacion ==', this.agrupaciones);
