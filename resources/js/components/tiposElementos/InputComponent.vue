@@ -126,7 +126,7 @@
             if( !exregValida ){
               let mensaje = { 
                 tipo: 'regex',
-                mensajeStr: "El campo " + this.campo.nombre + " no cumple con la regla de validación."
+                mensajeStr: "El campo " + this.campo.nombre.toLocaleLowerCase() + " no cumple con la regla de validación."
               }
               this.campo.mensajes.push( mensaje );
             }
@@ -137,7 +137,7 @@
             if( !requeridoValido ){
               let mensaje = { 
                 tipo:'required',
-                mensajeStr: "El campo " + this.campo.nombre + " es requerido"
+                mensajeStr: "El campo " + this.campo.nombre.toLocaleLowerCase() + " es requerido"
               }
               this.campo.mensajes.push( mensaje );
             }

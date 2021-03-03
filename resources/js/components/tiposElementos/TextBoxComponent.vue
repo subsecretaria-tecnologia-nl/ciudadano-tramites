@@ -43,7 +43,7 @@
             if( !requeridoValido ){
               let mensaje = { 
                 tipo:'required',
-                mensajeStr: "El campo " + this.campo.nombre + " es requerido"
+                mensajeStr: "El campo " + this.campo.nombre.toLocaleLowerCase() + " es requerido"
               }
               this.campo.mensajes.push( mensaje );
             }

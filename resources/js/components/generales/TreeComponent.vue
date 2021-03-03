@@ -26,16 +26,22 @@
 </template>
 
 <script>
+import Vue from 'vue';
 export default {
     props:['item'],
-    mounted(){
-        console.log(JSON.parse(JSON.stringify( this.item )))
+    updated(){
+        if(this.item.datos_catastrales){
+            this.item.datos_catastrales.map( dato => {
+                dato.valor_catastral = Vue.filter('toCurrency')(dato.valor_catastral);
+                return dato;
+            });
+        }
     },
     data: function () {
         return {
             isOpen: false
         }
-  },
+    },
     computed:{},
     methods: {
         toggle: function (key) {
