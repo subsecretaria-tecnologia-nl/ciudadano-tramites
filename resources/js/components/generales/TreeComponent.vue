@@ -37,12 +37,6 @@ export default {
             });
         }
     },
-    data: function () {
-        return {
-            isOpen: false
-        }
-    },
-    computed:{},
     methods: {
         toggle: function (key) {
             $("#" + key).toggle(200)

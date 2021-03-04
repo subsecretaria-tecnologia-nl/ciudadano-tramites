@@ -113,7 +113,7 @@
 
     export default {
 
-        props: ['datosComplementaria','tipoTramite', 'files', 'usuario','errors'],
+        props: ['datosComplementaria','tipoTramite', 'files', 'usuario'],
         mounted() {
             this.obtenerInformacionDelTramite();
             
@@ -152,13 +152,6 @@
                 camposArchivos:[],
                 camposGenerales:[],
                 camposEnajenantes:[]
-
-                /*camposEnajenantes:[
-                    'index',
-                    { key: 'rfc', label: 'RFC' },
-                    { key: 'curp', label: 'CURP' },
-                    { key: 'nombre', label: 'Nombre' },
-                ]*/
             }
         },
   
@@ -212,41 +205,7 @@
                 }
             }
 
-        },
-          watch: {
-            'errors': {
-                handler: function (val, oldVal) {
-                    this.listaEnajentantes =  this.listaEnajentantes.map( enajenante => {
-                        delete enajenante.status;
-                        return enajenante;
-                    } );
-                    this.$refs.table.refresh();
-                    /*
-                    if(val.headers.indiceEnajenante){
-                   
-                        this.listaEnajentantes[val.headers.indiceEnajenante].status = {
-                            guardado:false,
-                            error:true
-                        };
-                        this.$refs.table.refresh();
-                        
-                        let campos = this.datosFormulario.campos;
-                        let indexCampoEnajenantes = campos.findIndex( campo =>  campo.tipo == 'enajenante');
-                        this.datosFormulario.campos[indexCampoEnajenantes].valor.enajenantes[val.headers.indiceEnajenante].status = {
-                            guardado:false,
-                            error:true,
-                            indice:val.headers.indiceEnajenante,
-                            msj:"No fue posible guardar los datos del enajenante, intente de nuevo"
-                        };
-                        this.datosFormulario.errorAlguardar = true;             
-                        const parsed = JSON.stringify(this.datosFormulario);
-                        localStorage.setItem('datosFormulario', parsed);  
-                    }*/
-                    
-                },
-                deep: true
-            }
-          }
+        }
     }
 </script>
 

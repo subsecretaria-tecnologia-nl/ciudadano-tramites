@@ -65,7 +65,7 @@
                                                   :tipoTramite="tipoTramite" 
                                                   :datosComplementaria="datosComplementaria" 
                                                   :files="files" 
-                                                  :usuario="usuario" :errors="errors">
+                                                  :usuario="usuario">
                                                   </resumen-tramite-5-isr-component>
                                                 </div>
                                                 <div v-else>
@@ -199,7 +199,6 @@
                   wizardTitle:'Finalizar',
                   wizardDesc:'Revisar y completar',
                 }],
-                errors:[],
                 nombtreTamite5IS5:'ISR 5% POR ENAJENACIÓN DE INMUEBLES'
                 //declararEn0:false
             }
@@ -207,7 +206,6 @@
 
         methods: {
           tramiteAgregadoEvent(data){
-            this.errors = [];
             if(data.respuesta){
               let totalAgregados = data.response ? 1 : data.responses.length;
               let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
@@ -228,11 +226,6 @@
                 const parsed = JSON.stringify(this.tramite);
                 localStorage.setItem('tramite', parsed);
                 if(!['finalizar', 'temporal'].includes(data.type)) redirect("/nuevo-tramite");
-              }
-            } else {
-
-              if(data.err && data.err.config && data.err.config.headers.indiceEnajenante){
-                this.errors = data.err.config;
               }
             }
 
