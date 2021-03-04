@@ -19,9 +19,9 @@
                         </strong>
                     </div>
                     <span>
-                        <strong id="totalTramites" >
-                            $ {{ calcularTotal }}
-                        </strong>
+                        <h3 id="totalTramites" >
+                         {{ calcularTotal | toCurrency }}
+                        </h3>
                     </span>
                 </li>
             </ul>
@@ -64,6 +64,7 @@
                     let tramite = Object.assign({}, tr);
                     delete tramite.nombre;
                     delete tramite.idSolicitante;
+                    delete tramite.calveTemp;
                     tramitesAEnviar.push( tramite );
                 });
 

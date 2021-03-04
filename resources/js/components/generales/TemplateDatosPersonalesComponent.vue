@@ -3,9 +3,9 @@
         <div class="row">
             <div class="col-lg-12" style="padding-bottom: 9px; margin-top: 5px;">
                 <div class="text-dark-50 line-height-sm">
-                    <div class="text-center" v-if="datosPersonales.razonSocial">
+                    <div class="text-center" v-if="datosPersonales.razonSocial ||  datosPersonales.razon_social">
                         <div>
-                            <strong>{{datosPersonales.razonSocial }}</strong>
+                            <strong>{{datosPersonales.razonSocial ||  datosPersonales.razon_social}}</strong>
                         </div>
                         <div class="font-weight-10">
                            <strong>RFC:</strong> <i class="ni location_pin mr-2"></i>{{ datosPersonales.rfc }}
