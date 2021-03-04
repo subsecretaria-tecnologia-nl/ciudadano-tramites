@@ -64,6 +64,7 @@
                     let tramite = Object.assign({}, tr);
                     delete tramite.nombre;
                     delete tramite.idSolicitante;
+                    delete tramite.calveTemp;
                     tramitesAEnviar.push( tramite );
                 });
 
