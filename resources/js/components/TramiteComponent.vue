@@ -43,7 +43,7 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a v-for="(file, ind) in files" class="dropdown-item" href="{file}" :key="ind"><i class="fas fa-download mr-2"></i> {{ file }}</a>
+                                    <a v-for="(file, ind) in files" class="dropdown-item" :href="file.href || file" :key="ind"><i class="fas fa-download mr-2"></i> {{ file.name || file }}</a>
                                 </div>
                             </div>
                         </div>
@@ -74,10 +74,12 @@
                 this.tramite.info = JSON.parse(this.tramite.info)
             if(this.tramite.mensajes && this.tramite.mensajes.length > 0){
                 this.tramite.mensajes.map(msg => {
-                    if(msg.attach != "")
+                    if(msg.attach && msg.attach != "")
                         this.files.push(msg.attach);
                 })
             }
+            if(this.tramite.doc_firmado) this.files.push({ name : 'Declaración', href : this.tramite.doc_firmado })
+            // if(this.tramite.doc_firmado) this.files.push({ name : 'Declaración', href : this.tramite.doc_firmado })
             this.tramite.loading = false;
             if(this.tramite.info.enajenante){
                 this.tramite.info = {
