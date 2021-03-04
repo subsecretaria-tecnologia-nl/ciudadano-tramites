@@ -9,7 +9,6 @@
                         <div class="col-sm-6">
                             <h6 class="mb-3">Solicitante:</h6>
                             <div>
-
                                 <strong>{{usuario.name + ' ' + usuario.fathers_surname + ' ' + usuario.mothers_surname }}</strong>
                             </div>
                             <div>CURP: {{usuario.curp}}</div>

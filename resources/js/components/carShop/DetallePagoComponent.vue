@@ -19,9 +19,9 @@
                         </strong>
                     </div>
                     <span>
-                        <strong id="totalTramites" >
-                            $ {{ calcularTotal }}
-                        </strong>
+                        <h3 id="totalTramites" >
+                         {{ calcularTotal | toCurrency }}
+                        </h3>
                     </span>
                 </li>
             </ul>

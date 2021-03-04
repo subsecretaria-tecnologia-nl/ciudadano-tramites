@@ -13,12 +13,9 @@
 		                </v-row>
 		            </v-container>
 		            <div v-if="!obteniendoTramites && items.length > 0">
-		        		<div class="container-fluid mb-4 mb-3 shadow-sm p-3 bg-white rounded" id="listTramites" v-for="(tramite, index) in items" :key="index"  >
-							<item-solictud-carshop-component 
-								:solicitud="tramite"
-								@updatingParent="updateList" 
-								:index="index">
-							 </item-solictud-carshop-component>
+		        		<div class="container-fluid mb-4 mb-3 shadow-sm p-3 bg-white rounded" v-for="(item, index) in items" :key="index"  >
+		        			<agrupacion-items-carrrito-component :agrupacion="item" :index="index" :idUsuario="idUsuario"
+		        			@updatingParent="updateList" ></agrupacion-items-carrrito-component>
 		        		</div>
 			        	<div class="card card-custom">
 	                    	<div class="card-body py-7">
@@ -86,11 +83,20 @@
     	props: ['idUsuario'],
         computed:{
             totalListTramites(){
-                return this.tramites.length;
+                return this.items.length;
             },
             items(){
-				const items = this.tramites;
-				return items.slice((this.currentPage - 1) * this.porPage,this.currentPage * this.porPage);       	
+            	let tramitesAgrupados = [];
+            	this.tramites.forEach( tramite => {
+            		let item = { nombre: tramite.nombre, clave: tramite.calveTemp, items:[tramite], verDetalle:false };
+            		let indice = tramitesAgrupados.findIndex( agrupado => agrupado.clave == tramite.calveTemp );
+            		if( indice < 0 ){
+            			tramitesAgrupados.push( item );
+            		} else {
+            			tramitesAgrupados[indice].items.push( tramite )
+            		}
+            	});
+				return tramitesAgrupados.slice((this.currentPage - 1) * this.porPage,this.currentPage * this.porPage);       	
             }
         },
         data() {
@@ -113,7 +119,17 @@
 
         methods: {
         	updateList(  data ){
-    		    this.tramites.splice( data.index, 1 );
+                let nuevaListaTTramites = this.tramites.filter( tramite => {
+                	 
+                	let itemEliminado = data.idsDelete.find( id => {
+                		console.log(id);
+                		return id == tramite.idSolicitante; 
+                	});
+                	if(itemEliminado){
+                		console.log(JSON.parse(itemEliminado)) 
+                	}
+                	return !itemEliminado;
+                });
         	},
 
         	cancelarPago(){
@@ -228,6 +244,8 @@
 						tramitesJson.id_tipo_servicio = tramiteInarray.tramite_id;//397;//
 						tramitesJson.idSolicitante = soliciante.id; 
 						tramitesJson.id_tramite = soliciante.id;//soliciante.clave;
+
+						tramitesJson.calveTemp = soliciante.clave;//soliciante.clave;
 
 						if(soliciante.info.enajenante) soliciante.info = {...soliciante.info, ...soliciante.info.enajenante}
 						let info = (typeof soliciante.info) == 'string' ? JSON.parse(soliciante.info) : soliciante.info;
