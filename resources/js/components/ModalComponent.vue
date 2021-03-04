@@ -282,9 +282,9 @@
                                           </calculo-costo-tramite-5-isr-component>
 
                      <div class="text-center" v-if="datosCostos">
-                         <b-link title="Click para ver detalles" @click="verDetalle =  !verDetalle" class="mr-2 btn btn-link">
-                             {{!verDetalle? "Ver detalle " : "Ocultar detalle "}}            
-                          </b-link>
+                          <b-button title="Click para ver detalles" variant="primary" @click="verDetalle =  !verDetalle" class="mr-2 btn btn-block">
+                            {{!verDetalle? "Ver detalle " : "Ocultar detalle "}}   
+                          </b-button>
                       </div>    
                       <div>
                         <b-card no-body v-if="datosCostos && verDetalle">
@@ -525,6 +525,11 @@
             this.form.datosParaDeterminarImpuesto.montoOperacion = oldEnajentanteEditado.datosParaDeterminarImpuesto.montoOperacion;
             this.form.datosParaDeterminarImpuesto.multaCorreccion = oldEnajentanteEditado.datosParaDeterminarImpuesto.multaCorreccion;
             this.form.datosParaDeterminarImpuesto.pagoProvisional= oldEnajentanteEditado.datosParaDeterminarImpuesto.pagoProvisional;
+            
+            this.formatoMoneda('gananciaObtenida');
+            this.formatoMoneda('montoOperacion');
+            this.formatoMoneda('multaCorreccion');
+            this.formatoMoneda('pagoProvisional');
 
 
             this.maxProcentajePermitido = parseFloat(this.porcentajeVenta)  - (parseFloat(porcentajeAsignado) - parseFloat(this.form.porcentajeCompra) )  ;

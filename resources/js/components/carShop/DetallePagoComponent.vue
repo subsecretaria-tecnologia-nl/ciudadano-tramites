@@ -40,9 +40,6 @@
     import { uuid } from 'vue-uuid';
     export default {
         props: ['tramites', 'obtenidoCostos'],
-        mounted() {
-
-        },
 
         data(){
             return {

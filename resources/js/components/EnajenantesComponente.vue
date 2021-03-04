@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="col-md-6 col-sm-6 col-xs-6 col-md-12 col-sm-12 col-xs-12">
         <b-row >
           <b-col>
@@ -205,8 +205,27 @@
                 this.campo.valor = valor;
                 this.$emit('updateForm', this.campo);
           
-            },
+            }
 		},
+
+        watch: {
+            configCostos:{
+                handler: function (val, oldVal) {
+                  if(val.declararEn0){
+                   if(this.enajentantes.length > 0) {
+                    this.enajentantes = this.enajentantes.map( enajentante => {
+                        enajentante.datosParaDeterminarImpuesto.gananciaObtenida = '0';
+                        enajentante.datosParaDeterminarImpuesto.montoOperacion = '0';
+                        enajentante.datosParaDeterminarImpuesto.multaCorreccion = '0';
+                        enajentante.datosParaDeterminarImpuesto.pagoProvisional = '0';
+                        return enajentante;
+                    });
+                   }
+                  }
+                },
+                deep: true
+            }
+        }
 
 	};
 </script>

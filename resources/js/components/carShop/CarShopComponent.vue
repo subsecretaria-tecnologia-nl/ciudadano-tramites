@@ -63,8 +63,15 @@
 		    </div>
 		    <!--Grid column-->
 		    <!--Grid column-->
-		    <div class="col-lg-4" v-if="tramites.length > 0">
-        		<detalle-pago-component 
+		    <div class="col-lg-4" >
+		    		<v-container v-if="obteniendoTramites">
+		                <v-row>
+		                    <v-col cols="12" md="12">
+		                        <v-skeleton-loader v-bind:key="i" type="list-item" v-for="(r,i) in [1]" height="150px" style="margin-bottom: 8px;"></v-skeleton-loader>
+		                    </v-col>
+		                </v-row>
+		            </v-container>
+        		<detalle-pago-component v-if="tramites.length > 0" 
         			:tramites="tramites" 
         			:obtenidoCostos="costosObtenidos" @updatingParent="recibirMetodosPago"  @cancelarPago="cancelarPago" >
         		</detalle-pago-component>
@@ -121,9 +128,6 @@
                     let response = await axios.get(url);
                     let notary_offices = response.data.notary_offices;
                     let tramites =  response.data.tramites ;
-
-                    console.log('tramites', tramites);
-
                     this.construirJSONTramites( tramites );
                     
                 } catch (error) {
@@ -162,7 +166,6 @@
             },
 
             extraerDatosPersonalesSolicitante(solicitante){
-            	console.log('extraerDatosPersonalesSolicitante')
 				let datos_solicitante = {
 			        "nombre": solicitante.tipoPersona == "pm" ? "" : solicitante.nombreSolicitante || "",
 			        "apellido_paterno": solicitante.tipoPersona == "pm" ? "" : solicitante.apPat || "",
@@ -182,8 +185,6 @@
             },
 
             extraerDatosPersonalesEnajentante(enajenante){
-            	console.log(enajenante);
-            	// if(enajenante.enajenante && enajenante.enajenante.datosPersonales) enajenante.datosPersonales = enajenante.enajenante.datosPersonales;
 				let datos_solicitante = {
 			        "nombre": enajenante.tipoPersona == "pm" ? "" : enajenante.datosPersonales.nombre || "",
 			        "apellido_paterno": enajenante.tipoPersona == "pm" ? "" : enajenante.datosPersonales.apPat || "",
@@ -199,7 +200,6 @@
 			        "municipio":  "-",
 			        "codigopostal":"-",
 			    }
-            	console.log(datos_solicitante)
 			    return datos_solicitante;
             },
 
@@ -286,7 +286,6 @@
 
 			    });
 
-			    console.log('listadoTramites', listadoTramites);
 	    		this.tramites = listadoTramites;
 				this.obteniendoTramites = false;
 				this.costosObtenidos = true;

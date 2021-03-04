@@ -33,7 +33,6 @@
                 <p class="mb-0">
                     <span>
                         <strong v-if="!isNaN(solicitud.importe_tramite)"> 
-                            <!-- {{solicitud.importe_tramite| toCurrency}}-->
                             $<span v-html="solicitud.importe_tramite"> </span>
                         </strong>
                         <strong v-if="isNaN(solicitud.importe_tramite)"> 
@@ -49,17 +48,9 @@
 </template>
 
 <script>
-    console.log("hello world");
     export default {
         props: ['solicitud', 'index'],
-        mounted() {
-            console.log("hello world")
-        },
 
-        data(){
-            return {}
-        },
-  
         methods: {
             eliminar(){
                 $("#spinner-pago-solicitud-" + this.solicitud.idSolicitante ).show();
@@ -67,7 +58,6 @@
                 let elItem = this;
                 axios.put(url, {tipo:"u"}).then(response => {
                     let data = { response, index: elItem.index };
-                    console.log(data);
                     this.$emit('updatingParent', data);
                     let totalCarritoActual = parseInt( $("#totalTramitesCarrito" ).text( ));
                     $("#totalTramitesCarrito" ).text( totalCarritoActual - 1  );
