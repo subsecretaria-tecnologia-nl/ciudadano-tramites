@@ -18,6 +18,7 @@
               enviando:false
             }
         },
+
         created(){ console.log('btnClass', this.btnClass) },
         extends: BtnGuardarTramiteParent, //heredamos del componente BtnGuardarTramiteParent!
         
@@ -43,15 +44,28 @@
               let informacion = this.getInformacion( tramite, datosFormulario );
 
               if(!!this.tieneEnajentantes(datosFormulario) && this.type != 'temporal' && this.tipoTramite != 'complementaria' ){
-                //this.guardarMultiplesTramites( datosFormulario, listaSolicitantes, tramite, informacion, url );
                 let enajenantes = this.extraerEnajentantes(datosFormulario, tramite, informacion, listaSolicitantes );
-                
-                console.log(JSON.parse(JSON.stringify(enajenantes)))
                 formData = this.getFormData(enajenantes);
-                this.guardarTramiteUnico(formData, url )
+
+                let detallesComplete = true;
+                enajenantes.forEach( enajenante => {
+                  detallesComplete = detallesComplete && !!enajenante.detalle; 
+                });
+                if(detallesComplete){
+                  this.guardarTramiteUnico(formData, url );
+                } else {
+                  this.enviando = false;
+                  Command: toastr.warning("Aviso!", "Obteniendo costos");
+                }
               } else {
-                formData = this.getFormData();
-                this.guardarTramiteUnico(formData, url); 
+                if(tramite.detalle){
+                  formData = this.getFormData();
+                  this.guardarTramiteUnico(formData, url); 
+                } else {
+                  this.enviando = false;
+                  Command: toastr.warning("Aviso!", "Obteniendo costos");
+                }
+
               } 
             },
 
