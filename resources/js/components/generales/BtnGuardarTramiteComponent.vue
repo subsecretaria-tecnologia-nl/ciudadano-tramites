@@ -86,6 +86,7 @@
                   let listaEnajentantes = [];
                   enajenantes.forEach( (enajenante, indice) => {
                     let inf = Object.assign({} , informacion);
+                      inf.version = '1.0.0';
                       inf.detalle = enajenante.detalle;
                       inf.enajenante = enajenante;
                       inf.id = 0;
