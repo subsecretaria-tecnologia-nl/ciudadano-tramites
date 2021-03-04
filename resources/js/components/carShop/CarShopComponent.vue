@@ -120,16 +120,14 @@
         methods: {
         	updateList(  data ){
                 let nuevaListaTTramites = this.tramites.filter( tramite => {
-                	 
+                
                 	let itemEliminado = data.idsDelete.find( id => {
                 		console.log(id);
                 		return id == tramite.idSolicitante; 
                 	});
-                	if(itemEliminado){
-                		console.log(JSON.parse(itemEliminado)) 
-                	}
                 	return !itemEliminado;
                 });
+                this.tramites = nuevaListaTTramites;
         	},
 
         	cancelarPago(){
