@@ -33,6 +33,24 @@
 			padding: 8px;
 		}
 
+		.border td:nth-child(1) { 
+			border: 5px solid #f0f9fc;
+			border-spacing: 10px;
+			border-collapse: separate;
+			width: 90%;
+			height: 100px;
+			padding: 0.5rem
+
+		}
+		.border td:nth-child(2) { 
+			border: 5px solid #f0f9fc;
+			border-spacing: 10px;
+			border-collapse: separate;
+			width: 90%;
+			height: 100px;
+			padding: 0.5rem
+		}
+
 		.text-uppercase{
 			text-transform: uppercase;
 		}
@@ -47,6 +65,7 @@
 		}
 		.titulo1{
 			text-align: center; 
+			padding:20px;
 		}
 		.titulo2{
 			text-align: center;
@@ -77,6 +96,9 @@
 			height:30px;
 			width:100%;
 			border-top: 1px solid grey;
+		}
+		.motivo-fundamento{
+			border = 1;
 		}
 	</style>
 </head>
@@ -133,53 +155,41 @@
 				<td class="columna"></td>
 			</tr>
 			<tr>
-				<td class="columna value" >{{-- <p class="mt-0">{{ $enajenante->{'porcentajeCompra'} }}</p> --}}</td>
+				<td class="columna value" >{{-- <p>{{  $enajenante->{'porcentajeCompra'} ?? ''  }}</p> --}}</td>
 				<td class="columna value" colspan="2">{{$enajenante->datosParaDeterminarImpuesto->{'montoOperacion'} }}</td>
 				<td class="columna"></td>
 			</tr>
 			<tr >
-				<td  colspan="4"> <strong> DATOS DEL ENAJENANTE </strong></td>
+				<td  colspan="4" class="titulo1"> <strong> DATOS DEL ENAJENANTE </strong></td>
 			</tr>
-				<tr class="datos-enajenante"">
-					<td class="value">REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
-					<td class="value">{{ $enajenante->datosPersonales->{'rfc'} ?? ''  }}</td>
-					<td colspan="2"></td>
+			<tr class="datos-enajenante">
+					<td class="columna ">REGISTRO FEDERAL DEL CONTRIBUYENTE:</td>
+					<td class=" columna " colspan="2">CLAVE ÚNICA DE REGISTRO DE POBLACIÓN:</td>
+					<td class="columna ">CLAVE DE ELECTOR (INE):</td>
 				</tr>
 				<tr class="datos-enajenante">
-					<td class="value">CLAVE ÚNICA DE REGISTRO DE POBLACIÓN:</td>
-					<td class="value"> {{ $enajenante->datosPersonales->{'curp'} ?? ''  }}</td>
-					<td colspan="2"></td>
+					<td class="columna value">{{ $enajenante->datosPersonales->{'rfc'} ?? ''  }}</td>
+					<td class="columna value" colspan="2">CLAVE ÚNICA DE REGISTRO DE POBLACIÓN:</td>
+					<td class="columna value">{{ $enajenante->datosPersonales->{'claveIne'} ?? ''  }}</td>
 				</tr>
 				<tr class="datos-enajenante">
-					<td class="value">CLAVE DE ELECTOR (INE):</td>
-					<td class="value">{{ $enajenante->datosPersonales->{'claveIne'} ?? ''  }}</td>
-					<td colspan="2"></td>
+					<td class="columna ">NOMBRE:</td>
+					<td class="columna "colspan="2">APELLIDO PATERNO:</td>
+					<td class="columna ">APELLIDO MATERNO:</td>
 				</tr>
 				<tr class="datos-enajenante">
-					<td class="value">NOMBRE:</td>
-					<td class="value">{{ $enajenante->datosPersonales->{'nombre'} ?? ''  }}</td>
-					<td colspan="2"></td>
-				</tr>
-				<tr class="datos-enajenante">
-					<td class="value">APELLIDO PATERNO:</td>
-					<td class="value">{{  $enajenante->datosPersonales->{'apPat'} ?? ''  }} </td>
-					<td colspan="2"></td>
-				</tr>
-				<tr class="datos-enajenante">
-					<td class="value">APELLIDO MATERNO:</td>
-					<td class="value">{{  $enajenante->datosPersonales->{'apMat'} ?? ''  }}</td>
-					<td colspan="2"></td>
-				</tr>
-				@if($info->solicitudes[0]->info->tipoTramite == 'declaracionEn0')
-				<tr>
-					<td colspan="2" style="text-align: center;">MOTIVO POR EL QUE DECLARA EN CEROS</td>
-					<td colspan="2" style="text-align: center;">FUNDAMENTO LEGAL</td>
+					<td class="columna value">{{ $enajenante->datosPersonales->{'nombre'} ?? ''  }}</td>
+					<td class="columna value" colspan="2">{{  $enajenante->datosPersonales->{'apPat'} ?? ''  }} </td>
+					<td class="columna value">{{  $enajenante->datosPersonales->{'apMat'} ?? ''  }}</td>
 				</tr>
 				<tr>
-					<td colspan="2">...</td>
-					<td colspan="2">...</td>
+					<td class="titulo1" colspan="2"> <strong> MOTIVO POR EL QUE DECLARA EN CEROS </strong></td>
+					<td class="titulo1" colspan="2"> <strong> FUNDAMENTO LEGAL</strong></td>
 				</tr>
-				@endif
+					<tr class="border">
+						<td clas="motivo-fundamento" colspan="2">...</td>
+						<td class="motivo-fundamento" colspan="2">...</td>
+					</tr>
 
 		</tbody>
 	</table>
