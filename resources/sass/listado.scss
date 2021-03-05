@@ -409,6 +409,20 @@
         .card-body {
             padding: 10px 15px;
         }
+
+        .btn{
+            &[data-toggle=collapse]{
+                i{
+                    transition: all .5s;
+                }
+
+                &[aria-expanded="true"]{
+                    i{
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
     }
 
     .v-skeleton-loader{

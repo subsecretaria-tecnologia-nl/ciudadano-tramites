@@ -86,7 +86,6 @@
             // localStorage.removeItem('tramite');
             this.obtenerTramites();
         },
-
         methods: {
             processToCart (tramite) {
                 let index = this.tramitesCart.findIndex(ele => ele.id == tramite.id)

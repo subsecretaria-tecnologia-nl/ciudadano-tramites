@@ -1,33 +1,38 @@
 <template>
 	<div class="pagination flex-column">
 		<div class="pagination-content">
-			<div  v-for="(tramite, index) in tramitesPaginados">
+			<div v-for="(tramite, index) in tramitesPaginados">
 				<div class="card list-item card-custom gutter-b col-lg-12" style="background-color: #d9dee2 !important;" v-if="tramite.length > 1">
 					<div class="d-flex align-items-center mb-3">
-						<div class="mr-3 ml-4" v-if="tramite[0].status && (tramite[0].status == 99 || tramite[0].status == 98)"><input type="checkbox" :id="tramite[0].id" style="width:18px; height:18px;" v-on:change="processToCart(tramite[0], true)"></div>
-						<div class="mr-auto" style="width: 40%">
-							<h4 class="ml-3"><strong class="text-uppercase text-truncate">{{ tramite[0].nombre_servicio && (tramite[0].titulo && tramite[0].nombre_servicio.toLowerCase() != tramite[0].titulo.toLowerCase()) ? `${tramite[0].nombre_servicio} - ` : '' }}{{ tramite[0].tramite || tramite[0].titulo | capitalize }}</strong></h4>
+						<div class="mr-3 ml-4" v-if="tramite[0].status && (tramite[0].status == 99 || tramite[0].status == 98) && !cartComponent"><input type="checkbox" :id="tramite[0].id" style="width:18px; height:18px;" v-on:change="processToCart(tramite[0], true)"></div>
+						<div class="mr-auto" v-bind:style="[ cartComponent ? { width : '60%' } : { width: '40%' } ]">
+							<h4 class="ml-3 text-uppercase text-truncate"><strong>{{ tramite[0].nombre_servicio && (tramite[0].titulo && tramite[0].nombre_servicio.toLowerCase() != tramite[0].titulo.toLowerCase()) ? `${tramite[0].nombre_servicio} - ` : '' }}{{ tramite[0].tramite || tramite[0].titulo | capitalize }}</strong></h4>
 							<h5 class="ml-3">{{ index }}</h5>
 						</div>
 						<div class="my-lg-0 my-1">
 							<button v-on:click="addToCart(tramite[0])" v-if="tramite[0].status == 99" type="button" class="btn btn-sm mr-2" :class="tramite[0].en_carrito ? 'btn-primary' : 'btn-outline-primary'">
                                 <span v-if="tramite[0].loading"><i class="fas fa-spinner fa-spin"></i></span>
-                                <span v-if="!tramite[0].loading"><i :class="tramite[0].en_carrito == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite[0].en_carrito == 1 ? 'QUITAR DEL CARRITO' : 'AGREGAR AL CARRITO' }}</span>
+                                <span v-if="!tramite[0].loading"><i :class="tramite[0].en_carrito == 1 ? (cartComponent ? 'fas fa-trash' : 'fas fa-check-circle') : 'fas fa-plus-circle'"></i> {{ tramite[0].en_carrito == 1 ? (cartComponent ? 'ELIMINAR' : 'QUITAR DEL CARRITO') : 'AGREGAR AL CARRITO' }} ({{ tramite.length }})</span>
                             </button>
                             <button v-on:click="addToSign(tramite[0])" v-if="type == 'pendiente_firma'" type="button" class="btn btn-sm mr-2" :class="tramite[0].por_firmar ? 'btn-primary' : 'btn-outline-primary'">
                                 <span v-if="tramite[0].loadingSign"><i class="fas fa-spinner fa-spin"></i></span>
                                 <span v-if="!tramite[0].loadingSign"><i :class="tramite[0].por_firmar == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite[0].por_firmar == 1 ? 'DESELECCIONAR' : 'PREPARAR PARA FIRMAR' }}</span>
                             </button>
-                            <span v-if="tramite[0].info && tramite[0].descripcion" class="btn btn-secondary mr-2">{{ tramite[0].descripcion || "CERRADO" }} </span>
+                            <span v-if="cartComponent" class="btn btn-secondary mr-2">{{ new Intl.NumberFormat('es-MX', { style : 'currency', currency : 'MXN' }).format(tramite.map(ele => ele.importe_tramite).reduce((a,b) => a+b)) }} </span>
+                            <span v-if="tramite[0].info && tramite[0].descripcion && !cartComponent" class="btn btn-secondary mr-2">{{ tramite[0].descripcion || "CERRADO" }} </span>
+                            <button class="btn btn-secondary" type="button" data-toggle="collapse" :data-target="`#collapse-${index}`" aria-expanded="false" :aria-controls="`collapse-${index}`"><i class="fas fa-chevron-down p-0"></i></button>
 						</div>
 					</div>
-					<tramite-component :group="true" :type="type" v-for="(solicitud, ind) in tramite" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="solicitud" v-bind:key="ind" v-if="totalItems != 0"></tramite-component>
+                    <div class="collapse" :id="`collapse-${index}`">
+    					<tramite-component :cartComponent="cartComponent" :group="true" :type="type" v-for="(solicitud, ind) in tramite" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="solicitud" v-bind:key="ind" v-if="totalItems != 0"></tramite-component>
+                    </div>
 				</div>
-				<tramite-component :type="type" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="tramite[0]" v-bind:key="index"  v-if="tramite.length == 1 && totalItems != 0"></tramite-component>
+				<tramite-component :cartComponent="cartComponent" :type="type" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="tramite[0]" v-bind:key="index"  v-if="tramite.length == 1 && totalItems != 0"></tramite-component>
 			</div>
-            <div class="card mb-4" v-if="totalItems == 0">
+            <div class="card mb-4" v-if="totalItems === 0">
                 <div class="card-body">
                     <h3 class="text-center">{{ message || '¡Lo sentimos! No se encuentran registros para mostrar.' }}</h3>
+                    <p class="text-center w-75 m-auto" v-if="cartComponent">Para continuar puedes <a class="card-link m-0 cursor-pointer" v-on:click="redirect('/nuevo-tramite')">inciar un tramite nuevo</a> o agregar trámites desde el listado de <a class="card-link m-0 cursor-pointer" v-on:click="redirect('/tramites/pendiente-de-pago/99')">Pendientes de Pago</a></p>
                 </div>
             </div>
 		</div>
@@ -68,14 +73,14 @@
 </template>
 <script>
 	export default {
-		props: ['tramitesCart', 'type'],
+		props: ['tramitesCart', 'type', 'cartComponent', 'items'],
 		mounted(){
 			this.calcularPage()
             this.pagination(1);
 		},
 		data () {
 			let attrs = this.$attrs;
-			if(!attrs.items) attrs.items = [];
+			// if(!attrs.items) attrs.items = [];
 			if(!attrs.currentPage) attrs.currentPage = 1;
 			if(!attrs.pages) attrs.pages = 0;
 			if(!attrs.index) attrs.index = 1;
@@ -92,6 +97,7 @@
             calcularPage(){
                 let pages = [];
                 let pagesTotal = Math.ceil( this.items.length  / this.limit);
+                if(pagesTotal == 0) pagesTotal = 1;
                 for (var i = 0; i < pagesTotal; i++) {
                     pages.push( i + 1 );
                 }
@@ -104,14 +110,14 @@
                 let indiceInicial = (page - 1 ) * limitInt;
                 let indiceFinal = ( (page - 1 ) * limitInt  )  + limitInt;
 
-                this.tramitesPaginados = this.items.slice( indiceInicial,  indiceFinal );
+                this.tramitesPaginados = this.items.slice(indiceInicial, indiceFinal);
                 this.tramitesPaginados.map(tramite => {
                 	if(groups[tramite.clave]) groups[tramite.clave].push(tramite);
                 	else groups[tramite.clave] = [tramite];
                 })
 
                 this.tramitesPaginados = groups;
-                this.totalItems = this.tramitesPaginados.length;
+                this.totalItems = this.items.length;
             },
             goto( page ){ 
                 this.pagination( page );
@@ -156,6 +162,9 @@
                         tramite.loadingSign = false;
                     });
                 });
+            },
+            redirect($url){
+                redirect($url);
             }
 		}
 	};
