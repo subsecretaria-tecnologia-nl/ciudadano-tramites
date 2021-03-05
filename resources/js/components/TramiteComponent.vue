@@ -1,5 +1,5 @@
 <template>
-    <div class="card list-item card-custom gutter-b col-lg-12" >
+    <div class="card list-item card-custom gutter-b col-lg-12" :class="cartComponent && !tramite.en_carrito ? 'd-none' : ''">
         <div class="card-body" :class="group && cartComponent ? 'p-0' : ''">
             <!--begin::Top-->
             <div class="d-flex">
@@ -129,7 +129,8 @@
                     .then(res => {
                         if(res.code === 200){
                             tramite.en_carrito = status;
-                            console.log(onCart);
+                            if(status === null && this.cartComponent)
+                                this.$emit('processDelete', tramite);
                             $('#totalTramitesCarrito').text(onCart);
                         }
                         tramite.loading = false;

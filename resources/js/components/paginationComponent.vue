@@ -1,7 +1,7 @@
 <template>
 	<div class="pagination flex-column">
 		<div class="pagination-content">
-			<div v-for="(tramite, index) in tramitesPaginados">
+			<div v-for="(tramite, index) in tramitesPaginados" :class="!tramite[0].en_carrito && cartComponent ? 'd-none' : '' ">
 				<div class="card list-item card-custom gutter-b col-lg-12" style="background-color: #d9dee2 !important;" v-if="tramite.length > 1">
 					<div class="d-flex align-items-center mb-3">
 						<div class="mr-3 ml-4" v-if="tramite[0].status && (tramite[0].status == 99 || tramite[0].status == 98) && !cartComponent"><input type="checkbox" :id="tramite[0].id" style="width:18px; height:18px;" v-on:change="processToCart(tramite[0], true)"></div>
@@ -24,10 +24,10 @@
 						</div>
 					</div>
                     <div class="collapse" :id="`collapse-${index}`">
-    					<tramite-component :cartComponent="cartComponent" :group="true" :type="type" v-for="(solicitud, ind) in tramite" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="solicitud" v-bind:key="ind" v-if="totalItems != 0"></tramite-component>
+    					<tramite-component :cartComponent="cartComponent" :group="true" :type="type" v-for="(solicitud, ind) in tramite" @processToCart="processToCart" @processDelete="processDelete" :tramitesCart="tramitesCart" :tramite="solicitud" v-bind:key="ind" v-if="totalItems != 0"></tramite-component>
                     </div>
 				</div>
-				<tramite-component :cartComponent="cartComponent" :type="type" @processToCart="processToCart" :tramitesCart="tramitesCart" :tramite="tramite[0]" v-bind:key="index"  v-if="tramite.length == 1 && totalItems != 0"></tramite-component>
+				<tramite-component :cartComponent="cartComponent" :type="type" @processToCart="processToCart" @processDelete="processDelete" :tramitesCart="tramitesCart" :tramite="tramite[0]" v-bind:key="index"  v-if="tramite.length == 1 && totalItems != 0"></tramite-component>
 			</div>
             <div class="card mb-4" v-if="totalItems === 0">
                 <div class="card-body">
@@ -90,10 +90,18 @@
 			if(!attrs.message) attrs.message = null;
 			return attrs;
 		},
+        watch: {
+            items (props) {
+                this.items = props;
+            }
+        },
 		methods : {
 			processToCart(tramite){
 				this.$emit('processToCart', tramite);
 			},
+            processDelete(tramite){
+                this.$emit('processDelete', tramite);
+            },
             calcularPage(){
                 let pages = [];
                 let pagesTotal = Math.ceil( this.items.length  / this.limit);
@@ -137,6 +145,8 @@
                     .then(res => {
                         if(res.code === 200){
                             tramite.en_carrito = status;
+                            if(status === null && this.cartComponent)
+                                this.$emit('processDelete', tramite);
                             $('#totalTramitesCarrito').text(res.count);
                         }
                         tramite.loading = false;

@@ -22,7 +22,7 @@
 		            <div class="w-100" v-if="!loading">
 		                <pagination-component
 		                	:type="type"
-		                	@processToCart="processToCart"
+		                	@processDelete="processDelete"
 		                	:items="tramitesFiltrados"
 		                	:tramitesCart="tramitesCart"
 		                	:cartComponent="true"
@@ -157,12 +157,10 @@
         created() {
         	this.obtenerTramites();
         },
-
         methods: {
-            processToCart (tramite) {
-                let index = this.tramitesCart.findIndex(ele => ele.id == tramite.id)
-                if(index < 0) this.tramitesCart.push(tramite);
-                else this.tramitesCart = this.tramitesCart.filter((ele, ind) => index != ind)
+            processDelete(tramite) {
+            	console.log('emit');
+            	this.obtenerTramites();
             },
             addToCart(status){
                 let ids = this.tramitesCart.map(ele => ele.id);
@@ -182,6 +180,7 @@
 
                         this.tramitesCart = [];
                         $('#totalTramitesCarrito').text(onCart);
+                        this.obtenerTramites();
                     }
                 });
             },
