@@ -12,8 +12,15 @@ class FormatoDeclaracionController extends Controller
 		if(isset($tramite->tramite) && count( $tramite->tramite->solicitudes) > 0){
 			$info = $tramite->tramite;
 			$enajenante = $info->solicitudes[0]->info->enajenante;
-			$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info', 'enajenante'));
-        	return $pdf->stream('formatoDeclaracion.blade.pdf');
+			$tipoTramite =  $info->solicitudes[0]->info->tipoTramite;
+			if($tipoTramite == "normal"){
+				$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info', 'enajenante'));
+				return $pdf->stream('formatoDeclaracionNormal.blade.pdf');
+			}else if($tipoTramite == "declaracionEn0"){
+				$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info', 'enajenante'));
+				return $pdf->stream('formatoDeclaracion.blade.pdf');
+			}
+		
 		}
 
 		dd("No existe un trámite con el ID '{$id}' en nuestro registro.");
