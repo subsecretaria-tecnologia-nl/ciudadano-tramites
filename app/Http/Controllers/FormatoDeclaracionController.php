@@ -13,14 +13,15 @@ class FormatoDeclaracionController extends Controller
 			$info = $tramite->tramite;
 			$enajenante = $info->solicitudes[0]->info->enajenante;
 			$tipoTramite =  $info->solicitudes[0]->info->tipoTramite;
-			if($tipoTramite == "normal"){
-				$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info', 'enajenante'));
-				return $pdf->stream('formatoDeclaracionNormal.blade.pdf');
-			}else if($tipoTramite == "declaracionEn0"){
-				$pdf = PDF::loadView('pdf.formatoDeclaracion', compact('info', 'enajenante'));
-				return $pdf->stream('formatoDeclaracion.blade.pdf');
+
+			$pdf = PDF::loadView('pdf.formatoDeclaracion5%', compact('info', 'enajenante', 'tipoTramite'));
+			$tipo = "";
+			$escritura = $info->solicitudes[0]->info->campos->{'Escritura'} ?? "";
+			switch ($info->solicitudes[0]->info->{'tipoTramite'}) {
+				case 'declaracionEn0': $tipo = " - EN CERO"; break;
+				default: $tipo = " - ".strtoupper($info->solicitudes[0]->info->{'tipoTramite'}); break;
 			}
-		
+			return $pdf->stream(($escritura ? "{$escritura} - " : "")."{$info->tramite}".($tipo).".pdf");
 		}
 
 		dd("No existe un trámite con el ID '{$id}' en nuestro registro.");
