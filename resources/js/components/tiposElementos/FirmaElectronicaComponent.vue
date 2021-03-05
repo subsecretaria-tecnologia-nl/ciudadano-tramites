@@ -63,7 +63,7 @@ export default {
     		if(this.coutnLoad == 2){
     			fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
                     method : 'POST',
-                    body: JSON.stringify({ ids : this.idFirmado, status : 1, type : 'firmado', urls : this.urlFirmado })
+                    body: JSON.stringify({ ids : this.idFirmado, status : 1, type : 'firmado', urls : this.urlFirmado, user_id: user.id })
                 })
                 .then(res => res.json())
                 .then(res => {
@@ -72,33 +72,6 @@ export default {
                 });
     		}
     	},
-        eventListenerIframe(){
-            var iframe = document.getElementById('the_frame');
-            console.log("-------");
-            iframe.contentDocument.body.addEventListener('beforeunload', function(){
-            console.log("---.----");
-            var guardarInfo = [ this.idFirmado, this.urlFirmado ]
-            $.ajax({
-                    type: "POST",
-                    data: { guardarInfo }, 
-                    dataType: 'json', 
-                    url:  process.env.TESORERIA_HOSTNAME +"/solicitudes-guardar-carrito",
-                    async: false,
-                    success:function(data){
-                        console.log(data);
-                        console.log("considerate guardado");
-                    },
-                    error:function(error){
-                        console.log('error: ', error);
-                    },
-                    complete:function(){
-                        console.log('xD' );
-                    }
-            })
-        })
-        },
-
-
         encodeData(){
             var urlDataGeneric = 'http://Insumos.test.nl.gob.mx/api/data_generic';
             var url = "http://Insumos.test.nl.gob.mx/api/v2/signature/iframe?id=";

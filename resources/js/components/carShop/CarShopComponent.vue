@@ -137,7 +137,7 @@
             async obtenerTramitesAgregados(){
             	this.obteniendoTramites = true;
 
-                let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-info/" + this.idUsuario;
+                let url = process.env.TESORERIA_HOSTNAME + "/solicitudes-info/" + user.id;
                 try {
                     let response = await axios.get(url);
                     let notary_offices = response.data.notary_offices;

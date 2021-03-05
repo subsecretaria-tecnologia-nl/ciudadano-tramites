@@ -94,11 +94,12 @@
                 else this.tramitesCart = this.tramitesCart.filter((ele, ind) => index != ind)
             },
             addToCart(status){
+                console.log(user, window.user);
                 let ids = this.tramitesCart.map(ele => ele.id);
                 let onCart = parseInt($('#totalTramitesCarrito').text());
                 fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
                     method : 'POST',
-                    body: JSON.stringify({ ids, status, type : 'en_carrito' })
+                    body: JSON.stringify({ ids, status, type : 'en_carrito', user_id: user.id })
                 })
                 .then(res => res.json())
                 .then(res => {

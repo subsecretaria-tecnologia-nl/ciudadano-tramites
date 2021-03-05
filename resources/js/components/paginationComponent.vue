@@ -125,13 +125,12 @@
                     tramite.loading = true;
                     fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
                         method : 'POST',
-                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'en_carrito' })
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'en_carrito', user_id: user.id })
                     })
                     .then(res => res.json())
                     .then(res => {
                         if(res.code === 200){
                             tramite.en_carrito = status;
-                            console.log(onCart);
                             $('#totalTramitesCarrito').text(res.count);
                         }
                         tramite.loading = false;
@@ -146,7 +145,7 @@
                     tramite.loadingSign = true;
                     fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
                         method : 'POST',
-                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'por_firmar' })
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'por_firmar', user_id: user.id })
                     })
                     .then(res => res.json())
                     .then(res => {

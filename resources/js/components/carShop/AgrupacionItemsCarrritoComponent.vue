@@ -101,7 +101,7 @@
 					status : null,
 					ids : idsDelete,
 					type : "en_carrito",
-					user_id: this.idUsuario
+					user_id: user.id
                 }
 
 

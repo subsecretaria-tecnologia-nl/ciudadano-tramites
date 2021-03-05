@@ -94,7 +94,7 @@
                     }
                 });
               }
-              formData.append('user_id', this.idUsuario );
+              formData.append('user_id', user.id );
               if(!enajenantes){
                 formData.append('info', JSON.stringify(informacion) );
               } else {

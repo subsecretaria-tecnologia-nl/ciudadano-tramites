@@ -68,7 +68,6 @@
         },
         props: ['tramite', 'type', 'group'],
         mounted() {
-            console.log(this.type);
             this.files = [];
             if(this.tramite.info && typeof this.tramite.info === 'string')
                 this.tramite.info = JSON.parse(this.tramite.info)
@@ -120,7 +119,7 @@
                     tramite.loading = true;
                     fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
                         method : 'POST',
-                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'en_carrito' })
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'en_carrito', user_id: user.id })
                     })
                     .then(res => res.json())
                     .then(res => {
@@ -144,7 +143,7 @@
                     tramite.loadingSign = true;
                     fetch(`${process.env.TESORERIA_HOSTNAME}/solicitudes-guardar-carrito`, {
                         method : 'POST',
-                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'por_firmar' })
+                        body: JSON.stringify({ ids : [ tramite.id ], status, type : 'por_firmar', user_id: user.id })
                     })
                     .then(res => res.json())
                     .then(res => {
