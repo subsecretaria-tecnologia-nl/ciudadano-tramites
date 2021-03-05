@@ -37,7 +37,7 @@
 
             <div class="card border-secondary shadow p-3 mb-5 bg-white rounded metodopago"" id="idBancomer" v-if="tienePagoBancomer">
                 <div class="pt-4" >
-                    <h6 class="mb-3"><strong>Pago en Bnacomer</strong></h6>
+                    <h6 class="mb-3"><strong>Pago en Bancomer</strong></h6>
                     <div class="text-center">
                         <button type="button" class="btn btn-success btn-metodopago" id="metodopagoBtnBancomer"  v-on:click="pagoBancomer()"> 
                             Bancomer 
