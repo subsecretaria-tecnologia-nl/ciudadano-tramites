@@ -119,11 +119,8 @@
 
         methods: {
         	updateList(  data ){
-        		debugger;
-                let nuevaListaTTramites = this.tramites.filter( tramite => {
-                
+                let nuevaListaTTramites = this.tramites.filter( tramite => {      	 
                 	let itemEliminado = data.idsDelete.find( id => {
-                		console.log(id);
                 		return id == tramite.idSolicitante; 
                 	});
                 	return !itemEliminado;
