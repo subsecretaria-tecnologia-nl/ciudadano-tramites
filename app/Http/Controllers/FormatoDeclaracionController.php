@@ -22,6 +22,8 @@ class FormatoDeclaracionController extends Controller
 				default: $tipo = " - ".strtoupper($info->solicitudes[0]->info->{'tipoTramite'}); break;
 			}
 			return $pdf->stream(($escritura ? "{$escritura} - " : "")."{$info->tramite}".($tipo).".pdf");
+			// return view("pdf/formatoDeclaracion5%", [ "info" => $info , "enajenante" => $enajenante, "tipoTramite" =>$tipoTramite ]);
+
 		}
 
 		dd("No existe un trámite con el ID '{$id}' en nuestro registro.");

@@ -3,6 +3,9 @@
 <head>
 	<title>{{ $info->tramite }}</title>
 	<style type="text/css">
+		@page {
+                margin-top: 0px ;
+        }
 		body{
 			background-color: white;
 			padding: 0;
@@ -54,7 +57,7 @@
 
 		.titulo1{
 			text-align: left;
-			padding-top: 40px;
+			padding-top: 30px;
 			padding-bottom: 10px;
 			font-size: 13px;
 		}
@@ -108,12 +111,16 @@
 		}
 	</style>
 </head>
-<body>
-	<table style="width: 100%; margin-top:0px" border="0">
+<body style="margin-top:0px">
+	<table style="width: 100%; margin-top:0px" border="0" >
 		<thead class="border_bottom" >
 			<tr class="header">
 				<th colspan="3" valign="middle" class="text-uppercase text-left"> <strong> DECLARACION DEL {{ $info->tramite }} <br> REALIZADAS EN EL ESTADO DE NUEVO LEÓN </strong> </th>
-				<th class="" valign="middle"><img src="{{public_path('images/escudo-de-armas-veda-color.png')}}" width="200"></th>
+				<th class="" valign="middle">
+				<img src="{{public_path('images/escudo-de-armas-veda-color.png')}}" width="200">   
+				<!-- <img src="{{ asset('images/escudo-de-armas-veda-color.png') }}"   width="200"/> -->
+
+				</th>
 			</tr>
 		</thead>
 		<tbody>
