@@ -36,7 +36,7 @@ return [
 			]
 		]
 	],
-	"session_whitelist" => ["login","password/recovery", "password", "password/recovery/(.+)"],
+	"session_whitelist" => ["login","password/recovery", "password", "password/recovery/(.+)" , "formato-declaracion/(.+)"],
 	"menu" => [
 		[
 			"name" => "Inicio",

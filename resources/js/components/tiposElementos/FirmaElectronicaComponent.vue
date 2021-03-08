@@ -31,7 +31,7 @@ export default {
 		let APP_URL = 'http://10.153.144.218/tramites-ciudadano';
 		this.usuario.solicitudes.map((solicitud, ind) => {
 			this.multiple = this.usuario.solicitudes.length > 1;
-			let doc = `${APP_URL}/formato-declaracion/${solicitud.id}`;
+			let doc = `${process.env.APP_URL}/formato-declaracion/${solicitud.id}`;
 			console.log(doc);
 			if(this.multiple){
 				if(typeof this.doc === 'string') this.doc = [];
@@ -39,7 +39,7 @@ export default {
 				
 				if(typeof this.llave === 'string') this.llave = [];
 				this.llave.push(`${solicitud.id}`)
-				
+				 
 				if(typeof this.folio === 'string') this.folio = [];
 				this.folio.push(`${ind}`)
 			
@@ -53,6 +53,9 @@ export default {
 			this.urlFirmado.push(`http://insumos.test.nl.gob.mx/documentos/firmas/${this.usuario.tramite_id}/${solicitud.id}_${this.usuario.tramite_id}_firmado` );
 		})
 
+        console.log("doc" +this.doc);
+        console.log ("folio" +this.folio);
+        console.log("llave" +this.llave);
 		this.rfc = this.user.rfc;
 		this.accesToken();
 		this.encodeData();
