@@ -487,6 +487,9 @@
           delete enajenante.datosPersonales.apMat;
           delete enajenante.datosPersonales.claveIne;
         }
+
+        enajenante.detalle = this.datosCostos;
+
         if(this.enajenanteEditado){
           let response = {
             enajenante:enajenante, 
@@ -575,7 +578,7 @@
         } else {
           this.curpEncontrada = false;
           this.form.datosPersonales.nombre = "";
-          this.form.datosPersonales.apPat = ""
+          this.form.datosPersonales.apPat = "";
           this.form.datosPersonales.apMat = "";
           this.form.datosPersonales.fechaNacimiento = "";
         }
@@ -615,7 +618,10 @@
         
         if(res.success){
           this.datosCostos = res.respuestaCosto;
+        } else {
+           Command: toastr.error("Error!", "No fue posible obtener información del impuesto");
         }
+        
       },
 
       currencyFormat(campoName, salida){
