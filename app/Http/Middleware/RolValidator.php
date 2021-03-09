@@ -43,8 +43,9 @@ class RolValidator
             preg_match("/^".str_replace("/", "\/", $disabledPath)."$/", $path, $matchesDisabled);
             if(!empty($matchesDisabled)) return $a;
         }, $session_disabled);
+        $disabled = array_filter($disabled);
         if(!empty($disabled)) return abort(403);
-        
+
         $pass = array_map(function($a) use ($path){
             if($a == "*") return $a;
             $whitePath = ((getenv("APP_PREFIX") ? explode("/", getenv("APP_PREFIX"))[1]."" : "").$a);
