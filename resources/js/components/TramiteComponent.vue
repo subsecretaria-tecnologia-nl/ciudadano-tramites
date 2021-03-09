@@ -21,21 +21,20 @@
                         </div>
                         <!--begin::User-->
                         <!--begin::Actions-->
-                        <div class="my-lg-0 my-1">
-                            <button v-on:click="addToCart(tramite)" v-if="!group && tramite.status == 99" type="button" class="btn btn-sm mr-2" :class="tramite.en_carrito ? 'btn-primary' : 'btn-outline-primary'">
+                        <div class="my-lg-0 my-1 d-flex flex-column">
+                            <span v-if="!group && tramite.info && tramite.descripcion && !cartComponent" class="btn btn-secondary">{{ tramite.descripcion || "CERRADO" }} </span>
+                            <button v-on:click="addToCart(tramite)" v-if="!group && tramite.status == 99 && !['notary_capturist'].includes(user.role_name)" type="button" class="btn btn-sm mt-2" :class="tramite.en_carrito ? 'btn-primary' : 'btn-outline-primary'">
                                 <span v-if="tramite.loading"><i class="fas fa-spinner fa-spin"></i></span>
                                 <span v-if="!tramite.loading"><i :class="tramite.en_carrito == 1 ? (cartComponent ? 'fas fa-trash' : 'fas fa-check-circle') : 'fas fa-plus-circle'"></i> {{ tramite.en_carrito == 1 ? (cartComponent ? 'ELIMINAR' : 'QUITAR DEL CARRITO') : 'AGREGAR AL CARRITO' }}</span>
                             </button>
-                            <button v-on:click="addToSign(tramite)" v-if="!group && type == 'pendiente_firma'" type="button" class="btn btn-sm mr-2" :class="tramite.por_firmar ? 'btn-primary' : 'btn-outline-primary'">
+                            <button v-on:click="addToSign(tramite)" v-if="!group && type == 'pendiente_firma'" type="button" class="btn btn-sm mt-2" :class="tramite.por_firmar ? 'btn-primary' : 'btn-outline-primary'">
                                 <span v-if="tramite.loadingSign"><i class="fas fa-spinner fa-spin"></i></span>
                                 <span v-if="!tramite.loadingSign"><i :class="tramite.por_firmar == 1 ? 'fas fa-check-circle' : 'fas fa-plus-circle'"></i> {{ tramite.por_firmar == 1 ? 'DESELECCIONAR' : 'PREPARAR PARA FIRMAR' }}</span>
                             </button>
-                            <span v-if="cartComponent" class="btn btn-secondary mr-2">MX{{ new Intl.NumberFormat('es-MX', { style : 'currency', currency : 'MXN' }).format(tramite.importe_tramite) }}</span>
-                            <span v-if="!group && tramite.info && tramite.descripcion && !cartComponent" class="btn btn-secondary mr-2">{{ tramite.descripcion || "CERRADO" }} </span>
                             <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" v-if="!tramite.info">
                                 INICIAR TRAMITE
                             </a>
-                            <div class="btn-group" v-if="tramite.info && !cartComponent">
+                            <div class="btn-group mt-2" v-if="tramite.info && !cartComponent">
                                 <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" :class="files.length == 0 ? 'rounded' : ''">
                                     <span v-if="tramite.mensajes.length > 0" class="text-white">VER MENSAJES ({{ tramite.mensajes.length }})</span>
                                     <span v-if="tramite.mensajes.length == 0" class="text-white">VER DETALLES</span>
@@ -47,6 +46,7 @@
                                     <a v-for="(file, ind) in files" class="dropdown-item" :href="file.href || file" :key="ind"><i class="fas fa-download mr-2"></i> {{ file.name || file }}</a>
                                 </div>
                             </div>
+                            <span v-if="cartComponent" class="btn btn-secondary mt-2">MX{{ new Intl.NumberFormat('es-MX', { style : 'currency', currency : 'MXN' }).format(tramite.importe_tramite) }}</span>
                         </div>
                         <!--end::Actions-->
                     </div>
@@ -64,7 +64,8 @@
         data() {
             return {
                 files : [],
-                solicitante : {}
+                solicitante : {},
+                user : window.user
             }
         },
         props: ['tramite', 'type', 'group', 'cartComponent'],
