@@ -131,8 +131,8 @@
                     let data = { };
                     if(estatus) data.estatus = estatus;
                     if(pendiente_firma) data.pendiente_firma = pendiente_firma;
-                    if(this.notary) data.notary_id = this.notary;
-                    else if(this.user) data.id_usuario = this.user;
+                    // if(this.notary) data.notary_id = this.notary;
+                    if(window.user) data.id_usuario = window.user.id;
 
                     let response = await axios.post(url, data);
                     response.data = response.data.map(res => {
