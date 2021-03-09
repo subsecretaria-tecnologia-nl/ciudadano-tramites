@@ -14,7 +14,7 @@ class FormatoDeclaracionController extends Controller
 			$enajenante = $info->solicitudes[0]->info->enajenante;
 			$tipoTramite =  $info->solicitudes[0]->info->tipoTramite;
 
-			$pdf = PDF::loadView('pdf.formatoDeclaracion5%', compact('info', 'enajenante', 'tipoTramite'));
+			$pdf = PDF::loadView('pdf.formatoDeclaracionISR', compact('info', 'enajenante', 'tipoTramite'));
 			$tipo = "";
 			$escritura = $info->solicitudes[0]->info->campos->{'Escritura'} ?? "";
 			switch ($info->solicitudes[0]->info->{'tipoTramite'}) {
@@ -22,7 +22,7 @@ class FormatoDeclaracionController extends Controller
 				default: $tipo = " - ".strtoupper($info->solicitudes[0]->info->{'tipoTramite'}); break;
 			}
 			return $pdf->stream(($escritura ? "{$escritura} - " : "")."{$info->tramite}".($tipo).".pdf");
-			// return view("pdf/formatoDeclaracion5%", [ "info" => $info , "enajenante" => $enajenante, "tipoTramite" =>$tipoTramite ]);
+			// return view("pdf/formatoDeclaracionISR", [ "info" => $info , "enajenante" => $enajenante, "tipoTramite" =>$tipoTramite ]);
 
 		}
 
