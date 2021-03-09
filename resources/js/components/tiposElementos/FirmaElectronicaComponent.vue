@@ -50,7 +50,7 @@ export default {
 			}
 
 			this.idFirmado.push(solicitud.id);
-			this.urlFirmado.push(`http://insumos.test.nl.gob.mx/documentos/firmas/${this.usuario.tramite_id}/${solicitud.id}_${this.usuario.tramite_id}_firmado` );
+			this.urlFirmado.push(`http://insumos.test.nl.gob.mx/documentos/firmas/${this.usuario.tramite_id}/${solicitud.id}_${this.usuario.tramite_id}_firmado.pdf` );
 		})
 
         console.log("doc" +this.doc);
