@@ -1,63 +1,57 @@
 <template>
-    <div class="col-md-12 col-lg-12 col-xl-12" :id="idItem">
-        <b-container fluid>
-            <b-row>
-                <h5> {{ agrupacion.nombre }} </h5>
-                <hr>
-            </b-row>
-            <b-row cols="12">
-                <b-col lg="2">
-                    <button  type='button' class='card-link-secondary small text-uppercase mr-3' v-on:click="eliminar()" :disabled="desabilitar" >
-                        <i class='fas fa-trash-alt mr-1'></i>Eliminar 
-                        <div :id="`spinner-pago-solicitud-${index}`"  class="spinner-border spinner-border-sm float-right" role="status" style="display: none;">
-                            <span class="sr-only">Loading...</span> 
-                        </div>
-                    </button>
-                </b-col>
 
-                <b-col lg="6" class="text-right">
-                    <strong title="Total"> 
-                    	<h4>
-                        	{{total | toCurrency}}
-                    	</h4>
+    <div>
+       <div class="d-flex align-items-center mb-3" :id="idItem">
+            <!----> 
+            <div class="mr-auto" style="width: 60%;">
+                <h4 >
+                    <strong class="ml-3 text-uppercase text-truncate">
+                    {{ agrupacion.nombre }} 
                     </strong>
-                </b-col>
-                <b-col lg="4" class="text-right">
-                	<span class="badge badge-pill badge-success" title="N° de Items">{{totalItemInGroup}}</span> 
-                </b-col>
-            </b-row>
-            <b-row>
-            	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+                </h4>
+                <h5 class="ml-3 text-muted">
+                    {{ agrupacion.clave }}
+                </h5>
+                <span class="ml-3" style="font-size: 12px;"  v-if="totalItemInGroup  == 1 && agrupacion.items[0].datos_solicitante">
+                   {{ agrupacion.items[0].datos_solicitante.rfc || agrupacion.items[0].datos_solicitante.curp || "" }} - {{ agrupacion.items[0].datos_solicitante.tipoPersona == "pm" ? agrupacion.items[0].datos_solicitante.razonSocial : agrupacion.items[0].datos_solicitante.nombre + " " + agrupacion.items[0].datos_solicitante.apellido_paterno + " " + agrupacion.items[0].datos_solicitante.apellido_materno }}
+                </span>
+            </div>
+            <div class="my-lg-0 my-1">
+                <button type="button" class="btn btn-sm mr-2 btn-primary" v-on:click="eliminar()" :disabled="desabilitar">
+                    <span><i class="fas fa-trash" v-if="totalItemInGroup > 0"></i> ELIMINAR ({{  totalItemInGroup }})</span>
+                </button> 
+                <span class="btn btn-secondary mr-2"> {{ total | toCurrency }} </span> 
+                <button class="btn btn-secondary" type="button" data-toggle="collapse" :data-target="`#collapse-${index}`" aria-expanded="false" :aria-controls="`collapse-${index}`" v-if="totalItemInGroup >1 ">
+                    <i class="fas fa-chevron-down p-0"></i>
+                </button>
+            </div>
+       </div>
 
-				<b-button  title="Click para ver detalles" variant="outline-info" @click="verDetalle" class="mr-2 btn btn-block" size="sm"  :disabled="desabilitar">
-					 <transition>
-				    	<span v-if="agrupacion.verDetalle">
-				    		Ocultar detalle
-				    	</span>
-				    	<span v-if="!agrupacion.verDetalle">
-				    		Ver detalle
-				    	</span>
-				  </transition>  
-				</b-button>
-   
-              <div class="col-sm-12">
-                <b-card no-body v-if="agrupacion.verDetalle" >
-                    <b-card-body id="nav-scroller" ref="content">
-                         <b-table  responsive  hover :items="itemCamposShow" :fields="campos" style=" height:300px; overflow-y:scroll;"> 
-                                <template #cell(datos_solicitante)="data">
-                                    <template-datos-personales-component :datosPersonales="data.item.datos_solicitante"></template-datos-personales-component>
-                                </template>
-                                <template #cell(importe_tramite)="data">
-                                    	{{ data.item.importe_tramite | toCurrency }}
-                                </template>
-                         </b-table>
-                    </b-card-body> 
-                </b-card>
-
-              </div>    
-
-            </b-row>
-        </b-container>
+       <div :id="`collapse-${index}`"  v-bind:class="totalItemInGroup > 1 ? 'collapse' : ''" v-if="totalItemInGroup >1 ">
+          <div v-bind:class="totalItemInGroup > 1 ? 'card' : ''" class="list-item card-custom gutter-b col-lg-12"  v-for="(item, i) in agrupacion.items" >
+             <div class="card-body p-0">
+                <div class="d-flex">
+                   <div class="flex-grow-1">
+                      <div class="d-flex align-items-center justify-content-between flex-wrap" >
+                         <!----> 
+                         <div class="mr-auto" style="width: 60%;">
+                            <a class="d-flex text-dark over-primary font-size-h5 font-weight-bold mr-3 flex-column">
+                                <span class="mt-3" style="font-size: 12px;"  v-if="item.datos_solicitante">
+                                   {{ item.datos_solicitante.rfc || item.datos_solicitante.curp || "" }} - {{ item.datos_solicitante.tipoPersona == "pm" ? item.datos_solicitante.razonSocial : item.datos_solicitante.nombre + " " + item.datos_solicitante.apellido_paterno + " " + item.datos_solicitante.apellido_materno }}
+                                </span>
+                            </a>
+                         </div>
+                         <div class="my-lg-0 my-1" >
+                            <span class="btn btn-secondary mr-2">
+                                {{item.importe_tramite | toCurrency}}                              
+                            </span>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
     </div>
 </template>
 
