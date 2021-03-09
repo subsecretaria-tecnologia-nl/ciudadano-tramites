@@ -61,12 +61,6 @@
 			padding-bottom: 10px;
 			font-size: 13px;
 		}
-		.titulo2{
-			text-align: center;
-		}
-		.escudo{
-			text-align: left
-		}
 		.columna{
 			padding-top: 10px;
 			padding-bottom: 4px;
@@ -117,7 +111,7 @@
 			<tr class="header">
 				<th colspan="3" valign="middle" class="text-uppercase text-left"> <strong> DECLARACION DEL {{ $info->tramite }} <br> REALIZADAS EN EL ESTADO DE NUEVO LEÓN </strong> </th>
 				<th class="" valign="middle">
-				<img src="{{public_path('images/escudo-de-armas-veda-color.png')}}" width="200">   
+				<!-- <img src="{{public_path('images/escudo-de-armas-veda-color.png')}}" width="200">    -->
 				<!-- <img src="{{ asset('images/escudo-de-armas-veda-color.png') }}"   width="200"/> -->
 
 				</th>
