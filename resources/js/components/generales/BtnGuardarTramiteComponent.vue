@@ -48,14 +48,17 @@
                 formData = this.getFormData(enajenantes);
 
                 let detallesComplete = true;
+       
                 enajenantes.forEach( enajenante => {
                   detallesComplete = detallesComplete && !!enajenante.detalle; 
                 });
+
+                
                 if(detallesComplete ||  this.type == 'temporal'){
                   this.guardarTramiteUnico(formData, url );
                 } else {
                   this.enviando = false;
-                  Command: toastr.warning("Aviso!", "Obteniendo costos");
+                  Command: toastr.warning("Aviso!", "Importe total requerido");
                 }
               } else {
                 if(tramite.detalle ||  this.type == 'temporal'){
@@ -63,7 +66,7 @@
                   this.guardarTramiteUnico(formData, url); 
                 } else {
                   this.enviando = false;
-                  Command: toastr.warning("Aviso!", "Obteniendo costos");
+                  Command: toastr.warning("Aviso!", "Importe total requerido");
                 }
 
               } 

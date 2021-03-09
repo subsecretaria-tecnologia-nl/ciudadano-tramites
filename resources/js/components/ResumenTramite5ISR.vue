@@ -34,27 +34,25 @@
                                 <template #cell(datosPersonales)="data">
                                     <template-datos-personales-component :datosPersonales="data.item.datosPersonales"></template-datos-personales-component>
                                 </template>
-                                <template #cell(datosParaDeterminarImpuesto)="data" >
-                                    <div v-if="!data.item.detalle"  class="text-center">
-                                        <b-spinner type="grow" label="Spinning"></b-spinner>
-                                        <calculo-costo-tramite-5-isr-component 
-                                        :datosParaDeterminarImpuesto="data.item.datosParaDeterminarImpuesto" 
-                                        :campos="camposGenerales"
-                                        :tramite="tramite" :tipoPersona="data.item.tipoPersona" @costosObtenidos="costosObtenidos" :index="data.index">
-                                        </calculo-costo-tramite-5-isr-component>                                    
-                                    </div>
-                                    <div v-else-if="data.item.detalle && data.item.detalle.Salidas">
+                                <template #cell(detalle)="data" >
+                                    <div v-if="data.item.detalle && data.item.detalle.Salidas">
                                         <div class="text-center">
                                             {{currencyFormat('Importe total', data.item.detalle.Salidas['Importe total'])}}
                                         </div>                          
                                     </div>
-                                    
+                                    <div v-else-if="!data.item.detalle">
+                                        <div class="text-center text-danger">
+                                          No fue posible obtener información <br>   
+                                          <span class="text-muted text-danger">    
+                                                Consulte al administrador del sistema
+                                          </span>
+                                        </div>                          
+                                    </div>
                                 </template>
                                 <template #cell(status)="data">
-                                    <div>
+                                    <div v-if="data.item.detalle">
                                         <b-link title="Click para ver detalles" @click="data.toggleDetails" class="mr-2 btn btn-link">
                                             {{!data.detailsShowing ? "Ver detalle " : "Ocultar detalle "}}
-                                            
                                         </b-link>
                                     </div>
                                 </template> 
@@ -133,7 +131,7 @@
                     { key: 'porcentajeCompra', label: '% Venta' },
                     { key: 'datosPersonales', label: 'Datos Personales' },
                     { key: 'tipoPersona', label: 'Tipo Persona' },
-                    { key: 'datosParaDeterminarImpuesto', label: 'Total' },
+                    { key: 'detalle', label: 'Total' },
                     { key: 'status', label:"Acciones" }
 
             ];
@@ -141,10 +139,7 @@
 
         data(){
             return {
-                tramite: {  },
-                listaSolicitantes:[],
                 datosFormulario:{},
-                obteniendoCosto:true,
                 listaEnajentantes:[],
                 listaExpedientes:[],
                 camposExpedientes:[],
@@ -157,7 +152,7 @@
         methods: {
 
             obtenerInformacionDelTramite(){
-                let informacionEnStorage = ["listaSolicitantes", "tramite", "datosFormulario"];
+                let informacionEnStorage = ["datosFormulario"];
                 informacionEnStorage.forEach( name => {
                     if (localStorage.getItem(name)) {
                       try {
@@ -167,28 +162,6 @@
                       }
                     }
                 });
-            },
-
-            costosObtenidos(data){
-                let detalle =  data.success ? data.respuestaCosto : true;
-
-                if(!data.success){
-                    this.listaEnajentantes[data.indice].status  =  {
-                        error:true,
-                        indice:data.indice,
-                        msj :"No fue posible obtener los costos"
-                    };
-                }
-
-                this.listaEnajentantes[data.indice].detalle = detalle;
-                this.$refs.table.refresh();
-
-                let campos = this.datosFormulario.campos;
-                let indexCampoEnajenantes = campos.findIndex( campo =>  campo.tipo == 'enajenante');
-
-                const parsed = JSON.stringify(this.datosFormulario);
-                localStorage.setItem('datosFormulario', parsed);  
-
             },
 
 
