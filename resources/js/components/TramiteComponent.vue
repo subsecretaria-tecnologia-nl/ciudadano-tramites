@@ -13,9 +13,9 @@
                             <!--begin::Name-->
                             <a v-on:click="goTo(tramite)" class="d-flex text-dark over-primary font-size-h5 font-weight-bold mr-3 flex-column">
                                 <strong v-if="(!group && cartComponent) || !cartComponent" class="text-uppercase text-truncate">{{ tramite.nombre_servicio && (tramite.titulo && tramite.nombre_servicio.toLowerCase() != tramite.titulo.toLowerCase()) ? `${tramite.nombre_servicio} - ` : '' }}{{ tramite.tramite || tramite.titulo | capitalize }}</strong>
-                                <span class="text-muted" v-if="tramite.info && ((!group && cartComponent) || !cartComponent)">{{ tramite.id || '' }} - {{ tramite.clave }}</span>
-                                <span class="text-muted" v-if="tramite.info && !cartComponent">{{ tramite.created_at }}</span>
-                                <span v-bind:style="[ (!group && cartComponent) || !cartComponent ? {} : { 'font-size' : '12px' } ]" :class="(!group && cartComponent) || !cartComponent ? 'mt-3' : ''" v-if="solicitante">{{ solicitante.rfc || solicitante.curp || "" }} - {{ solicitante.tipoPersona == "pm" ? solicitante.razonSocial : `${solicitante.nombreSolicitante || solicitante.nombre} ${solicitante.apPat} ${solicitante.apMat}` }}</span>
+                                <span class="text-muted" v-if="type !== undefined && tramite.info && ((!group && cartComponent) || !cartComponent)">{{ tramite.id || '' }} - {{ tramite.clave }}</span>
+                                <span class="text-muted" v-if="type !== undefined && tramite.info && !cartComponent">{{ tramite.created_at }}</span>
+                                <span v-bind:style="[ (!group && cartComponent) || !cartComponent ? {} : { 'font-size' : '12px' } ]" :class="(!group && cartComponent) || !cartComponent ? 'mt-3' : ''" v-if="type !== undefined && solicitante">{{ solicitante.rfc || solicitante.curp || "" }} - {{ solicitante.tipoPersona == "pm" ? solicitante.razonSocial : `${solicitante.nombreSolicitante || solicitante.nombre} ${solicitante.apPat} ${solicitante.apMat}` }}</span>
                             </a>
                             <!--end::Name-->
                         </div>
@@ -34,10 +34,15 @@
                             <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" v-if="!tramite.info">
                                 INICIAR TRAMITE
                             </a>
-                            <div class="btn-group mt-2" v-if="tramite.info && !cartComponent">
+                            <a v-on:click="goTo(tramite.doc_firmado, true)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white mt-2" v-if="tramite.doc_firmado && [2,3].includes(type)">
+                                VER DECLARACIÓN
+                            </a>
+                            <a v-on:click="goTo(tramite.tramites[0].url_recibo, true)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white mt-2" v-if="tramite.tramites && tramite.tramites[0].url_recibo && [2,3].includes(type)">
+                                VER RECIBO DE PAGO
+                            </a>
+                            <div class="btn-group mt-2" v-if="tramite.info && !cartComponent && type != 2">
                                 <a v-on:click="goTo(tramite)" class="btn btn-sm btn-primary font-weight-bolder text-uppercase text-white" :class="files.length == 0 ? 'rounded' : ''">
-                                    <span v-if="tramite.mensajes.length > 0" class="text-white">VER MENSAJES ({{ tramite.mensajes.length }})</span>
-                                    <span v-if="tramite.mensajes.length == 0" class="text-white">VER DETALLES</span>
+                                    <span class="text-white">VER DETALLES</span>
                                 </a>
                                 <button v-if="files.length > 0" type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">Toggle Dropdown</span>
@@ -65,7 +70,9 @@
             return {
                 files : [],
                 solicitante : {},
-                user : window.user
+                user : window.user,
+                declaracion : null,
+                recibo: null
             }
         },
         props: ['tramite', 'type', 'group', 'cartComponent'],
@@ -75,8 +82,9 @@
                 this.tramite.info = JSON.parse(this.tramite.info)
             if(this.tramite.mensajes && this.tramite.mensajes.length > 0){
                 this.tramite.mensajes.map(msg => {
-                    if(msg.attach && msg.attach != "")
+                    if(msg.attach && msg.attach != ""){
                         this.files.push(msg.attach);
+                    }
                 })
             }
             if(this.tramite.doc_firmado) this.files.push({ name : 'Declaración', href : this.tramite.doc_firmado })
@@ -103,11 +111,12 @@
             }
         },
         methods:{
-            goTo(tramite){
+            goTo(tramite, _blank=false){
+                if(typeof tramite === 'string') return redirect(tramite, _blank);
                 if(window.location.href.indexOf("borradores") >= 0){
-                    redirect("detalle-tramite/" + tramite.tramite_id + "?clave=" + tramite.clave );
+                    redirect("detalle-tramite/" + tramite.tramite_id + "?clave=" + tramite.clave, _blank);
                 } else {
-                    redirect(`/detalle${ tramite.id_tramite ? "-tramite" : "" }/` +  (tramite.id_tramite || tramite.id));
+                    redirect(`/detalle${ tramite.id_tramite ? "-tramite" : "" }/` +  (tramite.id_tramite || tramite.id), _blank);
                 }
                 
             },
