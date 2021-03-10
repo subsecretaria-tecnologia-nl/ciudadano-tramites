@@ -91,7 +91,7 @@
 			position:fixed;
 			left:0px;
 			bottom:55px;
-			height:50px;
+			height:65px;
 			width:100%;
 		}
 		.text-center{
@@ -279,7 +279,7 @@
 				<td class="border_bottom">FIRMA DEL CONTRIBUYENTE</td>
 			</tr>
 			<tr class="datos-enajenante">
-				<td  colspan="3"><div style="height:30px;"></div></td>
+				<td  colspan="3"><div style="height:26px;"></div></td>
 			</tr>
 		</table>
 		<div style="position:fixed;left:0px;bottom:0px;"> 
