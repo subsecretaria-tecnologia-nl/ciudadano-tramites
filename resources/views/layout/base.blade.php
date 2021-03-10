@@ -1605,11 +1605,12 @@
 			<script>
 				const APP_URL = '{{ getenv("APP_URL") }}';
 				window.user = <?= json_encode(session()->get("user"))?>;
-				function redirect(path) {
+				function redirect(path, _blank=false) {
 					if (!(new RegExp('^(http(s)?[:]//)','i')).test(path)) {
 						newPath = APP_URL + (path.search(/\//) != 0 ? "/" : "") + path;
 					}
-					window.location = newPath;
+					if(!_blank) window.location = newPath;
+					else windo.open(newPath, '_blank')
 				}
 
 				$.ajaxSetup({

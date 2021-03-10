@@ -35,17 +35,24 @@ class RolValidator
 
         $session_whitelist = $session->role->paths ? explode('|', $session->role->paths) : ["*"];
         $session_disabled = $session->role->paths_disabled ? explode('|', $session->role->paths_disabled) : [];
-        $pass = array_map(function($a) use ($path, $session_disabled){
+        $disabled = array_map(function($a) use ($path){
+            $disabledPath = ((getenv("APP_PREFIX") ? explode("/", getenv("APP_PREFIX"))[1]."" : "").$a);
+            if(substr($disabledPath, -1) == "/") $disabledPath = substr($disabledPath, 0, -1);
+            if(substr($disabledPath, 0, 1) == "/") $disabledPath = substr($disabledPath, 1);
+
+            preg_match("/^".str_replace("/", "\/", $disabledPath)."$/", $path, $matchesDisabled);
+            if(!empty($matchesDisabled)) return $a;
+        }, $session_disabled);
+        $disabled = array_filter($disabled);
+        if(!empty($disabled)) return abort(403);
+
+        $pass = array_map(function($a) use ($path){
             if($a == "*") return $a;
             $whitePath = ((getenv("APP_PREFIX") ? explode("/", getenv("APP_PREFIX"))[1]."" : "").$a);
             if(substr($whitePath, -1) == "/") $whitePath = substr($whitePath, 0, -1);
             if(substr($whitePath, 0, 1) == "/") $whitePath = substr($whitePath, 1);
             preg_match("/^".str_replace("/", "\/", $whitePath)."$/", $path, $matches);
 
-            foreach($session_disabled as $disabled_path){
-                preg_match("/^".str_replace("/", "\/", $disabled_path)."$/", $path, $matchesDisabled);
-                if($matchesDisabled) $matches[] = $matchesDisabled;
-            }
             if(!empty($matches) && empty($matchesDisabled)) return $a;
         }, $session_whitelist);
         $pass = array_filter($pass);

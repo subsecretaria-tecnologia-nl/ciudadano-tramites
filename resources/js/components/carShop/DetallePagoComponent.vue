@@ -110,6 +110,11 @@
                             json_envio: data,
                             json_recibo:responseTransaccion.data
                         }
+
+                        if(responseTransaccion.data.response.pago_cero){
+                            dataMotor.status = 0;
+                        }
+
                         this.folioMotor = dataMotor.id_transaccion_motor;
                         this.guardarTransaccionMotor( dataMotor );
 
