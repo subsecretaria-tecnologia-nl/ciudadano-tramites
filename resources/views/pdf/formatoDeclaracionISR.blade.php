@@ -91,7 +91,7 @@
 			position:fixed;
 			left:0px;
 			bottom:55px;
-			height:50px;
+			height:65px;
 			width:100%;
 		}
 		.text-center{
@@ -241,8 +241,8 @@
 				</tr>
 				<tr class="{{ $info->solicitudes[0]->info->{'tipoTramite'} !== 'declaracionEn0' ? 'datos-enajenante' : '' }}">
 					<td class="columna value">{{ 'oper_transacciones.OPER_TRANSACCION' }}</td>
-					<td class="columna value" colspan="2">{{ 'oper_transacciones.FECHA_LIMITE_REFERENCIA' }}</td>
-					<td class="columna value">{{ 'oper_transacciones.ID_TRANSACCION_MOTOR' }}</td>
+					<td class="columna value" colspan="2">{{ $control->operaciones->{'fecha_limite_referencia'} }}</td>
+					<td class="columna value">{{ $control->operaciones->{'id_transaccion_motor'} }}</td>
 				</tr>
 				<tr class="{{ $info->solicitudes[0]->info->{'tipoTramite'} !== 'declaracionEn0' ? 'datos-enajenante' : '' }}">
 					<td class="columna">FECHA DE PAGO</td>
@@ -250,9 +250,9 @@
 					<td class="columna">REFERENCIA BANCARIA</td>
 				</tr>
 				<tr class="{{ $info->solicitudes[0]->info->{'tipoTramite'} !== 'declaracionEn0' ? 'datos-enajenante' : '' }} last">
-					<td class="columna value">{{ 'oper_transacciones.FECHA_PAGO' }}</td>
-					<td class="columna value" colspan="2">{{ 'oper_transacciones.ID_TRANSACCION' }}</td>
-					<td class="columna value">{{ 'oper_transacciones.REFERENCIA' }}</td>
+					<td class="columna value">{{ $control->operaciones->{'fecha_pago'} }}</td>
+					<td class="columna value" colspan="2">{{ $control->operaciones->{'referencia'} }}</td>
+					<td class="columna value">{{  $control->operaciones->{'referencia'} }}</td>
 				</tr>
 			@if ($info->solicitudes[0]->info->{'tipoTramite'} === 'declaracionEn0')
 				<tr>
@@ -279,7 +279,7 @@
 				<td class="border_bottom">FIRMA DEL CONTRIBUYENTE</td>
 			</tr>
 			<tr class="datos-enajenante">
-				<td  colspan="3"><div style="height:30px;"></div></td>
+				<td  colspan="3"><div style="height:26px;"></div></td>
 			</tr>
 		</table>
 		<div style="position:fixed;left:0px;bottom:0px;"> 
