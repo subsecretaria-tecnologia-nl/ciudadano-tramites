@@ -1606,11 +1606,12 @@
 				const APP_URL = '{{ getenv("APP_URL") }}';
 				window.user = <?= json_encode(session()->get("user"))?>;
 				function redirect(path, _blank=false) {
+					let newPath = path;
 					if (!(new RegExp('^(http(s)?[:]//)','i')).test(path)) {
 						newPath = APP_URL + (path.search(/\//) != 0 ? "/" : "") + path;
 					}
-					if(!_blank) window.location = newPath || path;
-					else window.open(newPath || path, '_blank')
+					if(!_blank) window.location = newPath;
+					else window.open(newPath, '_blank')
 				}
 
 				$.ajaxSetup({
