@@ -1610,7 +1610,7 @@
 						newPath = APP_URL + (path.search(/\//) != 0 ? "/" : "") + path;
 					}
 					if(!_blank) window.location = newPath;
-					else windo.open(newPath, '_blank')
+					else window.open(newPath, '_blank')
 				}
 
 				$.ajaxSetup({
