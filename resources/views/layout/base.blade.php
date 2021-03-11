@@ -1609,8 +1609,8 @@
 					if (!(new RegExp('^(http(s)?[:]//)','i')).test(path)) {
 						newPath = APP_URL + (path.search(/\//) != 0 ? "/" : "") + path;
 					}
-					if(!_blank) window.location = newPath;
-					else window.open(newPath, '_blank')
+					if(!_blank) window.location = newPath || path;
+					else window.open(newPath || path, '_blank')
 				}
 
 				$.ajaxSetup({
